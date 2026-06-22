@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ListaPro ✕ Bordio Cloud Hub</title>
+    <style>
+        :root {
+            --bg-primary: #0a192f;
+            --bg-secondary: #172a45;
+            --bg-card: #020c1b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --google-blue: #4285F4;
+            --dropbox-blue: #0061FE;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        body { background-color: var(--bg-primary); color: var(--text-main); padding-bottom: 70px; }
+        header { background-color: var(--bg-secondary); padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 10; }
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+
+        /* Abas */
+        .nav-tabs { display: flex; justify-content: space-around; background-color: var(--bg-secondary); position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100; }
+        .tab-btn { background: none; border: none; color: var(--text-muted); padding: 15px 10px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: 0.2s; }
+        .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: rgba(56, 189, 248, 0.05); }
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        /* Formulários */
+        h2 { margin: 20px 0 10px 0; font-size: 18px; color: var(--accent); }
+        input, select, textarea { width: 100%; padding: 12px; background-color: var(--bg-secondary); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-main); margin-bottom: 10px; font-size: 16px; }
+        button.btn-primary { width: 100%; padding: 12px; background-color: var(--accent); color: var(--bg-card); border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+        
+        /* Botões de Ação */
+        .btn-sync { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 6px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; text-decoration: none; text-align: center; }
+        .btn-google { background-color: var(--google-blue); color: white; }
+        .btn-dropbox { background-color: var(--dropbox-blue); color: white; margin-bottom: 15px; }
+
+        /* Cards */
+        .total-box { background-color: rgba(56, 189, 248, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
+        .card-item { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        .card-row { display: flex; justify-content: space-between; align-items: center; }
+        .card-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; }
+        .badge { font-size: 11px; padding: 3px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+        .badge.alta { background-color: rgba(239, 68, 68, 0.2); color: var(--danger); }
+        .badge.media { background-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        .badge.baixa { background-color: rgba(34, 197, 94, 0.2); color: var(--success); }
+        
+        .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; }
+        .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
+
+        .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; position: relative; min-height: 100px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 style="font-size: 18px;">ListaPro ✕ Bordio Cloud</h1>
+    </header>
+
+    <div class="container">
+        
+        <!-- MÓDULO 1: LISTAPRO -->
+        <section id="listapro-view" class="view-section active">
+            <div class="total-box">Total Local: <span id="total-gastos-val">R$ 0,00</span></div>
+            
+            <h2>Adicionar Item / Despesa</h2>
+            <input type="text" id="gasto-nome" placeholder="Ex: Boleto Energia">
+            <input type="number" id="gasto-valor" placeholder="Valor R$">
+            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo (Dropbox)">
+            <button class="btn-primary" onclick="addGasto()">Salvar na Lista</button>
+
+            <h2>Itens e Recibos</h2>
+            <div id="gastos-container"></div>
+        </section>
+
+        <!-- MÓDULO 2: BORDIO -->
+        <section id="bordio-view" class="view-section">
+            <h2>Criar Evento ou Tarefa</h2>
+            <input type="text" id="tarefa-nome" placeholder="Ex: Cir alex">
+            <input type="datetime-local" id="tarefa-data">
+            <select id="tarefa-prioridade">
+                <option value="baixa">Prioridade Baixa</option>
+                <option value="media">Prioridade Média</option>
+                <option value="alta">Prioridade Alta</option>
+            </select>
+            <input type="text" id="tarefa-anexo" placeholder="Link de documento anexo (Opcional)">
+            
+            <button class="btn-primary" onclick="addTarefaLocal()">Salvar no Painel</button>
+
+            <h2>Linha do Tempo (Bordio)</h2>
+            <div id="tarefas-container"></div>
+        </section>
+
+        <!-- MÓDULO 3: NOTAS ONLINE -->
+        <section id="notas-view" class="view-section">
+            <h2>Notas & Links Rápidos</h2>
+            
+            <button class="btn-sync btn-dropbox" onclick="abrirLinkExterno('https://www.dropbox.com/')">
+                📁 Abrir Dropbox Cloud
+            </button>
+
+            <textarea id="nota-texto" rows="4" placeholder="Digite anotações clínicas, lembretes ou cole links importantes aqui..."></textarea>
+            <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
+
+            <div class="notes-grid" id="notas-container"></div>
+        </section>
+
+    </div>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('listapro-view', this)">📊 ListaPro</button>
+        <button class="tab-btn" onclick="switchTab('bordio-view', this)">📅 Bordio</button>
+        <button class="tab-btn" onclick="switchTab('notas-view', this)">📝 Notas</button>
+    </nav>
+
+    <script>
+        let despesas = JSON.parse(localStorage.getItem('cloud_despesas')) || [];
+        let tarefas = JSON.parse(localStorage.getItem('cloud_tarefas')) || [];
+        let notas = JSON.parse(localStorage.getItem('cloud_notas')) || [];
+
+        function switchTab(viewId, element) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+            renderAll();
+        }
+
+        // Função Universal de Abertura Bypass para nuvem/web externa
+        function abrirLinkExterno(url) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        // --- LÓGICA LISTAPRO ---
+        function addGasto() {
+            const nome = document.getElementById('gasto-nome').value.trim();
+            const valor = parseFloat(document.getElementById('gasto-valor').value) || 0;
+            const anexo = document.getElementById('gasto-anexo').value.trim();
+
+            if(!nome) return;
+            despesas.push({ id: Date.now(), nome, valor, anexo });
+            localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
+            
+            document.getElementById('gasto-nome').value = '';
+            document.getElementById('gasto-valor').value = '';
+            document.getElementById('gasto-anexo').value = '';
+            renderAll();
+        }
+
+        function deleteGasto(id) {
+            despesas = despesas.filter(d => d.id !== id);
+            localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
+            renderAll();
+        }
+
+        // --- LÓGICA BORDIO + AGENDA COMPATÍVEL COM WEB ---
+        function addTarefaLocal() {
+            const nome = document.getElementById('tarefa-nome').value.trim();
+            const dataRaw = document.getElementById('tarefa-data').value; 
+            const prioridade = document.getElementById('tarefa-prioridade').value;
+            const anexo = document.getElementById('tarefa-anexo').value.trim();
+
+            if(!nome || !dataRaw) return alert('Por favor, defina o título e a data/hora.');
+
+            tarefas.push({ id: Date.now(), nome, data: dataRaw, prioridade, anexo });
+            localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
+
+            document.getElementById('tarefa-nome').value = '';
+            document.getElementById('tarefa-data').value = '';
+            document.getElementById('tarefa-anexo').value = '';
+            renderAll();
+        }
+
+        function dispararGoogleCalendar(nome, dataRaw, anexo, prioridade) {
+            // Formato exigido para a URL web comum: YYYYMMDDTHHMMSS
+            let limpa = dataRaw.replace(/[: text\-]/g, "") + "00";
+            
+            const dataObj = new Date(dataRaw);
+            dataObj.setHours(dataObj.getHours() + 1);
+            const ano = dataObj.getFullYear();
+            const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+            const dia = String(dataObj.getDate()).padStart(2, '0');
+            const hora = String(dataObj.getHours()).padStart(2, '0');
+            const min = String(dataObj.getMinutes()).padStart(2, '0');
+            const dataEnd = `${ano}${mes}${dia}T${hora}${min}00`;
+
+            let detalhes = `Prioridade: ${prioridade.toUpperCase()}`;
+            if(anexo) detalhes += `\n\nAnexo:\n${anexo}`;
+
+            const urlFinal = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${limpa}/${dataEnd}&details=${encodeURIComponent(detalhes)}`;
+            
+            abrirLinkExterno(urlFinal);
+        }
+
+        function deleteTarefa(id) {
+            tarefas = tarefas.filter(t => t.id !== id);
+            localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
+            renderAll();
+        }
+
+        // --- LÓGICA NOTAS ---
+        function addNota() {
+            const texto = document.getElementById('nota-texto').value.trim();
+            if(!texto) return;
+            notas.push({ id: Date.now(), texto });
+            localStorage.setItem('cloud_notas', JSON.stringify(notas));
+            document.getElementById('nota-texto').value = '';
+            renderAll();
+        }
+
+        function deleteNota(id) {
+            notas = notas.filter(n => n.id !== id);
+            localStorage.setItem('cloud_notas', JSON.stringify(notas));
+            renderAll();
+        }
+
+        // --- RENDERIZADORES ---
+        function renderAll() {
+            // Render Gastos
+            const gCont = document.getElementById('gastos-container');
+            gCont.innerHTML = '';
+            let total = 0;
+            despesas.forEach(d => {
+                total += d.valor;
+                gCont.innerHTML += `
+                    <div class="card-item">
+                        <div class="card-row">
+                            <strong>${d.nome}</strong>
+                            <span style="font-weight:bold;">R$ ${d.valor.toFixed(2)}</span>
+                        </div>
+                        <div class="card-row">
+                            ${d.anexo ? `<button onclick="abrirLinkExterno('${d.anexo}')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>` : '<span></span>'}
+                            <button class="delete-btn" onclick="deleteGasto(${d.id})">🗑️</button>
+                        </div>
+                    </div>`;
+            });
+            document.getElementById('total-gastos-val').innerText = `R$ ${total.toFixed(2)}`;
+
+            // Render Tarefas (Bordio)
+            const tCont = document.getElementById('tarefas-container');
+            tCont.innerHTML = '';
+            tarefas.sort((a,b) => new Date(a.data) - new Date(b.data)).forEach(t => {
+                const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+
+                tCont.innerHTML += `
+                    <div class="card-item">
+                        <div class="card-row">
+                            <div>
+                                <strong>${t.nome}</strong>
+                                <div class="card-meta" style="margin-top: 4px;">
+                                    <span>📅 ${dataExibicao}</span>
+                                    <span class="badge ${t.prioridade}">${t.prioridade}</span>
+                                </div>
+                            </div>
+                            <button class="delete-btn" onclick="deleteTarefa(${t.id})">🗑️</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button onclick="dispararGoogleCalendar('${t.nome}', '${t.data}', '${t.anexo || ''}', '${t.prioridade}')" class="btn-sync btn-google" style="flex: 1; margin-top: 0;">
+                                🗓️ Calendar
+                            </button>
+                            <button onclick="abrirLinkExterno('https://tasks.google.com/')" class="btn-sync" style="flex: 1; background-color: #f1f5f9; color: #1e293b; margin-top: 0;">
+                                ☑️ Tasks
+                            </button>
+                        </div>
+                        ${t.anexo ? `
+                        <div style="margin-top:5px;">
+                            <button onclick="abrirLinkExterno('${t.anexo}')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button>
+                        </div>` : ''}
+                    </div>`;
+                });
+
+            // Render Notas
+            const nCont = document.getElementById('notas-container');
+            nCont.innerHTML = '';
+            notas.forEach(n => {
+                nCont.innerHTML += `
+                    <div class="note-card">
+                        <p style="font-size:13px; white-space:pre-wrap; margin-bottom:15px;">${n.texto}</p>
+                        <button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(${n.id})">🗑️</button>
+                    </div>`;
+            });
+        }
+
+        renderAll();
+    </script>
+</body>
+</html>
