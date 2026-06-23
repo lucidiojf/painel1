@@ -74,7 +74,7 @@
             <h2>Adicionar Item / Despesa</h2>
             <input type="text" id="gasto-nome" placeholder="Ex: Boleto Energia">
             <input type="number" id="gasto-valor" placeholder="Valor R$">
-            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo (Dropbox)">
+            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo (GitHub)">
             <button class="btn-primary" onclick="addGasto()">Salvar na Lista</button>
 
             <h2>Itens e Recibos</h2>
@@ -103,9 +103,14 @@
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
-            <button class="btn-sync btn-dropbox" onclick="abrirLinkExterno('https://www.dropbox.com/')">
-                📁 Abrir Dropbox Cloud
+            <button class="btn-sync btn-google" onclick="abrirLinkExterno('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 10px; background-color: var(--accent); color: var(--bg-card);">
+                Subir Foto/PDF para o GitHub
             </button>
+
+            <div style="background-color: var(--bg-secondary); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: var(--accent); font-weight: bold;">📋 Link Padrão do seu Anexo:</span><br>
+                <code style="color: var(--text-main); display: block; margin-top: 5px; word-break: break-all;">https://lucidiojf.github.io/painel1/nome_do_arquivo.pdf</code>
+            </div>
 
             <textarea id="nota-texto" rows="4" placeholder="Digite anotações clínicas, lembretes ou cole links importantes aqui..."></textarea>
             <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
@@ -134,7 +139,6 @@
             renderAll();
         }
 
-        // Função Universal de Abertura Bypass para nuvem/web externa
         function abrirLinkExterno(url) {
             window.open(url, '_blank', 'noopener,noreferrer');
         }
@@ -180,7 +184,6 @@
         }
 
         function dispararGoogleCalendar(nome, dataRaw, anexo, prioridade) {
-            // Formato exigido para a URL web comum: YYYYMMDDTHHMMSS
             let limpa = dataRaw.replace(/[: text\-]/g, "") + "00";
             
             const dataObj = new Date(dataRaw);
@@ -193,7 +196,7 @@
             const dataEnd = `${ano}${mes}${dia}T${hora}${min}00`;
 
             let detalhes = `Prioridade: ${prioridade.toUpperCase()}`;
-            if(anexo) detalhes += `\n\nAnexo:\n${anexo}`;
+            if(anexo) detalhes += `\\n\\nAnexo:\\n${anexo}`;
 
             const urlFinal = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${limpa}/${dataEnd}&details=${encodeURIComponent(detalhes)}`;
             
@@ -224,7 +227,6 @@
 
         // --- RENDERIZADORES ---
         function renderAll() {
-            // Render Gastos
             const gCont = document.getElementById('gastos-container');
             gCont.innerHTML = '';
             let total = 0;
@@ -244,7 +246,6 @@
             });
             document.getElementById('total-gastos-val').innerText = `R$ ${total.toFixed(2)}`;
 
-            // Render Tarefas (Bordio)
             const tCont = document.getElementById('tarefas-container');
             tCont.innerHTML = '';
             tarefas.sort((a,b) => new Date(a.data) - new Date(b.data)).forEach(t => {
@@ -275,9 +276,8 @@
                             <button onclick="abrirLinkExterno('${t.anexo}')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button>
                         </div>` : ''}
                     </div>`;
-                });
+            });
 
-            // Render Notas
             const nCont = document.getElementById('notas-container');
             nCont.innerHTML = '';
             notas.forEach(n => {
