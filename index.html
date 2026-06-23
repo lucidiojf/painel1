@@ -74,7 +74,7 @@
     <div class="container">
         
         <div class="sync-banner">
-            <span id="sync-status">🔄 Conectado ao Google Sheets</span>
+            <span id="sync-status">🔄 Conectando ao Google Sheets...</span>
             <button class="btn-refresh" onclick="puxarDadosNuvem()">Atualizar 🔄</button>
         </div>
         
@@ -111,14 +111,9 @@
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
-            <button class="btn-sync btn-google" onclick="abrirLinkExterno('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 10px; background-color: var(--accent); color: var(--bg-card);">
+            <button class="btn-sync btn-google" onclick="abrirLinkExtern('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 10px; background-color: var(--accent); color: var(--bg-card);">
                 Subir Foto/PDF para o GitHub
             </button>
-
-            <div style="background-color: var(--bg-secondary); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                <span style="color: var(--accent); font-weight: bold;">📋 Link Padrão do seu Anexo:</span><br>
-                <code style="color: var(--text-main); display: block; margin-top: 5px; word-break: break-all;">https://lucidiojf.github.io/painel1/nome_do_arquivo.pdf</code>
-            </div>
 
             <textarea id="nota-texto" rows="3" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
             <input type="text" id="nota-link" placeholder="Link do documento/foto associado (Opcional)">
@@ -128,10 +123,10 @@
             <div class="notes-grid" id="notas-container"></div>
 
             <div class="backup-box">
-                <h3 style="font-size: 13px; color: var(--text-main); margin-bottom: 10px;">🛡️ Recuperação de Notas Antigas</h3>
+                <h3 style="font-size: 13px; color: var(--text-main); margin-bottom: 10px;">🛡️ Recuperação Manual</h3>
                 <div style="display: flex; justify-content: space-between;">
                     <button class="btn-backup" onclick="exportarBackup()">Gerar Backup</button>
-                    <button class="btn-backup" onclick="document.getElementById('importFile').click()" style="background-color: var(--success); color: var(--bg-card);">Puxar o arquivo .json</button>
+                    <button class="btn-backup" onclick="document.getElementById('importFile').click()" style="background-color: var(--success); color: var(--bg-card);">Puxar .json</button>
                 </div>
                 <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarBackupManual(this)">
             </div>
@@ -146,30 +141,31 @@
     </nav>
 
     <script>
+        // URL Oficial configurada por mim:
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQJgO1Kb-KaWvUAlkRH8mceVf26dGjgoJ7nhtbeuJZrKTOl-KPYrgMJxkLpgkRydmv/exec";
 
-        let despesas = JSON.parse(localStorage.getItem('cloud_despesas')) || [];
-        let tarefas = JSON.parse(localStorage.getItem('cloud_tarefas')) || [];
-        let notas = JSON.parse(localStorage.getItem('cloud_notas')) || [];
+        let despesas = [];
+        let tarefas = [];
+        let notas = [];
 
         function switchTab(viewId, element) {
-            document.querySelectorAll('.view-section').forEach(function(v) { 
-                v.classList.remove('active'); 
-            });
-            document.querySelectorAll('.tab-btn').forEach(function(t) { 
-                t.classList.remove('active'); 
-            });
+            var sections = document.getElementsByClassName('view-section');
+            for(var i=0; i<sections.length; i++) { sections[i].classList.remove('active'); }
+            
+            var tabs = document.getElementsByClassName('tab-btn');
+            for(var j=0; j<tabs.length; j++) { tabs[j].classList.remove('active'); }
+            
             document.getElementById(viewId).classList.add('active');
             element.classList.add('active');
             renderAll();
         }
 
-        function abrirLinkExterno(url) {
+        function abrirLinkExtern(url) {
             window.open(url, '_blank', 'noopener,noreferrer');
         }
 
         async function enviarDadosNuvem() {
-            if(SCRIPT_URL.includes("SUA_URL")) return;
+            if(!SCRIPT_URL || SCRIPT_URL.indexOf("SUA_URL") !== -1) return;
             document.getElementById('sync-status').innerText = "📤 Salvando na Nuvem...";
             try {
                 await fetch(SCRIPT_URL, {
@@ -185,26 +181,26 @@
         }
 
         async function puxarDadosNuvem() {
-            if(SCRIPT_URL.includes("SUA_URL")) return;
+            if(!SCRIPT_URL || SCRIPT_URL.indexOf("SUA_URL") !== -1) {
+                document.getElementById('sync-status').innerText = "⚠️ URL não configurada";
+                return;
+            }
             document.getElementById('sync-status').innerText = "📥 Buscando dados novos...";
             try {
                 const response = await fetch(SCRIPT_URL);
                 const nuvem = await response.json();
                 
-                if(nuvem.despesas?.length || nuvem.tarefas?.length || nuvem.notas?.length) {
+                if(nuvem && (nuvem.despesas || nuvem.tarefas || nuvem.notas)) {
                     despesas = nuvem.despesas || [];
                     tarefas = nuvem.tarefas || [];
                     notas = nuvem.notas || [];
-                    localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
-                    localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
-                    localStorage.setItem('cloud_notas', JSON.stringify(notas));
                     document.getElementById('sync-status').innerText = "✅ Tudo Atualizado!";
                 } else {
-                    document.getElementById('sync-status').innerText = "✅ Nuvem Pronta (Vazia)";
+                    document.getElementById('sync-status').innerText = "✅ Conectado (Nuvem Vazia)";
                 }
                 renderAll();
             } catch(e) {
-                document.getElementById('sync-status').innerText = "⚠️ Modo Offline";
+                document.getElementById('sync-status').innerText = "⚠️ Erro de Conexão";
             }
         }
 
@@ -216,16 +212,11 @@
                     despesas = dados.despesas || [];
                     tarefas = dados.tarefas || [];
                     notas = dados.notas || [];
-                    
-                    localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
-                    localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
-                    localStorage.setItem('cloud_notas', JSON.stringify(notas));
-                    
                     renderAll();
-                    alert("Dados recuperados na tela! Enviando para o Google Sheets...");
+                    alert("Dados aplicados! Gravando no Google Sheets...");
                     enviarDadosNuvem();
                 } catch(e) {
-                    alert("Erro ao ler o arquivo.");
+                    alert("Arquivo inválido.");
                 }
             };
             reader.readAsText(input.files[0]);
@@ -245,7 +236,6 @@
             const anexo = document.getElementById('gasto-anexo').value.trim();
             if(!nome) return;
             despesas.push({ id: Date.now(), nome: nome, valor: valor, anexo: anexo });
-            localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
             document.getElementById('gasto-nome').value = '';
             document.getElementById('gasto-valor').value = '';
             document.getElementById('gasto-anexo').value = '';
@@ -255,7 +245,6 @@
 
         function deleteGasto(id) {
             despesas = despesas.filter(function(d) { return d.id !== id; });
-            localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
             renderAll();
             enviarDadosNuvem();
         }
@@ -267,7 +256,6 @@
             const anexo = document.getElementById('tarefa-anexo').value.trim();
             if(!nome || !dataRaw) return alert('Defina título e data.');
             tarefas.push({ id: Date.now(), nome: nome, data: dataRaw, prioridade: prioridade, anexo: anexo });
-            localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
             document.getElementById('tarefa-nome').value = '';
             document.getElementById('tarefa-data').value = '';
             document.getElementById('tarefa-anexo').value = '';
@@ -280,4 +268,65 @@
             const dataObj = new Date(dataRaw);
             dataObj.setHours(dataObj.getHours() + 1);
             const dataEnd = dataObj.getFullYear() + String(dataObj.getMonth() + 1).padStart(2, '0') + String(dataObj.getDate()).padStart(2, '0') + "T" + String(dataObj.getHours()).padStart(2, '0') + String(dataObj.getMinutes()).padStart(2, '0') + "00";
-            let
+            let detalhes = "Prioridade: " + prioridade.toUpperCase();
+            if(anexo) detalhes += "\n\nAnexo:\n" + anexo;
+            abrirLinkExtern("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details=" + encodeURIComponent(detalhes));
+        }
+
+        function deleteTarefa(id) {
+            tarefas = tarefas.filter(function(t) { return t.id !== id; });
+            renderAll();
+            enviarDadosNuvem();
+        }
+
+        function addNota() {
+            const texto = document.getElementById('nota-texto').value.trim();
+            const link = document.getElementById('nota-link').value.trim();
+            if(!texto && !link) return;
+            notas.push({ id: Date.now(), texto: texto, link: link });
+            document.getElementById('nota-texto').value = '';
+            document.getElementById('nota-link').value = '';
+            renderAll();
+            enviarDadosNuvem();
+        }
+
+        function deleteNota(id) {
+            notas = notas.filter(function(n) { return n.id !== id; });
+            renderAll();
+            enviarDadosNuvem();
+        }
+
+        function renderAll() {
+            const gCont = document.getElementById('gastos-container');
+            if(gCont) {
+                gCont.innerHTML = '';
+                let total = 0;
+                despesas.forEach(function(d) {
+                    total += d.valor;
+                    gCont.innerHTML += '<div class="card-item"><div class="card-row"><strong>' + d.nome + '</strong><span style="font-weight:bold;">R$ ' + d.valor.toFixed(2) + '</span></div><div class="card-row">' + (d.anexo ? '<button onclick="abrirLinkExtern(\'' + d.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>' : '<span></span>') + '<button class="delete-btn" onclick="deleteGasto(' + d.id + ')">🗑️</button></div></div>';
+                });
+                document.getElementById('total-gastos-val').innerText = 'R$ ' + total.toFixed(2);
+            }
+
+            const tCont = document.getElementById('tarefas-container');
+            if(tCont) {
+                tCont.innerHTML = '';
+                tarefas.sort(function(a,b) { return new Date(a.data) - new Date(b.data); }).forEach(function(t) {
+                    const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+                    tCont.innerHTML += '<div class="card-item"><div class="card-row"><div><strong>' + t.nome + '</strong><div class="card-meta" style="margin-top:4px;"><span>📅 ' + dataExibicao + '</span><span class="badge ' + t.prioridade + '">' + t.prioridade + '</span></div></div><button class="delete-btn" onclick="deleteTarefa(' + t.id + ')">🗑️</button></div><div style="display:flex; gap:8px; margin-top:8px;"><button onclick="dispararGoogleCalendar(\'' + t.nome + '\', \'' + t.data + '\', \'' + (t.anexo || '') + '\', \'' + t.prioridade + '\')" class="btn-sync btn-google" style="flex:1; margin-top:0;">🗓️ Calendar</button><button onclick="abrirLinkExtern(\'https://tasks.google.com/\')" class="btn-sync" style="flex:1; background-color:#f1f5f9; color:#1e293b; margin-top:0;">☑️ Tasks</button></div>' + (t.anexo ? '<div style="margin-top:5px;"><button onclick="abrirLinkExtern(\'' + t.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>' : '') + '</div>';
+                });
+            }
+
+            const nCont = document.getElementById('notas-container');
+            if(nCont) {
+                nCont.innerHTML = '';
+                notas.forEach(function(n) {
+                    nCont.innerHTML += '<div class="note-card" style="display:flex; flex-direction:column; justify-content:space-between; padding-bottom:35px;"><div><p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight:500;">' + (n.texto || 'Nota com Link') + '</p>' + (n.link ? '<button onclick="abrirLinkExtern(\'' + n.link + '\')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding:2px 0;">🔗 Ver Link</button>' : '') + '</div><button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(' + n.id + ')">🗑️</button></div>';
+                });
+            }
+        }
+
+        puxarDadosNuvem();
+    </script>
+</body>
+</html>
