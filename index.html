@@ -111,7 +111,7 @@
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
-            <button class="btn-sync btn-google" onclick="abrirLinkExtern('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 10px; background-color: var(--accent); color: var(--bg-card);">
+            <button class="btn-sync btn-google" onclick="abrirLinkExterno('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 10px; background-color: var(--accent); color: var(--bg-card);">
                 Subir Foto/PDF para o GitHub
             </button>
 
@@ -141,7 +141,6 @@
     </nav>
 
     <script>
-        // URL Oficial configurada por mim:
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQJgO1Kb-KaWvUAlkRH8mceVf26dGjgoJ7nhtbeuJZrKTOl-KPYrgMJxkLpgkRydmv/exec";
 
         let despesas = [];
@@ -160,7 +159,7 @@
             renderAll();
         }
 
-        function abrirLinkExtern(url) {
+        function abrirLinkExterno(url) {
             window.open(url, '_blank', 'noopener,noreferrer');
         }
 
@@ -270,7 +269,7 @@
             const dataEnd = dataObj.getFullYear() + String(dataObj.getMonth() + 1).padStart(2, '0') + String(dataObj.getDate()).padStart(2, '0') + "T" + String(dataObj.getHours()).padStart(2, '0') + String(dataObj.getMinutes()).padStart(2, '0') + "00";
             let detalhes = "Prioridade: " + prioridade.toUpperCase();
             if(anexo) detalhes += "\n\nAnexo:\n" + anexo;
-            abrirLinkExtern("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details=" + encodeURIComponent(detalhes));
+            abrirLinkExterno("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details=" + encodeURIComponent(detalhes));
         }
 
         function deleteTarefa(id) {
@@ -303,7 +302,7 @@
                 let total = 0;
                 despesas.forEach(function(d) {
                     total += d.valor;
-                    gCont.innerHTML += '<div class="card-item"><div class="card-row"><strong>' + d.nome + '</strong><span style="font-weight:bold;">R$ ' + d.valor.toFixed(2) + '</span></div><div class="card-row">' + (d.anexo ? '<button onclick="abrirLinkExtern(\'' + d.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>' : '<span></span>') + '<button class="delete-btn" onclick="deleteGasto(' + d.id + ')">🗑️</button></div></div>';
+                    gCont.innerHTML += '<div class="card-item"><div class="card-row"><strong>' + d.nome + '</strong><span style="font-weight:bold;">R$ ' + d.valor.toFixed(2) + '</span></div><div class="card-row">' + (d.anexo ? '<button onclick="abrirLinkExterno(\'' + d.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>' : '<span></span>') + '<button class="delete-btn" onclick="deleteGasto(' + d.id + ')">🗑️</button></div></div>';
                 });
                 document.getElementById('total-gastos-val').innerText = 'R$ ' + total.toFixed(2);
             }
@@ -313,7 +312,7 @@
                 tCont.innerHTML = '';
                 tarefas.sort(function(a,b) { return new Date(a.data) - new Date(b.data); }).forEach(function(t) {
                     const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-                    tCont.innerHTML += '<div class="card-item"><div class="card-row"><div><strong>' + t.nome + '</strong><div class="card-meta" style="margin-top:4px;"><span>📅 ' + dataExibicao + '</span><span class="badge ' + t.prioridade + '">' + t.prioridade + '</span></div></div><button class="delete-btn" onclick="deleteTarefa(' + t.id + ')">🗑️</button></div><div style="display:flex; gap:8px; margin-top:8px;"><button onclick="dispararGoogleCalendar(\'' + t.nome + '\', \'' + t.data + '\', \'' + (t.anexo || '') + '\', \'' + t.prioridade + '\')" class="btn-sync btn-google" style="flex:1; margin-top:0;">🗓️ Calendar</button><button onclick="abrirLinkExtern(\'https://tasks.google.com/\')" class="btn-sync" style="flex:1; background-color:#f1f5f9; color:#1e293b; margin-top:0;">☑️ Tasks</button></div>' + (t.anexo ? '<div style="margin-top:5px;"><button onclick="abrirLinkExtern(\'' + t.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>' : '') + '</div>';
+                    tCont.innerHTML += '<div class="card-item"><div class="card-row"><div><strong>' + t.nome + '</strong><div class="card-meta" style="margin-top:4px;"><span>📅 ' + dataExibicao + '</span><span class="badge ' + t.prioridade + '">' + t.prioridade + '</span></div></div><button class="delete-btn" onclick="deleteTarefa(' + t.id + ')">🗑️</button></div><div style="display:flex; gap:8px; margin-top:8px;"><button onclick="dispararGoogleCalendar(\'' + t.nome + '\', \'' + t.data + '\', \'' + (t.anexo || '') + '\', \'' + t.prioridade + '\')" class="btn-sync btn-google" style="flex:1; margin-top:0;">🗓️ Calendar</button><button onclick="abrirLinkExterno(\'https://tasks.google.com/\')" class="btn-sync" style="flex:1; background-color:#f1f5f9; color:#1e293b; margin-top:0;">☑️ Tasks</button></div>' + (t.anexo ? '<div style="margin-top:5px;"><button onclick="abrirLinkExterno(\'' + t.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>' : '') + '</div>';
                 });
             }
 
@@ -321,7 +320,7 @@
             if(nCont) {
                 nCont.innerHTML = '';
                 notas.forEach(function(n) {
-                    nCont.innerHTML += '<div class="note-card" style="display:flex; flex-direction:column; justify-content:space-between; padding-bottom:35px;"><div><p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight:500;">' + (n.texto || 'Nota com Link') + '</p>' + (n.link ? '<button onclick="abrirLinkExtern(\'' + n.link + '\')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding:2px 0;">🔗 Ver Link</button>' : '') + '</div><button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(' + n.id + ')">🗑️</button></div>';
+                    nCont.innerHTML += '<div class="note-card" style="display:flex; flex-direction:column; justify-content:space-between; padding-bottom:35px;"><div><p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight:500;">' + (n.texto || 'Nota com Link') + '</p>' + (n.link ? '<button onclick="abrirLinkExterno(\'' + n.link + '\')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding:2px 0;">🔗 Ver Link</button>' : '') + '</div><button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(' + n.id + ')">🗑️</button></div>';
                 });
             }
         }
