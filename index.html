@@ -55,6 +55,10 @@
 
         .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
         .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; position: relative; min-height: 120px; }
+        
+        /* Secção de Backup */
+        .backup-box { background-color: var(--bg-secondary); border: 1px dashed rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin-top: 30px; }
+        .btn-backup { background-color: #475569; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 48%; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -65,7 +69,6 @@
 
     <div class="container">
         
-        <!-- MÓDULO 1: LISTAPRO -->
         <section id="listapro-view" class="view-section active">
             <div class="total-box">Total Local: <span id="total-gastos-val">R$ 0,00</span></div>
             
@@ -79,7 +82,6 @@
             <div id="gastos-container"></div>
         </section>
 
-        <!-- MÓDULO 2: BORDIO -->
         <section id="bordio-view" class="view-section">
             <h2>Criar Evento ou Tarefa</h2>
             <input type="text" id="tarefa-nome" placeholder="Ex: Cir alex">
@@ -97,7 +99,6 @@
             <div id="tarefas-container"></div>
         </section>
 
-        <!-- MÓDULO 3: NOTAS ONLINE (ESPELHADO) -->
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
@@ -116,6 +117,15 @@
 
             <h2>Notas Fixadas</h2>
             <div class="notes-grid" id="notas-container"></div>
+
+            <div class="backup-box">
+                <h3 style="font-size: 14px; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">🛡️ Cópia de Segurança (Textos)</h3>
+                <div style="display: flex; justify-content: space-between;">
+                    <button class="btn-backup" onclick="exportarBackup()" style="background-color: var(--success); color: var(--bg-card);">Baixar Backup</button>
+                    <button class="btn-backup" onclick="document.getElementById('importFile').click()">Restaurar Backup</button>
+                </div>
+                <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarBackup(this)">
+            </div>
         </section>
 
     </div>
@@ -209,7 +219,7 @@
             renderAll();
         }
 
-        // --- LÓGICA NOTAS ESPELHADA ---
+        // --- LÓGICA NOTAS ---
         function addNota() {
             const texto = document.getElementById('nota-texto').value.trim();
             const link = document.getElementById('nota-link').value.trim();
@@ -228,6 +238,51 @@
             notas = notas.filter(n => n.id !== id);
             localStorage.setItem('cloud_notas', JSON.stringify(notas));
             renderAll();
+        }
+
+        // --- SISTEMA DE BACKUP ---
+        function exportarBackup() {
+            const dadosApp = {
+                despesas: JSON.parse(localStorage.getItem('cloud_despesas')) || [],
+                tarefas: JSON.parse(localStorage.getItem('cloud_tarefas')) || [],
+                notas: JSON.parse(localStorage.getItem('cloud_notas')) || []
+            };
+            
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dadosApp));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "backup_painel_listabordio.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importarBackup(input) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                try {
+                    const dadosImportados = JSON.parse(reader.result);
+                    if(dadosImportados.despesas || dadosImportados.tarefas || dadosImportados.notas) {
+                        if(confirm("Deseja substituir os dados atuais por este backup?")) {
+                            localStorage.setItem('cloud_despesas', JSON.stringify(dadosImportados.despesas || []));
+                            localStorage.setItem('cloud_tarefas', JSON.stringify(dadosImportados.tarefas || []));
+                            localStorage.setItem('cloud_notas', JSON.stringify(dadosImportados.notas || []));
+                            
+                            despesas = dadosImportados.despesas || [];
+                            tarefas = dadosImportados.tarefas || [];
+                            notas = dadosImportados.notas || [];
+                            
+                            renderAll();
+                            alert("Backup restaurado com sucesso!");
+                        }
+                    } else {
+                        alert("Arquivo inválido.");
+                    }
+                } catch(e) {
+                    alert("Erro ao ler o arquivo de backup.");
+                }
+            };
+            reader.readAsText(input.files[0]);
         }
 
         // --- RENDERIZADORES ---
@@ -285,7 +340,7 @@
                     </div>`;
             });
 
-            // Render Notas (Com Link Espelhado)
+            // Render Notas
             const nCont = document.getElementById('notas-container');
             nCont.innerHTML = '';
             notas.forEach(n => {
