@@ -17,7 +17,6 @@
             --success: #22c55e;
             --warning: #f59e0b;
             --google-blue: #4285F4;
-            --dropbox-blue: #0061FE;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -40,7 +39,6 @@
         /* Botões de Ação */
         .btn-sync { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 6px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; text-decoration: none; text-align: center; }
         .btn-google { background-color: var(--google-blue); color: white; }
-        .btn-dropbox { background-color: var(--dropbox-blue); color: white; margin-bottom: 15px; }
 
         /* Cards */
         .total-box { background-color: rgba(56, 189, 248, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
@@ -52,11 +50,11 @@
         .badge.media { background-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
         .badge.baixa { background-color: rgba(34, 197, 94, 0.2); color: var(--success); }
         
-        .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; }
+        .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
 
         .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; position: relative; min-height: 100px; }
+        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; position: relative; min-height: 120px; }
     </style>
 </head>
 <body>
@@ -99,7 +97,7 @@
             <div id="tarefas-container"></div>
         </section>
 
-        <!-- MÓDULO 3: NOTAS ONLINE -->
+        <!-- MÓDULO 3: NOTAS ONLINE (ESPELHADO) -->
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
@@ -112,9 +110,11 @@
                 <code style="color: var(--text-main); display: block; margin-top: 5px; word-break: break-all;">https://lucidiojf.github.io/painel1/nome_do_arquivo.pdf</code>
             </div>
 
-            <textarea id="nota-texto" rows="4" placeholder="Digite anotações clínicas, lembretes ou cole links importantes aqui..."></textarea>
+            <textarea id="nota-texto" rows="3" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
+            <input type="text" id="nota-link" placeholder="Link do documento/foto associado (Opcional)">
             <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
 
+            <h2>Notas Fixadas</h2>
             <div class="notes-grid" id="notas-container"></div>
         </section>
 
@@ -165,7 +165,7 @@
             renderAll();
         }
 
-        // --- LÓGICA BORDIO + AGENDA COMPATÍVEL COM WEB ---
+        // --- LÓGICA BORDIO ---
         function addTarefaLocal() {
             const nome = document.getElementById('tarefa-nome').value.trim();
             const dataRaw = document.getElementById('tarefa-data').value; 
@@ -196,7 +196,7 @@
             const dataEnd = `${ano}${mes}${dia}T${hora}${min}00`;
 
             let detalhes = `Prioridade: ${prioridade.toUpperCase()}`;
-            if(anexo) detalhes += `\\n\\nAnexo:\\n${anexo}`;
+            if(anexo) detalhes += `\n\nAnexo:\n${anexo}`;
 
             const urlFinal = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${limpa}/${dataEnd}&details=${encodeURIComponent(detalhes)}`;
             
@@ -209,13 +209,18 @@
             renderAll();
         }
 
-        // --- LÓGICA NOTAS ---
+        // --- LÓGICA NOTAS ESPELHADA ---
         function addNota() {
             const texto = document.getElementById('nota-texto').value.trim();
-            if(!texto) return;
-            notas.push({ id: Date.now(), texto });
+            const link = document.getElementById('nota-link').value.trim();
+            
+            if(!texto && !link) return alert('Por favor, digite um texto ou insira um link.');
+
+            notas.push({ id: Date.now(), texto, link });
             localStorage.setItem('cloud_notas', JSON.stringify(notas));
+            
             document.getElementById('nota-texto').value = '';
+            document.getElementById('nota-link').value = '';
             renderAll();
         }
 
@@ -227,6 +232,7 @@
 
         // --- RENDERIZADORES ---
         function renderAll() {
+            // Render Gastos
             const gCont = document.getElementById('gastos-container');
             gCont.innerHTML = '';
             let total = 0;
@@ -246,6 +252,7 @@
             });
             document.getElementById('total-gastos-val').innerText = `R$ ${total.toFixed(2)}`;
 
+            // Render Tarefas (Bordio)
             const tCont = document.getElementById('tarefas-container');
             tCont.innerHTML = '';
             tarefas.sort((a,b) => new Date(a.data) - new Date(b.data)).forEach(t => {
@@ -278,12 +285,16 @@
                     </div>`;
             });
 
+            // Render Notas (Com Link Espelhado)
             const nCont = document.getElementById('notas-container');
             nCont.innerHTML = '';
             notas.forEach(n => {
                 nCont.innerHTML += `
-                    <div class="note-card">
-                        <p style="font-size:13px; white-space:pre-wrap; margin-bottom:15px;">${n.texto}</p>
+                    <div class="note-card" style="display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 35px;">
+                        <div>
+                            <p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight: 500;">${n.texto || 'Nota com Link'}</p>
+                            ${n.link ? `<button onclick="abrirLinkExterno('${n.link}')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding: 2px 0;">🔗 Ver Link</button>` : ''}
+                        </div>
                         <button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(${n.id})">🗑️</button>
                     </div>`;
             });
