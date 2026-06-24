@@ -53,16 +53,13 @@
         .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
 
-        .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; position: relative; min-height: 120px; }
+        /* AJUSTE VISUAL MARGINAL: Transforma a lista vertical em um Mural Horizontal de Notas */
+        .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(48%, 1fr)); gap: 12px; margin-top: 10px; }
+        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; position: relative; min-height: 90px; margin-bottom: 0px !important; }
         
         /* Barra de Sincronismo Nuvem */
         .sync-banner { background-color: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; text-align: center; display: flex; justify-content: space-between; align-items: center; }
         .btn-refresh { background: var(--success); color: var(--bg-card); border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; }
-        
-        /* Box de Backup manual */
-        .backup-box { background-color: var(--bg-secondary); border: 1px dashed rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin-top: 30px; }
-        .btn-backup { background-color: #475569; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 48%; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -73,11 +70,13 @@
 
     <div class="container">
         
+        <!-- Status de Sincronismo em Tempo Real -->
         <div class="sync-banner">
-            <span id="sync-status">🔄 Conectando ao Google Sheets...</span>
+            <span id="sync-status">🔄 Sincronizado com o Google Sheets</span>
             <button class="btn-refresh" onclick="puxarDadosNuvem()">Atualizar 🔄</button>
         </div>
         
+        <!-- MÓDULO 1: LISTAPRO -->
         <section id="listapro-view" class="view-section active">
             <div class="total-box">Total Local: <span id="total-gastos-val">R$ 0,00</span></div>
             
@@ -91,6 +90,7 @@
             <div id="gastos-container"></div>
         </section>
 
+        <!-- MÓDULO 2: BORDIO -->
         <section id="bordio-view" class="view-section">
             <h2>Criar Evento ou Tarefa</h2>
             <input type="text" id="tarefa-nome" placeholder="Ex: Cir alex">
@@ -108,6 +108,7 @@
             <div id="tarefas-container"></div>
         </section>
 
+        <!-- MÓDULO 3: NOTAS ONLINE -->
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
@@ -115,21 +116,17 @@
                 Subir Foto/PDF para o GitHub
             </button>
 
-            <textarea id="nota-texto" rows="3" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
+            <div style="background-color: var(--bg-secondary); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <span style="color: var(--accent); font-weight: bold;">📋 Link Padrão do seu Anexo:</span><br>
+                <code style="color: var(--text-main); display: block; margin-top: 5px; word-break: break-all;">https://lucidiojf.github.io/painel1/nome_do_arquivo.pdf</code>
+            </div>
+
+            <textarea id="nota-texto" rows="3" placeholder="Digite a anotação or lembrete clínico aqui..."></textarea>
             <input type="text" id="nota-link" placeholder="Link do documento/foto associado (Opcional)">
             <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
 
             <h2>Notas Fixadas</h2>
             <div class="notes-grid" id="notas-container"></div>
-
-            <div class="backup-box">
-                <h3 style="font-size: 13px; color: var(--text-main); margin-bottom: 10px;">🛡️ Recuperação Manual</h3>
-                <div style="display: flex; justify-content: space-between;">
-                    <button class="btn-backup" onclick="exportarBackup()">Gerar Backup</button>
-                    <button class="btn-backup" onclick="document.getElementById('importFile').click()" style="background-color: var(--success); color: var(--bg-card);">Puxar .json</button>
-                </div>
-                <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarBackupManual(this)">
-            </div>
         </section>
 
     </div>
@@ -143,17 +140,13 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQJgO1Kb-KaWvUAlkRH8mceVf26dGjgoJ7nhtbeuJZrKTOl-KPYrgMJxkLpgkRydmv/exec";
 
-        let despesas = [];
-        let tarefas = [];
-        let notas = [];
+        let despesas = JSON.parse(localStorage.getItem('cloud_despesas')) || [];
+        let tarefas = JSON.parse(localStorage.getItem('cloud_tarefas')) || [];
+        let notas = JSON.parse(localStorage.getItem('cloud_notas')) || [];
 
         function switchTab(viewId, element) {
-            var sections = document.getElementsByClassName('view-section');
-            for(var i=0; i<sections.length; i++) { sections[i].classList.remove('active'); }
-            
-            var tabs = document.getElementsByClassName('tab-btn');
-            for(var j=0; j<tabs.length; j++) { tabs[j].classList.remove('active'); }
-            
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             element.classList.add('active');
             renderAll();
@@ -164,77 +157,56 @@
         }
 
         async function enviarDadosNuvem() {
-            if(!SCRIPT_URL || SCRIPT_URL.indexOf("SUA_URL") !== -1) return;
+            if(SCRIPT_URL.includes("SUA_URL")) return;
             document.getElementById('sync-status').innerText = "📤 Salvando na Nuvem...";
+            
+            const payload = { despesas, tarefas, notas };
+            
             try {
                 await fetch(SCRIPT_URL, {
                     method: "POST",
                     mode: "no-cors",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ despesas: despesas, tarefas: tarefas, notas: notas })
+                    body: JSON.stringify(payload)
                 });
-                document.getElementById('sync-status').innerText = "✅ Sincronizado com o Google Sheets";
+                document.getElementById('sync-status').innerText = "✅ Salvo no Google Sheets";
             } catch(e) {
                 document.getElementById('sync-status').innerText = "❌ Erro ao salvar na nuvem";
             }
         }
 
         async function puxarDadosNuvem() {
-            if(!SCRIPT_URL || SCRIPT_URL.indexOf("SUA_URL") !== -1) {
-                document.getElementById('sync-status').innerText = "⚠️ URL não configurada";
-                return;
-            }
+            if(SCRIPT_URL.includes("SUA_URL")) return;
             document.getElementById('sync-status').innerText = "📥 Buscando dados novos...";
+            
             try {
                 const response = await fetch(SCRIPT_URL);
                 const nuvem = await response.json();
                 
-                if(nuvem && (nuvem.despesas || nuvem.tarefas || nuvem.notas)) {
-                    despesas = nuvem.despesas || [];
-                    tarefas = nuvem.tarefas || [];
-                    notas = nuvem.notas || [];
-                    document.getElementById('sync-status').innerText = "✅ Tudo Atualizado!";
-                } else {
-                    document.getElementById('sync-status').innerText = "✅ Conectado (Nuvem Vazia)";
-                }
+                despesas = nuvem.despesas || [];
+                tarefas = nuvem.tarefas || [];
+                notas = nuvem.notas || [];
+                
+                localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
+                localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
+                localStorage.setItem('cloud_notas', JSON.stringify(notas));
+                
                 renderAll();
+                document.getElementById('sync-status').innerText = "✅ Tudo Atualizado!";
             } catch(e) {
-                document.getElementById('sync-status').innerText = "⚠️ Erro de Conexão";
+                document.getElementById('sync-status').innerText = "⚠️ Modo Offline Ativo";
             }
-        }
-
-        function importarBackupManual(input) {
-            const reader = new FileReader();
-            reader.onload = function(){
-                try {
-                    const dados = JSON.parse(reader.result);
-                    despesas = dados.despesas || [];
-                    tarefas = dados.tarefas || [];
-                    notas = dados.notas || [];
-                    renderAll();
-                    alert("Dados aplicados! Gravando no Google Sheets...");
-                    enviarDadosNuvem();
-                } catch(e) {
-                    alert("Arquivo inválido.");
-                }
-            };
-            reader.readAsText(input.files[0]);
-        }
-
-        function exportarBackup() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({despesas: despesas, tarefas: tarefas, notas: notas}));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "backup_painel_listabordio.json");
-            dlAnchor.click();
         }
 
         function addGasto() {
             const nome = document.getElementById('gasto-nome').value.trim();
             const valor = parseFloat(document.getElementById('gasto-valor').value) || 0;
             const anexo = document.getElementById('gasto-anexo').value.trim();
+
             if(!nome) return;
-            despesas.push({ id: Date.now(), nome: nome, valor: valor, anexo: anexo });
+            despesas.push({ id: Date.now(), nome, valor, anexo });
+            localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
+            
             document.getElementById('gasto-nome').value = '';
             document.getElementById('gasto-valor').value = '';
             document.getElementById('gasto-anexo').value = '';
@@ -243,7 +215,8 @@
         }
 
         function deleteGasto(id) {
-            despesas = despesas.filter(function(d) { return d.id !== id; });
+            despesas = despesas.filter(d => d.id !== id);
+            localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
             renderAll();
             enviarDadosNuvem();
         }
@@ -253,8 +226,12 @@
             const dataRaw = document.getElementById('tarefa-data').value; 
             const prioridade = document.getElementById('tarefa-prioridade').value;
             const anexo = document.getElementById('tarefa-anexo').value.trim();
-            if(!nome || !dataRaw) return alert('Defina título e data.');
-            tarefas.push({ id: Date.now(), nome: nome, data: dataRaw, prioridade: prioridade, anexo: anexo });
+
+            if(!nome || !dataRaw) return alert('Por favor, defina o título e a data/hora.');
+
+            tarefas.push({ id: Date.now(), nome, data: dataRaw, prioridade, anexo });
+            localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
+
             document.getElementById('tarefa-nome').value = '';
             document.getElementById('tarefa-data').value = '';
             document.getElementById('tarefa-anexo').value = '';
@@ -267,13 +244,16 @@
             const dataObj = new Date(dataRaw);
             dataObj.setHours(dataObj.getHours() + 1);
             const dataEnd = dataObj.getFullYear() + String(dataObj.getMonth() + 1).padStart(2, '0') + String(dataObj.getDate()).padStart(2, '0') + "T" + String(dataObj.getHours()).padStart(2, '0') + String(dataObj.getMinutes()).padStart(2, '0') + "00";
-            let detalhes = "Prioridade: " + prioridade.toUpperCase();
-            if(anexo) detalhes += "\n\nAnexo:\n" + anexo;
-            abrirLinkExterno("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details=" + encodeURIComponent(detalhes));
+
+            let detalhes = `Prioridade: ${prioridade.toUpperCase()}`;
+            if(anexo) detalhes += `\n\nAnexo:\n${anexo}`;
+
+            abrirLinkExterno(`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${limpa}/${dataEnd}&details=${encodeURIComponent(detalhes)}`);
         }
 
         function deleteTarefa(id) {
-            tarefas = tarefas.filter(function(t) { return t.id !== id; });
+            tarefas = tarefas.filter(t => t.id !== id);
+            localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
             renderAll();
             enviarDadosNuvem();
         }
@@ -282,7 +262,10 @@
             const texto = document.getElementById('nota-texto').value.trim();
             const link = document.getElementById('nota-link').value.trim();
             if(!texto && !link) return;
-            notas.push({ id: Date.now(), texto: texto, link: link });
+
+            notas.push({ id: Date.now(), texto, link });
+            localStorage.setItem('cloud_notas', JSON.stringify(notas));
+            
             document.getElementById('nota-texto').value = '';
             document.getElementById('nota-link').value = '';
             renderAll();
@@ -290,39 +273,68 @@
         }
 
         function deleteNota(id) {
-            notas = notas.filter(function(n) { return n.id !== id; });
+            notas = notas.filter(n => n.id !== id);
+            localStorage.setItem('cloud_notas', JSON.stringify(notas));
             renderAll();
             enviarDadosNuvem();
         }
 
         function renderAll() {
             const gCont = document.getElementById('gastos-container');
-            if(gCont) {
-                gCont.innerHTML = '';
-                let total = 0;
-                despesas.forEach(function(d) {
-                    total += d.valor;
-                    gCont.innerHTML += '<div class="card-item"><div class="card-row"><strong>' + d.nome + '</strong><span style="font-weight:bold;">R$ ' + d.valor.toFixed(2) + '</span></div><div class="card-row">' + (d.anexo ? '<button onclick="abrirLinkExterno(\'' + d.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>' : '<span></span>') + '<button class="delete-btn" onclick="deleteGasto(' + d.id + ')">🗑️</button></div></div>';
-                });
-                document.getElementById('total-gastos-val').innerText = 'R$ ' + total.toFixed(2);
-            }
+            gCont.innerHTML = '';
+            let total = 0;
+            despesas.forEach(d => {
+                total += d.valor;
+                gCont.innerHTML += `
+                    <div class="card-item">
+                        <div class="card-row">
+                            <strong>${d.nome}</strong>
+                            <span style="font-weight:bold;">R$ ${d.valor.toFixed(2)}</span>
+                        </div>
+                        <div class="card-row">
+                            ${d.anexo ? `<button onclick="abrirLinkExterno('${d.anexo}')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>` : '<span></span>'}
+                            <button class="delete-btn" onclick="deleteGasto(${d.id})">🗑️</button>
+                        </div>
+                    </div>`;
+            });
+            document.getElementById('total-gastos-val').innerText = `R$ ${total.toFixed(2)}`;
 
             const tCont = document.getElementById('tarefas-container');
-            if(tCont) {
-                tCont.innerHTML = '';
-                tarefas.sort(function(a,b) { return new Date(a.data) - new Date(b.data); }).forEach(function(t) {
-                    const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-                    tCont.innerHTML += '<div class="card-item"><div class="card-row"><div><strong>' + t.nome + '</strong><div class="card-meta" style="margin-top:4px;"><span>📅 ' + dataExibicao + '</span><span class="badge ' + t.prioridade + '">' + t.prioridade + '</span></div></div><button class="delete-btn" onclick="deleteTarefa(' + t.id + ')">🗑️</button></div><div style="display:flex; gap:8px; margin-top:8px;"><button onclick="dispararGoogleCalendar(\'' + t.nome + '\', \'' + t.data + '\', \'' + (t.anexo || '') + '\', \'' + t.prioridade + '\')" class="btn-sync btn-google" style="flex:1; margin-top:0;">🗓️ Calendar</button><button onclick="abrirLinkExterno(\'https://tasks.google.com/\')" class="btn-sync" style="flex:1; background-color:#f1f5f9; color:#1e293b; margin-top:0;">☑️ Tasks</button></div>' + (t.anexo ? '<div style="margin-top:5px;"><button onclick="abrirLinkExterno(\'' + t.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>' : '') + '</div>';
-                });
-            }
+            tCont.innerHTML = '';
+            tarefas.sort((a,b) => new Date(a.data) - new Date(b.data)).forEach(t => {
+                const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+                tCont.innerHTML += `
+                    <div class="card-item">
+                        <div class="card-row">
+                            <div>
+                                <strong>${t.nome}</strong>
+                                <div class="card-meta" style="margin-top: 4px;">
+                                    <span>📅 ${dataExibicao}</span>
+                                    <span class="badge ${t.prioridade}">${t.prioridade}</span>
+                                </div>
+                            </div>
+                            <button class="delete-btn" onclick="deleteTarefa(${t.id})">🗑️</button>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 8px;">
+                            <button onclick="dispararGoogleCalendar('${t.nome}', '${t.data}', '${t.anexo || ''}', '${t.prioridade}')" class="btn-sync btn-google" style="flex: 1; margin-top: 0;">🗓️ Calendar</button>
+                            <button onclick="abrirLinkExterno('https://tasks.google.com/')" class="btn-sync" style="flex: 1; background-color: #f1f5f9; color: #1e293b; margin-top: 0;">☑️ Tasks</button>
+                        </div>
+                        ${t.anexo ? `<div style="margin-top:5px;"><button onclick="abrirLinkExterno('${t.anexo}')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>` : ''}
+                    </div>`;
+            });
 
             const nCont = document.getElementById('notas-container');
-            if(nCont) {
-                nCont.innerHTML = '';
-                notas.forEach(function(n) {
-                    nCont.innerHTML += '<div class="note-card" style="display:flex; flex-direction:column; justify-content:space-between; padding-bottom:35px;"><div><p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight:500;">' + (n.texto || 'Nota com Link') + '</p>' + (n.link ? '<button onclick="abrirLinkExterno(\'' + n.link + '\')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding:2px 0;">🔗 Ver Link</button>' : '') + '</div><button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(' + n.id + ')">🗑️</button></div>';
-                });
-            }
+            nCont.innerHTML = '';
+            notas.forEach(n => {
+                nCont.innerHTML += `
+                    <div class="note-card" style="display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 35px;">
+                        <div>
+                            <p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight: 500;">${n.texto || 'Nota com Link'}</p>
+                            ${n.link ? `<button onclick="abrirLinkExterno('${n.link}')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding: 2px 0;">🔗 Ver Link</button>` : ''}
+                        </div>
+                        <button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(${n.id})">🗑️</button>
+                    </div>`;
+            });
         }
 
         puxarDadosNuvem();
