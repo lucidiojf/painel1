@@ -52,10 +52,14 @@
         
         .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
+        .edit-btn { background: none; border: none; color: var(--warning); cursor: pointer; font-size: 15px; margin-right: 8px; }
 
-        /* AJUSTE VISUAL MARGINAL: Transforma a lista vertical em um Mural Horizontal de Notas */
+        /* Mural Horizontal de Notas */
         .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(48%, 1fr)); gap: 12px; margin-top: 10px; }
-        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; position: relative; min-height: 90px; margin-bottom: 0px !important; }
+        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 8px; position: relative; min-height: 95px; }
+        
+        /* Barra de Pesquisa */
+        .search-box { background-color: var(--bg-secondary); border: 1px solid var(--accent); padding: 10px 12px; border-radius: 8px; color: var(--text-main); font-size: 14px; margin-bottom: 15px; }
         
         /* Barra de Sincronismo Nuvem */
         .sync-banner { background-color: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; text-align: center; display: flex; justify-content: space-between; align-items: center; }
@@ -121,9 +125,16 @@
                 <code style="color: var(--text-main); display: block; margin-top: 5px; word-break: break-all;">https://lucidiojf.github.io/painel1/nome_do_arquivo.pdf</code>
             </div>
 
-            <textarea id="nota-texto" rows="3" placeholder="Digite a anotação or lembrete clínico aqui..."></textarea>
+            <!-- Guardamos o ID da nota que está sendo editada (inicia vazio) -->
+            <input type="hidden" id="nota-id-edicao" value="">
+
+            <textarea id="nota-texto" rows="3" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
             <input type="text" id="nota-link" placeholder="Link do documento/foto associado (Opcional)">
-            <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
+            <button class="btn-primary" id="btn-salvar-nota" onclick="addNota()">Fixar Nota</button>
+
+            <h2>🔍 Pesquisar Notas</h2>
+            <!-- Campo de Busca Dinâmica -->
+            <input type="text" class="search-box" id="busca-nota" oninput="renderAll()" placeholder="Digite uma palavra para buscar nas notas...">
 
             <h2>Notas Fixadas</h2>
             <div class="notes-grid" id="notas-container"></div>
@@ -159,9 +170,7 @@
         async function enviarDadosNuvem() {
             if(SCRIPT_URL.includes("SUA_URL")) return;
             document.getElementById('sync-status').innerText = "📤 Salvando na Nuvem...";
-            
             const payload = { despesas, tarefas, notas };
-            
             try {
                 await fetch(SCRIPT_URL, {
                     method: "POST",
@@ -178,19 +187,15 @@
         async function puxarDadosNuvem() {
             if(SCRIPT_URL.includes("SUA_URL")) return;
             document.getElementById('sync-status').innerText = "📥 Buscando dados novos...";
-            
             try {
                 const response = await fetch(SCRIPT_URL);
                 const nuvem = await response.json();
-                
                 despesas = nuvem.despesas || [];
                 tarefas = nuvem.tarefas || [];
                 notas = nuvem.notas || [];
-                
                 localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
                 localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
                 localStorage.setItem('cloud_notas', JSON.stringify(notas));
-                
                 renderAll();
                 document.getElementById('sync-status').innerText = "✅ Tudo Atualizado!";
             } catch(e) {
@@ -202,11 +207,9 @@
             const nome = document.getElementById('gasto-nome').value.trim();
             const valor = parseFloat(document.getElementById('gasto-valor').value) || 0;
             const anexo = document.getElementById('gasto-anexo').value.trim();
-
             if(!nome) return;
             despesas.push({ id: Date.now(), nome, valor, anexo });
             localStorage.setItem('cloud_despesas', JSON.stringify(despesas));
-            
             document.getElementById('gasto-nome').value = '';
             document.getElementById('gasto-valor').value = '';
             document.getElementById('gasto-anexo').value = '';
@@ -226,12 +229,9 @@
             const dataRaw = document.getElementById('tarefa-data').value; 
             const prioridade = document.getElementById('tarefa-prioridade').value;
             const anexo = document.getElementById('tarefa-anexo').value.trim();
-
             if(!nome || !dataRaw) return alert('Por favor, defina o título e a data/hora.');
-
             tarefas.push({ id: Date.now(), nome, data: dataRaw, prioridade, anexo });
             localStorage.setItem('cloud_tarefas', JSON.stringify(tarefas));
-
             document.getElementById('tarefa-nome').value = '';
             document.getElementById('tarefa-data').value = '';
             document.getElementById('tarefa-anexo').value = '';
@@ -244,10 +244,8 @@
             const dataObj = new Date(dataRaw);
             dataObj.setHours(dataObj.getHours() + 1);
             const dataEnd = dataObj.getFullYear() + String(dataObj.getMonth() + 1).padStart(2, '0') + String(dataObj.getDate()).padStart(2, '0') + "T" + String(dataObj.getHours()).padStart(2, '0') + String(dataObj.getMinutes()).padStart(2, '0') + "00";
-
             let detalhes = `Prioridade: ${prioridade.toUpperCase()}`;
             if(anexo) detalhes += `\n\nAnexo:\n${anexo}`;
-
             abrirLinkExterno(`https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(nome)}&dates=${limpa}/${dataEnd}&details=${encodeURIComponent(detalhes)}`);
         }
 
@@ -258,18 +256,48 @@
             enviarDadosNuvem();
         }
 
+        // --- SISTEMA DE NOTAS ATUALIZADO (SALVAR + EDITAR) ---
         function addNota() {
             const texto = document.getElementById('nota-texto').value.trim();
             const link = document.getElementById('nota-link').value.trim();
+            const idEdicao = document.getElementById('nota-id-edicao').value;
+
             if(!texto && !link) return;
 
-            notas.push({ id: Date.now(), texto, link });
+            if(idEdicao) {
+                // Se tem ID de edição, atualiza a nota existente
+                notas = notas.map(n => n.id == idEdicao ? { id: n.id, texto, link } : n);
+                document.getElementById('nota-id-edicao').value = '';
+                document.getElementById('btn-salvar-nota').innerText = 'Fixar Nota';
+                document.getElementById('btn-salvar-nota').style.backgroundColor = 'var(--accent)';
+            } else {
+                // Se não tem ID, cria uma nova nota
+                notas.push({ id: Date.now(), texto, link });
+            }
+
             localStorage.setItem('cloud_notas', JSON.stringify(notas));
-            
             document.getElementById('nota-texto').value = '';
             document.getElementById('nota-link').value = '';
             renderAll();
             enviarDadosNuvem();
+        }
+
+        // Carrega a nota de volta nos campos para você poder alterar
+        function iniciarEdicaoNota(id) {
+            const nota = notas.find(n => n.id === id);
+            if(!nota) return;
+
+            document.getElementById('nota-texto').value = nota.texto;
+            document.getElementById('nota-link').value = nota.link;
+            document.getElementById('nota-id-edicao').value = nota.id;
+            
+            // Muda o visual do botão temporariamente para alertar a edição
+            const btn = document.getElementById('btn-salvar-nota');
+            btn.innerText = '💾 Salvar Alteração';
+            btn.style.backgroundColor = 'var(--warning)';
+            
+            // Sobe a tela para os campos de texto automaticamente
+            document.getElementById('nota-texto').focus();
         }
 
         function deleteNota(id) {
@@ -279,7 +307,9 @@
             enviarDadosNuvem();
         }
 
+        // --- RENDERIZADORES COM FILTRO DE BUSCA ---
         function renderAll() {
+            // Render Gastos
             const gCont = document.getElementById('gastos-container');
             gCont.innerHTML = '';
             let total = 0;
@@ -299,6 +329,7 @@
             });
             document.getElementById('total-gastos-val').innerText = `R$ ${total.toFixed(2)}`;
 
+            // Render Tarefas
             const tCont = document.getElementById('tarefas-container');
             tCont.innerHTML = '';
             tarefas.sort((a,b) => new Date(a.data) - new Date(b.data)).forEach(t => {
@@ -323,16 +354,29 @@
                     </div>`;
             });
 
+            // Render Notas (Com filtro de busca ativa)
             const nCont = document.getElementById('notas-container');
             nCont.innerHTML = '';
+            
+            const termoBusca = document.getElementById('busca-nota').value.toLowerCase().trim();
+
             notas.forEach(n => {
+                const textoNota = (n.texto || '').toLowerCase();
+                
+                // Se tiver termo de busca e a nota não contiver a palavra, ela pula e não aparece
+                if(termoBusca && !textoNota.includes(termoBusca)) return;
+
                 nCont.innerHTML += `
                     <div class="note-card" style="display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 35px;">
                         <div>
                             <p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight: 500;">${n.texto || 'Nota com Link'}</p>
                             ${n.link ? `<button onclick="abrirLinkExterno('${n.link}')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding: 2px 0;">🔗 Ver Link</button>` : ''}
                         </div>
-                        <button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(${n.id})">🗑️</button>
+                        <div style="position:absolute; bottom:5px; right:5px; display: flex; align-items: center;">
+                            <!-- O LÁPIS DA EDIÇÃO CLÍNICA -->
+                            <button class="edit-btn" title="Editar Nota" onclick="iniciarEdicaoNota(${n.id})">✏️</button>
+                            <button class="delete-btn" style="font-size:12px;" title="Excluir" onclick="deleteNota(${n.id})">🗑️</button>
+                        </div>
                     </div>`;
             });
         }
