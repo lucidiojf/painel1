@@ -42,7 +42,7 @@
         .btn-google { background-color: var(--google-blue); color: white; }
         .btn-dropbox { background-color: var(--dropbox-blue); color: white; }
 
-        /* Cards */
+        /* Cards Gerais */
         .total-box { background-color: rgba(56, 189, 248, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
         .card-item { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
         .card-row { display: flex; justify-content: space-between; align-items: center; }
@@ -55,9 +55,23 @@
         .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
 
-        .notes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .note-card { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; position: relative; min-height: 120px; }
-        .btn-download-txt { background-color: rgba(255,255,255,0.1); color: var(--text-main); border: none; border-radius: 4px; padding: 4px 8px; font-size: 11px; font-weight: bold; cursor: pointer; margin-top: 8px; display: inline-block; }
+        /* Layout Compacto de Notas (Tipo Manchete / Bloco de Noticias) */
+        .search-box { position: relative; margin-bottom: 15px; }
+        .search-input { width: 100%; padding: 12px 15px; background-color: var(--bg-secondary); border: 1px solid var(--accent); border-radius: 8px; color: var(--text-main); font-size: 15px; outline: none; }
+        
+        .notes-list { display: flex; flex-direction: column; gap: 8px; }
+        .note-item { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
+        .note-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
+        .note-header:hover { background-color: rgba(255,255,255,0.03); }
+        .note-title-text { font-weight: 600; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .note-title-text::before { content: '▶'; font-size: 10px; color: var(--accent); transition: transform 0.2s; }
+        .note-item.open .note-title-text::before { transform: rotate(90deg); }
+        
+        .note-body { display: none; padding: 15px; background-color: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05); font-size: 14px; line-height: 1.5; color: #cbd5e1; white-space: pre-wrap; }
+        .note-item.open .note-body { display: block; }
+        
+        .note-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); }
+        .btn-download-txt { background-color: rgba(255,255,255,0.1); color: var(--text-main); border: none; border-radius: 4px; padding: 6px 10px; font-size: 12px; font-weight: bold; cursor: pointer; }
         .btn-download-txt:hover { background-color: var(--accent); color: var(--bg-card); }
         
         /* Barra de Sincronismo Nuvem */
@@ -126,12 +140,19 @@
                 Subir Foto para o Dropbox 📦
             </button>
 
-            <textarea id="nota-texto" rows="3" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
+            <input type="text" id="nota-titulo" placeholder="Título / Manchete (Ex: Exames Necessários)">
+            <textarea id="nota-texto" rows="3" placeholder="Digite o conteúdo detalhado ou instrução aqui..."></textarea>
             <input type="text" id="nota-link" placeholder="Link do documento/foto associado (Opcional)">
             <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
 
-            <h2>Notas Fixadas</h2>
-            <div class="notes-grid" id="notas-container"></div>
+            <h2>Notas Salvas</h2>
+            
+            <!-- Campo de Busca em Tempo Real -->
+            <div class="search-box">
+                <input type="text" id="busca-nota" class="search-input" placeholder="🔍 Buscar nas notas..." oninput="renderNotas()">
+            </div>
+
+            <div class="notes-list" id="notas-container"></div>
 
             <div class="backup-box">
                 <h3 style="font-size: 13px; color: var(--text-main); margin-bottom: 10px;">🛡️ Recuperação Manual</h3>
@@ -290,10 +311,13 @@
         }
 
         function addNota() {
+            const titulo = document.getElementById('nota-titulo').value.trim();
             const texto = document.getElementById('nota-texto').value.trim();
             const link = document.getElementById('nota-link').value.trim();
-            if(!texto && !link) return;
-            notas.push({ id: Date.now(), texto: texto, link: link });
+            if(!texto && !link && !titulo) return;
+            
+            notas.push({ id: Date.now(), titulo: titulo, texto: texto, link: link });
+            document.getElementById('nota-titulo').value = '';
             document.getElementById('nota-texto').value = '';
             document.getElementById('nota-link').value = '';
             renderAll();
@@ -306,17 +330,21 @@
             enviarDadosNuvem();
         }
 
+        function toggleNota(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
+        }
+
         function baixarNotaTXT(id) {
             const nota = notas.find(function(n) { return n.id === id; });
             if (!nota) return;
 
-            let conteudo = nota.texto || "";
+            let conteudo = (nota.titulo ? (nota.titulo + "\n\n") : "") + (nota.texto || "");
             if (nota.link) {
                 conteudo += "\n\nLink do Documento/Foto:\n" + nota.link;
             }
 
-            // Define o nome do arquivo usando as primeiras palavras do texto
-            let nomeLimpo = (nota.texto || "nota_sem_titulo")
+            let nomeLimpo = (nota.titulo || nota.texto || "nota_sem_titulo")
                 .split('\n')[0]
                 .replace(/[^a-zA-Z0-9_ -]/g, "")
                 .substring(0, 25)
@@ -330,6 +358,50 @@
             dlAnchor.download = nomeLimpo + ".txt";
             dlAnchor.click();
             URL.revokeObjectURL(dlAnchor.href);
+        }
+
+        function renderNotas() {
+            const nCont = document.getElementById('notas-container');
+            if(!nCont) return;
+            
+            const termoBusca = (document.getElementById('busca-nota') ? document.getElementById('busca-nota').value.toLowerCase() : '');
+            nCont.innerHTML = '';
+
+            const notasFiltradas = notas.filter(function(n) {
+                const tit = (n.titulo || '').toLowerCase();
+                const txt = (n.texto || '').toLowerCase();
+                return tit.indexOf(termoBusca) !== -1 || txt.indexOf(termoBusca) !== -1;
+            });
+
+            if(notasFiltradas.length === 0) {
+                nCont.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:15px; font-size:13px;">Nenhuma nota encontrada.</div>';
+                return;
+            }
+
+            notasFiltradas.forEach(function(n) {
+                // Se a nota antiga não tinha o campo 'titulo', gera um automaticamente com as primeiras palavras
+                let tituloExibicao = n.titulo;
+                if(!tituloExibicao) {
+                    tituloExibicao = (n.texto || 'Nota Sem Título').split('\n')[0].substring(0, 35);
+                    if((n.texto || '').length > 35) tituloExibicao += '...';
+                }
+
+                nCont.innerHTML += `
+                    <div class="note-item">
+                        <div class="note-header" onclick="toggleNota(this)">
+                            <span class="note-title-text">${tituloExibicao}</span>
+                            <button class="delete-btn" onclick="event.stopPropagation(); deleteNota(${n.id})">🗑️</button>
+                        </div>
+                        <div class="note-body">
+                            <div>${n.texto || '<em>Sem texto adicional.</em>'}</div>
+                            ${n.link ? `<div style="margin-top:10px;"><button onclick="abrirLinkExterno('${n.link}')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Ver Anexo / Documento</button></div>` : ''}
+                            <div class="note-actions">
+                                <button class="btn-download-txt" onclick="baixarNotaTXT(${n.id})">📄 Baixar TXT</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
         function renderAll() {
@@ -353,13 +425,7 @@
                 });
             }
 
-            const nCont = document.getElementById('notas-container');
-            if(nCont) {
-                nCont.innerHTML = '';
-                notas.forEach(function(n) {
-                    nCont.innerHTML += '<div class="note-card" style="display:flex; flex-direction:column; justify-content:space-between; padding-bottom:35px;"><div><p style="font-size:13px; white-space:pre-wrap; margin-bottom:10px; font-weight:500;">' + (n.texto || 'Nota com Link') + '</p>' + (n.link ? '<button onclick="abrirLinkExterno(\'' + n.link + '\')" class="file-link" style="background:none; border:none; cursor:pointer; font-weight:bold; padding:2px 0;">🔗 Ver Link</button><br>' : '') + '<button class="btn-download-txt" onclick="baixarNotaTXT(' + n.id + ')">📄 Baixar TXT</button></div><button class="delete-btn" style="position:absolute; bottom:5px; right:5px; font-size:12px;" onclick="deleteNota(' + n.id + ')">🗑️</button></div>';
-                });
-            }
+            renderNotas();
         }
 
         puxarDadosNuvem();
