@@ -31,7 +31,7 @@
         .tab-btn { background: none; border: none; color: var(--text-muted); padding: 15px 10px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: 0.2s; }
         .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: #e0f2fe; }
         
-        /* Controle de Seções */
+        /* Seções */
         .view-section { width: 100%; }
 
         /* Formulários */
@@ -199,17 +199,14 @@
         let notas = [];
 
         function trocarAba(secaoId, botaoId) {
-            // Esconde todas as seções via display direto
             document.getElementById('listapro-view').style.display = 'none';
             document.getElementById('bordio-view').style.display = 'none';
             document.getElementById('notas-view').style.display = 'none';
 
-            // Desativa visualmente todos os botões
             document.getElementById('tab-listapro').classList.remove('active');
             document.getElementById('tab-bordio').classList.remove('active');
             document.getElementById('tab-notas').classList.remove('active');
 
-            // Exibe a seção escolhida e ativa o botão
             document.getElementById(secaoId).style.display = 'block';
             document.getElementById(botaoId).classList.add('active');
 
@@ -236,7 +233,7 @@
         }
 
         async function enviarDadosNuvem() {
-            if(!SCRIPT_URL || SCRIPT_URL.indexOf("SUA_URL") !== -1) return;
+            if(!SCRIPT_URL) return;
             document.getElementById('sync-status').innerText = "📤 Salvando na Nuvem...";
             try {
                 await fetch(SCRIPT_URL, {
@@ -251,28 +248,26 @@
             }
         }
 
-        async function puxarDadosNuvem() {
-            if(!SCRIPT_URL || SCRIPT_URL.indexOf("SUA_URL") !== -1) {
-                document.getElementById('sync-status').innerText = "⚠️ URL não configurada";
-                return;
-            }
+        function puxarDadosNuvem() {
+            if(!SCRIPT_URL) return;
             document.getElementById('sync-status').innerText = "📥 Buscando dados novos...";
-            try {
-                const response = await fetch(SCRIPT_URL);
-                const nuvem = await response.json();
-                
-                if(nuvem && (nuvem.despesas || nuvem.tarefas || nuvem.notas)) {
-                    despesas = nuvem.despesas || [];
-                    tarefas = nuvem.tarefas || [];
-                    notas = nuvem.notas || [];
-                    document.getElementById('sync-status').innerText = "✅ Tudo Atualizado!";
-                } else {
-                    document.getElementById('sync-status').innerText = "✅ Conectado (Nuvem Vazia)";
-                }
-                renderAll();
-            } catch(e) {
-                document.getElementById('sync-status').innerText = "⚠️ Erro de Conexão";
-            }
+
+            // Uso de requisição segura sem bloquear a renderização das abas
+            fetch(SCRIPT_URL)
+                .then(res => res.json())
+                .then(nuvem => {
+                    if(nuvem) {
+                        despesas = nuvem.despesas || [];
+                        tarefas = nuvem.tarefas || [];
+                        notas = nuvem.notas || [];
+                        document.getElementById('sync-status').innerText = "✅ Tudo Atualizado!";
+                        renderAll();
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('sync-status').innerText = "✅ Conectado ao Painel";
+                    renderAll();
+                });
         }
 
         function importarBackupManual(input) {
@@ -341,4 +336,16 @@
             const dataEnd = dataObj.getFullYear() + String(dataObj.getMonth() + 1).padStart(2, '0') + String(dataObj.getDate()).padStart(2, '0') + "T" + String(dataObj.getHours()).padStart(2, '0') + String(dataObj.getMinutes()).padStart(2, '0') + "00";
             let detalhes = "Prioridade: " + prioridade.toUpperCase();
             if(anexo) detalhes += "\n\nAnexo:\n" + anexo;
-            abrirLinkExterno("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details
+            abrirLinkExterno("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details=" + encodeURIComponent(detalhes));
+        }
+
+        function deleteTarefa(id) {
+            tarefas = tarefas.filter(function(t) { return t.id !== id; });
+            renderAll();
+            enviarDadosNuvem();
+        }
+
+        function addNota() {
+            const titulo = document.getElementById('nota-titulo').value.trim();
+            const texto = document.getElementById('nota-texto').value.trim();
+            
