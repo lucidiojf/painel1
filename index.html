@@ -26,7 +26,7 @@
         header { background-color: var(--bg-secondary); padding: 15px; text-align: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
 
-        /* Navegação por Abas */
+        /* Abas Navegação */
         .nav-tabs { display: flex; justify-content: space-around; background-color: var(--bg-secondary); position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--border-color); z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
         .tab-btn { background: none; border: none; color: var(--text-muted); padding: 15px 10px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: 0.2s; }
         .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: #e0f2fe; }
@@ -199,14 +199,12 @@
         let notas = [];
 
         function switchTab(viewId, btnId) {
-            var sections = document.getElementsByClassName('view-section');
-            for (var i = 0; i < sections.length; i++) {
-                sections[i].classList.remove('active');
-            }
-            var tabs = document.getElementsByClassName('tab-btn');
-            for (var j = 0; j < tabs.length; j++) {
-                tabs[j].classList.remove('active');
-            }
+            var sections = document.querySelectorAll('.view-section');
+            sections.forEach(function(s) { s.classList.remove('active'); });
+            
+            var tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+
             document.getElementById(viewId).classList.add('active');
             document.getElementById(btnId).classList.add('active');
             renderAll();
@@ -246,25 +244,33 @@
             });
         }
 
+        // Callback invocado automaticamente pelo JSONP
+        window.processarRespostaNuvem = function(nuvem) {
+            if (nuvem) {
+                despesas = nuvem.despesas || [];
+                tarefas = nuvem.tarefas || [];
+                notas = nuvem.notas || [];
+                document.getElementById('sync-status').innerText = "✅ Conectado e Atualizado!";
+                renderAll();
+            }
+        };
+
         function puxarDadosNuvem() {
             if(!SCRIPT_URL) return;
             document.getElementById('sync-status').innerText = "📥 Buscando dados...";
 
-            fetch(SCRIPT_URL)
-                .then(function(res) { return res.json(); })
-                .then(function(nuvem) {
-                    if(nuvem) {
-                        despesas = nuvem.despesas || [];
-                        tarefas = nuvem.tarefas || [];
-                        notas = nuvem.notas || [];
-                        document.getElementById('sync-status').innerText = "✅ Conectado e Atualizado!";
-                        renderAll();
-                    }
-                })
-                .catch(function(err) {
-                    document.getElementById('sync-status').innerText = "✅ Pronto (Modo Offline/Local)";
-                    renderAll();
-                });
+            // Remove script anterior se existir
+            var scriptAntigo = document.getElementById('jsonp-script');
+            if(scriptAntigo) scriptAntigo.remove();
+
+            // Cria tag <script> dinamicamente para evitar restrições de CORS
+            var script = document.createElement('script');
+            script.id = 'jsonp-script';
+            script.src = SCRIPT_URL + "?callback=processarRespostaNuvem&_=" + Date.now();
+            script.onerror = function() {
+                document.getElementById('sync-status').innerText = "✅ Conectado (Modo Local)";
+            };
+            document.body.appendChild(script);
         }
 
         function importarBackupManual(input) {
@@ -348,4 +354,120 @@
             const link = document.getElementById('nota-link').value.trim();
             if(!texto && !link && !titulo) return;
             
-            notas.push({ id: Date.now(), titulo: titulo, te
+            notas.push({ id: Date.now(), titulo: titulo, texto: texto, link: link });
+            document.getElementById('nota-titulo').value = '';
+            document.getElementById('nota-texto').value = '';
+            document.getElementById('nota-link').value = '';
+            document.getElementById('nome-foto-gh').value = '';
+            renderAll();
+            enviarDadosNuvem();
+        }
+
+        function deleteNota(id) {
+            notas = notas.filter(function(n) { return n.id !== id; });
+            renderAll();
+            enviarDadosNuvem();
+        }
+
+        function toggleNota(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
+        }
+
+        function baixarNotaTXT(id) {
+            const nota = notas.find(function(n) { return n.id === id; });
+            if (!nota) return;
+
+            let conteudo = (nota.titulo ? (nota.titulo + "\n\n") : "") + (nota.texto || "");
+            if (nota.link) {
+                conteudo += "\n\nLink do Documento/Foto:\n" + nota.link;
+            }
+
+            let nomeLimpo = (nota.titulo || nota.texto || "nota_sem_titulo")
+                .split('\n')[0]
+                .replace(/[^a-zA-Z0-9_ -]/g, "")
+                .substring(0, 25)
+                .trim();
+            
+            if (!nomeLimpo) nomeLimpo = "nota_" + id;
+
+            const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
+            const dlAnchor = document.createElement("a");
+            dlAnchor.href = URL.createObjectURL(blob);
+            dlAnchor.download = nomeLimpo + ".txt";
+            dlAnchor.click();
+            URL.revokeObjectURL(dlAnchor.href);
+        }
+
+        function renderNotas() {
+            const nCont = document.getElementById('notas-container');
+            if(!nCont) return;
+            
+            const termoBusca = (document.getElementById('busca-nota') ? document.getElementById('busca-nota').value.toLowerCase() : '');
+            nCont.innerHTML = '';
+
+            const notasFiltradas = notas.filter(function(n) {
+                const tit = (n.titulo || '').toLowerCase();
+                const txt = (n.texto || '').toLowerCase();
+                return tit.indexOf(termoBusca) !== -1 || txt.indexOf(termoBusca) !== -1;
+            });
+
+            if(notasFiltradas.length === 0) {
+                nCont.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:15px; font-size:13px;">Nenhuma nota encontrada.</div>';
+                return;
+            }
+
+            notasFiltradas.forEach(function(n) {
+                let tituloExibicao = n.titulo;
+                if(!tituloExibicao) {
+                    tituloExibicao = (n.texto || 'Nota Sem Título').split('\n')[0].substring(0, 35);
+                    if((n.texto || '').length > 35) tituloExibicao += '...';
+                }
+
+                nCont.innerHTML += `
+                    <div class="note-item">
+                        <div class="note-header" onclick="toggleNota(this)">
+                            <span class="note-title-text">${tituloExibicao}</span>
+                            <button class="delete-btn" onclick="event.stopPropagation(); deleteNota(${n.id})">🗑️</button>
+                        </div>
+                        <div class="note-body">
+                            <div>${n.texto || '<em>Sem texto adicional.</em>'}</div>
+                            ${n.link ? `<div style="margin-top:10px;"><button onclick="abrirLinkExterno('${n.link}')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Ver Anexo / Documento</button></div>` : ''}
+                            <div class="note-actions">
+                                <button class="btn-download-txt" onclick="baixarNotaTXT(${n.id})">📄 Baixar TXT</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAll() {
+            const gCont = document.getElementById('gastos-container');
+            if(gCont) {
+                gCont.innerHTML = '';
+                let total = 0;
+                despesas.forEach(function(d) {
+                    total += d.valor;
+                    gCont.innerHTML += '<div class="card-item"><div class="card-row"><strong>' + d.nome + '</strong><span style="font-weight:bold;">R$ ' + d.valor.toFixed(2) + '</span></div><div class="card-row">' + (d.anexo ? '<button onclick="abrirLinkExterno(\'' + d.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>' : '<span></span>') + '<button class="delete-btn" onclick="deleteGasto(' + d.id + ')">🗑️</button></div></div>';
+                });
+                document.getElementById('total-gastos-val').innerText = 'R$ ' + total.toFixed(2);
+            }
+
+            const tCont = document.getElementById('tarefas-container');
+            if(tCont) {
+                tCont.innerHTML = '';
+                tarefas.sort(function(a,b) { return new Date(a.data) - new Date(b.data); }).forEach(function(t) {
+                    const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+                    tCont.innerHTML += '<div class="card-item"><div class="card-row"><div><strong>' + t.nome + '</strong><div class="card-meta" style="margin-top:4px;"><span>📅 ' + dataExibicao + '</span><span class="badge ' + t.prioridade + '">' + t.prioridade + '</span></div></div><button class="delete-btn" onclick="deleteTarefa(' + t.id + ')">🗑️</button></div><div style="display:flex; gap:8px; margin-top:8px;"><button onclick="dispararGoogleCalendar(\'' + t.nome + '\', \'' + t.data + '\', \'' + (t.anexo || '') + '\', \'' + t.prioridade + '\')" class="btn-sync btn-google" style="flex:1; margin-top:0;">🗓️ Calendar</button><button onclick="abrirLinkExterno(\'https://tasks.google.com/\')" class="btn-sync" style="flex:1; background-color:#f1f5f9; color:#1e293b; margin-top:0;">☑️ Tasks</button></div>' + (t.anexo ? '<div style="margin-top:5px;"><button onclick="abrirLinkExterno(\'' + t.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>' : '') + '</div>';
+                });
+            }
+
+            renderNotas();
+        }
+
+        // Executa busca via JSONP
+        puxarDadosNuvem();
+    </script>
+</body>
+</html>
