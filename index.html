@@ -102,7 +102,7 @@
     <div class="container">
         
         <div class="sync-banner">
-            <span id="sync-status">🔄 Conectando ao Google Sheets...</span>
+            <span id="sync-status">🔄 Painel Pronto</span>
             <button class="btn-refresh" onclick="puxarDadosNuvem()">Atualizar 🔄</button>
         </div>
         
@@ -192,22 +192,26 @@
     </nav>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQJgO1Kb-KaWvUAlkRH8mceVf26dGjgoJ7nhtbeuJZrKTOl-KPYrgMJxkLpgkRydmv/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec";
 
         let despesas = [];
         let tarefas = [];
         let notas = [];
 
+        // NAVEGAÇÃO ENTRE ABAS - INDEPENDENTE DA NUVEM
         function switchTab(viewId, btnId) {
-            var sections = document.querySelectorAll('.view-section');
-            sections.forEach(function(s) { s.classList.remove('active'); });
-            
-            var tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(function(t) { t.classList.remove('active'); });
+            try {
+                var sections = document.querySelectorAll('.view-section');
+                sections.forEach(function(s) { s.classList.remove('active'); });
+                
+                var tabs = document.querySelectorAll('.tab-btn');
+                tabs.forEach(function(t) { t.classList.remove('active'); });
 
-            document.getElementById(viewId).classList.add('active');
-            document.getElementById(btnId).classList.add('active');
-            renderAll();
+                document.getElementById(viewId).classList.add('active');
+                document.getElementById(btnId).classList.add('active');
+            } catch(e) {
+                console.error("Erro na navegação:", e);
+            }
         }
 
         function abrirLinkExterno(url) {
@@ -244,7 +248,7 @@
             });
         }
 
-        // Callback invocado automaticamente pelo JSONP
+        // CALLBACK SEGURO DO JSONP
         window.processarRespostaNuvem = function(nuvem) {
             if (nuvem) {
                 despesas = nuvem.despesas || [];
@@ -259,18 +263,20 @@
             if(!SCRIPT_URL) return;
             document.getElementById('sync-status').innerText = "📥 Buscando dados...";
 
-            // Remove script anterior se existir
-            var scriptAntigo = document.getElementById('jsonp-script');
-            if(scriptAntigo) scriptAntigo.remove();
+            try {
+                var scriptAntigo = document.getElementById('jsonp-script');
+                if(scriptAntigo) scriptAntigo.remove();
 
-            // Cria tag <script> dinamicamente para evitar restrições de CORS
-            var script = document.createElement('script');
-            script.id = 'jsonp-script';
-            script.src = SCRIPT_URL + "?callback=processarRespostaNuvem&_=" + Date.now();
-            script.onerror = function() {
-                document.getElementById('sync-status').innerText = "✅ Conectado (Modo Local)";
-            };
-            document.body.appendChild(script);
+                var script = document.createElement('script');
+                script.id = 'jsonp-script';
+                script.src = SCRIPT_URL + "?callback=processarRespostaNuvem&_=" + Date.now();
+                script.onerror = function() {
+                    document.getElementById('sync-status').innerText = "⚠️ Erro de Conexão com a Nuvem";
+                };
+                document.body.appendChild(script);
+            } catch(e) {
+                document.getElementById('sync-status').innerText = "⚠️ Modo Local";
+            }
         }
 
         function importarBackupManual(input) {
@@ -466,8 +472,8 @@
             renderNotas();
         }
 
-        // Executa busca via JSONP
-        puxarDadosNuvem();
+        // Tenta puxar da nuvem em segundo plano
+        setTimeout(puxarDadosNuvem, 500);
     </script>
 </body>
 </html>
