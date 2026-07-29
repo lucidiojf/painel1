@@ -30,8 +30,9 @@
         .nav-tabs { display: flex; justify-content: space-around; background-color: var(--bg-secondary); position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--border-color); z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
         .tab-btn { background: none; border: none; color: var(--text-muted); padding: 15px 10px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: 0.2s; }
         .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: #e0f2fe; }
-        .view-section { display: none; }
-        .view-section.active { display: block !important; }
+        
+        /* Controle de Seções */
+        .view-section { width: 100%; }
 
         /* Formulários */
         h2 { margin: 20px 0 10px 0; font-size: 18px; color: var(--accent); }
@@ -106,7 +107,7 @@
         </div>
         
         <!-- MÓDULO 1: LISTAPRO -->
-        <section id="listapro-view" class="view-section active">
+        <section id="listapro-view" class="view-section" style="display: block;">
             <div class="total-box">Total Local: <span id="total-gastos-val">R$ 0,00</span></div>
             
             <h2>Adicionar Item / Despesa</h2>
@@ -120,7 +121,7 @@
         </section>
 
         <!-- MÓDULO 2: BORDIO -->
-        <section id="bordio-view" class="view-section">
+        <section id="bordio-view" class="view-section" style="display: none;">
             <h2>Criar Evento ou Tarefa</h2>
             <input type="text" id="tarefa-nome" placeholder="Ex: Cir alex">
             <input type="datetime-local" id="tarefa-data">
@@ -138,7 +139,7 @@
         </section>
 
         <!-- MÓDULO 3: NOTAS ONLINE -->
-        <section id="notas-view" class="view-section">
+        <section id="notas-view" class="view-section" style="display: none;">
             <h2>Notas & Links Rápidos</h2>
             
             <button class="btn-sync btn-google" onclick="abrirLinkExterno('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 8px; background-color: var(--accent); color: white;">
@@ -185,9 +186,9 @@
     </div>
 
     <nav class="nav-tabs">
-        <button id="tab-listapro" class="tab-btn active" onclick="mostrarAba('listapro-view', 'tab-listapro')">📊 ListaPro</button>
-        <button id="tab-bordio" class="tab-btn" onclick="mostrarAba('bordio-view', 'tab-bordio')">📅 Bordio</button>
-        <button id="tab-notas" class="tab-btn" onclick="mostrarAba('notas-view', 'tab-notas')">📝 Notas</button>
+        <button id="tab-listapro" class="tab-btn active" onclick="trocarAba('listapro-view', 'tab-listapro')">📊 ListaPro</button>
+        <button id="tab-bordio" class="tab-btn" onclick="trocarAba('bordio-view', 'tab-bordio')">📅 Bordio</button>
+        <button id="tab-notas" class="tab-btn" onclick="trocarAba('notas-view', 'tab-notas')">📝 Notas</button>
     </nav>
 
     <script>
@@ -197,20 +198,20 @@
         let tarefas = [];
         let notas = [];
 
-        function mostrarAba(viewId, btnId) {
-            // Oculta todas as seções
-            document.getElementById('listapro-view').classList.remove('active');
-            document.getElementById('bordio-view').classList.remove('active');
-            document.getElementById('notas-view').classList.remove('active');
+        function trocarAba(secaoId, botaoId) {
+            // Esconde todas as seções via display direto
+            document.getElementById('listapro-view').style.display = 'none';
+            document.getElementById('bordio-view').style.display = 'none';
+            document.getElementById('notas-view').style.display = 'none';
 
-            // Desativa todos os botões
+            // Desativa visualmente todos os botões
             document.getElementById('tab-listapro').classList.remove('active');
             document.getElementById('tab-bordio').classList.remove('active');
             document.getElementById('tab-notas').classList.remove('active');
 
-            // Ativa os selecionados
-            document.getElementById(viewId).classList.add('active');
-            document.getElementById(btnId).classList.add('active');
+            // Exibe a seção escolhida e ativa o botão
+            document.getElementById(secaoId).style.display = 'block';
+            document.getElementById(botaoId).classList.add('active');
 
             renderAll();
         }
@@ -340,8 +341,4 @@
             const dataEnd = dataObj.getFullYear() + String(dataObj.getMonth() + 1).padStart(2, '0') + String(dataObj.getDate()).padStart(2, '0') + "T" + String(dataObj.getHours()).padStart(2, '0') + String(dataObj.getMinutes()).padStart(2, '0') + "00";
             let detalhes = "Prioridade: " + prioridade.toUpperCase();
             if(anexo) detalhes += "\n\nAnexo:\n" + anexo;
-            abrirLinkExterno("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details=" + encodeURIComponent(detalhes));
-        }
-
-        function deleteTarefa(id) {
-            
+            abrirLinkExterno("https://www.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(nome) + "&dates=" + limpa + "/" + dataEnd + "&details
