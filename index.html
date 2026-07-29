@@ -6,87 +6,96 @@
     <title>ListaPro ✕ Bordio Cloud Hub</title>
     <style>
         :root {
-            --bg-primary: #0a192f;
-            --bg-secondary: #172a45;
-            --bg-card: #020c1b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #38bdf8;
-            --accent-hover: #0ea5e9;
+            --bg-primary: #f1f5f9;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0284c7;
+            --accent-hover: #0369a1;
             --danger: #ef4444;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --google-blue: #4285F4;
-            --dropbox-blue: #0061FE;
+            --success: #16a34a;
+            --warning: #d97706;
+            --google-blue: #2563eb;
+            --dropbox-blue: #0284c7;
+            --border-color: #cbd5e1;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         body { background-color: var(--bg-primary); color: var(--text-main); padding-bottom: 70px; }
-        header { background-color: var(--bg-secondary); padding: 15px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 10; }
+        header { background-color: var(--bg-secondary); padding: 15px; text-align: center; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .container { max-width: 800px; margin: 0 auto; padding: 15px; }
 
         /* Abas */
-        .nav-tabs { display: flex; justify-content: space-around; background-color: var(--bg-secondary); position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid rgba(255,255,255,0.1); z-index: 100; }
+        .nav-tabs { display: flex; justify-content: space-around; background-color: var(--bg-secondary); position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--border-color); z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
         .tab-btn { background: none; border: none; color: var(--text-muted); padding: 15px 10px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: 0.2s; }
-        .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: rgba(56, 189, 248, 0.05); }
+        .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: #e0f2fe; }
         .view-section { display: none; }
         .view-section.active { display: block; }
 
         /* Formulários */
         h2 { margin: 20px 0 10px 0; font-size: 18px; color: var(--accent); }
-        input, select, textarea { width: 100%; padding: 12px; background-color: var(--bg-secondary); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: var(--text-main); margin-bottom: 10px; font-size: 16px; }
-        button.btn-primary { width: 100%; padding: 12px; background-color: var(--accent); color: var(--bg-card); border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 12px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); margin-bottom: 10px; font-size: 16px; }
+        input:focus, textarea:focus, select:focus { border-color: var(--accent); outline: none; }
+        button.btn-primary { width: 100%; padding: 12px; background-color: var(--accent); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 15px; }
+        button.btn-primary:hover { background-color: var(--accent-hover); }
         
         /* Botões de Ação */
         .btn-sync { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px; border-radius: 6px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; text-decoration: none; text-align: center; }
         .btn-google { background-color: var(--google-blue); color: white; }
         .btn-dropbox { background-color: var(--dropbox-blue); color: white; }
 
+        /* Generator de Link GitHub */
+        .github-generator { background-color: #f8fafc; border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; margin-bottom: 15px; }
+        .github-generator label { font-size: 12px; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 5px; }
+        .github-generator-row { display: flex; gap: 8px; }
+
         /* Cards Gerais */
-        .total-box { background-color: rgba(56, 189, 248, 0.1); border: 1px dashed var(--accent); padding: 15px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; }
-        .card-item { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+        .total-box { background-color: #e0f2fe; border: 1px dashed var(--accent); padding: 15px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 15px; color: var(--accent); }
+        .card-item { background-color: var(--bg-card); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .card-row { display: flex; justify-content: space-between; align-items: center; }
         .card-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; }
         .badge { font-size: 11px; padding: 3px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
-        .badge.alta { background-color: rgba(239, 68, 68, 0.2); color: var(--danger); }
-        .badge.media { background-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
-        .badge.baixa { background-color: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .badge.alta { background-color: #fee2e2; color: var(--danger); }
+        .badge.media { background-color: #fef3c7; color: var(--warning); }
+        .badge.baixa { background-color: #dcfce7; color: var(--success); }
         
         .file-link { color: var(--accent); text-decoration: none; font-size: 13px; display: inline-flex; align-items: center; gap: 4px; font-weight: bold; }
         .delete-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 16px; }
 
-        /* Layout Compacto de Notas (Tipo Manchete / Bloco de Noticias) */
+        /* Layout Compacto de Notas */
         .search-box { position: relative; margin-bottom: 15px; }
-        .search-input { width: 100%; padding: 12px 15px; background-color: var(--bg-secondary); border: 1px solid var(--accent); border-radius: 8px; color: var(--text-main); font-size: 15px; outline: none; }
+        .search-input { width: 100%; padding: 12px 15px; background-color: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main); font-size: 15px; outline: none; }
+        .search-input:focus { border-color: var(--accent); }
         
         .notes-list { display: flex; flex-direction: column; gap: 8px; }
-        .note-item { background-color: var(--bg-card); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; overflow: hidden; transition: border-color 0.2s; }
+        .note-item { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
         .note-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; user-select: none; }
-        .note-header:hover { background-color: rgba(255,255,255,0.03); }
+        .note-header:hover { background-color: #f8fafc; }
         .note-title-text { font-weight: 600; font-size: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         .note-title-text::before { content: '▶'; font-size: 10px; color: var(--accent); transition: transform 0.2s; }
         .note-item.open .note-title-text::before { transform: rotate(90deg); }
         
-        .note-body { display: none; padding: 15px; background-color: rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.05); font-size: 14px; line-height: 1.5; color: #cbd5e1; white-space: pre-wrap; }
+        .note-body { display: none; padding: 15px; background-color: #f8fafc; border-top: 1px solid var(--border-color); font-size: 14px; line-height: 1.5; color: #334155; white-space: pre-wrap; }
         .note-item.open .note-body { display: block; }
         
-        .note-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); }
-        .btn-download-txt { background-color: rgba(255,255,255,0.1); color: var(--text-main); border: none; border-radius: 4px; padding: 6px 10px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .btn-download-txt:hover { background-color: var(--accent); color: var(--bg-card); }
+        .note-actions { display: flex; gap: 8px; align-items: center; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border-color); }
+        .btn-download-txt { background-color: #e2e8f0; color: var(--text-main); border: none; border-radius: 4px; padding: 6px 10px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .btn-download-txt:hover { background-color: var(--accent); color: white; }
         
         /* Barra de Sincronismo Nuvem */
-        .sync-banner { background-color: rgba(34, 197, 94, 0.15); border: 1px solid var(--success); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; text-align: center; display: flex; justify-content: space-between; align-items: center; }
-        .btn-refresh { background: var(--success); color: var(--bg-card); border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .sync-banner { background-color: #dcfce7; border: 1px solid var(--success); padding: 10px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; text-align: center; display: flex; justify-content: space-between; align-items: center; color: #14532d; }
+        .btn-refresh { background: var(--success); color: white; border: none; padding: 4px 10px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         
         /* Box de Backup manual */
-        .backup-box { background-color: var(--bg-secondary); border: 1px dashed rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin-top: 30px; }
-        .btn-backup { background-color: #475569; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 48%; font-size: 13px; }
+        .backup-box { background-color: var(--bg-secondary); border: 1px dashed var(--border-color); padding: 15px; border-radius: 8px; margin-top: 30px; }
+        .btn-backup { background-color: #64748b; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 48%; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1 style="font-size: 18px;">ListaPro ✕ Bordio Cloud</h1>
+        <h1 style="font-size: 18px; color: var(--text-main);">ListaPro ✕ Bordio Cloud</h1>
     </header>
 
     <div class="container">
@@ -103,7 +112,7 @@
             <h2>Adicionar Item / Despesa</h2>
             <input type="text" id="gasto-nome" placeholder="Ex: Boleto Energia">
             <input type="number" id="gasto-valor" placeholder="Valor R$">
-            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo (GitHub)">
+            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo">
             <button class="btn-primary" onclick="addGasto()">Salvar na Lista</button>
 
             <h2>Itens e Recibos</h2>
@@ -132,13 +141,22 @@
         <section id="notas-view" class="view-section">
             <h2>Notas & Links Rápidos</h2>
             
-            <button class="btn-sync btn-google" onclick="abrirLinkExterno('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 8px; background-color: var(--accent); color: var(--bg-card);">
+            <button class="btn-sync btn-google" onclick="abrirLinkExterno('https://github.com/lucidiojf/painel1/upload/main')" style="margin-bottom: 8px; background-color: var(--accent); color: white;">
                 Subir Foto/PDF para o GitHub
             </button>
 
             <button class="btn-sync btn-dropbox" onclick="abrirLinkExterno('https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS')" style="margin-bottom: 15px;">
                 Subir Foto para o Dropbox 📦
             </button>
+
+            <!-- Generator de Link Fixo GitHub -->
+            <div class="github-generator">
+                <label>🔗 Gerador de Link Fixo (GitHub Image):</label>
+                <div class="github-generator-row">
+                    <input type="text" id="nome-foto-gh" placeholder="Ex: foto1.jpg ou nota.pdf" style="margin-bottom:0; font-size:14px;">
+                    <button type="button" onclick="copiarLinkGitHubFixo()" style="padding:0 12px; background:var(--accent); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; white-space:nowrap;">Gerar & Copiar</button>
+                </div>
+            </div>
 
             <input type="text" id="nota-titulo" placeholder="Título / Manchete (Ex: Exames Necessários)">
             <textarea id="nota-texto" rows="3" placeholder="Digite o conteúdo detalhado ou instrução aqui..."></textarea>
@@ -158,7 +176,7 @@
                 <h3 style="font-size: 13px; color: var(--text-main); margin-bottom: 10px;">🛡️ Recuperação Manual</h3>
                 <div style="display: flex; justify-content: space-between;">
                     <button class="btn-backup" onclick="exportarBackup()">Gerar Backup</button>
-                    <button class="btn-backup" onclick="document.getElementById('importFile').click()" style="background-color: var(--success); color: var(--bg-card);">Puxar .json</button>
+                    <button class="btn-backup" onclick="document.getElementById('importFile').click()" style="background-color: var(--success); color: white;">Puxar .json</button>
                 </div>
                 <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importarBackupManual(this)">
             </div>
@@ -193,6 +211,21 @@
 
         function abrirLinkExterno(url) {
             window.open(url, '_blank', 'noopener,noreferrer');
+        }
+
+        function copiarLinkGitHubFixo() {
+            const nomeArq = document.getElementById('nome-foto-gh').value.trim();
+            if(!nomeArq) return alert('Digite o nome do arquivo (ex: foto1.jpg)');
+            
+            const urlFinal = "https://raw.githubusercontent.com/lucidiojf/painel1/main/" + nomeArq;
+            
+            navigator.clipboard.writeText(urlFinal).then(function() {
+                document.getElementById('nota-link').value = urlFinal;
+                alert('Link copiado e inserido no campo de anexo!\n\n' + urlFinal);
+            }).catch(function() {
+                document.getElementById('nota-link').value = urlFinal;
+                alert('Link inserido no campo de anexo!');
+            });
         }
 
         async function enviarDadosNuvem() {
@@ -313,122 +346,4 @@
         function addNota() {
             const titulo = document.getElementById('nota-titulo').value.trim();
             const texto = document.getElementById('nota-texto').value.trim();
-            const link = document.getElementById('nota-link').value.trim();
-            if(!texto && !link && !titulo) return;
-            
-            notas.push({ id: Date.now(), titulo: titulo, texto: texto, link: link });
-            document.getElementById('nota-titulo').value = '';
-            document.getElementById('nota-texto').value = '';
-            document.getElementById('nota-link').value = '';
-            renderAll();
-            enviarDadosNuvem();
-        }
-
-        function deleteNota(id) {
-            notas = notas.filter(function(n) { return n.id !== id; });
-            renderAll();
-            enviarDadosNuvem();
-        }
-
-        function toggleNota(element) {
-            const item = element.parentElement;
-            item.classList.toggle('open');
-        }
-
-        function baixarNotaTXT(id) {
-            const nota = notas.find(function(n) { return n.id === id; });
-            if (!nota) return;
-
-            let conteudo = (nota.titulo ? (nota.titulo + "\n\n") : "") + (nota.texto || "");
-            if (nota.link) {
-                conteudo += "\n\nLink do Documento/Foto:\n" + nota.link;
-            }
-
-            let nomeLimpo = (nota.titulo || nota.texto || "nota_sem_titulo")
-                .split('\n')[0]
-                .replace(/[^a-zA-Z0-9_ -]/g, "")
-                .substring(0, 25)
-                .trim();
-            
-            if (!nomeLimpo) nomeLimpo = "nota_" + id;
-
-            const blob = new Blob([conteudo], { type: "text/plain;charset=utf-8" });
-            const dlAnchor = document.createElement("a");
-            dlAnchor.href = URL.createObjectURL(blob);
-            dlAnchor.download = nomeLimpo + ".txt";
-            dlAnchor.click();
-            URL.revokeObjectURL(dlAnchor.href);
-        }
-
-        function renderNotas() {
-            const nCont = document.getElementById('notas-container');
-            if(!nCont) return;
-            
-            const termoBusca = (document.getElementById('busca-nota') ? document.getElementById('busca-nota').value.toLowerCase() : '');
-            nCont.innerHTML = '';
-
-            const notasFiltradas = notas.filter(function(n) {
-                const tit = (n.titulo || '').toLowerCase();
-                const txt = (n.texto || '').toLowerCase();
-                return tit.indexOf(termoBusca) !== -1 || txt.indexOf(termoBusca) !== -1;
-            });
-
-            if(notasFiltradas.length === 0) {
-                nCont.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:15px; font-size:13px;">Nenhuma nota encontrada.</div>';
-                return;
-            }
-
-            notasFiltradas.forEach(function(n) {
-                // Se a nota antiga não tinha o campo 'titulo', gera um automaticamente com as primeiras palavras
-                let tituloExibicao = n.titulo;
-                if(!tituloExibicao) {
-                    tituloExibicao = (n.texto || 'Nota Sem Título').split('\n')[0].substring(0, 35);
-                    if((n.texto || '').length > 35) tituloExibicao += '...';
-                }
-
-                nCont.innerHTML += `
-                    <div class="note-item">
-                        <div class="note-header" onclick="toggleNota(this)">
-                            <span class="note-title-text">${tituloExibicao}</span>
-                            <button class="delete-btn" onclick="event.stopPropagation(); deleteNota(${n.id})">🗑️</button>
-                        </div>
-                        <div class="note-body">
-                            <div>${n.texto || '<em>Sem texto adicional.</em>'}</div>
-                            ${n.link ? `<div style="margin-top:10px;"><button onclick="abrirLinkExterno('${n.link}')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Ver Anexo / Documento</button></div>` : ''}
-                            <div class="note-actions">
-                                <button class="btn-download-txt" onclick="baixarNotaTXT(${n.id})">📄 Baixar TXT</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function renderAll() {
-            const gCont = document.getElementById('gastos-container');
-            if(gCont) {
-                gCont.innerHTML = '';
-                let total = 0;
-                despesas.forEach(function(d) {
-                    total += d.valor;
-                    gCont.innerHTML += '<div class="card-item"><div class="card-row"><strong>' + d.nome + '</strong><span style="font-weight:bold;">R$ ' + d.valor.toFixed(2) + '</span></div><div class="card-row">' + (d.anexo ? '<button onclick="abrirLinkExterno(\'' + d.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">📎 Ver Anexo</button>' : '<span></span>') + '<button class="delete-btn" onclick="deleteGasto(' + d.id + ')">🗑️</button></div></div>';
-                });
-                document.getElementById('total-gastos-val').innerText = 'R$ ' + total.toFixed(2);
-            }
-
-            const tCont = document.getElementById('tarefas-container');
-            if(tCont) {
-                tCont.innerHTML = '';
-                tarefas.sort(function(a,b) { return new Date(a.data) - new Date(b.data); }).forEach(function(t) {
-                    const dataExibicao = new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-                    tCont.innerHTML += '<div class="card-item"><div class="card-row"><div><strong>' + t.nome + '</strong><div class="card-meta" style="margin-top:4px;"><span>📅 ' + dataExibicao + '</span><span class="badge ' + t.prioridade + '">' + t.prioridade + '</span></div></div><button class="delete-btn" onclick="deleteTarefa(' + t.id + ')">🗑️</button></div><div style="display:flex; gap:8px; margin-top:8px;"><button onclick="dispararGoogleCalendar(\'' + t.nome + '\', \'' + t.data + '\', \'' + (t.anexo || '') + '\', \'' + t.prioridade + '\')" class="btn-sync btn-google" style="flex:1; margin-top:0;">🗓️ Calendar</button><button onclick="abrirLinkExterno(\'https://tasks.google.com/\')" class="btn-sync" style="flex:1; background-color:#f1f5f9; color:#1e293b; margin-top:0;">☑️ Tasks</button></div>' + (t.anexo ? '<div style="margin-top:5px;"><button onclick="abrirLinkExterno(\'' + t.anexo + '\')" class="file-link" style="background:none; border:none; cursor:pointer;">🔗 Doc Associado</button></div>' : '') + '</div>';
-                });
-            }
-
-            renderNotas();
-        }
-
-        puxarDadosNuvem();
-    </script>
-</body>
-</html>
+            const link = docum
