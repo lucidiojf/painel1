@@ -113,7 +113,17 @@
             <h2>Adicionar Item / Despesa</h2>
             <input type="text" id="gasto-nome" placeholder="Ex: Boleto Energia">
             <input type="number" id="gasto-valor" placeholder="Valor R$">
-            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo">
+
+            <!-- Gerador de Link Fixo GitHub para Despesas -->
+            <div class="github-generator">
+                <label>🔗 Gerador de Link Fixo de Recibo (GitHub):</label>
+                <div class="github-generator-row">
+                    <input type="text" id="nome-foto-gasto-gh" placeholder="Ex: boleto1.pdf ou recibo.jpg" style="margin-bottom:0; font-size:14px;">
+                    <button type="button" onclick="copiarLinkGitHubFixoGasto()" style="padding:0 12px; background:var(--accent); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; white-space:nowrap;">Gerar & Inserir</button>
+                </div>
+            </div>
+
+            <input type="text" id="gasto-anexo" placeholder="Link do Boleto/Recibo (Opcional)">
             <button class="btn-primary" onclick="addGasto()">Salvar na Lista</button>
 
             <h2>Itens e Recibos</h2>
@@ -233,6 +243,21 @@
             });
         }
 
+        function copiarLinkGitHubFixoGasto() {
+            const nomeArq = document.getElementById('nome-foto-gasto-gh').value.trim();
+            if(!nomeArq) return alert('Digite o nome do arquivo (ex: boleto1.pdf)');
+            
+            const urlFinal = "https://raw.githubusercontent.com/lucidiojf/painel1/main/" + nomeArq;
+            
+            navigator.clipboard.writeText(urlFinal).then(function() {
+                document.getElementById('gasto-anexo').value = urlFinal;
+                alert('Link copiado e inserido no campo do recibo!\n\n' + urlFinal);
+            }).catch(function() {
+                document.getElementById('gasto-anexo').value = urlFinal;
+                alert('Link inserido no campo do recibo!');
+            });
+        }
+
         function enviarDadosNuvem() {
             if(!SCRIPT_URL) return;
             document.getElementById('sync-status').innerText = "📤 Salvando na Nuvem...";
@@ -314,6 +339,7 @@
             document.getElementById('gasto-nome').value = '';
             document.getElementById('gasto-valor').value = '';
             document.getElementById('gasto-anexo').value = '';
+            document.getElementById('nome-foto-gasto-gh').value = '';
             renderAll();
             enviarDadosNuvem();
         }
