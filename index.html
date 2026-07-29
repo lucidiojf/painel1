@@ -31,7 +31,7 @@
         .tab-btn { background: none; border: none; color: var(--text-muted); padding: 15px 10px; font-size: 14px; font-weight: 600; cursor: pointer; flex: 1; text-align: center; transition: 0.2s; }
         .tab-btn.active { color: var(--accent); border-top: 3px solid var(--accent); background-color: #e0f2fe; }
         .view-section { display: none; }
-        .view-section.active { display: block; }
+        .view-section.active { display: block !important; }
 
         /* Formulários */
         h2 { margin: 20px 0 10px 0; font-size: 18px; color: var(--accent); }
@@ -185,9 +185,9 @@
     </div>
 
     <nav class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('listapro-view', this)">📊 ListaPro</button>
-        <button class="tab-btn" onclick="switchTab('bordio-view', this)">📅 Bordio</button>
-        <button class="tab-btn" onclick="switchTab('notas-view', this)">📝 Notas</button>
+        <button id="tab-listapro" class="tab-btn active" onclick="mostrarAba('listapro-view', 'tab-listapro')">📊 ListaPro</button>
+        <button id="tab-bordio" class="tab-btn" onclick="mostrarAba('bordio-view', 'tab-bordio')">📅 Bordio</button>
+        <button id="tab-notas" class="tab-btn" onclick="mostrarAba('notas-view', 'tab-notas')">📝 Notas</button>
     </nav>
 
     <script>
@@ -197,28 +197,21 @@
         let tarefas = [];
         let notas = [];
 
-        function switchTab(viewId, element) {
+        function mostrarAba(viewId, btnId) {
             // Oculta todas as seções
-            const sections = document.querySelectorAll('.view-section');
-            sections.forEach(function(sec) {
-                sec.classList.remove('active');
-            });
-            
-            // Remove ativação de todos os botões
-            const tabs = document.querySelectorAll('.tab-btn');
-            tabs.forEach(function(tab) {
-                tab.classList.remove('active');
-            });
-            
-            // Ativa a seção e a aba desejada
-            const targetSection = document.getElementById(viewId);
-            if(targetSection) {
-                targetSection.classList.add('active');
-            }
-            if(element) {
-                element.classList.add('active');
-            }
-            
+            document.getElementById('listapro-view').classList.remove('active');
+            document.getElementById('bordio-view').classList.remove('active');
+            document.getElementById('notas-view').classList.remove('active');
+
+            // Desativa todos os botões
+            document.getElementById('tab-listapro').classList.remove('active');
+            document.getElementById('tab-bordio').classList.remove('active');
+            document.getElementById('tab-notas').classList.remove('active');
+
+            // Ativa os selecionados
+            document.getElementById(viewId).classList.add('active');
+            document.getElementById(btnId).classList.add('active');
+
             renderAll();
         }
 
@@ -351,4 +344,4 @@
         }
 
         function deleteTarefa(id) {
-            tarefas = tarefas.filt
+            
