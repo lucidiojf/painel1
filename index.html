@@ -276,7 +276,7 @@
         // CALLBACK SEGURO DO JSONP
         window.processarRespostaNuvem = function(nuvem) {
             if (nuvem) {
-                despesas = nuvem.despesas || nuvem.gastos || [];
+                despesas = nuvem.despesas || [];
                 tarefas = nuvem.tarefas || [];
                 notas = nuvem.notas || [];
                 document.getElementById('sync-status').innerText = "✅ Conectado e Atualizado!";
@@ -304,25 +304,19 @@
             }
         }
 
-        // IMPORTAÇÃO COMPATÍVEL COM FORMATOS ANTIGOS
         function importarBackupManual(input) {
             const reader = new FileReader();
             reader.onload = function(){
                 try {
                     const dados = JSON.parse(reader.result);
-                    
-                    // Suporta variações de nomes antigos (despesas vs gastos)
-                    despesas = dados.despesas || dados.gastos || [];
+                    despesas = dados.despesas || [];
                     tarefas = dados.tarefas || [];
                     notas = dados.notas || [];
-                    
                     renderAll();
-                    
-                    let contagem = despesas.length + tarefas.length + notas.length;
-                    alert("Backup importado com sucesso! " + contagem + " item(ns) restaurados.\n\nEnviando para o Google Sheets...");
+                    alert("Dados aplicados! Gravando no Google Sheets...");
                     enviarDadosNuvem();
                 } catch(e) {
-                    alert("Erro ao ler o arquivo JSON. Verifique se o arquivo está corrompido.");
+                    alert("Arquivo inválido.");
                 }
             };
             reader.readAsText(input.files[0]);
