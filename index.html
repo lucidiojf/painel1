@@ -47,10 +47,10 @@
         
         .card-item { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; border-radius: 4px; }
         
-        /* GERADOR DE LINK FIXO NO TOPO DA ABA NOTAS */
         .generator-box { background: #eef6ff; border: 1px dashed #007bff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        .tools-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 10px; border-radius: 6px; margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
 
-        /* ESTILO DA SANFONA NATIVA (<details>) */
+        /* SANFONA NATIVA (<details>) */
         details.nota-sanfona { width: 100%; }
         details.nota-sanfona summary { 
             font-weight: 600; 
@@ -73,6 +73,9 @@
             font-size: 0.9rem; 
             color: #444; 
         }
+
+        .total-box { margin-top: 15px; padding: 10px; background: #eef6ff; font-weight: bold; text-align: right; border-radius: 4px; color: #007bff; font-size: 1.05rem; }
+        .btn-sec { padding: 6px 10px; font-size: 0.8rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
     </style>
 </head>
 <body>
@@ -91,6 +94,7 @@
         </div>
         <button class="btn-primary" onclick="addGasto()">Adicionar Gasto</button>
         <div id="lista-despesas"></div>
+        <div id="total-despesas" class="total-box">Total: R$ 0,00</div>
     </div>
 
     <!-- ABA TAREFAS -->
@@ -120,7 +124,17 @@
             <input type="text" id="nota-link">
         </div>
         <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
+        
         <div id="lista-notas"></div>
+
+        <!-- FERRAMENTAS: DROPBOX, BACKUP E RESTAURAÇÃO -->
+        <div class="tools-box">
+            <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-sec" style="background: #0061ff;">📦 Upload Dropbox</a>
+            <a href="https://github.com/lucidiojf/painel1" target="_blank" class="btn-sec" style="background: #24292e;">🐙 GitHub Repo</a>
+            <button onclick="gerarBackup()" class="btn-sec" style="background: #28a745;">💾 Baixar Backup</button>
+            <button onclick="document.getElementById('input-restore').click()" class="btn-sec" style="background: #ffc107; color: #333;">📂 Restaurar Backup</button>
+            <input type="file" id="input-restore" style="display: none;" onchange="recuperarBackup(event)" accept=".json">
+        </div>
     </div>
 
 </div>
@@ -186,13 +200,20 @@
 
     function renderDespesas() {
         const container = document.getElementById('lista-despesas');
+        const totalContainer = document.getElementById('total-despesas');
         if (!container) return;
         container.innerHTML = '';
+        
+        let soma = 0;
+
         despesas.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'card-item';
             const nomeStr = item.nome || item.desc || '';
-            const valStr = item.valor ? ` - R$ ${parseFloat(item.valor).toFixed(2)}` : '';
+            const val = parseFloat(item.valor) || 0;
+            soma += val;
+            const valStr = val > 0 ? ` - R$ ${val.toFixed(2)}` : '';
+
             div.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div><strong>${nomeStr}</strong>${valStr}</div>
@@ -201,6 +222,10 @@
             `;
             container.appendChild(div);
         });
+
+        if(totalContainer) {
+            totalContainer.innerText = `Total: R$ ${soma.toFixed(2).replace('.', ',')}`;
+        }
     }
 
     function renderTarefas() {
@@ -211,10 +236,20 @@
             const div = document.createElement('div');
             div.className = 'card-item';
             const nomeStr = item.nome || item.texto || '';
+
+            // Encodings para Google Calendar e Tasks
+            const textEncoded = encodeURIComponent(nomeStr);
+            const linkAgenda = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${textEncoded}`;
+            const linkTasks = `https://tasks.google.com/embed/list/~default?add=${textEncoded}`;
+
             div.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>${nomeStr}</div>
-                    <button onclick="removerTarefa(${index})" style="background:none;border:none;cursor:pointer;">🗑️</button>
+                    <div style="flex:1; margin-right:10px;">${nomeStr}</div>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <a href="${linkAgenda}" target="_blank" title="Enviar para o Google Agenda" style="text-decoration:none; font-size:1.1rem;">📅</a>
+                        <a href="${linkTasks}" target="_blank" title="Enviar para o Google Tasks" style="text-decoration:none; font-size:1.1rem;">☑️</a>
+                        <button onclick="removerTarefa(${index})" style="background:none;border:none;cursor:pointer; font-size:1.1rem;">🗑️</button>
+                    </div>
                 </div>
             `;
             container.appendChild(div);
@@ -243,7 +278,6 @@
                 lnk = item.link || '';
             }
 
-            // Pega a primeira linha não vazia do texto para a barra da sanfona
             const linhas = txt.split('\n').filter(l => l.trim().length > 0);
             const primeiraLinha = linhas[0] || lnk || 'Nota sem texto';
 
@@ -337,6 +371,40 @@
         notas.splice(index, 1);
         renderAll();
         enviarDadosNuvem();
+    }
+
+    // --- FUNÇÕES DE BACKUP / RESTAURAÇÃO ---
+    function gerarBackup() {
+        const payload = { despesas, tarefas, notas };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `backup_painel_${Date.now()}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+    }
+
+    function recuperarBackup(event) {
+        const fileReader = new FileReader();
+        fileReader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if(data.despesas || data.tarefas || data.notas) {
+                    despesas = data.despesas || [];
+                    tarefas = data.tarefas || [];
+                    notas = data.notas || [];
+                    renderAll();
+                    enviarDadosNuvem();
+                    alert("Backup restaurado e sincronizado com sucesso!");
+                } else {
+                    alert("Formato de arquivo JSON inválido!");
+                }
+            } catch (err) {
+                alert("Erro ao ler o arquivo JSON.");
+            }
+        };
+        fileReader.readAsText(event.target.files[0]);
     }
 
     carregarDadosNuvem();
