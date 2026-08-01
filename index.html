@@ -287,6 +287,9 @@
                         <div class="nota-corpo-expandido">
                             ${txt ? `<div>${txt}</div>` : ''}
                             ${lnk ? `<a href="${lnk}" target="_blank" style="word-break:break-all; color:#007bff; display:block; margin-top:8px;">${lnk}</a>` : ''}
+                            <div style="margin-top: 10px; text-align: right;">
+                                <button onclick="baixarNotaTxt(${index})" class="btn-sec" style="background:#17a2b8;">📄 Baixar TXT</button>
+                            </div>
                         </div>
                     </details>
                     <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
@@ -297,6 +300,41 @@
             `;
             container.appendChild(div);
         });
+    }
+
+    function baixarNotaTxt(index) {
+        const item = notas[index];
+        if (!item) return;
+
+        let txt = '';
+        let lnk = '';
+
+        if (typeof item === 'string') {
+            if (item.startsWith('http://') || item.startsWith('https://')) {
+                lnk = item;
+            } else {
+                txt = item;
+            }
+        } else {
+            txt = item.texto || item.titulo || '';
+            lnk = item.link || '';
+        }
+
+        let conteudo = txt;
+        if (lnk) {
+            conteudo += (conteudo ? '\n\nLink / Anexo:\n' : '') + lnk;
+        }
+
+        const linhas = txt.split('\n').filter(l => l.trim().length > 0);
+        const nomeArquivo = (linhas[0] || 'nota').replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 20);
+
+        const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `${nomeArquivo}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     }
 
     function addGasto() {
