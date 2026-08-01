@@ -18,10 +18,7 @@
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
         button.btn-primary { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .card-item { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Preserva as quebras de linha e formatação do texto */
-        .nota-conteudo { white-space: pre-wrap; word-break: break-word; line-height: 1.4; }
-        
+        .nota-texto { white-space: pre-wrap; word-break: break-word; line-height: 1.4; }
         .generator-box { background: #eef6ff; border: 1px dashed #007bff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
     </style>
 </head>
@@ -38,7 +35,7 @@
     <div id="tab-despesas" class="tab-content active">
         <div class="form-group">
             <label>Descrição</label>
-            <input type="text" id="gasto-desc">
+            <input type="text" id="gasto-nome">
         </div>
         <div class="form-group">
             <label>Valor (R$)</label>
@@ -52,7 +49,7 @@
     <div id="tab-tarefas" class="tab-content">
         <div class="form-group">
             <label>Tarefa</label>
-            <input type="text" id="tarefa-texto">
+            <input type="text" id="tarefa-nome">
         </div>
         <button class="btn-primary" onclick="addTarefa()">Adicionar Tarefa</button>
         <div id="lista-tarefas"></div>
@@ -66,12 +63,8 @@
         </div>
 
         <div class="form-group">
-            <label>Título / Manchete</label>
-            <input type="text" id="nota-titulo">
-        </div>
-        <div class="form-group">
             <label>Texto / Conteúdo</label>
-            <textarea id="nota-texto" rows="3"></textarea>
+            <textarea id="nota-texto" rows="4"></textarea>
         </div>
         <div class="form-group">
             <label>Link / Anexo</label>
@@ -141,8 +134,10 @@
         despesas.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'card-item';
+            const nomeStr = item.nome || item.desc || '';
+            const valStr = item.valor ? ` - R$ ${parseFloat(item.valor).toFixed(2)}` : '';
             div.innerHTML = `
-                <div><strong>${item.desc}</strong> - R$ ${parseFloat(item.valor).toFixed(2)}</div>
+                <div><strong>${nomeStr}</strong>${valStr}</div>
                 <button onclick="removerGasto(${index})" style="background:none;border:none;cursor:pointer;">🗑️</button>
             `;
             container.appendChild(div);
@@ -156,8 +151,9 @@
         tarefas.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'card-item';
+            const nomeStr = item.nome || item.texto || '';
             div.innerHTML = `
-                <div>${item.texto}</div>
+                <div>${nomeStr}</div>
                 <button onclick="removerTarefa(${index})" style="background:none;border:none;cursor:pointer;">🗑️</button>
             `;
             container.appendChild(div);
@@ -173,26 +169,22 @@
             div.className = 'card-item';
             
             let htmlConteudo = '';
-
-            // Suporte para notas antigas (salvas apenas como string simples)
+            
+            // Compatibilidade com notas em formato antigo (string) ou novo (objeto)
             if (typeof item === 'string') {
                 if (item.startsWith('http://') || item.startsWith('https://')) {
                     htmlConteudo = `<a href="${item}" target="_blank" style="word-break: break-all; color: #007bff;">${item}</a>`;
                 } else {
-                    htmlConteudo = `<div class="nota-conteudo">${item}</div>`;
+                    htmlConteudo = `<div class="nota-texto">${item}</div>`;
                 }
             } else {
-                // Suporte para notas novas (com objeto titulo, texto, link)
-                const tituloStr = item.titulo ? `<strong>${item.titulo}</strong><br>` : '';
-                const textoStr = item.texto ? `<div class="nota-conteudo">${item.texto}</div>` : '';
-                const linkStr = item.link ? `<a href="${item.link}" target="_blank" style="word-break: break-all; color: #007bff;">${item.link}</a>` : '';
+                const txt = item.texto || item.titulo || '';
+                const lnk = item.link || '';
                 
-                // Se for uma nota antiga em objeto que salvou tudo no texto/título ou link puro
-                if (!item.titulo && !item.texto && item.link) {
-                    htmlConteudo = `<a href="${item.link}" target="_blank" style="word-break: break-all; color: #007bff;">${item.link}</a>`;
-                } else {
-                    htmlConteudo = `${tituloStr}${textoStr}${linkStr}`;
-                }
+                const textoHtml = txt ? `<div class="nota-texto">${txt}</div>` : '';
+                const linkHtml = lnk ? `<a href="${lnk}" target="_blank" style="word-break: break-all; color: #007bff; display: block; margin-top: 5px;">${lnk}</a>` : '';
+                
+                htmlConteudo = `${textoHtml}${linkHtml}`;
             }
 
             div.innerHTML = `
@@ -209,11 +201,11 @@
     }
 
     function addGasto() {
-        const desc = document.getElementById('gasto-desc').value.trim();
+        const nome = document.getElementById('gasto-nome').value.trim();
         const valor = document.getElementById('gasto-valor').value.trim();
-        if(!desc || !valor) return;
-        despesas.push({ id: Date.now(), desc, valor });
-        document.getElementById('gasto-desc').value = '';
+        if(!nome) return;
+        despesas.push({ id: Date.now(), nome: nome, valor: valor ? parseFloat(valor) : 0, anexo: "" });
+        document.getElementById('gasto-nome').value = '';
         document.getElementById('gasto-valor').value = '';
         renderAll();
         enviarDadosNuvem();
@@ -226,10 +218,10 @@
     }
 
     function addTarefa() {
-        const texto = document.getElementById('tarefa-texto').value.trim();
-        if(!texto) return;
-        tarefas.push({ id: Date.now(), texto });
-        document.getElementById('tarefa-texto').value = '';
+        const nome = document.getElementById('tarefa-nome').value.trim();
+        if(!nome) return;
+        tarefas.push({ id: Date.now(), nome: nome, data: "", prioridade: "baixa", anexo: "" });
+        document.getElementById('tarefa-nome').value = '';
         renderAll();
         enviarDadosNuvem();
     }
@@ -241,13 +233,11 @@
     }
 
     function addNota() {
-        const titulo = document.getElementById('nota-titulo').value.trim();
         const texto = document.getElementById('nota-texto').value.trim();
         const link = document.getElementById('nota-link').value.trim();
-        if(!texto && !link && !titulo) return;
+        if(!texto && !link) return;
 
-        notas.push({ id: Date.now(), titulo, texto, link });
-        document.getElementById('nota-titulo').value = '';
+        notas.push({ id: Date.now(), texto: texto, link: link });
         document.getElementById('nota-texto').value = '';
         document.getElementById('nota-link').value = '';
         document.getElementById('nome-foto-gh').value = '';
@@ -262,12 +252,13 @@
         if (typeof item === 'string') {
             if (item.startsWith('http://') || item.startsWith('https://')) {
                 document.getElementById('nota-link').value = item;
+                document.getElementById('nota-texto').value = '';
             } else {
                 document.getElementById('nota-texto').value = item;
+                document.getElementById('nota-link').value = '';
             }
         } else {
-            document.getElementById('nota-titulo').value = item.titulo || '';
-            document.getElementById('nota-texto').value = item.texto || '';
+            document.getElementById('nota-texto').value = item.texto || item.titulo || '';
             document.getElementById('nota-link').value = item.link || '';
         }
 
