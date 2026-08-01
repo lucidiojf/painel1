@@ -130,7 +130,7 @@
         <!-- FERRAMENTAS: DROPBOX, BACKUP E RESTAURAÇÃO -->
         <div class="tools-box">
             <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-sec" style="background: #0061ff;">📦 Upload Dropbox</a>
-            <a href="https://github.com/lucidiojf/painel1" target="_blank" class="btn-sec" style="background: #24292e;">🐙 GitHub Repo</a>
+            <a href="https://github.com/lucidiojf/painel1/upload/main" target="_blank" class="btn-sec" style="background: #24292e;">🐙 Upload GitHub</a>
             <button onclick="gerarBackup()" class="btn-sec" style="background: #28a745;">💾 Baixar Backup</button>
             <button onclick="document.getElementById('input-restore').click()" class="btn-sec" style="background: #ffc107; color: #333;">📂 Restaurar Backup</button>
             <input type="file" id="input-restore" style="display: none;" onchange="recuperarBackup(event)" accept=".json">
@@ -237,7 +237,6 @@
             div.className = 'card-item';
             const nomeStr = item.nome || item.texto || '';
 
-            // Encodings para Google Calendar e Tasks
             const textEncoded = encodeURIComponent(nomeStr);
             const linkAgenda = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${textEncoded}`;
             const linkTasks = `https://tasks.google.com/embed/list/~default?add=${textEncoded}`;
@@ -373,7 +372,6 @@
         enviarDadosNuvem();
     }
 
-    // --- FUNÇÕES DE BACKUP / RESTAURAÇÃO ---
     function gerarBackup() {
         const payload = { despesas, tarefas, notas };
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
