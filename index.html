@@ -18,6 +18,10 @@
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
         button.btn-primary { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .card-item { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Preserva as quebras de linha e formatação do texto */
+        .nota-conteudo { white-space: pre-wrap; word-break: break-word; line-height: 1.4; }
+        
         .generator-box { background: #eef6ff; border: 1px dashed #007bff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
     </style>
 </head>
@@ -56,7 +60,6 @@
 
     <!-- ABA NOTAS -->
     <div id="tab-notas" class="tab-content">
-        <!-- Gerador de Links do GitHub -->
         <div class="generator-box">
             <label style="font-size: 0.85rem; font-weight: bold;">📎 Gerador de Link Fixo (GitHub):</label>
             <input type="text" id="nome-foto-gh" placeholder="Ex: recibo1.jpg" style="margin-top: 5px;" oninput="gerarLinkGitHub()">
@@ -86,7 +89,6 @@
     let tarefas = [];
     let notas = [];
 
-    // JSONP Sync - Carregamento Assíncrono
     function carregarDadosNuvem() {
         const script = document.createElement('script');
         script.src = `${SCRIPT_URL}?callback=receberDadosNuvem&t=${Date.now()}`;
@@ -126,7 +128,6 @@
         }
     }
 
-    // --- RENDERIZADORES ---
     function renderAll() {
         renderDespesas();
         renderTarefas();
@@ -170,13 +171,35 @@
         notas.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'card-item';
+            
+            let htmlConteudo = '';
+
+            // Suporte para notas antigas (salvas apenas como string simples)
+            if (typeof item === 'string') {
+                if (item.startsWith('http://') || item.startsWith('https://')) {
+                    htmlConteudo = `<a href="${item}" target="_blank" style="word-break: break-all; color: #007bff;">${item}</a>`;
+                } else {
+                    htmlConteudo = `<div class="nota-conteudo">${item}</div>`;
+                }
+            } else {
+                // Suporte para notas novas (com objeto titulo, texto, link)
+                const tituloStr = item.titulo ? `<strong>${item.titulo}</strong><br>` : '';
+                const textoStr = item.texto ? `<div class="nota-conteudo">${item.texto}</div>` : '';
+                const linkStr = item.link ? `<a href="${item.link}" target="_blank" style="word-break: break-all; color: #007bff;">${item.link}</a>` : '';
+                
+                // Se for uma nota antiga em objeto que salvou tudo no texto/título ou link puro
+                if (!item.titulo && !item.texto && item.link) {
+                    htmlConteudo = `<a href="${item.link}" target="_blank" style="word-break: break-all; color: #007bff;">${item.link}</a>`;
+                } else {
+                    htmlConteudo = `${tituloStr}${textoStr}${linkStr}`;
+                }
+            }
+
             div.innerHTML = `
-                <div style="flex: 1;">
-                    ${item.titulo ? `<strong>${item.titulo}</strong><br>` : ''}
-                    ${item.texto ? `<span>${item.texto}</span><br>` : ''}
-                    ${item.link ? `<a href="${item.link}" target="_blank" style="word-break: break-all; color: #007bff;">${item.link}</a>` : ''}
+                <div style="flex: 1; margin-right: 10px;">
+                    ${htmlConteudo}
                 </div>
-                <div style="display: flex; gap: 8px; align-items: center; margin-left: 10px;">
+                <div style="display: flex; gap: 8px; align-items: center; flex-shrink: 0;">
                     <button onclick="editarNota(${index})" style="background: none; border: none; cursor: pointer; font-size: 1.1rem;" title="Editar">✏️</button>
                     <button onclick="removerNota(${index})" style="background: none; border: none; cursor: pointer; font-size: 1.1rem;" title="Excluir">🗑️</button>
                 </div>
@@ -185,7 +208,6 @@
         });
     }
 
-    // --- AÇÕES ---
     function addGasto() {
         const desc = document.getElementById('gasto-desc').value.trim();
         const valor = document.getElementById('gasto-valor').value.trim();
@@ -237,9 +259,17 @@
         const item = notas[index];
         if (!item) return;
 
-        document.getElementById('nota-titulo').value = item.titulo || '';
-        document.getElementById('nota-texto').value = item.texto || '';
-        document.getElementById('nota-link').value = item.link || '';
+        if (typeof item === 'string') {
+            if (item.startsWith('http://') || item.startsWith('https://')) {
+                document.getElementById('nota-link').value = item;
+            } else {
+                document.getElementById('nota-texto').value = item;
+            }
+        } else {
+            document.getElementById('nota-titulo').value = item.titulo || '';
+            document.getElementById('nota-texto').value = item.texto || '';
+            document.getElementById('nota-link').value = item.link || '';
+        }
 
         notas.splice(index, 1);
         renderAll();
@@ -252,7 +282,6 @@
         enviarDadosNuvem();
     }
 
-    // Inicialização
     carregarDadosNuvem();
 </script>
 
