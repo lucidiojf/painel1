@@ -9,7 +9,7 @@
         body { background-color: #f4f6f9; color: #333; padding: 15px; padding-bottom: 75px; }
         .container { max-width: 600px; margin: 0 auto; }
         
-        /* ABAS NA PARTE INFERIOR (RODAPÉ FIXO) */
+        /* ABAS NA PARTE INFERIOR */
         .tabs { 
             position: fixed; 
             bottom: 0; 
@@ -47,13 +47,32 @@
         
         .card-item { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; border-radius: 4px; }
         
-        /* SANFONA / ACCORDION */
-        .nota-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .nota-titulo-resumo { font-weight: 600; font-size: 0.95rem; color: #222; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 75%; }
-        .nota-corpo { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #ddd; white-space: pre-wrap; word-break: break-word; line-height: 1.4; font-size: 0.9rem; color: #444; }
-        .nota-corpo.open { display: block; }
-        
+        /* GERADOR DE LINK FIXO NO TOPO DA ABA NOTAS */
         .generator-box { background: #eef6ff; border: 1px dashed #007bff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+
+        /* ESTILO DA SANFONA NATIVA (<details>) */
+        details.nota-sanfona { width: 100%; }
+        details.nota-sanfona summary { 
+            font-weight: 600; 
+            font-size: 0.95rem; 
+            color: #222; 
+            cursor: pointer; 
+            outline: none;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 10px;
+        }
+        .nota-corpo-expandido { 
+            margin-top: 10px; 
+            padding-top: 10px; 
+            border-top: 1px dashed #ddd; 
+            white-space: pre-wrap; 
+            word-break: break-word; 
+            line-height: 1.4; 
+            font-size: 0.9rem; 
+            color: #444; 
+        }
     </style>
 </head>
 <body>
@@ -86,6 +105,7 @@
 
     <!-- ABA NOTAS -->
     <div id="tab-notas" class="tab-content">
+        <!-- GERADOR DE LINK DO GITHUB NO TOPO DA ABA -->
         <div class="generator-box">
             <label style="font-size: 0.85rem; font-weight: bold;">📎 Gerador de Link Fixo (GitHub):</label>
             <input type="text" id="nome-foto-gh" placeholder="Ex: recibo1.jpg" style="margin-top: 5px;" oninput="gerarLinkGitHub()">
@@ -105,7 +125,7 @@
 
 </div>
 
-<!-- NAVEGAÇÃO POR ABAS EMBAIXO -->
+<!-- NAVEGAÇÃO POR ABAS NO RODAPÉ -->
 <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('despesas', this)">💰 Gastos</button>
     <button class="tab-btn" onclick="switchTab('tarefas', this)">📋 Tarefas</button>
@@ -223,31 +243,27 @@
                 lnk = item.link || '';
             }
 
-            // Pega a primeira linha do texto para servir de título na sanfona
-            const primeiraLinha = txt.split('\n')[0] || lnk || 'Nota sem texto';
+            // Pega a primeira linha não vazia do texto para a barra da sanfona
+            const linhas = txt.split('\n').filter(l => l.trim().length > 0);
+            const primeiraLinha = linhas[0] || lnk || 'Nota sem texto';
 
             div.innerHTML = `
-                <div class="nota-header" onclick="toggleSanfona(${index})">
-                    <span class="nota-titulo-resumo">▶ ${primeiraLinha}</span>
-                    <div onclick="event.stopPropagation();" style="display:flex; gap:8px;">
-                        <button onclick="editarNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;">✏️</button>
-                        <button onclick="removerNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;">🗑️</button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <details class="nota-sanfona" style="flex: 1; margin-right: 10px;">
+                        <summary>${primeiraLinha}</summary>
+                        <div class="nota-corpo-expandido">
+                            ${txt ? `<div>${txt}</div>` : ''}
+                            ${lnk ? `<a href="${lnk}" target="_blank" style="word-break:break-all; color:#007bff; display:block; margin-top:8px;">${lnk}</a>` : ''}
+                        </div>
+                    </details>
+                    <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
+                        <button onclick="editarNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;" title="Editar">✏️</button>
+                        <button onclick="removerNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;" title="Excluir">🗑️</button>
                     </div>
-                </div>
-                <div id="sanfona-corpo-${index}" class="nota-corpo">
-                    ${txt ? `<div>${txt}</div>` : ''}
-                    ${lnk ? `<a href="${lnk}" target="_blank" style="word-break:break-all; color:#007bff; display:block; margin-top:8px;">${lnk}</a>` : ''}
                 </div>
             `;
             container.appendChild(div);
         });
-    }
-
-    function toggleSanfona(index) {
-        const corpo = document.getElementById(`sanfona-corpo-${index}`);
-        if (corpo) {
-            corpo.classList.toggle('open');
-        }
     }
 
     function addGasto() {
