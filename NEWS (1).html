@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornal Digital + RSS Completo</title>
+    <style>
+        :root { --primary: #000; --bg: #fff; }
+        body { font-family: sans-serif; margin: 0; padding: 10px; background: var(--bg); }
+        
+        .header { border-bottom: 4px solid #000; padding-bottom: 10px; margin-bottom: 10px; position: sticky; top: 0; background: #fff; z-index: 100; }
+        .btn-x { background: #000; color: #fff; padding: 8px 12px; text-decoration: none; float: right; font-weight: bold; font-size: 12px; }
+        
+        #search-input { 
+            width: 100%; padding: 8px 12px; border: 2px solid #000; font-size: 14px; 
+            box-sizing: border-box; margin: 8px 0; outline: none;
+        }
+
+        .controls { display: flex; gap: 5px; align-items: center; justify-content: space-between; margin-top: 5px; flex-wrap: wrap; }
+        .btn { background: #000; color: #fff; border: none; padding: 6px 10px; font-weight: bold; cursor: pointer; font-size: 11px; }
+        .btn-clear { background: #666; }
+
+        .fav-bar { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px; margin-top: 10px; }
+        .fav-link { background: #eee; padding: 5px; text-decoration: none; color: #000; border: 1px solid #000; font-size: 11px; font-weight: bold; }
+        .fav-link.rss-btn { background: #2196F3; color: #fff; border-color: #0b7dda; }
+        
+        .card { border: 2px solid #000; margin-bottom: 12px; padding: 10px; box-shadow: 3px 3px 0px #000; background: #fff; }
+        .card img { width: 100%; height: auto; max-height: 150px; object-fit: cover; display: block; margin-bottom: 5px; }
+        .source { background: #000; color: #fff; padding: 2px 5px; font-size: 10px; display: inline-block; margin-bottom: 5px; text-transform: uppercase; }
+        .date { font-size: 10px; color: #555; margin-left: 5px; }
+        
+        h3 { margin: 5px 0; font-size: 15px; line-height: 1.2; }
+        .title-link { color: #000; text-decoration: none; cursor: pointer; display: block; }
+        .title-link:hover { text-decoration: underline; }
+        
+        .card.read { opacity: 0.4; background: #f4f4f4; border-color: #777; box-shadow: 1px 1px 0px #777; }
+        .card.read .source { background: #777; }
+        .hide-read .card.read { display: none !important; }
+        .card.hidden { display: none !important; }
+
+        #status { color: red; font-weight: bold; font-size: 11px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="https://x.com/home" class="btn-x">𝕏 MANCHETES</a>
+    <h1 style="margin:0; font-size: 20px;">JORNAL DIGITAL</h1>
+    
+    <input type="text" id="search-input" placeholder="🔍 Pesquisar manchetes no RSS..." onkeyup="filterNews()">
+
+    <div class="controls">
+        <button class="btn" onclick="fetchNews()">🔄 ATUALIZAR</button>
+        <button class="btn" onclick="toggleReadVisibility()" id="btn-toggle">Esconder Lidas</button>
+        <button class="btn btn-clear" onclick="clearHistory()">Limpar Lidas</button>
+        <div id="status">Carregando...</div>
+    </div>
+</div>
+
+<div class="fav-bar">
+    <a href="#news-container" class="fav-link rss-btn">🩺 VER MANCHETES RSS</a>
+    <a href="https://sbtnews.sbt.com.br/" class="fav-link" target="_blank">SBT</a>
+    <a href="https://www1.folha.uol.com.br/ultimas-noticias/" class="fav-link" target="_blank">FOLHA</a>
+    <a href="https://bandnewstv.uol.com.br/" class="fav-link" target="_blank">BANDNEWS</a>
+    <a href="https://www.estadao.com.br/ultimas/" class="fav-link" target="_blank">ESTADÃO</a>
+    <a href="https://www.cnnbrasil.com.br/ultimas-noticias/" class="fav-link" target="_blank">CNN</a>
+    <a href="https://noticias.r7.com/" class="fav-link" target="_blank">R7</a>
+    <a href="https://noticias.uol.com.br/ultimas/" class="fav-link" target="_blank">UOL</a>
+    <a href="https://g1.globo.com/ultimas-noticias/" class="fav-link" target="_blank">G1</a>
+    <a href="https://www.correiobraziliense.com.br/" class="fav-link" target="_blank">CB</a>
+    <a href="https://veja.abril.com.br/" class="fav-link" target="_blank">VEJA</a>
+    <a href="https://istoe.com.br/" class="fav-link" target="_blank">ISTOÉ</a>
+    <a href="https://patu-emfoco.blogspot.com/" class="fav-link" target="_blank">PATU</a>
+    <a href="https://rnpoliticaemdia2012.blogspot.com/" class="fav-link" target="_blank">RN POLÍTICA</a>
+    <a href="https://politicapauferrense.blogspot.com/" class="fav-link" target="_blank">POL PDF</a>
+    <a href="https://agorarn.com.br/" class="fav-link" target="_blank">AGORA RN</a>
+    <a href="https://www.jornalfolharegional.com.br/" class="fav-link" target="_blank">FOLHA REG</a>
+    <a href="https://tribunadonorte.com.br/" class="fav-link" target="_blank">TN</a>
+    <a href="https://www.blogdobg.com.br/" class="fav-link" target="_blank">BG</a>
+    <a href="https://robsonpiresxerife.com/" class="fav-link" target="_blank">RP</a>
+</div>
+
+<div id="news-container"></div>
+
+<script>
+    // LISTA COMPLETA E ATUALIZADA (G1, SBT e IstoÉ incluídos com URLs ativas)
+    const feeds = [
+        { name: 'G1 Notícias', url: 'https://g1.globo.com/dynamo/rss2.xml' },
+        { name: 'SBT News', url: 'https://sbtnews.sbt.com.br/rss' },
+        { name: 'IstoÉ', url: 'https://istoe.com.br/feed/' },
+        { name: 'CNN Brasil', url: 'https://www.cnnbrasil.com.br/feed/' },
+        { name: 'Folha de S.Paulo', url: 'https://feeds.folha.uol.com.br/emcimadahora/rss091.xml' },
+        { name: 'UOL Notícias', url: 'https://rss.uol.com.br/feed/noticias.xml' },
+        { name: 'Correio Braziliense', url: 'https://www.correiobraziliense.com.br/rss/ultimas-noticias/rss.xml' },
+        { name: 'Agora RN', url: 'https://agorarn.com.br/feed/' },
+        { name: 'Blog do BG', url: 'https://www.blogdobg.com.br/feed/' },
+        { name: 'Robson Pires', url: 'https://robsonpiresxerife.com/feed/' },
+        { name: 'Patu em Foco', url: 'https://patu-emfoco.blogspot.com/feeds/posts/default' },
+        { name: 'Política Pauferrense', url: 'https://politicapauferrense.blogspot.com/feeds/posts/default' },
+        { name: 'RN Política em Dia', url: 'https://feeds.feedburner.com/RnPoliticaEmDia2012' },
+        { name: 'Tribuna do Norte', url: 'https://tribunadonorte.com.br/feed/' }
+    ];
+
+    let hideRead = true;
+    let readArticles = JSON.parse(localStorage.getItem('readArticles')) || [];
+
+    async function fetchNews() {
+        const container = document.getElementById('news-container');
+        const status = document.getElementById('status');
+        status.innerText = "Buscando...";
+        let newsData = [];
+
+        for (const feed of feeds) {
+            try {
+                // Requisição direta à API
+                let reqUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed.url)}&_=${Date.now()}`;
+                let response = await fetch(reqUrl);
+                let data = await response.json();
+                
+                if (data.status === 'ok' && data.items && data.items.length > 0) {
+                    data.items.slice(0, 3).forEach(item => {
+                        newsData.push({
+                            id: btoa(unescape(encodeURIComponent(item.link))),
+                            title: decodeHTML(item.title),
+                            link: item.link,
+                            img: item.thumbnail || item.enclosure?.link || '',
+                            date: new Date(item.pubDate),
+                            source: feed.name
+                        });
+                    });
+                }
+            } catch (e) { 
+                console.warn("Erro ao buscar feed: " + feed.name); 
+            }
+        }
+
+        // Ordena pela hora da publicação
+        newsData.sort((a, b) => b.date - a.date);
+
+        container.innerHTML = "";
+        if (newsData.length > 0) {
+            newsData.forEach(item => {
+                const isRead = readArticles.includes(item.id);
+                const div = document.createElement('div');
+                div.className = `card ${isRead ? 'read' : ''}`;
+                div.id = item.id;
+                
+                div.innerHTML = `
+                    ${item.img ? `<img src="${item.img}" onerror="this.style.display='none'">` : ''}
+                    <span class="source">${item.source}</span>
+                    <span class="date">• ${item.date.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</span>
+                    <h3>
+                        <a class="title-link" href="javascript:void(0)" onclick="openNews('${item.link}', '${item.id}')">${item.title}</a>
+                    </h3>
+                    <button onclick="markAsRead('${item.id}')" style="display:block; width:100%; border:2px solid #000; padding:8px; font-weight:bold; margin-top:8px; background:#f9f9f9; cursor:pointer; font-size:11px;">✓ APAGAR / MARCAR COMO LIDA</button>
+                `;
+                container.appendChild(div);
+            });
+            status.innerText = "Atualizado: " + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+        } else {
+            status.innerText = "Erro ao carregar manchetes. Tente novamente.";
+        }
+
+        applyFilters();
+    }
+
+    function openNews(url, id) {
+        markAsRead(id);
+        window.open(url, '_system');
+    }
+
+    function markAsRead(id) {
+        if (!readArticles.includes(id)) {
+            readArticles.push(id);
+            localStorage.setItem('readArticles', JSON.stringify(readArticles));
+            const el = document.getElementById(id);
+            if(el) el.classList.add('read');
+            setTimeout(applyFilters, 300);
+        }
+    }
+
+    function toggleReadVisibility() {
+        hideRead = !hideRead;
+        document.getElementById('btn-toggle').innerText = hideRead ? 'Mostrar Lidas' : 'Esconder Lidas';
+        applyFilters();
+    }
+
+    function applyFilters() {
+        if (hideRead) document.body.classList.add('hide-read');
+        else document.body.classList.remove('hide-read');
+        filterNews();
+    }
+
+    function filterNews() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const text = card.innerText.toLowerCase();
+            card.classList.toggle('hidden', !text.includes(query));
+        });
+    }
+
+    function clearHistory() {
+        if(confirm("Deseja restaurar as notícias marcadas como lidas?")) {
+            localStorage.removeItem('readArticles');
+            readArticles = [];
+            fetchNews();
+        }
+    }
+
+    function decodeHTML(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
+
+    fetchNews();
+    setInterval(fetchNews, 300000);
+</script>
+
+</body>
+</html>
