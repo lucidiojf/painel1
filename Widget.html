@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mini Widget Razr</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        
+        body { 
+            background: #ffffff; 
+            color: #1a1a1a; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; 
+            user-select: none;
+            padding: 10px;
+        }
+
+        /* TOPO ESTILO STICKY NOTE */
+        .widget-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-bottom: 6px; 
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .widget-title { 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: #333; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+        }
+        .dot { 
+            width: 9px; 
+            height: 9px; 
+            background: #5c6274; 
+            border-radius: 50%; 
+            display: inline-block; 
+        }
+        .status-sync { 
+            font-size: 0.75rem; 
+            color: #888; 
+        }
+
+        /* CONTEÚDO PRINCIPAL ROLÁVEL */
+        .widget-content { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 8px 0; 
+            font-size: 0.9rem;
+        }
+
+        /* ITENS COMPACTOS */
+        .mini-card { 
+            background: #fdfdfd; 
+            border-left: 3px solid #007bff; 
+            padding: 8px; 
+            margin-bottom: 6px; 
+            border-radius: 4px; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .mini-card.tarefa { border-left-color: #28a745; }
+        .mini-card.gasto { border-left-color: #ff9800; }
+
+        .item-text { 
+            white-space: pre-wrap; 
+            word-break: break-word; 
+            line-height: 1.35; 
+            font-size: 0.88rem; 
+        }
+        .item-link { 
+            display: inline-block; 
+            margin-top: 4px; 
+            color: #007bff; 
+            font-size: 0.8rem; 
+            text-decoration: none; 
+            font-weight: 600;
+        }
+
+        /* BARRA INFERIOR DE ÍCONES (Estilo Sticky Notes) */
+        .widget-footer { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding-top: 6px; 
+            border-top: 1px solid #f0f0f0; 
+        }
+        .nav-group { display: flex; gap: 10px; }
+        .icon-btn { 
+            background: none; 
+            border: none; 
+            cursor: pointer; 
+            font-size: 1.25rem; 
+            color: #444; 
+            padding: 4px 6px; 
+            border-radius: 6px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        .icon-btn.active { 
+            background: #eef4ff; 
+            color: #007bff; 
+        }
+        .icon-btn:active { transform: scale(0.92); }
+    </style>
+</head>
+<body>
+
+    <!-- CABEÇALHO -->
+    <div class="widget-header">
+        <div class="widget-title">
+            <span class="dot"></span>
+            <span id="aba-nome">Notas</span>
+        </div>
+        <span id="sync-indicador" class="status-sync">🔄</span>
+    </div>
+
+    <!-- ÁREA DE ROLAGEM DOS DADOS -->
+    <div class="widget-content" id="conteudo-lista">
+        <div style="text-align: center; color: #999; margin-top: 20px; font-size: 0.85rem;">Carregando...</div>
+    </div>
+
+    <!-- RODAPÉ DE NAVEGAÇÃO -->
+    <div class="widget-footer">
+        <!-- Alternadores de Visualização -->
+        <div class="nav-group">
+            <button id="btn-notas" class="icon-btn active" onclick="trocarAba('notas')" title="Notas">📝</button>
+            <button id="btn-tarefas" class="icon-btn" onclick="trocarAba('tarefas')" title="Tarefas">📋</button>
+            <button id="btn-despesas" class="icon-btn" onclick="trocarAba('despesas')" title="Gastos">💰</button>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="nav-group">
+            <button class="icon-btn" onclick="carregarDados()" title="Atualizar Nuvem">🔄</button>
+            <button class="icon-btn" onclick="abrirPainelCompleto()" title="Abrir Painel Completo">↗️</button>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
+
+        let despesas = [];
+        let tarefas = [];
+        let notas = [];
+        let abaAtual = 'notas';
+
+        function carregarDados() {
+            document.getElementById('sync-indicador').innerText = '🔄';
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?callback=receberDados&t=${Date.now()}`;
+            document.body.appendChild(script);
+        }
+
+        function receberDados(data) {
+            if (data) {
+                despesas = data.despesas || [];
+                tarefas = data.tarefas || [];
+                notas = data.notas || [];
+                document.getElementById('sync-indicador').innerText = '●';
+                renderWidget();
+            }
+        }
+
+        function trocarAba(aba) {
+            abaAtual = aba;
+            document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${aba}`).classList.add('active');
+            
+            const nomes = { notas: 'Notas', tarefas: 'Tarefas', despesas: 'Gastos' };
+            document.getElementById('aba-nome').innerText = nomes[aba];
+            renderWidget();
+        }
+
+        function renderWidget() {
+            const container = document.getElementById('conteudo-lista');
+            container.innerHTML = '';
+
+            if (abaAtual === 'notas') {
+                if (!notas.length) return container.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:20px;">Nenhuma nota salva.</div>';
+                notas.forEach(n => {
+                    const txt = n.texto || n.titulo || (typeof n === 'string' ? n : '');
+                    const lnk = n.link || '';
+                    container.innerHTML += `
+                        <div class="mini-card">
+                            <div class="item-text">${txt}</div>
+                            ${lnk ? `<a href="${lnk}" target="_blank" class="item-link">🔗 Abrir Anexo</a>` : ''}
+                        </div>
+                    `;
+                });
+            } else if (abaAtual === 'tarefas') {
+                if (!tarefas.length) return container.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:20px;">Nenhuma tarefa.</div>';
+                tarefas.forEach(t => {
+                    const nome = t.nome || t.texto || '';
+                    container.innerHTML += `
+                        <div class="mini-card tarefa">
+                            <div class="item-text">☑️ ${nome}</div>
+                        </div>
+                    `;
+                });
+            } else if (abaAtual === 'despesas') {
+                if (!despesas.length) return container.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:20px;">Nenhum gasto.</div>';
+                let total = 0;
+                let html = '';
+                despesas.forEach(d => {
+                    const nome = d.nome || d.desc || '';
+                    const valor = parseFloat(d.valor) || 0;
+                    total += valor;
+                    html += `
+                        <div class="mini-card gasto" style="display:flex; justify-content:space-between;">
+                            <span class="item-text">${nome}</span>
+                            <strong>R$ ${valor.toFixed(2)}</strong>
+                        </div>
+                    `;
+                });
+                html += `<div style="text-align:right; font-weight:bold; padding:4px; font-size:0.9rem; color:#ff9800;">Total: R$ ${total.toFixed(2)}</div>`;
+                container.innerHTML = html;
+            }
+        }
+
+        function abrirPainelCompleto() {
+            window.location.href = 'index.html';
+        }
+
+        // Inicialização
+        carregarDados();
+    </script>
+</body>
+</html>
