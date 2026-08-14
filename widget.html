@@ -2,487 +2,348 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Geral</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sticky Notes Razr</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; padding: 15px; padding-bottom: 75px; }
-        .container { max-width: 600px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
-        /* ABAS INFERIORES */
-        .tabs { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
+        body { 
+            background: #ffffff; 
+            color: #1a1a1a; 
+            height: 100vh; 
             display: flex; 
-            background: #ffffff; 
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); 
-            z-index: 1000; 
-        }
-        .tab-btn { 
-            flex: 1; 
-            padding: 12px 5px; 
-            border: none; 
-            background: #f8f9fa; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-            color: #666;
-            border-top: 3px solid transparent;
-        }
-        .tab-btn.active { 
-            background: #ffffff; 
-            color: #007bff; 
-            border-top: 3px solid #007bff; 
+            flex-direction: column; 
+            overflow: hidden; 
+            padding: 10px;
         }
 
-        .tab-content { display: none; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tab-content.active { display: block; }
-        
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; font-weight: 500; }
-        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        button.btn-primary { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; }
-        
-        .card-item { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; border-radius: 4px; }
-        
-        .generator-box { background: #eef6ff; border: 1px dashed #007bff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
-        .tools-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 10px; border-radius: 6px; margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
-
-        /* SANFONA NATIVA */
-        details.nota-sanfona { width: 100%; }
-        details.nota-sanfona summary { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            color: #222; 
-            cursor: pointer; 
-            outline: none;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-right: 10px;
+        /* TOPO */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .nota-corpo-expandido { 
-            margin-top: 10px; 
-            padding-top: 10px; 
-            border-top: 1px dashed #ddd; 
-            white-space: pre-wrap; 
-            word-break: break-word; 
-            line-height: 1.4; 
-            font-size: 0.9rem; 
-            color: #444; 
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .dot { width: 9px; height: 9px; background: #64748b; border-radius: 50%; display: inline-block; }
+
+        /* LISTA DOS STICKY CARDS */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        /* EXIBIÇÃO DE IMAGEM DENTRO DA NOTA */
-        .nota-img-preview {
-            max-width: 100%;
-            height: auto;
+        .sticky-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: background 0.15s;
+        }
+        .sticky-card:active { background: #f8fafc; }
+        .sticky-text {
+            font-size: 1.25rem;
+            line-height: 1.35;
+            color: #1e293b;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-weight: 500;
+        }
+
+        /* RODAPÉ DO WIDGET */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 6px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.4rem;
+            padding: 4px 8px;
+            color: #475569;
             border-radius: 6px;
-            margin-top: 10px;
-            display: block;
-            border: 1px solid #e2e8f0;
+        }
+        .icon-btn.active { background: #e0f2fe; }
+
+        /* TELA EXTRA CHEIA (ESTILO STICKY EDIT) */
+        #modal-editor {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #ffffff;
+            z-index: 9999;
+            flex-direction: column;
+            padding: 12px;
+        }
+        #modal-editor.open { display: flex; }
+
+        .editor-textarea {
+            flex: 1;
+            width: 100%;
+            border: none;
+            outline: none;
+            font-size: 1.4rem;
+            line-height: 1.4;
+            color: #0f172a;
+            resize: none;
+            background: transparent;
+            font-weight: 500;
         }
 
-        .total-box { margin-top: 15px; padding: 10px; background: #eef6ff; font-weight: bold; text-align: right; border-radius: 4px; color: #007bff; font-size: 1.05rem; }
-        .btn-sec { padding: 6px 10px; font-size: 0.8rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+        /* BARRA DE FERRAMENTAS DO STICKY (Lixeira, Copiar, Confirmar) */
+        .editor-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 4px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .toolbar-group { display: flex; gap: 20px; align-items: center; }
+        .tool-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tool-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
 
-<div class="container">
-
-    <!-- ABA DESPESAS -->
-    <div id="tab-despesas" class="tab-content active">
-        <div class="form-group">
-            <label>Descrição</label>
-            <input type="text" id="gasto-nome">
+    <!-- CABEÇALHO -->
+    <div class="header">
+        <div class="header-title">
+            <span class="dot"></span>
+            <span id="titulo-aba">Sticky Notes</span>
         </div>
-        <div class="form-group">
-            <label>Valor (R$)</label>
-            <input type="number" step="0.01" id="gasto-valor">
-        </div>
-        <button class="btn-primary" onclick="addGasto()">Adicionar Gasto</button>
-        <div id="lista-despesas"></div>
-        <div id="total-despesas" class="total-box">Total: R$ 0,00</div>
+        <button class="icon-btn" onclick="abrirNovoSticky()" title="Nova Nota" style="font-size: 1.5rem; font-weight: bold; color: #007bff;">➕</button>
     </div>
 
-    <!-- ABA TAREFAS -->
-    <div id="tab-tarefas" class="tab-content">
-        <div class="form-group">
-            <label>Tarefa</label>
-            <input type="text" id="tarefa-nome">
-        </div>
-        <button class="btn-primary" onclick="addTarefa()">Adicionar Tarefa</button>
-        <div id="lista-tarefas"></div>
+    <!-- LISTAGEM -->
+    <div class="content" id="lista-cards">
+        <div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size: 1.1rem;">Carregando...</div>
     </div>
 
-    <!-- ABA NOTAS -->
-    <div id="tab-notas" class="tab-content">
-        <div class="generator-box">
-            <label style="font-size: 0.85rem; font-weight: bold;">📎 Gerador de Link Fixo (GitHub):</label>
-            <input type="text" id="nome-foto-gh" placeholder="Ex: recibo1.jpg" style="margin-top: 5px;" oninput="gerarLinkGitHub()">
+    <!-- RODAPÉ -->
+    <div class="footer">
+        <div style="display: flex; gap: 8px;">
+            <button id="tab-notas" class="icon-btn active" onclick="trocarAba('notas')">📝</button>
+            <button id="tab-tarefas" class="icon-btn" onclick="trocarAba('tarefas')">📋</button>
+            <button id="tab-despesas" class="icon-btn" onclick="trocarAba('despesas')">💰</button>
         </div>
+        <button class="icon-btn" onclick="window.location.href='index.html'" title="Painel Completo">↗️</button>
+    </div>
 
-        <div class="form-group">
-            <label>Texto / Conteúdo</label>
-            <textarea id="nota-texto" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Link / URL da Foto / Arquivo</label>
-            <input type="text" id="nota-link" placeholder="Cole o link ou escolha um arquivo abaixo">
-        </div>
-        <div class="form-group">
-            <label style="font-size: 0.85rem; color: #666;">Ou carregar foto/arquivo do dispositivo:</label>
-            <input type="file" id="nota-arquivo" onchange="carregarArquivoLocal(this)" accept="image/*,.pdf,.txt">
-        </div>
-        <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
+    <!-- TELA EXTRA EXPANDIDA / MODAL DE EDIÇÃO -->
+    <div id="modal-editor">
+        <textarea id="editor-texto" class="editor-textarea" placeholder="Digite aqui..."></textarea>
         
-        <div id="lista-notas"></div>
-
-        <div class="tools-box">
-            <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-sec" style="background: #0061ff;">📦 Upload Dropbox</a>
-            <a href="https://github.com/lucidiojf/painel1/upload/main" target="_blank" class="btn-sec" style="background: #24292e;">🐙 Upload GitHub</a>
-            <button onclick="gerarBackup()" class="btn-sec" style="background: #28a745;">💾 Baixar Backup</button>
-            <button onclick="document.getElementById('input-restore').click()" class="btn-sec" style="background: #ffc107; color: #333;">📂 Restaurar Backup</button>
-            <input type="file" id="input-restore" style="display: none;" onchange="recuperarBackup(event)" accept=".json">
+        <div class="editor-toolbar">
+            <button class="tool-btn" onclick="fecharEditor()" title="Configurações / Voltar">⚙️</button>
+            <div class="toolbar-group">
+                <button class="tool-btn" onclick="excluirStickyAtual()" title="Excluir">🗑️</button>
+                <button class="tool-btn" onclick="copiarStickyAtual()" title="Copiar">📄</button>
+                <button class="tool-btn" onclick="salvarStickyAtual()" style="font-size: 1.7rem; color: #0f172a; font-weight: bold;" title="Confirmar">✓</button>
+            </div>
         </div>
     </div>
 
-</div>
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
 
-<!-- NAVEGAÇÃO NO RODAPÉ -->
-<div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('despesas', this)">💰 Gastos</button>
-    <button class="tab-btn" onclick="switchTab('tarefas', this)">📋 Tarefas</button>
-    <button class="tab-btn" onclick="switchTab('notas', this)">📝 Notas</button>
-</div>
+        let despesas = [];
+        let tarefas = [];
+        let notas = [];
+        let abaAtual = 'notas';
+        let indiceEditando = -1; // -1 = novo item
 
-<script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
-    
-    let despesas = [];
-    let tarefas = [];
-    let notas = [];
-
-    function carregarDadosNuvem() {
-        const script = document.createElement('script');
-        script.src = `${SCRIPT_URL}?callback=receberDadosNuvem&t=${Date.now()}`;
-        document.body.appendChild(script);
-    }
-
-    function receberDadosNuvem(data) {
-        if (data) {
-            despesas = data.despesas || [];
-            tarefas = data.tarefas || [];
-            notas = data.notas || [];
-            renderAll();
+        function carregarDados() {
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?callback=receberDados&t=${Date.now()}`;
+            document.body.appendChild(script);
         }
-    }
 
-    function enviarDadosNuvem() {
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ despesas, tarefas, notas })
-        });
-    }
-
-    function switchTab(tab, btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
-        btn.classList.add('active');
-        document.getElementById(`tab-${tab}`).classList.add('active');
-    }
-
-    function gerarLinkGitHub() {
-        const arq = document.getElementById('nome-foto-gh').value.trim();
-        if (arq) {
-            document.getElementById('nota-link').value = `https://lucidiojf.github.io/painel1/${arq}`;
-        }
-    }
-
-    // Converte arquivo local para Base64/Link de exibição
-    function carregarArquivoLocal(input) {
-        if (input.files && input.files[0]) {
-            const file = input.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('nota-link').value = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // Checa se o link é imagem
-    function isImagemUrl(url) {
-        if (!url) return false;
-        if (url.startsWith('data:image/')) return true;
-        return /\.(jpeg|jpg|gif|png|webp|bmp|svg)($|\?)/i.test(url);
-    }
-
-    function renderAll() {
-        renderDespesas();
-        renderTarefas();
-        renderNotas();
-    }
-
-    function renderDespesas() {
-        const container = document.getElementById('lista-despesas');
-        const totalContainer = document.getElementById('total-despesas');
-        if (!container) return;
-        container.innerHTML = '';
-        
-        let soma = 0;
-
-        despesas.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card-item';
-            const nomeStr = item.nome || item.desc || '';
-            const val = parseFloat(item.valor) || 0;
-            soma += val;
-            const valStr = val > 0 ? ` - R$ ${val.toFixed(2)}` : '';
-
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong>${nomeStr}</strong>${valStr}</div>
-                    <button onclick="removerGasto(${index})" style="background:none;border:none;cursor:pointer;">🗑️</button>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-
-        if(totalContainer) {
-            totalContainer.innerText = `Total: R$ ${soma.toFixed(2).replace('.', ',')}`;
-        }
-    }
-
-    function renderTarefas() {
-        const container = document.getElementById('lista-tarefas');
-        if (!container) return;
-        container.innerHTML = '';
-        tarefas.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card-item';
-            const nomeStr = item.nome || item.texto || '';
-
-            const textEncoded = encodeURIComponent(nomeStr);
-            const linkAgenda = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${textEncoded}`;
-            const linkTasks = `https://tasks.google.com/embed/list/~default?add=${textEncoded}`;
-
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="flex:1; margin-right:10px;">${nomeStr}</div>
-                    <div style="display:flex; gap:6px; align-items:center;">
-                        <a href="${linkAgenda}" target="_blank" title="Enviar para o Google Agenda" style="text-decoration:none; font-size:1.1rem;">📅</a>
-                        <a href="${linkTasks}" target="_blank" title="Enviar para o Google Tasks" style="text-decoration:none; font-size:1.1rem;">☑️</a>
-                        <button onclick="removerTarefa(${index})" style="background:none;border:none;cursor:pointer; font-size:1.1rem;">🗑️</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function renderNotas() {
-        const container = document.getElementById('lista-notas');
-        if (!container) return;
-        container.innerHTML = '';
-        notas.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card-item';
-            
-            let txt = '';
-            let lnk = '';
-
-            if (typeof item === 'string') {
-                if (item.startsWith('http://') || item.startsWith('https://') || item.startsWith('data:')) {
-                    lnk = item;
-                } else {
-                    txt = item;
-                }
-            } else {
-                txt = item.texto || item.titulo || '';
-                lnk = item.link || '';
+        function receberDados(data) {
+            if (data) {
+                despesas = data.despesas || [];
+                tarefas = data.tarefas || [];
+                notas = data.notas || [];
+                renderWidget();
             }
+        }
 
-            const linhas = txt.split('\n').filter(l => l.trim().length > 0);
-            const primeiraLinha = linhas[0] || (lnk ? '🔗 Anexo / Imagem' : 'Nota sem texto');
+        function enviarDados() {
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ despesas, tarefas, notas })
+            });
+        }
 
-            // Renderiza imagem se for formato de foto
-            let midiaHtml = '';
-            if (lnk) {
-                if (isImagemUrl(lnk)) {
-                    midiaHtml = `
-                        <div style="margin-top: 10px;">
-                            <a href="${lnk}" target="_blank">
-                                <img src="${lnk}" class="nota-img-preview" alt="Imagem anexa">
-                            </a>
+        function trocarAba(aba) {
+            abaAtual = aba;
+            document.querySelectorAll('.footer .icon-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`tab-${aba}`).classList.add('active');
+            
+            const titulos = { notas: 'Sticky Notes', tarefas: 'Sticky Tarefas', despesas: 'Sticky Gastos' };
+            document.getElementById('titulo-aba').innerText = titulos[aba];
+            renderWidget();
+        }
+
+        function renderWidget() {
+            const container = document.getElementById('lista-cards');
+            container.innerHTML = '';
+
+            if (abaAtual === 'notas') {
+                if (!notas.length) return container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:20px;font-size:1.1rem;">Sem notas. Toque em ➕</div>';
+                
+                // Exibe as 2 últimas notas
+                const ultimas = notas.slice(-2).reverse();
+                ultimas.forEach((n, idx) => {
+                    const originalIndex = notas.length - 1 - idx;
+                    const txt = n.texto || n.titulo || (typeof n === 'string' ? n : '');
+                    container.innerHTML += `
+                        <div class="sticky-card" onclick="abrirEditor(${originalIndex})">
+                            <div class="sticky-text">${txt}</div>
                         </div>
                     `;
-                } else {
-                    midiaHtml = `<a href="${lnk}" target="_blank" style="word-break:break-all; color:#007bff; display:block; margin-top:8px;">🔗 ${lnk}</a>`;
-                }
-            }
-
-            div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <details class="nota-sanfona" style="flex: 1; margin-right: 10px;">
-                        <summary>${primeiraLinha}</summary>
-                        <div class="nota-corpo-expandido">
-                            ${txt ? `<div>${txt}</div>` : ''}
-                            ${midiaHtml}
-                            <div style="margin-top: 10px; text-align: right;">
-                                <button onclick="baixarNotaTxt(${index})" class="btn-sec" style="background:#17a2b8;">📄 Baixar TXT</button>
-                            </div>
+                });
+            } else if (abaAtual === 'tarefas') {
+                if (!tarefas.length) return container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:20px;font-size:1.1rem;">Sem tarefas. Toque em ➕</div>';
+                const ultimas = tarefas.slice(-2).reverse();
+                ultimas.forEach((t, idx) => {
+                    const originalIndex = tarefas.length - 1 - idx;
+                    const nome = t.nome || t.texto || '';
+                    container.innerHTML += `
+                        <div class="sticky-card" onclick="abrirEditor(${originalIndex})" style="border-left: 5px solid #28a745;">
+                            <div class="sticky-text">☑️ ${nome}</div>
                         </div>
-                    </details>
-                    <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
-                        <button onclick="editarNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;" title="Editar">✏️</button>
-                        <button onclick="removerNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;" title="Excluir">🗑️</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function baixarNotaTxt(index) {
-        const item = notas[index];
-        if (!item) return;
-
-        let txt = item.texto || item.titulo || (typeof item === 'string' ? item : '');
-        let lnk = item.link || '';
-
-        let conteudo = txt;
-        if (lnk) {
-            conteudo += (conteudo ? '\n\nLink / Anexo:\n' : '') + lnk;
-        }
-
-        const linhas = txt.split('\n').filter(l => l.trim().length > 0);
-        const nomeArquivo = (linhas[0] || 'nota').replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 20);
-
-        const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${nomeArquivo}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    }
-
-    function addGasto() {
-        const nome = document.getElementById('gasto-nome').value.trim();
-        const valor = document.getElementById('gasto-valor').value.trim();
-        if(!nome) return;
-        despesas.push({ id: Date.now(), nome: nome, valor: valor ? parseFloat(valor) : 0, anexo: "" });
-        document.getElementById('gasto-nome').value = '';
-        document.getElementById('gasto-valor').value = '';
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function removerGasto(index) {
-        despesas.splice(index, 1);
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function addTarefa() {
-        const nome = document.getElementById('tarefa-nome').value.trim();
-        if(!nome) return;
-        tarefas.push({ id: Date.now(), nome: nome, data: "", prioridade: "baixa", anexo: "" });
-        document.getElementById('tarefa-nome').value = '';
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function removerTarefa(index) {
-        tarefas.splice(index, 1);
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function addNota() {
-        const texto = document.getElementById('nota-texto').value.trim();
-        const link = document.getElementById('nota-link').value.trim();
-        if(!texto && !link) return;
-
-        notas.push({ id: Date.now(), texto: texto, link: link });
-        document.getElementById('nota-texto').value = '';
-        document.getElementById('nota-link').value = '';
-        document.getElementById('nome-foto-gh').value = '';
-        document.getElementById('nota-arquivo').value = '';
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function editarNota(index) {
-        const item = notas[index];
-        if (!item) return;
-
-        if (typeof item === 'string') {
-            if (item.startsWith('http://') || item.startsWith('https://') || item.startsWith('data:')) {
-                document.getElementById('nota-link').value = item;
-                document.getElementById('nota-texto').value = '';
-            } else {
-                document.getElementById('nota-texto').value = item;
-                document.getElementById('nota-link').value = '';
+                    `;
+                });
+            } else if (abaAtual === 'despesas') {
+                if (!despesas.length) return container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:20px;font-size:1.1rem;">Sem gastos. Toque em ➕</div>';
+                const ultimas = despesas.slice(-2).reverse();
+                ultimas.forEach((d, idx) => {
+                    const originalIndex = despesas.length - 1 - idx;
+                    const nome = d.nome || d.desc || '';
+                    const val = parseFloat(d.valor) || 0;
+                    container.innerHTML += `
+                        <div class="sticky-card" onclick="abrirEditor(${originalIndex})" style="border-left: 5px solid #ff9800; display:flex; justify-content:space-between; align-items:center;">
+                            <div class="sticky-text">${nome}</div>
+                            <strong style="font-size:1.1rem; color:#d97706;">R$ ${val.toFixed(2)}</strong>
+                        </div>
+                    `;
+                });
             }
-        } else {
-            document.getElementById('nota-texto').value = item.texto || item.titulo || '';
-            document.getElementById('nota-link').value = item.link || '';
         }
 
-        notas.splice(index, 1);
-        renderAll();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+        // --- CONTROLE DA TELA EXTRA DE EDIÇÃO ---
+        function abrirEditor(index) {
+            indiceEditando = index;
+            const modal = document.getElementById('modal-editor');
+            const textarea = document.getElementById('editor-texto');
+            
+            let conteudo = '';
+            if (abaAtual === 'notas') {
+                const item = notas[index];
+                conteudo = item.texto || item.titulo || (typeof item === 'string' ? item : '');
+            } else if (abaAtual === 'tarefas') {
+                conteudo = tarefas[index].nome || tarefas[index].texto || '';
+            } else if (abaAtual === 'despesas') {
+                conteudo = (despesas[index].nome || despesas[index].desc || '') + ' ' + (despesas[index].valor || '');
+            }
 
-    function removerNota(index) {
-        notas.splice(index, 1);
-        renderAll();
-        enviarDadosNuvem();
-    }
+            textarea.value = conteudo;
+            modal.classList.add('open');
+            textarea.focus();
+        }
 
-    function gerarBackup() {
-        const payload = { despesas, tarefas, notas };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `backup_painel_${Date.now()}.json`);
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-    }
+        function abrirNovoSticky() {
+            indiceEditando = -1;
+            const modal = document.getElementById('modal-editor');
+            const textarea = document.getElementById('editor-texto');
+            textarea.value = '';
+            modal.classList.add('open');
+            textarea.focus();
+        }
 
-    function recuperarBackup(event) {
-        const fileReader = new FileReader();
-        fileReader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.despesas || data.tarefas || data.notas) {
-                    despesas = data.despesas || [];
-                    tarefas = data.tarefas || [];
-                    notas = data.notas || [];
-                    renderAll();
-                    enviarDadosNuvem();
-                    alert("Backup restaurado e sincronizado com sucesso!");
+        function fecharEditor() {
+            document.getElementById('modal-editor').classList.remove('open');
+        }
+
+        function salvarStickyAtual() {
+            const val = document.getElementById('editor-texto').value.trim();
+            if (!val) { fecharEditor(); return; }
+
+            if (abaAtual === 'notas') {
+                if (indiceEditando >= 0) {
+                    notas[indiceEditando].texto = val;
                 } else {
-                    alert("Formato de arquivo JSON inválido!");
+                    notas.push({ id: Date.now(), texto: val, link: '' });
                 }
-            } catch (err) {
-                alert("Erro ao ler o arquivo JSON.");
+            } else if (abaAtual === 'tarefas') {
+                if (indiceEditando >= 0) {
+                    tarefas[indiceEditando].nome = val;
+                } else {
+                    tarefas.push({ id: Date.now(), nome: val, data: '', prioridade: 'baixa', anexo: '' });
+                }
+            } else if (abaAtual === 'despesas') {
+                if (indiceEditando >= 0) {
+                    despesas[indiceEditando].nome = val;
+                } else {
+                    despesas.push({ id: Date.now(), nome: val, valor: 0, anexo: '' });
+                }
             }
-        };
-        fileReader.readAsText(event.target.files[0]);
-    }
 
-    carregarDadosNuvem();
-</script>
+            renderWidget();
+            enviarDados();
+            fecharEditor();
+        }
 
+        function excluirStickyAtual() {
+            if (indiceEditando >= 0) {
+                if (abaAtual === 'notas') notas.splice(indiceEditando, 1);
+                if (abaAtual === 'tarefas') tarefas.splice(indiceEditando, 1);
+                if (abaAtual === 'despesas') despesas.splice(indiceEditando, 1);
+                renderWidget();
+                enviarDados();
+            }
+            fecharEditor();
+        }
+
+        function copiarStickyAtual() {
+            const val = document.getElementById('editor-texto').value;
+            navigator.clipboard.writeText(val);
+            alert("Copiado!");
+        }
+
+        carregarDados();
+    </script>
 </body>
 </html>
-
