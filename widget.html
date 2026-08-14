@@ -2,177 +2,123 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sticky Notes</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
-        html, body {
-            width: 100%;
-            height: 100dvh;
+        body {
             background: #ffffff;
-            color: #1a1a1a;
+            color: #111827;
+            padding: 12px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
-        /* TELA PRINCIPAL */
-        #main-view {
-            display: flex;
-            flex-direction: column;
-            height: 100dvh;
-            padding: 10px;
-        }
-
-        .header {
+        /* BARRA SUPERIOR */
+        .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-bottom: 8px;
-            border-bottom: 2px solid #f1f5f9;
+            border-bottom: 2px solid #e5e7eb;
         }
-        .header-title {
+        .app-title {
             font-size: 20px;
             font-weight: 700;
-            color: #334155;
+            color: #1f2937;
+        }
+        .top-actions {
             display: flex;
+            gap: 14px;
             align-items: center;
-            gap: 8px;
         }
-        .dot { width: 10px; height: 10px; background: #64748b; border-radius: 50%; display: inline-block; }
-
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .sticky-card {
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 16px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.04);
-        }
-        .sticky-card:active { background: #f8fafc; }
-        
-        .sticky-text {
-            font-size: 22px;
-            line-height: 1.35;
-            color: #0f172a;
-            white-space: pre-wrap;
-            word-break: break-word;
-            font-weight: 600;
-        }
-
-        .footer {
-            height: 56px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 4px;
-            border-top: 2px solid #f1f5f9;
-            background: #ffffff;
-        }
-        .icon-btn {
+        .btn-action {
             background: none;
             border: none;
+            font-size: 26px;
             cursor: pointer;
-            font-size: 24px;
-            padding: 6px 12px;
-            color: #475569;
-            border-radius: 8px;
+            padding: 4px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .icon-btn.active { background: #e0f2fe; }
-
-        /* TELA DE EDIÇÃO (MODAL FULLSCREEN) */
-        #editor-view {
-            display: none;
-            flex-direction: column;
-            height: 100dvh;
-            background: #ffffff;
-            padding: 12px;
+        .btn-confirm {
+            font-size: 32px;
+            font-weight: 900;
+            color: #2563eb;
         }
 
-        .editor-textarea {
+        /* ÁREA DE TEXTO ESTILO STICKY NOTES */
+        .sticky-editor {
             flex: 1;
             width: 100%;
             border: none;
             outline: none;
             font-size: 24px;
-            line-height: 1.35;
-            color: #0f172a;
+            line-height: 1.4;
+            color: #111827;
             resize: none;
             background: transparent;
+            padding: 12px 0;
             font-weight: 500;
-            padding: 8px 0;
         }
 
-        .editor-toolbar {
-            height: 56px;
+        /* NAVEGAÇÃO DE ABAS / HISTÓRICO NO RODAPÉ */
+        .bottom-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 4px;
-            border-top: 2px solid #f1f5f9;
+            padding-top: 8px;
+            border-top: 2px solid #e5e7eb;
             background: #ffffff;
         }
-        .toolbar-group { display: flex; gap: 20px; align-items: center; }
-        .tool-btn {
-            background: none;
-            border: none;
-            font-size: 26px;
+        .tab-btn {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 18px;
             cursor: pointer;
-            color: #334155;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px;
         }
-        .tool-btn:active { transform: scale(0.9); }
+        .tab-btn.active {
+            background: #dbeafe;
+            border-color: #2563eb;
+        }
+        .status-pill {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
-    <!-- TELA PRINCIPAL -->
-    <div id="main-view">
-        <div class="header">
-            <div class="header-title">
-                <span class="dot"></span>
-                <span id="titulo-aba">Sticky Notes</span>
-            </div>
-            <button class="icon-btn" onclick="abrirNovoSticky()" style="color: #007bff; font-weight: bold;">➕</button>
-        </div>
-
-        <div class="content" id="lista-cards">
-            <div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size: 18px;">Carregando...</div>
-        </div>
-
-        <div class="footer">
-            <div style="display: flex; gap: 8px;">
-                <button id="tab-notas" class="icon-btn active" onclick="trocarAba('notas')">📝</button>
-                <button id="tab-tarefas" class="icon-btn" onclick="trocarAba('tarefas')">📋</button>
-                <button id="tab-despesas" class="icon-btn" onclick="trocarAba('despesas')">💰</button>
-            </div>
-            <button class="icon-btn" onclick="window.location.href='index.html'" title="Painel Completo">↗️</button>
+    <!-- BARRA COM AS FERRAMENTAS EXATAS DO SEU PRINT DO STICKY -->
+    <div class="top-bar">
+        <span class="app-title" id="aba-titulo">📝 Nota</span>
+        <div class="top-actions">
+            <button class="btn-action" onclick="limparTexto()" title="Excluir">🗑️</button>
+            <button class="btn-action" onclick="copiarTexto()" title="Copiar">📄</button>
+            <button class="btn-action btn-confirm" onclick="salvarNota()" title="Confirmar">✓</button>
         </div>
     </div>
 
-    <!-- TELA DE EDIÇÃO -->
-    <div id="editor-view">
-        <textarea id="editor-texto" class="editor-textarea" placeholder="Digite aqui..."></textarea>
-        
-        <div class="editor-toolbar">
-            <button class="tool-btn" onclick="fecharEditor()" title="Voltar">⚙️</button>
-            <div class="toolbar-group">
-                <button class="tool-btn" onclick="excluirStickyAtual()" title="Excluir">🗑️</button>
-                <button class="tool-btn" onclick="copiarStickyAtual()" title="Copiar">📄</button>
-                <button class="tool-btn" onclick="salvarStickyAtual()" style="font-size: 30px; font-weight: bold; color: #007bff;" title="Confirmar">✓</button>
-            </div>
+    <!-- ÁREA DE ESCRITA DIRETA (GRANDE E LIMPA) -->
+    <textarea id="texto-principal" class="sticky-editor" placeholder="Digite aqui..."></textarea>
+
+    <!-- BARRA INFERIOR DE TROCA RÁPIDA -->
+    <div class="bottom-bar">
+        <div style="display: flex; gap: 8px;">
+            <button id="btn-notas" class="tab-btn active" onclick="mudarAba('notas')">📝</button>
+            <button id="btn-tarefas" class="tab-btn" onclick="mudarAba('tarefas')">📋</button>
+            <button id="btn-despesas" class="tab-btn" onclick="mudarAba('despesas')">💰</button>
         </div>
+        <span id="status-envio" class="status-pill">Sincronizado</span>
+        <button class="btn-action" onclick="window.location.href='index.html'" title="Painel Completo" style="font-size: 22px;">↗️</button>
     </div>
 
     <script>
@@ -181,202 +127,147 @@
         let despesas = [];
         let tarefas = [];
         let notas = [];
-        let abaAtual = 'notas';
-        let indiceEditando = -1;
+        let abaAtiva = 'notas';
 
-        // Carrega cache local primeiro para não ficar tela em branco
-        try {
-            const cache = localStorage.getItem('painel_cache');
-            if (cache) {
-                const dados = JSON.parse(cache);
-                despesas = dados.despesas || [];
-                tarefas = dados.tarefas || [];
-                notas = dados.notas || [];
-            }
-        } catch(e) {}
+        // 1. Carrega do cache local instantaneamente (nunca fica tela branca)
+        function carregarCacheLocal() {
+            try {
+                const salvo = localStorage.getItem('lista_painel_dados');
+                if (salvo) {
+                    const obj = JSON.parse(salvo);
+                    despesas = obj.despesas || [];
+                    tarefas = obj.tarefas || [];
+                    notas = obj.notas || [];
+                }
+            } catch(e) {}
+            mostrarTextoAba();
+        }
 
-        function carregarDados() {
-            renderWidget();
+        // 2. Busca na nuvem (Google Sheets)
+        function sincronizarNuvem() {
+            document.getElementById('status-envio').innerText = 'Carregando...';
             const script = document.createElement('script');
-            script.src = `${SCRIPT_URL}?callback=receberDados&t=${Date.now()}`;
+            script.src = `${SCRIPT_URL}?callback=receberDadosNuvem&t=${Date.now()}`;
             document.body.appendChild(script);
         }
 
-        function receberDados(data) {
+        function receberDadosNuvem(data) {
             if (data) {
                 despesas = data.despesas || [];
                 tarefas = data.tarefas || [];
                 notas = data.notas || [];
-                try {
-                    localStorage.setItem('painel_cache', JSON.stringify({ despesas, tarefas, notas }));
-                } catch(e) {}
-                renderWidget();
+                salvarNoLocalStorage();
+                mostrarTextoAba();
+                document.getElementById('status-envio').innerText = 'Sincronizado';
             }
         }
 
-        function enviarDados() {
+        function salvarNoLocalStorage() {
             try {
-                localStorage.setItem('painel_cache', JSON.stringify({ despesas, tarefas, notas }));
+                localStorage.setItem('lista_painel_dados', JSON.stringify({ despesas, tarefas, notas }));
             } catch(e) {}
+        }
+
+        function mostrarTextoAba() {
+            const textarea = document.getElementById('texto-principal');
+            if (abaAtiva === 'notas') {
+                if (notas.length > 0) {
+                    const ult = notas[notas.length - 1];
+                    textarea.value = (typeof ult === 'string') ? ult : (ult.texto || ult.titulo || '');
+                } else {
+                    textarea.value = '';
+                }
+            } else if (abaAtiva === 'tarefas') {
+                if (tarefas.length > 0) {
+                    const ult = tarefas[tarefas.length - 1];
+                    textarea.value = ult.nome || ult.texto || '';
+                } else {
+                    textarea.value = '';
+                }
+            } else if (abaAtiva === 'despesas') {
+                if (despesas.length > 0) {
+                    const ult = despesas[despesas.length - 1];
+                    textarea.value = `${ult.nome || ult.desc || ''} - R$ ${parseFloat(ult.valor || 0).toFixed(2)}`;
+                } else {
+                    textarea.value = '';
+                }
+            }
+        }
+
+        function mudarAba(aba) {
+            abaAtiva = aba;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${aba}`).classList.add('active');
+
+            const titulos = { notas: '📝 Nota', tarefas: '📋 Tarefa', despesas: '💰 Gasto' };
+            document.getElementById('aba-titulo').innerText = titulos[aba];
+            mostrarTextoAba();
+        }
+
+        function salvarNota() {
+            const txt = document.getElementById('texto-principal').value.trim();
+            if (!txt) return;
+
+            document.getElementById('status-envio').innerText = 'Salvando...';
+
+            if (abaAtiva === 'notas') {
+                if (notas.length > 0 && typeof notas[notas.length - 1] === 'object') {
+                    notas[notas.length - 1].texto = txt;
+                } else {
+                    notas.push({ id: Date.now(), texto: txt, link: '' });
+                }
+            } else if (abaAtiva === 'tarefas') {
+                if (tarefas.length > 0) {
+                    tarefas[tarefas.length - 1].nome = txt;
+                } else {
+                    tarefas.push({ id: Date.now(), nome: txt, data: '', prioridade: 'baixa', anexo: '' });
+                }
+            } else if (abaAtiva === 'despesas') {
+                if (despesas.length > 0) {
+                    despesas[despesas.length - 1].nome = txt;
+                } else {
+                    despesas.push({ id: Date.now(), nome: txt, valor: 0, anexo: '' });
+                }
+            }
+
+            salvarNoLocalStorage();
+
             fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ despesas, tarefas, notas })
+            }).then(() => {
+                document.getElementById('status-envio').innerText = 'Salvo ✓';
+                setTimeout(() => {
+                    document.getElementById('status-envio').innerText = 'Sincronizado';
+                }, 2000);
             });
         }
 
-        function trocarAba(aba) {
-            abaAtual = aba;
-            document.querySelectorAll('.footer .icon-btn').forEach(b => b.classList.remove('active'));
-            const btn = document.getElementById(`tab-${aba}`);
-            if (btn) btn.classList.add('active');
-            
-            const titulos = { notas: 'Sticky Notes', tarefas: 'Sticky Tarefas', despesas: 'Sticky Gastos' };
-            document.getElementById('titulo-aba').innerText = titulos[aba] || 'Sticky';
-            renderWidget();
+        function limparTexto() {
+            document.getElementById('texto-principal').value = '';
+            if (abaAtiva === 'notas' && notas.length) notas.pop();
+            if (abaAtiva === 'tarefas' && tarefas.length) tarefas.pop();
+            if (abaAtiva === 'despesas' && despesas.length) despesas.pop();
+            salvarNoLocalStorage();
+            salvarNota();
         }
 
-        function renderWidget() {
-            const container = document.getElementById('lista-cards');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (abaAtual === 'notas') {
-                if (!notas.length) {
-                    container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:20px;font-size:18px;">Sem notas. Toque em ➕</div>';
-                    return;
-                }
-                const ultimas = notas.slice(-2).reverse();
-                ultimas.forEach((n, idx) => {
-                    const originalIndex = notas.length - 1 - idx;
-                    const txt = n.texto || n.titulo || (typeof n === 'string' ? n : '');
-                    container.innerHTML += `
-                        <div class="sticky-card" onclick="abrirEditor(${originalIndex})">
-                            <div class="sticky-text">${txt}</div>
-                        </div>
-                    `;
-                });
-            } else if (abaAtual === 'tarefas') {
-                if (!tarefas.length) {
-                    container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:20px;font-size:18px;">Sem tarefas. Toque em ➕</div>';
-                    return;
-                }
-                const ultimas = tarefas.slice(-2).reverse();
-                ultimas.forEach((t, idx) => {
-                    const originalIndex = tarefas.length - 1 - idx;
-                    const nome = t.nome || t.texto || '';
-                    container.innerHTML += `
-                        <div class="sticky-card" onclick="abrirEditor(${originalIndex})" style="border-left: 6px solid #28a745;">
-                            <div class="sticky-text">☑️ ${nome}</div>
-                        </div>
-                    `;
-                });
-            } else if (abaAtual === 'despesas') {
-                if (!despesas.length) {
-                    container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:20px;font-size:18px;">Sem gastos. Toque em ➕</div>';
-                    return;
-                }
-                const ultimas = despesas.slice(-2).reverse();
-                ultimas.forEach((d, idx) => {
-                    const originalIndex = despesas.length - 1 - idx;
-                    const nome = d.nome || d.desc || '';
-                    const val = parseFloat(d.valor) || 0;
-                    container.innerHTML += `
-                        <div class="sticky-card" onclick="abrirEditor(${originalIndex})" style="border-left: 6px solid #ff9800; display:flex; justify-content:space-between; align-items:center;">
-                            <div class="sticky-text">${nome}</div>
-                            <strong style="font-size:20px; color:#d97706;">R$ ${val.toFixed(2)}</strong>
-                        </div>
-                    `;
-                });
+        function copiarTexto() {
+            const txt = document.getElementById('texto-principal').value;
+            if (navigator.clipboard && txt) {
+                navigator.clipboard.writeText(txt);
+                document.getElementById('status-envio').innerText = 'Copiado!';
+                setTimeout(() => {
+                    document.getElementById('status-envio').innerText = 'Sincronizado';
+                }, 1500);
             }
         }
 
-        function abrirEditor(index) {
-            indiceEditando = index;
-            document.getElementById('main-view').style.display = 'none';
-            const editorView = document.getElementById('editor-view');
-            const textarea = document.getElementById('editor-texto');
-            
-            let conteudo = '';
-            if (abaAtual === 'notas') {
-                const item = notas[index];
-                conteudo = item.texto || item.titulo || (typeof item === 'string' ? item : '');
-            } else if (abaAtual === 'tarefas') {
-                conteudo = tarefas[index].nome || tarefas[index].texto || '';
-            } else if (abaAtual === 'despesas') {
-                conteudo = (despesas[index].nome || despesas[index].desc || '') + ' ' + (despesas[index].valor || '');
-            }
-
-            textarea.value = conteudo;
-            editorView.style.display = 'flex';
-            textarea.focus();
-        }
-
-        function abrirNovoSticky() {
-            indiceEditando = -1;
-            document.getElementById('main-view').style.display = 'none';
-            const editorView = document.getElementById('editor-view');
-            const textarea = document.getElementById('editor-texto');
-            textarea.value = '';
-            editorView.style.display = 'flex';
-            textarea.focus();
-        }
-
-        function fecharEditor() {
-            document.getElementById('editor-view').style.display = 'none';
-            document.getElementById('main-view').style.display = 'flex';
-        }
-
-        function salvarStickyAtual() {
-            const val = document.getElementById('editor-texto').value.trim();
-            if (!val) { fecharEditor(); return; }
-
-            if (abaAtual === 'notas') {
-                if (indiceEditando >= 0) {
-                    notas[indiceEditando].texto = val;
-                } else {
-                    notas.push({ id: Date.now(), texto: val, link: '' });
-                }
-            } else if (abaAtual === 'tarefas') {
-                if (indiceEditando >= 0) {
-                    tarefas[indiceEditando].nome = val;
-                } else {
-                    tarefas.push({ id: Date.now(), nome: val, data: '', prioridade: 'baixa', anexo: '' });
-                }
-            } else if (abaAtual === 'despesas') {
-                if (indiceEditando >= 0) {
-                    despesas[indiceEditando].nome = val;
-                } else {
-                    despesas.push({ id: Date.now(), nome: val, valor: 0, anexo: '' });
-                }
-            }
-
-            renderWidget();
-            enviarDados();
-            fecharEditor();
-        }
-
-        function excluirStickyAtual() {
-            if (indiceEditando >= 0) {
-                if (abaAtual === 'notas') notas.splice(indiceEditando, 1);
-                if (abaAtual === 'tarefas') tarefas.splice(indiceEditando, 1);
-                if (abaAtual === 'despesas') despesas.splice(indiceEditando, 1);
-                renderWidget();
-                enviarDados();
-            }
-            fecharEditor();
-        }
-
-        function copiarStickyAtual() {
-            const val = document.getElementById('editor-texto').value;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(val);
-                alert("Copiado!");
-            }
-        }
-
-        carregarDados();
+        // Inicialização
+        carregarCacheLocal();
+        sincronizarNuvem();
     </script>
 </body>
 </html>
