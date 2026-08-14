@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mini Widget Razr</title>
+    <title>Sticky Notes Razr</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
@@ -14,79 +14,90 @@
             display: flex; 
             flex-direction: column; 
             overflow: hidden; 
-            padding: 8px;
+            padding: 12px;
         }
 
+        /* CABEÇALHO ESTILO STICKY NOTES */
         .widget-header { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding-bottom: 5px; 
-            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 8px; 
+            border-bottom: 1.5px solid #f0f0f0;
         }
         .widget-title { 
-            font-size: 0.95rem; 
+            font-size: 1.25rem; 
             font-weight: 700; 
-            color: #333; 
+            color: #2c3e50; 
             display: flex; 
             align-items: center; 
-            gap: 5px; 
+            gap: 8px; 
         }
         .dot { 
-            width: 8px; 
-            height: 8px; 
-            background: #007bff; 
+            width: 10px; 
+            height: 10px; 
+            background: #5c6274; 
             border-radius: 50%; 
             display: inline-block; 
         }
         .status-sync { 
-            font-size: 0.75rem; 
+            font-size: 1.1rem; 
             color: #888; 
             cursor: pointer;
+            padding: 4px;
         }
 
-        .widget-content { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 6px 0; 
-        }
-
-        /* FORMULÁRIO DE ADIÇÃO RÁPIDA */
+        /* FORMULÁRIO DE ADIÇÃO DIRETO */
         .add-box {
-            background: #f1f5f9;
-            padding: 6px;
-            border-radius: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 8px;
             margin-bottom: 8px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
         }
         .add-box input, .add-box textarea {
             width: 100%;
-            padding: 6px;
-            border: 1px solid #cbd5e1;
-            border-radius: 4px;
-            font-size: 0.8rem;
+            padding: 10px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 1rem;
             outline: none;
+            background: #fff;
         }
+        .add-box input:focus { border-color: #007bff; }
         .add-box button {
             background: #007bff;
             color: white;
             border: none;
-            padding: 6px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.8rem;
+            font-size: 1rem;
             cursor: pointer;
+        }
+        .add-box button:active { background: #0056b3; }
+
+        /* LISTA DOS 2 ÚLTIMOS */
+        .widget-content { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 4px 0; 
         }
 
         .mini-card { 
-            background: #fdfdfd; 
-            border-left: 3px solid #007bff; 
-            padding: 6px 8px; 
-            margin-bottom: 6px; 
-            border-radius: 4px; 
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            background: #ffffff; 
+            border-left: 4px solid #007bff; 
+            padding: 10px 12px; 
+            margin-bottom: 8px; 
+            border-radius: 6px; 
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            border-top: 1px solid #f1f5f9;
+            border-right: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
         }
         .mini-card.tarefa { border-left-color: #28a745; }
         .mini-card.gasto { border-left-color: #ff9800; }
@@ -94,58 +105,66 @@
         .item-text { 
             white-space: pre-wrap; 
             word-break: break-word; 
-            line-height: 1.3; 
-            font-size: 0.82rem; 
+            line-height: 1.4; 
+            font-size: 1rem; 
+            color: #334155;
         }
         .item-link { 
             display: inline-block; 
-            margin-top: 3px; 
+            margin-top: 5px; 
             color: #007bff; 
-            font-size: 0.75rem; 
+            font-size: 0.9rem; 
             text-decoration: none; 
             font-weight: 600;
         }
 
+        /* RODAPÉ COM ÍCONES GRANDES */
         .widget-footer { 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            padding-top: 4px; 
-            border-top: 1px solid #f0f0f0; 
+            padding-top: 8px; 
+            border-top: 1.5px solid #f0f0f0; 
         }
-        .nav-group { display: flex; gap: 8px; }
+        .nav-group { display: flex; gap: 12px; }
         .icon-btn { 
             background: none; 
             border: none; 
             cursor: pointer; 
-            font-size: 1.15rem; 
-            color: #444; 
-            padding: 3px 5px; 
-            border-radius: 4px; 
+            font-size: 1.6rem; 
+            color: #475569; 
+            padding: 6px 10px; 
+            border-radius: 8px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .icon-btn.active { 
-            background: #eef4ff; 
-            color: #007bff; 
+            background: #e0f2fe; 
+            transform: scale(1.08);
         }
     </style>
 </head>
 <body>
 
+    <!-- CABEÇALHO -->
     <div class="widget-header">
         <div class="widget-title">
             <span class="dot"></span>
-            <span id="aba-nome">Notas (Últimas 2)</span>
+            <span id="aba-nome">Notas</span>
         </div>
-        <span id="sync-indicador" class="status-sync" onclick="carregarDados()">🔄</span>
+        <span id="sync-indicador" class="status-sync" onclick="carregarDados()" title="Atualizar">🔄</span>
     </div>
 
-    <!-- FORMULÁRIO DE ADIÇÃO DINÂMICO -->
+    <!-- CAIXA DE ADIÇÃO RÁPIDA -->
     <div id="box-formulario" class="add-box"></div>
 
+    <!-- LISTAGEM -->
     <div class="widget-content" id="conteudo-lista">
-        <div style="text-align: center; color: #999; margin-top: 15px; font-size: 0.8rem;">Carregando...</div>
+        <div style="text-align: center; color: #94a3b8; margin-top: 20px; font-size: 1rem;">Carregando...</div>
     </div>
 
+    <!-- NAVEGAÇÃO INFERIOR -->
     <div class="widget-footer">
         <div class="nav-group">
             <button id="btn-notas" class="icon-btn active" onclick="trocarAba('notas')" title="Notas">📝</button>
@@ -200,7 +219,7 @@
             document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`btn-${aba}`).classList.add('active');
             
-            const nomes = { notas: 'Notas (Últimas 2)', tarefas: 'Tarefas (Últimas 2)', despesas: 'Gastos (Últimos 2)' };
+            const nomes = { notas: 'Notas', tarefas: 'Tarefas', despesas: 'Gastos' };
             document.getElementById('aba-nome').innerText = nomes[aba];
             renderWidget();
         }
@@ -209,48 +228,59 @@
             const formBox = document.getElementById('box-formulario');
             if (abaAtual === 'notas') {
                 formBox.innerHTML = `
-                    <input type="text" id="mini-nota-txt" placeholder="Nova nota rápida...">
-                    <button onclick="salvarMiniNota()">+ Fixar Nota</button>
+                    <input type="text" id="mini-nota-txt" placeholder="Digite uma nota rápida...">
+                    <button type="button" onclick="salvarMiniNota()">+ Salvar Nota</button>
                 `;
             } else if (abaAtual === 'tarefas') {
                 formBox.innerHTML = `
                     <input type="text" id="mini-tarefa-txt" placeholder="Nova tarefa...">
-                    <button onclick="salvarMiniTarefa()">+ Adicionar Tarefa</button>
+                    <button type="button" onclick="salvarMiniTarefa()">+ Salvar Tarefa</button>
                 `;
             } else if (abaAtual === 'despesas') {
                 formBox.innerHTML = `
-                    <input type="text" id="mini-gasto-nome" placeholder="Nome do gasto...">
+                    <input type="text" id="mini-gasto-nome" placeholder="Descrição do gasto...">
                     <input type="number" id="mini-gasto-val" placeholder="Valor R$">
-                    <button onclick="salvarMiniGasto()">+ Salvar Gasto</button>
+                    <button type="button" onclick="salvarMiniGasto()">+ Salvar Gasto</button>
                 `;
             }
         }
 
         function salvarMiniNota() {
-            const txt = document.getElementById('mini-nota-txt').value.trim();
+            const el = document.getElementById('mini-nota-txt');
+            if (!el) return;
+            const txt = el.value.trim();
             if (!txt) return;
+            
             notas.push({ id: Date.now(), texto: txt, link: '' });
-            document.getElementById('mini-nota-txt').value = '';
+            el.value = '';
             renderWidget();
             enviarDados();
         }
 
         function salvarMiniTarefa() {
-            const nome = document.getElementById('mini-tarefa-txt').value.trim();
+            const el = document.getElementById('mini-tarefa-txt');
+            if (!el) return;
+            const nome = el.value.trim();
             if (!nome) return;
+            
             tarefas.push({ id: Date.now(), nome: nome, data: '', prioridade: 'baixa', anexo: '' });
-            document.getElementById('mini-tarefa-txt').value = '';
+            el.value = '';
             renderWidget();
             enviarDados();
         }
 
         function salvarMiniGasto() {
-            const nome = document.getElementById('mini-gasto-nome').value.trim();
-            const val = parseFloat(document.getElementById('mini-gasto-val').value) || 0;
+            const elNome = document.getElementById('mini-gasto-nome');
+            const elVal = document.getElementById('mini-gasto-val');
+            if (!elNome || !elVal) return;
+            
+            const nome = elNome.value.trim();
+            const val = parseFloat(elVal.value) || 0;
             if (!nome) return;
+
             despesas.push({ id: Date.now(), nome: nome, valor: val, anexo: '' });
-            document.getElementById('mini-gasto-nome').value = '';
-            document.getElementById('mini-gasto-val').value = '';
+            elNome.value = '';
+            elVal.value = '';
             renderWidget();
             enviarDados();
         }
@@ -261,7 +291,7 @@
             container.innerHTML = '';
 
             if (abaAtual === 'notas') {
-                if (!notas.length) return container.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:15px;font-size:0.8rem;">Sem notas.</div>';
+                if (!notas.length) return container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:15px;font-size:0.95rem;">Sem notas salvas.</div>';
                 const ultimasNotas = notas.slice(-2).reverse();
                 ultimasNotas.forEach(n => {
                     const txt = n.texto || n.titulo || (typeof n === 'string' ? n : '');
@@ -269,12 +299,12 @@
                     container.innerHTML += `
                         <div class="mini-card">
                             <div class="item-text">${txt}</div>
-                            ${lnk ? `<a href="${lnk}" target="_blank" class="item-link">🔗 Anexo</a>` : ''}
+                            ${lnk ? `<a href="${lnk}" target="_blank" class="item-link">🔗 Ver Anexo</a>` : ''}
                         </div>
                     `;
                 });
             } else if (abaAtual === 'tarefas') {
-                if (!tarefas.length) return container.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:15px;font-size:0.8rem;">Sem tarefas.</div>';
+                if (!tarefas.length) return container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:15px;font-size:0.95rem;">Sem tarefas.</div>';
                 const ultimasTarefas = tarefas.slice(-2).reverse();
                 ultimasTarefas.forEach(t => {
                     const nome = t.nome || t.texto || '';
@@ -285,7 +315,7 @@
                     `;
                 });
             } else if (abaAtual === 'despesas') {
-                if (!despesas.length) return container.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:15px;font-size:0.8rem;">Sem gastos.</div>';
+                if (!despesas.length) return container.innerHTML = '<div style="color:#94a3b8;text-align:center;margin-top:15px;font-size:0.95rem;">Sem gastos.</div>';
                 const ultimasDespesas = despesas.slice(-2).reverse();
                 ultimasDespesas.forEach(d => {
                     const nome = d.nome || d.desc || '';
@@ -293,7 +323,7 @@
                     container.innerHTML += `
                         <div class="mini-card gasto" style="display:flex; justify-content:space-between; align-items:center;">
                             <span class="item-text">${nome}</span>
-                            <strong style="font-size:0.85rem;">R$ ${valor.toFixed(2)}</strong>
+                            <strong style="font-size:1rem; color:#d97706;">R$ ${valor.toFixed(2)}</strong>
                         </div>
                     `;
                 });
