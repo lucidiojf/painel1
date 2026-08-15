@@ -10,78 +10,78 @@
         body {
             background: #ffffff;
             color: #111827;
-            padding: 12px;
+            padding: 6px 10px;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* BARRA SUPERIOR */
+        /* CABEÇALHO COMPACTO */
         .top-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #e5e7eb;
         }
         .app-title {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 700;
-            color: #1f2937;
+            color: #374151;
         }
         .top-actions {
             display: flex;
-            gap: 14px;
+            gap: 12px;
             align-items: center;
         }
         .btn-action {
             background: none;
             border: none;
-            font-size: 26px;
+            font-size: 19px;
             cursor: pointer;
-            padding: 4px;
+            padding: 2px 4px;
             color: #374151;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .btn-confirm {
-            font-size: 32px;
+            font-size: 22px;
             font-weight: 900;
             color: #2563eb;
         }
 
-        /* ÁREA DE TEXTO ESTILO STICKY NOTES */
+        /* ÁREA DE TEXTO (MAXIMIZADA) */
         .sticky-editor {
             flex: 1;
             width: 100%;
             border: none;
             outline: none;
-            font-size: 24px;
-            line-height: 1.4;
+            font-size: 22px;
+            line-height: 1.35;
             color: #111827;
             resize: none;
             background: transparent;
-            padding: 12px 0;
+            padding: 6px 0;
             font-weight: 500;
         }
 
-        /* NAVEGAÇÃO DE ABAS / HISTÓRICO NO RODAPÉ */
+        /* BARRA INFERIOR COMPACTA */
         .bottom-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 8px;
-            border-top: 2px solid #e5e7eb;
+            padding-top: 4px;
+            border-top: 1px solid #e5e7eb;
             background: #ffffff;
         }
         .tab-btn {
             background: #f3f4f6;
             border: 1px solid #d1d5db;
-            border-radius: 8px;
-            padding: 6px 14px;
-            font-size: 18px;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 16px;
             cursor: pointer;
         }
         .tab-btn.active {
@@ -89,7 +89,7 @@
             border-color: #2563eb;
         }
         .status-pill {
-            font-size: 14px;
+            font-size: 12px;
             color: #6b7280;
             font-weight: 600;
         }
@@ -97,7 +97,7 @@
 </head>
 <body>
 
-    <!-- BARRA COM AS FERRAMENTAS EXATAS DO SEU PRINT DO STICKY -->
+    <!-- CABEÇALHO FINO -->
     <div class="top-bar">
         <span class="app-title" id="aba-titulo">📝 Nota</span>
         <div class="top-actions">
@@ -107,18 +107,18 @@
         </div>
     </div>
 
-    <!-- ÁREA DE ESCRITA DIRETA (GRANDE E LIMPA) -->
+    <!-- ÁREA DE ESCRITA COM MAIS ESPAÇO -->
     <textarea id="texto-principal" class="sticky-editor" placeholder="Digite aqui..."></textarea>
 
-    <!-- BARRA INFERIOR DE TROCA RÁPIDA -->
+    <!-- BARRA INFERIOR -->
     <div class="bottom-bar">
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 6px;">
             <button id="btn-notas" class="tab-btn active" onclick="mudarAba('notas')">📝</button>
             <button id="btn-tarefas" class="tab-btn" onclick="mudarAba('tarefas')">📋</button>
             <button id="btn-despesas" class="tab-btn" onclick="mudarAba('despesas')">💰</button>
         </div>
         <span id="status-envio" class="status-pill">Sincronizado</span>
-        <button class="btn-action" onclick="window.location.href='index.html'" title="Painel Completo" style="font-size: 22px;">↗️</button>
+        <button class="btn-action" onclick="window.location.href='index.html'" title="Painel Completo" style="font-size: 18px;">↗️</button>
     </div>
 
     <script>
@@ -129,7 +129,6 @@
         let notas = [];
         let abaAtiva = 'notas';
 
-        // 1. Carrega do cache local instantaneamente (nunca fica tela branca)
         function carregarCacheLocal() {
             try {
                 const salvo = localStorage.getItem('lista_painel_dados');
@@ -143,7 +142,6 @@
             mostrarTextoAba();
         }
 
-        // 2. Busca na nuvem (Google Sheets)
         function sincronizarNuvem() {
             document.getElementById('status-envio').innerText = 'Carregando...';
             const script = document.createElement('script');
@@ -265,7 +263,6 @@
             }
         }
 
-        // Inicialização
         carregarCacheLocal();
         sincronizarNuvem();
     </script>
