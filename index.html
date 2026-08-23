@@ -5,41 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Controle</title>
     <style>
-        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-        body { background: #f8fafc; color: #1e293b; padding: 16px; }
-        .container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #f1f5f9; color: #1e293b; padding: 14px; }
+        .container { max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+
+        .card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .card-title { font-size: 15px; font-weight: 700; color: #0061fe; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
         
-        /* CARD DO DROPBOX */
-        .dropbox-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #0061fe; display: flex; align-items: center; gap: 6px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
         .form-group label { font-size: 13px; font-weight: 600; color: #475569; }
-        .form-control { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
-        .btn-upload { background: #0061fe; color: #fff; border: none; border-radius: 6px; padding: 10px; font-weight: 700; cursor: pointer; width: 100%; }
+        .form-control { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
         
-        /* LISTA DO PAINEL */
-        .panel-section { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .item-card { border-left: 4px solid #3b82f6; background: #f1f5f9; padding: 10px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; }
-        .item-link { color: #0061fe; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 4px; }
+        .btn-upload { background: #0061fe; color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; font-size: 15px; margin-top: 6px; }
+        .btn-upload:active { opacity: 0.85; }
+
+        /* ABAS DO PAINEL */
+        .nav-tabs { display: flex; gap: 8px; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; }
+        .tab-btn { background: #ffffff; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; color: #475569; }
+        .tab-btn.active { background: #2563eb; color: #ffffff; border-color: #2563eb; }
+
+        .item-row { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .item-link { color: #0061fe; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-block; margin-top: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- UPLOAD DROPBOX COM QUALQUER PASTA E NOME -->
-    <div class="dropbox-card">
+    <!-- UPLOAD DROPBOX DIRETO -->
+    <div class="card">
         <div class="card-title">📦 Enviar Arquivo para o Dropbox</div>
         
         <div class="form-group">
-            <label>Pasta de Destino (digite qualquer pasta):</label>
-            <input type="text" id="db-pasta" class="form-control" placeholder="/documentos/2026" value="/anexos">
+            <label>Token de Acesso Dropbox:</label>
+            <input type="password" id="db-token" class="form-control" placeholder="Cole seu token aqui se não tiver salvo">
+        </div>
+
+        <div class="form-group">
+            <label>Pasta de Destino:</label>
+            <input type="text" id="db-pasta" class="form-control" placeholder="Ex: /Listapro" value="/Listapro">
         </div>
 
         <div class="form-group">
             <label>Renomear Arquivo (Opcional):</label>
-            <input type="text" id="db-nome" class="form-control" placeholder="Ex: recibo_agosto.pdf">
+            <input type="text" id="db-nome" class="form-control" placeholder="Ex: recibo_agosto.bmp">
         </div>
 
         <div class="form-group">
@@ -47,17 +56,24 @@
             <input type="file" id="db-arquivo" class="form-control">
         </div>
 
-        <button type="button" class="btn-upload" onclick="enviarParaDropbox()">📤 Enviar Arquivo</button>
+        <button type="button" class="btn-upload" onclick="fazerUploadDropbox()">📤 Enviar Arquivo</button>
         <div id="upload-status" style="font-size: 13px; margin-top: 8px; font-weight: 600;"></div>
     </div>
 
-    <!-- LISTA DE DADOS DO PAINEL -->
-    <div class="panel-section">
-        <div class="section-header">
-            <h3>📋 Itens do Painel</h3>
-            <button onclick="carregarDados()" style="padding: 4px 8px; font-size: 12px; cursor: pointer;">🔄 Atualizar</button>
+    <!-- ABAS DO PAINEL -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="tab-btn-notas" onclick="trocarAba('notas')">📝 Notas</button>
+        <button class="tab-btn" id="tab-btn-tarefas" onclick="trocarAba('tarefas')">📋 Tarefas</button>
+        <button class="tab-btn" id="tab-btn-despesas" onclick="trocarAba('despesas')">💰 Gastos</button>
+    </div>
+
+    <!-- CONTEÚDO DOS ITENS -->
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <strong id="titulo-secao" style="font-size: 16px;">Notas</strong>
+            <button onclick="carregarDados()" style="padding: 4px 8px; font-size: 12px; cursor: pointer;">🔄 Recarregar</button>
         </div>
-        <div id="lista-conteudo">Carregando dados...</div>
+        <div id="lista-itens">Carregando dados...</div>
     </div>
 
 </div>
@@ -65,102 +81,152 @@
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
 
-let dadosPainel = { despesas: [], tarefas: [], notas: [] };
+let dadosGerais = { despesas: [], tarefas: [], notas: [] };
+let abaAtiva = 'notas';
 
-// 1. CARREGAR DADOS DO SHEETS
+// Lembra o token no navegador
+const tokenSalvo = localStorage.getItem('dropbox_user_token') || '';
+if (tokenSalvo) {
+    document.getElementById('db-token').value = tokenSalvo;
+}
+
+// 1. CARREGAMENTO DA PLANILHA VIA JSONP
 function carregarDados() {
-    document.getElementById('lista-conteudo').innerText = 'Buscando da planilha...';
+    document.getElementById('lista-itens').innerText = 'Buscando da planilha...';
     const script = document.createElement('script');
-    script.src = `${SCRIPT_URL}?callback=renderizarPainel&t=${Date.now()}`;
+    script.src = `${SCRIPT_URL}?callback=receberDadosGerais&t=${Date.now()}`;
     document.body.appendChild(script);
 }
 
-function renderizarPainel(data) {
+function receberDadosGerais(data) {
     if (data) {
-        dadosPainel = data;
-        const container = document.getElementById('lista-conteudo');
-        container.innerHTML = '';
-
-        const notas = data.notas || [];
-        const tarefas = data.tarefas || [];
-
-        if (!notas.length && !tarefas.length) {
-            container.innerHTML = '<p style="color:#64748b;">Nenhum item encontrado.</p>';
-            return;
-        }
-
-        notas.forEach(n => {
-            const txt = n.texto || n.titulo || (typeof n === 'string' ? n : '');
-            const anexo = n.link ? `<br><a href="${n.link}" target="_blank" class="item-link">📎 Abrir Anexo</a>` : '';
-            container.innerHTML += `<div class="item-card" style="border-left-color: #3b82f6;"><strong>📝 Nota:</strong> ${txt}${anexo}</div>`;
-        });
-
-        tarefas.forEach(t => {
-            const txt = t.nome || t.texto || '';
-            const anexo = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="item-link">📎 Abrir Anexo</a>` : '';
-            container.innerHTML += `<div class="item-card" style="border-left-color: #10b981;"><strong>☑️ Tarefa:</strong> ${txt}${anexo}</div>`;
-        });
+        dadosGerais = data;
+        renderizar();
     }
 }
 
-// 2. CONVERSÃO BASE64
-function lerBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = erro => reject(erro);
-    });
+function trocarAba(aba) {
+    abaAtiva = aba;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab-btn-${aba}`).classList.add('active');
+    
+    const titulos = { notas: 'Notas', tarefas: 'Tarefas', despesas: 'Gastos' };
+    document.getElementById('titulo-secao').innerText = titulos[aba];
+    renderizar();
 }
 
-// 3. ENVIO DIRETO PARA O DROPBOX
-async function enviarParaDropbox() {
-    const inputArquivo = document.getElementById('db-arquivo');
-    const inputPasta = document.getElementById('db-pasta').value.trim() || '/anexos';
-    const inputNome = document.getElementById('db-nome').value.trim();
-    const statusTxt = document.getElementById('upload-status');
+function renderizar() {
+    const container = document.getElementById('lista-itens');
+    container.innerHTML = '';
+    const lista = dadosGerais[abaAtiva] || [];
 
-    if (!inputArquivo.files.length) {
-        alert('Selecione um arquivo primeiro!');
+    if (!lista.length) {
+        container.innerHTML = '<p style="color:#64748b; padding: 8px;">Nenhum registro encontrado.</p>';
         return;
     }
 
-    const file = inputArquivo.files[0];
-    const nomeFinal = inputNome ? inputNome : file.name;
+    lista.forEach(item => {
+        if (abaAtiva === 'notas') {
+            const txt = item.texto || item.titulo || (typeof item === 'string' ? item : '');
+            const anexo = item.link ? `<br><a href="${item.link}" target="_blank" class="item-link">📎 Ver Anexo</a>` : '';
+            container.innerHTML += `<div class="item-row" style="border-left: 4px solid #2563eb;">${txt}${anexo}</div>`;
+        } else if (abaAtiva === 'tarefas') {
+            const nome = item.nome || item.texto || '';
+            const anexo = item.anexo ? `<br><a href="${item.anexo}" target="_blank" class="item-link">📎 Ver Anexo</a>` : '';
+            container.innerHTML += `<div class="item-row" style="border-left: 4px solid #10b981;">☑️ ${nome}${anexo}</div>`;
+        } else if (abaAtiva === 'despesas') {
+            const nome = item.nome || item.desc || '';
+            const val = parseFloat(item.valor || 0).toFixed(2);
+            const anexo = item.anexo ? `<br><a href="${item.anexo}" target="_blank" class="item-link">📎 Ver Recibo</a>` : '';
+            container.innerHTML += `<div class="item-row" style="border-left: 4px solid #d97706; display:flex; justify-content:space-between;"><span>${nome}${anexo}</span><strong>R$ ${val}</strong></div>`;
+        }
+    });
+}
+
+// 2. ENVIO DIRETO AO DROPBOX (SEM ERRO DE CORS / APPS SCRIPT)
+async function fazerUploadDropbox() {
+    const token = document.getElementById('db-token').value.trim();
+    const pasta = document.getElementById('db-pasta').value.trim() || '/Listapro';
+    const nomeCustom = document.getElementById('db-nome').value.trim();
+    const inputFile = document.getElementById('db-arquivo');
+    const statusTxt = document.getElementById('upload-status');
+
+    if (!token) {
+        alert('Por favor, informe o Token do Dropbox!');
+        return;
+    }
+    if (!inputFile.files.length) {
+        alert('Selecione um arquivo!');
+        return;
+    }
+
+    localStorage.setItem('dropbox_user_token', token);
+
+    const file = inputFile.files[0];
+    const nomeFinal = nomeCustom ? nomeCustom : file.name;
+    const caminhoFormatado = (pasta.startsWith('/') ? pasta : '/' + pasta) + '/' + Date.now() + '_' + nomeFinal;
 
     statusTxt.style.color = '#0061fe';
-    statusTxt.innerText = 'Enviando para o Dropbox... Aguarde.';
+    statusTxt.innerText = 'Enviando arquivo diretamente ao Dropbox...';
 
     try {
-        const base64 = await lerBase64(file);
-        const resposta = await fetch(SCRIPT_URL, {
+        // Passo A: Upload do arquivo
+        const uploadRes = await fetch('https://content.dropboxapi.com/2/files/upload', {
             method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Dropbox-API-Arg': JSON.stringify({
+                    path: caminhoFormatado,
+                    mode: 'add',
+                    autorename: true,
+                    mute: false
+                }),
+                'Content-Type': 'application/octet-stream'
+            },
+            body: file
+        });
+
+        const uploadData = await uploadRes.json();
+        if (uploadData.error) {
+            throw new Error(uploadData.error_summary || JSON.stringify(uploadData.error));
+        }
+
+        // Passo B: Obter link público
+        statusTxt.innerText = 'Gerando link compartilhado...';
+        const linkRes = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify({
-                acao: 'upload_dropbox',
-                base64: base64,
-                nomeArquivo: nomeFinal,
-                pasta: inputPasta
+                path: uploadData.path_lower,
+                settings: { requested_visibility: 'public' }
             })
         });
 
-        const resultado = await resposta.json();
-
-        if (resultado.status === 'sucesso') {
-            statusTxt.style.color = '#16a34a';
-            statusTxt.innerHTML = `✓ Salvo na pasta <b>${inputPasta}</b>!<br><a href="${resultado.link}" target="_blank" class="item-link">🔗 Ver Arquivo: ${resultado.link}</a>`;
-            inputArquivo.value = '';
-            inputNome.value = '';
-        } else {
-            statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = 'Erro: ' + resultado.mensagem;
+        const linkData = await linkRes.json();
+        let urlFinal = '';
+        if (linkData.url) {
+            urlFinal = linkData.url;
+        } else if (linkData.error && linkData.error['.tag'] === 'shared_link_already_exists') {
+            urlFinal = linkData.error.shared_link_already_exists.metadata.url;
         }
+
+        urlFinal = urlFinal.replace('?dl=0', '?raw=1');
+
+        statusTxt.style.color = '#16a34a';
+        statusTxt.innerHTML = `✓ Sucesso!<br><a href="${urlFinal}" target="_blank" class="item-link">🔗 Abrir: ${urlFinal}</a>`;
+        inputFile.value = '';
+        document.getElementById('db-nome').value = '';
+
     } catch (err) {
+        console.error(err);
         statusTxt.style.color = '#dc2626';
-        statusTxt.innerText = 'Falha ao processar o upload.';
+        statusTxt.innerText = 'Erro no envio: ' + err.message;
     }
 }
 
-// Inicializar carregamento
 carregarDados();
 </script>
 </body>
