@@ -3,77 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle</title>
+    <title>Painel Geral</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: #f1f5f9; color: #1e293b; padding: 14px; }
-        .container { max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+        body { background: #f8fafc; color: #1e293b; padding: 12px; }
+        .container { max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-        .card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .card-title { font-size: 15px; font-weight: 700; color: #0061fe; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+        /* STATUS & TOPO */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #10b981; padding: 8px 12px; border-radius: 8px; }
+        .status-badge { color: #065f46; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+        .btn-sync { background: #10b981; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
+
+        /* ABAS */
+        .tabs { display: flex; gap: 6px; background: #e2e8f0; padding: 4px; border-radius: 10px; }
+        .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: #475569; border-radius: 6px; cursor: pointer; }
+        .tab-btn.active { background: #ffffff; color: #0284c7; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+        /* CARDS E FORMULÁRIOS */
+        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .section-title { font-size: 16px; font-weight: 700; color: #0284c7; margin-bottom: 10px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+        .input-field:focus { border-color: #38bdf8; ring: 2px solid #bae6fd; }
+        textarea.input-field { resize: vertical; min-height: 80px; }
+
+        .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
+        .btn-action:active { background: #0284c7; color: white; }
+
+        /* DROPBOX ANEXO RÁPIDO */
+        .dropbox-box { background: #f0f9ff; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .dropbox-header { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 6px; display: flex; justify-content: space-between; }
+
+        /* SANFONA (ACCORDION) DE NOTAS */
+        .nota-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; background: #ffffff; }
+        .nota-header { padding: 10px 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid transparent; }
+        .nota-header.open { border-bottom-color: #e2e8f0; background: #f1f5f9; }
+        .nota-title { font-size: 14px; font-weight: 700; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
+        .nota-body { display: none; padding: 12px; font-size: 14px; color: #334155; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+        .nota-body.open { display: block; }
         
-        .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
-        .form-group label { font-size: 13px; font-weight: 600; color: #475569; }
-        .form-control { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
-        
-        .btn-upload { background: #0061fe; color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; font-size: 15px; margin-top: 6px; }
-        .btn-upload:active { opacity: 0.85; }
+        .item-actions { display: flex; gap: 8px; align-items: center; }
+        .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 15px; padding: 2px; }
 
-        /* ABAS DO PAINEL */
-        .nav-tabs { display: flex; gap: 8px; border-bottom: 2px solid #cbd5e1; padding-bottom: 8px; }
-        .tab-btn { background: #ffffff; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; color: #475569; }
-        .tab-btn.active { background: #2563eb; color: #ffffff; border-color: #2563eb; }
-
-        .item-row { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
-        .item-link { color: #0061fe; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-block; margin-top: 4px; }
+        /* CARDS TAREFAS E GASTOS */
+        .list-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .badge { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+        .badge-baixa { background: #dcfce7; color: #15803d; }
+        .badge-media { background: #fef9c3; color: #a16207; }
+        .badge-alta { background: #fee2e2; color: #b91c1c; }
+        .total-box { background: #0284c7; color: #ffffff; text-align: center; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+        .link-anexo { color: #0284c7; text-decoration: none; font-weight: 600; font-size: 13px; display: inline-block; margin-top: 4px; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- UPLOAD DROPBOX DIRETO -->
-    <div class="card">
-        <div class="card-title">📦 Enviar Arquivo para o Dropbox</div>
-        
-        <div class="form-group">
-            <label>sl.u.AGut8N1nUV62h_O6xZ0MjPrsbLwYazZa7Vlu-JJzxbjrzrDxLfxoGLs3xVw3gD8X6MSDJq4HlNA8JR_vMvyAWDj1tD-TO93EcaRtLBffpH6b84m1oFK1_zUVA-7tq_pp-bzO6IfoiD8mfgPdIs4xWZBwv71skti8KP7M36aGsmYhixyf1te42ks-_XlTLYHRcuDNilvHwmaZAsM9wpu5YHGc-CEFFOQURbzidZBx6IIEDNGiKQdm4F8hWHe0UfedFhs5WBmUZlgDLHNsRa8U8RXbIwvoIVmZQEFzFYpuS7a5NHYg4YVvm0G6hARucXYlb3U6fOjH3gfTDw4KyafgkWu8LZ_2SmfXqBXFmrHyLdFGe4tHrFWXUcRndq5kNzkAqKtcSPItOrgqYNSOcDAcfPFUIKaYGVqw06YVmTA2YzNQJju5m2LVt3mj6ffoQV4w4XeIrOWMxcHrM9TptVY7yQh58fImPeD6SgrEnMQLWZMcmL3R8Vb_YXLQ23R5odWek2YiUVJHdrbQ8nXX47FU5g3wsy9n7ztY9s7Ehqg4epWuX6dETbqhKsoWpUN71hS3O_9JpuiPySx-yRkpPvqTT4Gnowv4tUCrVxQK7k5DRihj-XhERW2sMxhEUE4SJZUz4X4mWF5ScXlZf0TwpqeYiiiHZIm1daDzD2hcnP1HEDkLo0KiB_6wJfxCGFmTJUq38esWhFSMsU8TDmIMzJ601UItuli3vLFcZuy2aKP8-zwvXu6fKol5mqia7aFs7KyJUs0Xs8-4_4mX-WhtegVNjeTpVm-wlOASjgsBHTkq3ho8Vvk8MhQ4cV7NfbOijn8ncsfhTt9_ZzHUXJs5MsLMw_XIM50gFFLUgrKDklInRmy-5gy7FROIo19NLtkCvdmrhva2OsgfIb9AR9P5LF7jJzNJ1ssMpUQlhQW2v38ZeJWgnVgKlsmJLyTKXwOCoaJOqOP3Q3mtyqbeQWYVo_jPf-FoadUtzQ4mDoQkC17rjVlaEo2ryhWpLJGUk4zaKKoRDwyudFVpx05jAS7O0w-gDVfg-r0AxDkbkVV7PttzzvkOVoNrSWUpXENl9-56ZFs_9tK_kTn5j2JTOujnMDSl8ncE0SYyiymToEHycgcrB9Y8c0HHEt5C4D-Okdcwr4IqA6jDTR9_jZkU88D8VqsL3Idwk5bmQM3CTUkcK2KZVurRyHTlHiAVIELMr5XpRi-PmtkWX1qcfjWhMlngOQ0JgrYm7Ze1jUZZElZgW_DmSHe_6UiBCDCaSUfnZQSwfqBRH7CMObbROYckpGBKyUa1uHLAHRkFQOIf0un62mQ0nS3a6_DDUXWlJmTNZ966l0pxhcYDVhmFZ0rLJsSiDQ3nsWLcMxiGvm02y8zagcL0ExdOnCeBTsmz3Orz6DYMJgGwgWHmFHDYd9H0jeUGuwODxrZr7oKxiKenNCge_ncpbOBVzz7fE4ai44rGvnLRW_dAlcA:</label>
-            <input type="password" id="db-token" class="form-control" placeholder="Cole seu token aqui se não tiver salvo">
-        </div>
-
-        <div class="form-group">
-            <label>Pasta de Destino:</label>
-            <input type="text" id="db-pasta" class="form-control" placeholder="Ex: /Listapro" value="/Listapro">
-        </div>
-
-        <div class="form-group">
-            <label>Renomear Arquivo (Opcional):</label>
-            <input type="text" id="db-nome" class="form-control" placeholder="Ex: recibo_agosto.bmp">
-        </div>
-
-        <div class="form-group">
-            <label>Selecionar Arquivo:</label>
-            <input type="file" id="db-arquivo" class="form-control">
-        </div>
-
-        <button type="button" class="btn-upload" onclick="fazerUploadDropbox()">📤 Enviar Arquivo</button>
-        <div id="upload-status" style="font-size: 13px; margin-top: 8px; font-weight: 600;"></div>
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <span class="status-badge" id="sync-status">✅ Tudo Atualizado!</span>
+        <button class="btn-sync" onclick="carregarDados()">Atualizar 🔄</button>
     </div>
 
-    <!-- ABAS DO PAINEL -->
-    <div class="nav-tabs">
-        <button class="tab-btn active" id="tab-btn-notas" onclick="trocarAba('notas')">📝 Notas</button>
-        <button class="tab-btn" id="tab-btn-tarefas" onclick="trocarAba('tarefas')">📋 Tarefas</button>
-        <button class="tab-btn" id="tab-btn-despesas" onclick="trocarAba('despesas')">💰 Gastos</button>
+    <!-- ABAS -->
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-btn-notas" onclick="selecionarAba('notas')">Notas</button>
+        <button class="tab-btn" id="tab-btn-tarefas" onclick="selecionarAba('tarefas')">Tarefas</button>
+        <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- CONTEÚDO DOS ITENS -->
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <strong id="titulo-secao" style="font-size: 16px;">Notas</strong>
-            <button onclick="carregarDados()" style="padding: 4px 8px; font-size: 12px; cursor: pointer;">🔄 Recarregar</button>
+    <!-- ÁREA GLOBAL DE UPLOAD DROPBOX -->
+    <div class="dropbox-box">
+        <div class="dropbox-header">
+            <span>📦 Subir Arquivo para Dropbox</span>
+            <span id="dropbox-status"></span>
         </div>
-        <div id="lista-itens">Carregando dados...</div>
+        <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+            <input type="text" id="db-pasta" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Pasta (ex: /documentos)" value="/documentos">
+            <input type="file" id="db-file" class="input-field" style="padding: 4px; font-size: 12px;">
+        </div>
+        <button type="button" class="btn-action" style="padding: 6px; font-size: 12px;" onclick="enviarDropbox()">📤 Enviar e Preencher Link Abaixo</button>
+    </div>
+
+    <!-- 1. ABA NOTAS -->
+    <div id="section-notas" class="card">
+        <div class="section-title">Notas & Links Rápidos</div>
+        <input type="hidden" id="edit-nota-id" value="">
+        <div class="form-group">
+            <textarea id="nota-texto" class="input-field" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
+        </div>
+        <div class="form-group">
+            <input type="text" id="nota-link" class="input-field" placeholder="Link do documento/foto associado (Opcional)">
+        </div>
+        <button class="btn-action" id="btn-salvar-nota" onclick="salvarNota()">Fixar Nota</button>
+
+        <div style="margin-top: 16px;">
+            <h4 style="font-size: 14px; margin-bottom: 8px; color: #475569;">Minhas Anotações</h4>
+            <div id="lista-notas">Carregando notas...</div>
+        </div>
+    </div>
+
+    <!-- 2. ABA TAREFAS -->
+    <div id="section-tarefas" class="card" style="display: none;">
+        <div class="section-title">Criar Evento ou Tarefa</div>
+        <input type="hidden" id="edit-tarefa-id" value="">
+        <div class="form-group">
+            <input type="text" id="tarefa-nome" class="input-field" placeholder="Ex: Cir Alex">
+        </div>
+        <div class="form-group">
+            <input type="datetime-local" id="tarefa-data" class="input-field">
+        </div>
+        <div class="form-group">
+            <select id="tarefa-prioridade" class="input-field">
+                <option value="baixa">Prioridade Baixa</option>
+                <option value="media">Prioridade Média</option>
+                <option value="alta">Prioridade Alta</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="text" id="tarefa-link" class="input-field" placeholder="Link de documento anexo (Opcional)">
+        </div>
+        <button class="btn-action" id="btn-salvar-tarefa" onclick="salvarTarefa()">Salvar no Painel</button>
+
+        <div style="margin-top: 16px;">
+            <h4 style="font-size: 14px; margin-bottom: 8px; color: #475569;">Linha do Tempo</h4>
+            <div id="lista-tarefas">Carregando tarefas...</div>
+        </div>
+    </div>
+
+    <!-- 3. ABA GASTOS -->
+    <div id="section-despesas" class="card" style="display: none;">
+        <div class="total-box" id="total-despesas">Total Local: R$ 0,00</div>
+        <div class="section-title">Adicionar Item / Despesa</div>
+        <input type="hidden" id="edit-despesa-id" value="">
+        <div class="form-group">
+            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto Energia">
+        </div>
+        <div class="form-group">
+            <input type="number" step="0.01" id="despesa-valor" class="input-field" placeholder="Valor R$">
+        </div>
+        <div class="form-group">
+            <input type="text" id="despesa-link" class="input-field" placeholder="Link do Boleto/Recibo (Opcional)">
+        </div>
+        <button class="btn-action" id="btn-salvar-despesa" onclick="salvarDespesa()">Salvar na Lista</button>
+
+        <div style="margin-top: 16px;">
+            <h4 style="font-size: 14px; margin-bottom: 8px; color: #475569;">Itens e Recibos</h4>
+            <div id="lista-despesas">Carregando despesas...</div>
+        </div>
     </div>
 
 </div>
@@ -82,17 +159,22 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
 
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
-let abaAtiva = 'notas';
+let abaAtual = 'notas';
 
-// Lembra o token no navegador
-const tokenSalvo = localStorage.getItem('dropbox_user_token') || '';
-if (tokenSalvo) {
-    document.getElementById('db-token').value = tokenSalvo;
+// 1. NAVEGAÇÃO DE ABAS
+function selecionarAba(aba) {
+    abaAtual = aba;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`tab-btn-${aba}`).classList.add('active');
+
+    document.getElementById('section-notas').style.display = aba === 'notas' ? 'block' : 'none';
+    document.getElementById('section-tarefas').style.display = aba === 'tarefas' ? 'block' : 'none';
+    document.getElementById('section-despesas').style.display = aba === 'despesas' ? 'block' : 'none';
 }
 
-// 1. CARREGAMENTO DA PLANILHA VIA JSONP
+// 2. CARREGAR DADOS DO SHEETS
 function carregarDados() {
-    document.getElementById('lista-itens').innerText = 'Buscando da planilha...';
+    document.getElementById('sync-status').innerText = '⏳ Sincronizando...';
     const script = document.createElement('script');
     script.src = `${SCRIPT_URL}?callback=receberDadosGerais&t=${Date.now()}`;
     document.body.appendChild(script);
@@ -101,132 +183,275 @@ function carregarDados() {
 function receberDadosGerais(data) {
     if (data) {
         dadosGerais = data;
-        renderizar();
+        renderizarTudo();
+        document.getElementById('sync-status').innerText = '✅ Tudo Atualizado!';
     }
 }
 
-function trocarAba(aba) {
-    abaAtiva = aba;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`tab-btn-${aba}`).classList.add('active');
-    
-    const titulos = { notas: 'Notas', tarefas: 'Tarefas', despesas: 'Gastos' };
-    document.getElementById('titulo-secao').innerText = titulos[aba];
-    renderizar();
-}
+// 3. RENDERIZAÇÃO
+function renderizarTudo() {
+    // NOTAS (SANFONA)
+    const boxNotas = document.getElementById('lista-notas');
+    boxNotas.innerHTML = '';
+    (dadosGerais.notas || []).forEach(n => {
+        const txt = n.texto || '';
+        const primeiraLinha = txt.split('\n')[0].replace(/\\n/g, ' ') || 'Nota sem título';
+        const linkHtml = n.link ? `<br><a href="${n.link}" target="_blank" class="link-anexo">📎 Abrir Anexo / Documento</a>` : '';
 
-function renderizar() {
-    const container = document.getElementById('lista-itens');
-    container.innerHTML = '';
-    const lista = dadosGerais[abaAtiva] || [];
-
-    if (!lista.length) {
-        container.innerHTML = '<p style="color:#64748b; padding: 8px;">Nenhum registro encontrado.</p>';
-        return;
-    }
-
-    lista.forEach(item => {
-        if (abaAtiva === 'notas') {
-            const txt = item.texto || item.titulo || (typeof item === 'string' ? item : '');
-            const anexo = item.link ? `<br><a href="${item.link}" target="_blank" class="item-link">📎 Ver Anexo</a>` : '';
-            container.innerHTML += `<div class="item-row" style="border-left: 4px solid #2563eb;">${txt}${anexo}</div>`;
-        } else if (abaAtiva === 'tarefas') {
-            const nome = item.nome || item.texto || '';
-            const anexo = item.anexo ? `<br><a href="${item.anexo}" target="_blank" class="item-link">📎 Ver Anexo</a>` : '';
-            container.innerHTML += `<div class="item-row" style="border-left: 4px solid #10b981;">☑️ ${nome}${anexo}</div>`;
-        } else if (abaAtiva === 'despesas') {
-            const nome = item.nome || item.desc || '';
-            const val = parseFloat(item.valor || 0).toFixed(2);
-            const anexo = item.anexo ? `<br><a href="${item.anexo}" target="_blank" class="item-link">📎 Ver Recibo</a>` : '';
-            container.innerHTML += `<div class="item-row" style="border-left: 4px solid #d97706; display:flex; justify-content:space-between;"><span>${nome}${anexo}</span><strong>R$ ${val}</strong></div>`;
-        }
+        boxNotas.innerHTML += `
+            <div class="nota-item">
+                <div class="nota-header" onclick="toggleSanfona(this)">
+                    <span class="nota-title">📝 ${primeiraLinha}</span>
+                    <div class="item-actions" onclick="event.stopPropagation()">
+                        <button class="icon-btn" onclick="editarNota(${n.id})" title="Editar">✏️</button>
+                        <button class="icon-btn" onclick="excluirItem('notas', ${n.id})" title="Excluir">🗑️</button>
+                    </div>
+                </div>
+                <div class="nota-body">${txt}${linkHtml}</div>
+            </div>`;
     });
+
+    // TAREFAS
+    const boxTarefas = document.getElementById('lista-tarefas');
+    boxTarefas.innerHTML = '';
+    (dadosGerais.tarefas || []).forEach(t => {
+        const dataFmt = t.data ? new Date(t.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : 'Sem data';
+        const badgeClass = `badge-${t.prioridade || 'baixa'}`;
+        const linkHtml = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="link-anexo">📎 Anexo</a>` : '';
+
+        boxTarefas.innerHTML += `
+            <div class="list-card">
+                <div>
+                    <strong>${t.nome}</strong><br>
+                    <small style="color: #64748b;">📅 ${dataFmt} </small>
+                    <span class="badge ${badgeClass}">${t.prioridade || 'baixa'}</span>
+                    ${linkHtml}
+                </div>
+                <div class="item-actions">
+                    <button class="icon-btn" onclick="editarTarefa(${t.id})">✏️</button>
+                    <button class="icon-btn" onclick="excluirItem('tarefas', ${t.id})">🗑️</button>
+                </div>
+            </div>`;
+    });
+
+    // GASTOS & TOTAL
+    const boxDespesas = document.getElementById('lista-despesas');
+    boxDespesas.innerHTML = '';
+    let total = 0;
+    (dadosGerais.despesas || []).forEach(d => {
+        const val = parseFloat(d.valor || 0);
+        total += val;
+        const linkHtml = d.anexo ? `<br><a href="${d.anexo}" target="_blank" class="link-anexo">📎 Recibo</a>` : '';
+
+        boxDespesas.innerHTML += `
+            <div class="list-card">
+                <div>
+                    <strong>${d.nome}</strong>${linkHtml}
+                </div>
+                <div style="display:flex; align-items:center; gap: 10px;">
+                    <span style="font-weight:700; color:#0284c7;">R$ ${val.toFixed(2)}</span>
+                    <button class="icon-btn" onclick="editarDespesa(${d.id})">✏️</button>
+                    <button class="icon-btn" onclick="excluirItem('despesas', ${d.id})">🗑️</button>
+                </div>
+            </div>`;
+    });
+    document.getElementById('total-despesas').innerText = `Total Local: R$ ${total.toFixed(2)}`;
 }
 
-// 2. ENVIO DIRETO AO DROPBOX (SEM ERRO DE CORS / APPS SCRIPT)
-async function fazerUploadDropbox() {
-    const token = document.getElementById('db-token').value.trim();
-    const pasta = document.getElementById('db-pasta').value.trim() || '/Listapro';
-    const nomeCustom = document.getElementById('db-nome').value.trim();
-    const inputFile = document.getElementById('db-arquivo');
-    const statusTxt = document.getElementById('upload-status');
+// TOGGLE SANFONA
+function toggleSanfona(header) {
+    header.classList.toggle('open');
+    header.nextElementSibling.classList.toggle('open');
+}
 
-    if (!token) {
-        alert('Por favor, informe o Token do Dropbox!');
-        return;
+// 4. OPERAÇÕES DE CRUD (SALVAR, EDITAR, EXCLUIR)
+async function persistirDados() {
+    document.getElementById('sync-status').innerText = 'Salvando na nuvem... ⏳';
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosGerais)
+        });
+        document.getElementById('sync-status').innerText = '✅ Salvo com sucesso!';
+    } catch (e) {
+        document.getElementById('sync-status').innerText = '⚠️ Erro ao salvar online.';
     }
-    if (!inputFile.files.length) {
-        alert('Selecione um arquivo!');
-        return;
+}
+
+// NOTAS
+function salvarNota() {
+    const idEdit = document.getElementById('edit-nota-id').value;
+    const texto = document.getElementById('nota-texto').value.trim();
+    const link = document.getElementById('nota-link').value.trim();
+
+    if (!texto) return alert('Digite a anotação!');
+
+    if (idEdit) {
+        const item = dadosGerais.notas.find(n => n.id == idEdit);
+        if (item) { item.texto = texto; item.link = link; }
+        document.getElementById('edit-nota-id').value = '';
+        document.getElementById('btn-salvar-nota').innerText = 'Fixar Nota';
+    } else {
+        dadosGerais.notas.unshift({ id: Date.now(), texto, link });
     }
 
-    localStorage.setItem('dropbox_user_token', token);
+    document.getElementById('nota-texto').value = '';
+    document.getElementById('nota-link').value = '';
+    renderizarTudo();
+    persistirDados();
+}
+
+function editarNota(id) {
+    const item = dadosGerais.notas.find(n => n.id == id);
+    if (!item) return;
+    document.getElementById('edit-nota-id').value = item.id;
+    document.getElementById('nota-texto').value = item.texto;
+    document.getElementById('nota-link').value = item.link || '';
+    document.getElementById('btn-salvar-nota').innerText = 'Salvar Alteração';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// TAREFAS
+function salvarTarefa() {
+    const idEdit = document.getElementById('edit-tarefa-id').value;
+    const nome = document.getElementById('tarefa-nome').value.trim();
+    const data = document.getElementById('tarefa-data').value;
+    const prioridade = document.getElementById('tarefa-prioridade').value;
+    const anexo = document.getElementById('tarefa-link').value.trim();
+
+    if (!nome) return alert('Digite o nome da tarefa!');
+
+    if (idEdit) {
+        const item = dadosGerais.tarefas.find(t => t.id == idEdit);
+        if (item) { item.nome = nome; item.data = data; item.prioridade = prioridade; item.anexo = anexo; }
+        document.getElementById('edit-tarefa-id').value = '';
+        document.getElementById('btn-salvar-tarefa').innerText = 'Salvar no Painel';
+    } else {
+        dadosGerais.tarefas.unshift({ id: Date.now(), nome, data, prioridade, anexo });
+    }
+
+    document.getElementById('tarefa-nome').value = '';
+    document.getElementById('tarefa-data').value = '';
+    document.getElementById('tarefa-link').value = '';
+    renderizarTudo();
+    persistirDados();
+}
+
+function editarTarefa(id) {
+    const item = dadosGerais.tarefas.find(t => t.id == id);
+    if (!item) return;
+    document.getElementById('edit-tarefa-id').value = item.id;
+    document.getElementById('tarefa-nome').value = item.nome;
+    document.getElementById('tarefa-data').value = item.data || '';
+    document.getElementById('tarefa-prioridade').value = item.prioridade || 'baixa';
+    document.getElementById('tarefa-link').value = item.anexo || '';
+    document.getElementById('btn-salvar-tarefa').innerText = 'Salvar Alteração';
+    selecionarAba('tarefas');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// GASTOS
+function salvarDespesa() {
+    const idEdit = document.getElementById('edit-despesa-id').value;
+    const nome = document.getElementById('despesa-nome').value.trim();
+    const valor = parseFloat(document.getElementById('despesa-valor').value) || 0;
+    const anexo = document.getElementById('despesa-link').value.trim();
+
+    if (!nome) return alert('Digite a descrição do gasto!');
+
+    if (idEdit) {
+        const item = dadosGerais.despesas.find(d => d.id == idEdit);
+        if (item) { item.nome = nome; item.valor = valor; item.anexo = anexo; }
+        document.getElementById('edit-despesa-id').value = '';
+        document.getElementById('btn-salvar-despesa').innerText = 'Salvar na Lista';
+    } else {
+        dadosGerais.despesas.unshift({ id: Date.now(), nome, valor, anexo });
+    }
+
+    document.getElementById('despesa-nome').value = '';
+    document.getElementById('despesa-valor').value = '';
+    document.getElementById('despesa-link').value = '';
+    renderizarTudo();
+    persistirDados();
+}
+
+function editarDespesa(id) {
+    const item = dadosGerais.despesas.find(d => d.id == id);
+    if (!item) return;
+    document.getElementById('edit-despesa-id').value = item.id;
+    document.getElementById('despesa-nome').value = item.nome;
+    document.getElementById('despesa-valor').value = item.valor;
+    document.getElementById('despesa-link').value = item.anexo || '';
+    document.getElementById('btn-salvar-despesa').innerText = 'Salvar Alteração';
+    selecionarAba('despesas');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// EXCLUIR ITEM
+function excluirItem(tipo, id) {
+    if (!confirm('Deseja realmente excluir este item?')) return;
+    dadosGerais[tipo] = dadosGerais[tipo].filter(item => item.id != id);
+    renderizarTudo();
+    persistirDados();
+}
+
+// 5. UPLOAD DROPBOX DIRETO E PREENCHIMENTO AUTOMÁTICO
+async function enviarDropbox() {
+    const token = localStorage.getItem('dropbox_user_token');
+    const pasta = document.getElementById('db-pasta').value.trim() || '/documentos';
+    const inputFile = document.getElementById('db-file');
+    const statusTxt = document.getElementById('dropbox-status');
+
+    if (!token) return alert('Token Dropbox não configurado!');
+    if (!inputFile.files.length) return alert('Selecione um arquivo!');
 
     const file = inputFile.files[0];
-    const nomeFinal = nomeCustom ? nomeCustom : file.name;
-    const caminhoFormatado = (pasta.startsWith('/') ? pasta : '/' + pasta) + '/' + Date.now() + '_' + nomeFinal;
+    const path = (pasta.startsWith('/') ? pasta : '/' + pasta) + '/' + Date.now() + '_' + file.name;
 
-    statusTxt.style.color = '#0061fe';
-    statusTxt.innerText = 'Enviando arquivo diretamente ao Dropbox...';
+    statusTxt.innerText = 'Subindo... ⏳';
 
     try {
-        // Passo A: Upload do arquivo
         const uploadRes = await fetch('https://content.dropboxapi.com/2/files/upload', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token,
-                'Dropbox-API-Arg': JSON.stringify({
-                    path: caminhoFormatado,
-                    mode: 'add',
-                    autorename: true,
-                    mute: false
-                }),
+                'Dropbox-API-Arg': JSON.stringify({ path, mode: 'add', autorename: true }),
                 'Content-Type': 'application/octet-stream'
             },
             body: file
         });
 
         const uploadData = await uploadRes.json();
-        if (uploadData.error) {
-            throw new Error(uploadData.error_summary || JSON.stringify(uploadData.error));
-        }
-
-        // Passo B: Obter link público
-        statusTxt.innerText = 'Gerando link compartilhado...';
+        
         const linkRes = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                path: uploadData.path_lower,
-                settings: { requested_visibility: 'public' }
-            })
+            body: JSON.stringify({ path: uploadData.path_lower, settings: { requested_visibility: 'public' } })
         });
 
         const linkData = await linkRes.json();
-        let urlFinal = '';
-        if (linkData.url) {
-            urlFinal = linkData.url;
-        } else if (linkData.error && linkData.error['.tag'] === 'shared_link_already_exists') {
-            urlFinal = linkData.error.shared_link_already_exists.metadata.url;
-        }
+        let finalUrl = linkData.url || (linkData.error && linkData.error.shared_link_already_exists ? linkData.error.shared_link_already_exists.metadata.url : '');
+        finalUrl = finalUrl.replace('?dl=0', '?raw=1');
 
-        urlFinal = urlFinal.replace('?dl=0', '?raw=1');
-
-        statusTxt.style.color = '#16a34a';
-        statusTxt.innerHTML = `✓ Sucesso!<br><a href="${urlFinal}" target="_blank" class="item-link">🔗 Abrir: ${urlFinal}</a>`;
+        statusTxt.innerText = '✅ Enviado!';
         inputFile.value = '';
-        document.getElementById('db-nome').value = '';
 
-    } catch (err) {
-        console.error(err);
-        statusTxt.style.color = '#dc2626';
-        statusTxt.innerText = 'Erro no envio: ' + err.message;
+        // Preenche o campo de link da aba ativa
+        if (abaAtual === 'notas') document.getElementById('nota-link').value = finalUrl;
+        if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = finalUrl;
+        if (abaAtual === 'despesas') document.getElementById('despesa-link').value = finalUrl;
+
+    } catch (e) {
+        statusTxt.innerText = '❌ Erro no envio';
     }
 }
 
+// Iniciar carregamento
 carregarDados();
 </script>
 </body>
