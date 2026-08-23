@@ -29,7 +29,7 @@
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
-        /* DROPBOX ANEXO COM RENOMEAÇÃO */
+        /* DROPBOX ANEXO COM RENOMEAÇÃO E TOKEN */
         .dropbox-box { background: #f0f9ff; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
         .dropbox-header { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 6px; display: flex; justify-content: space-between; }
         .row-inputs { display: flex; gap: 6px; margin-bottom: 6px; }
@@ -73,15 +73,18 @@
         <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- CAIXA DROPBOX COM RENOMEAÇÃO -->
+    <!-- CAIXA DROPBOX COM CAMPO DE TOKEN E RENOMEAÇÃO -->
     <div class="dropbox-box">
         <div class="dropbox-header">
             <span>📦 Subir Arquivo para Dropbox</span>
             <span id="dropbox-status"></span>
         </div>
+        <div style="margin-bottom: 6px;">
+            <input type="password" id="db-token" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="🔑 Cole seu Token Dropbox aqui (salva automático)">
+        </div>
         <div class="row-inputs">
             <input type="text" id="db-pasta" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Pasta" value="/documentos">
-            <input type="text" id="db-novo-nome" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Novo nome (ex: tabela_x)">
+            <input type="text" id="db-novo-nome" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Novo nome (ex: foto_exame)">
         </div>
         <div style="margin-bottom: 6px;">
             <input type="file" id="db-file" class="input-field" style="padding: 4px; font-size: 12px;">
@@ -164,6 +167,12 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKX
 
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
+
+// Carrega o token salvo ao abrir
+const tokenSalvo = localStorage.getItem('dropbox_user_token') || '';
+if (tokenSalvo && document.getElementById('db-token')) {
+    document.getElementById('db-token').value = tokenSalvo;
+}
 
 function selecionarAba(aba) {
     abaAtual = aba;
@@ -429,15 +438,21 @@ function excluirItem(tipo, id) {
     persistirDados();
 }
 
-// UPLOAD DROPBOX COM RENOMEAÇÃO CUSTOMIZADA
+// UPLOAD DROPBOX COM TOKEN CONFIGURÁVEL E RENOMEAÇÃO CUSTOMIZADA
 async function enviarDropbox() {
-    const token = localStorage.getItem('dropbox_user_token');
+    let token = document.getElementById('db-token').value.trim() || localStorage.getItem('dropbox_user_token');
     const pasta = document.getElementById('db-pasta').value.trim() || '/documentos';
     const novoNome = document.getElementById('db-novo-nome').value.trim();
     const inputFile = document.getElementById('db-file');
     const statusTxt = document.getElementById('dropbox-status');
 
-    if (!token) return alert('Token Dropbox não configurado!');
+    if (!token) {
+        return alert('Por favor, cole seu Token do Dropbox no campo indicado!');
+    }
+
+    // Salva na memória do aparelho
+    localStorage.setItem('dropbox_user_token', token);
+
     if (!inputFile.files.length) return alert('Selecione um arquivo!');
 
     const file = inputFile.files[0];
@@ -445,8 +460,9 @@ async function enviarDropbox() {
     // Tratamento de extensão ao renomear
     let nomeFinal = file.name;
     if (novoNome) {
-        const ext = file.name.split('.').pop();
-        nomeFinal = novoNome.includes('.') ? novoNome : `${novoNome}.${ext}`;
+        const partes = file.name.split('.');
+        const ext = partes.length > 1 ? partes.pop() : '';
+        nomeFinal = novoNome.includes('.') ? novoNome : (ext ? `${novoNome}.${ext}` : novoNome);
     }
 
     const path = (pasta.startsWith('/') ? pasta : '/' + pasta) + '/' + Date.now() + '_' + nomeFinal;
@@ -464,6 +480,7 @@ async function enviarDropbox() {
         });
 
         const uploadData = await uploadRes.json();
+        if (uploadData.error) throw new Error(uploadData.error_summary || 'Erro no upload');
         
         const linkRes = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
             method: 'POST',
@@ -487,7 +504,8 @@ async function enviarDropbox() {
         if (abaAtual === 'despesas') document.getElementById('despesa-link').value = finalUrl;
 
     } catch (e) {
-        statusTxt.innerText = '❌ Erro no envio';
+        statusTxt.innerText = '❌ ' + e.message;
+        alert('Erro ao enviar: ' + e.message);
     }
 }
 
