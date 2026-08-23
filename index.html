@@ -9,7 +9,7 @@
         body { background: #f8fafc; color: #1e293b; padding: 12px; }
         .container { max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-        /* STATUS & TOPO */
+        /* STATUS E SINCRONIZAÇÃO */
         .top-bar { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #10b981; padding: 8px 12px; border-radius: 8px; }
         .status-badge { color: #065f46; font-size: 13px; font-weight: 600; }
         .btn-sync { background: #10b981; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
@@ -29,12 +29,12 @@
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
-        /* DROPBOX ANEXO COM RENOMEAÇÃO E TOKEN */
+        /* CAIXA DROPBOX */
         .dropbox-box { background: #f0f9ff; border: 1px dashed #38bdf8; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
         .dropbox-header { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 6px; display: flex; justify-content: space-between; }
         .row-inputs { display: flex; gap: 6px; margin-bottom: 6px; }
 
-        /* SANFONA (ACCORDION) DE NOTAS */
+        /* SANFONA (ACCORDION) NOTAS */
         .nota-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; background: #ffffff; }
         .nota-header { padding: 10px 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid transparent; }
         .nota-header.open { border-bottom-color: #e2e8f0; background: #f1f5f9; }
@@ -45,7 +45,7 @@
         .item-actions { display: flex; gap: 6px; align-items: center; }
         .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 15px; padding: 2px; }
 
-        /* TAREFAS E GASTOS */
+        /* ITENS TAREFAS E GASTOS */
         .list-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .badge { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .badge-baixa { background: #dcfce7; color: #15803d; }
@@ -73,22 +73,27 @@
         <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- CAIXA DROPBOX COM CAMPO DE TOKEN E RENOMEAÇÃO -->
+    <!-- CAIXA DROPBOX COM SALVAMENTO DE TOKEN E RENOMEAÇÃO -->
     <div class="dropbox-box">
         <div class="dropbox-header">
             <span>📦 Subir Arquivo para Dropbox</span>
             <span id="dropbox-status"></span>
         </div>
-        <div style="margin-bottom: 6px;">
-            <input type="password" id="db-token" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="🔑 sl.u.AGut8N1nUV62h_O6xZ0MjPrsbLwYazZa7Vlu-JJzxbjrzrDxLfxoGLs3xVw3gD8X6MSDJq4HlNA8JR_vMvyAWDj1tD-TO93EcaRtLBffpH6b84m1oFK1_zUVA-7tq_pp-bzO6IfoiD8mfgPdIs4xWZBwv71skti8KP7M36aGsmYhixyf1te42ks-_XlTLYHRcuDNilvHwmaZAsM9wpu5YHGc-CEFFOQURbzidZBx6IIEDNGiKQdm4F8hWHe0UfedFhs5WBmUZlgDLHNsRa8U8RXbIwvoIVmZQEFzFYpuS7a5NHYg4YVvm0G6hARucXYlb3U6fOjH3gfTDw4KyafgkWu8LZ_2SmfXqBXFmrHyLdFGe4tHrFWXUcRndq5kNzkAqKtcSPItOrgqYNSOcDAcfPFUIKaYGVqw06YVmTA2YzNQJju5m2LVt3mj6ffoQV4w4XeIrOWMxcHrM9TptVY7yQh58fImPeD6SgrEnMQLWZMcmL3R8Vb_YXLQ23R5odWek2YiUVJHdrbQ8nXX47FU5g3wsy9n7ztY9s7Ehqg4epWuX6dETbqhKsoWpUN71hS3O_9JpuiPySx-yRkpPvqTT4Gnowv4tUCrVxQK7k5DRihj-XhERW2sMxhEUE4SJZUz4X4mWF5ScXlZf0TwpqeYiiiHZIm1daDzD2hcnP1HEDkLo0KiB_6wJfxCGFmTJUq38esWhFSMsU8TDmIMzJ601UItuli3vLFcZuy2aKP8-zwvXu6fKol5mqia7aFs7KyJUs0Xs8-4_4mX-WhtegVNjeTpVm-wlOASjgsBHTkq3ho8Vvk8MhQ4cV7NfbOijn8ncsfhTt9_ZzHUXJs5MsLMw_XIM50gFFLUgrKDklInRmy-5gy7FROIo19NLtkCvdmrhva2OsgfIb9AR9P5LF7jJzNJ1ssMpUQlhQW2v38ZeJWgnVgKlsmJLyTKXwOCoaJOqOP3Q3mtyqbeQWYVo_jPf-FoadUtzQ4mDoQkC17rjVlaEo2ryhWpLJGUk4zaKKoRDwyudFVpx05jAS7O0w-gDVfg-r0AxDkbkVV7PttzzvkOVoNrSWUpXENl9-56ZFs_9tK_kTn5j2JTOujnMDSl8ncE0SYyiymToEHycgcrB9Y8c0HHEt5C4D-Okdcwr4IqA6jDTR9_jZkU88D8VqsL3Idwk5bmQM3CTUkcK2KZVurRyHTlHiAVIELMr5XpRi-PmtkWX1qcfjWhMlngOQ0JgrYm7Ze1jUZZElZgW_DmSHe_6UiBCDCaSUfnZQSwfqBRH7CMObbROYckpGBKyUa1uHLAHRkFQOIf0un62mQ0nS3a6_DDUXWlJmTNZ966l0pxhcYDVhmFZ0rLJsSiDQ3nsWLcMxiGvm02y8zagcL0ExdOnCeBTsmz3Orz6DYMJgGwgWHmFHDYd9H0jeUGuwODxrZr7oKxiKenNCge_ncpbOBVzz7fE4ai44rGvnLRW_dAlcA Dropbox aqui (salva automático)">
+        
+        <div style="display: flex; gap: 4px; margin-bottom: 6px;">
+            <input type="password" id="db-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 sl.u.AGut8N1nUV62h_O6xZ0MjPrsbLwYazZa7Vlu-JJzxbjrzrDxLfxoGLs3xVw3gD8X6MSDJq4HlNA8JR_vMvyAWDj1tD-TO93EcaRtLBffpH6b84m1oFK1_zUVA-7tq_pp-bzO6IfoiD8mfgPdIs4xWZBwv71skti8KP7M36aGsmYhixyf1te42ks-_XlTLYHRcuDNilvHwmaZAsM9wpu5YHGc-CEFFOQURbzidZBx6IIEDNGiKQdm4F8hWHe0UfedFhs5WBmUZlgDLHNsRa8U8RXbIwvoIVmZQEFzFYpuS7a5NHYg4YVvm0G6hARucXYlb3U6fOjH3gfTDw4KyafgkWu8LZ_2SmfXqBXFmrHyLdFGe4tHrFWXUcRndq5kNzkAqKtcSPItOrgqYNSOcDAcfPFUIKaYGVqw06YVmTA2YzNQJju5m2LVt3mj6ffoQV4w4XeIrOWMxcHrM9TptVY7yQh58fImPeD6SgrEnMQLWZMcmL3R8Vb_YXLQ23R5odWek2YiUVJHdrbQ8nXX47FU5g3wsy9n7ztY9s7Ehqg4epWuX6dETbqhKsoWpUN71hS3O_9JpuiPySx-yRkpPvqTT4Gnowv4tUCrVxQK7k5DRihj-XhERW2sMxhEUE4SJZUz4X4mWF5ScXlZf0TwpqeYiiiHZIm1daDzD2hcnP1HEDkLo0KiB_6wJfxCGFmTJUq38esWhFSMsU8TDmIMzJ601UItuli3vLFcZuy2aKP8-zwvXu6fKol5mqia7aFs7KyJUs0Xs8-4_4mX-WhtegVNjeTpVm-wlOASjgsBHTkq3ho8Vvk8MhQ4cV7NfbOijn8ncsfhTt9_ZzHUXJs5MsLMw_XIM50gFFLUgrKDklInRmy-5gy7FROIo19NLtkCvdmrhva2OsgfIb9AR9P5LF7jJzNJ1ssMpUQlhQW2v38ZeJWgnVgKlsmJLyTKXwOCoaJOqOP3Q3mtyqbeQWYVo_jPf-FoadUtzQ4mDoQkC17rjVlaEo2ryhWpLJGUk4zaKKoRDwyudFVpx05jAS7O0w-gDVfg-r0AxDkbkVV7PttzzvkOVoNrSWUpXENl9-56ZFs_9tK_kTn5j2JTOujnMDSl8ncE0SYyiymToEHycgcrB9Y8c0HHEt5C4D-Okdcwr4IqA6jDTR9_jZkU88D8VqsL3Idwk5bmQM3CTUkcK2KZVurRyHTlHiAVIELMr5XpRi-PmtkWX1qcfjWhMlngOQ0JgrYm7Ze1jUZZElZgW_DmSHe_6UiBCDCaSUfnZQSwfqBRH7CMObbROYckpGBKyUa1uHLAHRkFQOIf0un62mQ0nS3a6_DDUXWlJmTNZ966l0pxhcYDVhmFZ0rLJsSiDQ3nsWLcMxiGvm02y8zagcL0ExdOnCeBTsmz3Orz6DYMJgGwgWHmFHDYd9H0jeUGuwODxrZr7oKxiKenNCge_ncpbOBVzz7fE4ai44rGvnLRW_dAlcA">
+            <button type="button" onclick="salvarTokenManualmente()" style="background: #0284c7; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
         </div>
+
         <div class="row-inputs">
             <input type="text" id="db-pasta" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Pasta" value="/documentos">
-            <input type="text" id="db-novo-nome" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Novo nome (ex: foto_exame)">
+            <input type="text" id="db-novo-nome" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Novo nome (ex: tabela_x)">
         </div>
+        
         <div style="margin-bottom: 6px;">
             <input type="file" id="db-file" class="input-field" style="padding: 4px; font-size: 12px;">
         </div>
+        
         <button type="button" class="btn-action" style="padding: 6px; font-size: 12px;" onclick="enviarDropbox()">📤 Enviar e Preencher Link Abaixo</button>
     </div>
 
@@ -168,10 +173,24 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKX
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
 
-// Carrega o token salvo ao abrir
-const tokenSalvo = localStorage.getItem('dropbox_user_token') || '';
-if (tokenSalvo && document.getElementById('db-token')) {
-    document.getElementById('db-token').value = tokenSalvo;
+// Inicializar Token
+window.addEventListener('DOMContentLoaded', () => {
+    const salvo = localStorage.getItem('dropbox_user_token');
+    if (salvo) {
+        const campoToken = document.getElementById('db-token');
+        if (campoToken) campoToken.value = salvo;
+    }
+});
+
+function salvarTokenManualmente() {
+    const campo = document.getElementById('db-token');
+    const valor = campo.value.trim();
+    if (!valor) {
+        alert('Cole um token antes de salvar!');
+        return;
+    }
+    localStorage.setItem('dropbox_user_token', valor);
+    alert('Token salvo com sucesso no aparelho!');
 }
 
 function selecionarAba(aba) {
@@ -330,7 +349,7 @@ async function enviarParaTasks(id) {
     }
 }
 
-// OPERAÇÕES NOTAS, TAREFAS, GASTOS
+// NOTAS
 function salvarNota() {
     const idEdit = document.getElementById('edit-nota-id').value;
     const texto = document.getElementById('nota-texto').value.trim();
@@ -361,6 +380,7 @@ function editarNota(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// TAREFAS
 function salvarTarefa() {
     const idEdit = document.getElementById('edit-tarefa-id').value;
     const nome = document.getElementById('tarefa-nome').value.trim();
@@ -397,6 +417,7 @@ function editarTarefa(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// GASTOS
 function salvarDespesa() {
     const idEdit = document.getElementById('edit-despesa-id').value;
     const nome = document.getElementById('despesa-nome').value.trim();
@@ -438,26 +459,30 @@ function excluirItem(tipo, id) {
     persistirDados();
 }
 
-// UPLOAD DROPBOX COM TOKEN CONFIGURÁVEL E RENOMEAÇÃO CUSTOMIZADA
+// UPLOAD DROPBOX
 async function enviarDropbox() {
-    let token = document.getElementById('db-token').value.trim() || localStorage.getItem('dropbox_user_token');
+    const inputToken = document.getElementById('db-token');
+    let token = (inputToken ? inputToken.value.trim() : '') || localStorage.getItem('dropbox_user_token');
+    
+    if (!token) {
+        alert('Token Dropbox não configurado! Cole o token no campo correspondente.');
+        return;
+    }
+
+    localStorage.setItem('dropbox_user_token', token);
+
     const pasta = document.getElementById('db-pasta').value.trim() || '/documentos';
     const novoNome = document.getElementById('db-novo-nome').value.trim();
     const inputFile = document.getElementById('db-file');
     const statusTxt = document.getElementById('dropbox-status');
 
-    if (!token) {
-        return alert('Por favor, cole seu Token do Dropbox no campo indicado!');
+    if (!inputFile.files || !inputFile.files.length) {
+        alert('Selecione um arquivo!');
+        return;
     }
-
-    // Salva na memória do aparelho
-    localStorage.setItem('dropbox_user_token', token);
-
-    if (!inputFile.files.length) return alert('Selecione um arquivo!');
 
     const file = inputFile.files[0];
     
-    // Tratamento de extensão ao renomear
     let nomeFinal = file.name;
     if (novoNome) {
         const partes = file.name.split('.');
@@ -465,7 +490,9 @@ async function enviarDropbox() {
         nomeFinal = novoNome.includes('.') ? novoNome : (ext ? `${novoNome}.${ext}` : novoNome);
     }
 
-    const path = (pasta.startsWith('/') ? pasta : '/' + pasta) + '/' + Date.now() + '_' + nomeFinal;
+    const pastaFormatada = pasta.startsWith('/') ? pasta : '/' + pasta;
+    const path = `${pastaFormatada}/${Date.now()}_${nomeFinal}`;
+    
     statusTxt.innerText = 'Subindo... ⏳';
 
     try {
@@ -503,8 +530,10 @@ async function enviarDropbox() {
         if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = finalUrl;
         if (abaAtual === 'despesas') document.getElementById('despesa-link').value = finalUrl;
 
+        alert('Arquivo salvo no Dropbox e link preenchido!');
+
     } catch (e) {
-        statusTxt.innerText = '❌ ' + e.message;
+        statusTxt.innerText = '❌ Erro';
         alert('Erro ao enviar: ' + e.message);
     }
 }
