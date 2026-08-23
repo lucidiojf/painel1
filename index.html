@@ -1,45 +1,124 @@
-<!-- INTERFACE: ESCOLHA DA PASTA E ARQUIVO -->
-<div style="margin: 10px 0; display: flex; flex-direction: column; gap: 8px;">
-    <label style="font-size: 14px; font-weight: bold; color: #374151;">Pasta no Dropbox:</label>
-    <select id="dropbox-pasta" style="padding: 8px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 16px;">
-        <option value="/notas">📁 /notas</option>
-        <option value="/gastos">📁 /gastos</option>
-        <option value="/documentos">📁 /documentos</option>
-        <option value="/exames">📁 /exames</option>
-    </select>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Controle</title>
+    <style>
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+        body { background: #f8fafc; color: #1e293b; padding: 16px; }
+        .container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+        
+        /* CARD DO DROPBOX */
+        .dropbox-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #0061fe; display: flex; align-items: center; gap: 6px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+        .form-group label { font-size: 13px; font-weight: 600; color: #475569; }
+        .form-control { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+        .btn-upload { background: #0061fe; color: #fff; border: none; border-radius: 6px; padding: 10px; font-weight: 700; cursor: pointer; width: 100%; }
+        
+        /* LISTA DO PAINEL */
+        .panel-section { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .item-card { border-left: 4px solid #3b82f6; background: #f1f5f9; padding: 10px 12px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; }
+        .item-link { color: #0061fe; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 4px; }
+    </style>
+</head>
+<body>
 
-    <label style="font-size: 14px; font-weight: bold; color: #374151;">Anexo:</label>
-    <input type="file" id="arquivo-anexo" style="font-size: 14px;">
+<div class="container">
 
-    <button type="button" onclick="executarUploadDropbox()" style="background: #0061fe; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
-        📤 Enviar para Dropbox
-    </button>
-    
-    <span id="status-upload" style="font-size: 13px; color: #6b7280;"></span>
+    <!-- UPLOAD DROPBOX COM QUALQUER PASTA E NOME -->
+    <div class="dropbox-card">
+        <div class="card-title">📦 Enviar Arquivo para o Dropbox</div>
+        
+        <div class="form-group">
+            <label>Pasta de Destino (digite qualquer pasta):</label>
+            <input type="text" id="db-pasta" class="form-control" placeholder="/documentos/2026" value="/anexos">
+        </div>
+
+        <div class="form-group">
+            <label>Renomear Arquivo (Opcional):</label>
+            <input type="text" id="db-nome" class="form-control" placeholder="Ex: recibo_agosto.pdf">
+        </div>
+
+        <div class="form-group">
+            <label>Selecionar Arquivo:</label>
+            <input type="file" id="db-arquivo" class="form-control">
+        </div>
+
+        <button type="button" class="btn-upload" onclick="enviarParaDropbox()">📤 Enviar Arquivo</button>
+        <div id="upload-status" style="font-size: 13px; margin-top: 8px; font-weight: 600;"></div>
+    </div>
+
+    <!-- LISTA DE DADOS DO PAINEL -->
+    <div class="panel-section">
+        <div class="section-header">
+            <h3>📋 Itens do Painel</h3>
+            <button onclick="carregarDados()" style="padding: 4px 8px; font-size: 12px; cursor: pointer;">🔄 Atualizar</button>
+        </div>
+        <div id="lista-conteudo">Carregando dados...</div>
+    </div>
+
 </div>
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
 
-// Função para converter o arquivo selecionado em Base64
-function converterArquivoBase64(file) {
+let dadosPainel = { despesas: [], tarefas: [], notas: [] };
+
+// 1. CARREGAR DADOS DO SHEETS
+function carregarDados() {
+    document.getElementById('lista-conteudo').innerText = 'Buscando da planilha...';
+    const script = document.createElement('script');
+    script.src = `${SCRIPT_URL}?callback=renderizarPainel&t=${Date.now()}`;
+    document.body.appendChild(script);
+}
+
+function renderizarPainel(data) {
+    if (data) {
+        dadosPainel = data;
+        const container = document.getElementById('lista-conteudo');
+        container.innerHTML = '';
+
+        const notas = data.notas || [];
+        const tarefas = data.tarefas || [];
+
+        if (!notas.length && !tarefas.length) {
+            container.innerHTML = '<p style="color:#64748b;">Nenhum item encontrado.</p>';
+            return;
+        }
+
+        notas.forEach(n => {
+            const txt = n.texto || n.titulo || (typeof n === 'string' ? n : '');
+            const anexo = n.link ? `<br><a href="${n.link}" target="_blank" class="item-link">📎 Abrir Anexo</a>` : '';
+            container.innerHTML += `<div class="item-card" style="border-left-color: #3b82f6;"><strong>📝 Nota:</strong> ${txt}${anexo}</div>`;
+        });
+
+        tarefas.forEach(t => {
+            const txt = t.nome || t.texto || '';
+            const anexo = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="item-link">📎 Abrir Anexo</a>` : '';
+            container.innerHTML += `<div class="item-card" style="border-left-color: #10b981;"><strong>☑️ Tarefa:</strong> ${txt}${anexo}</div>`;
+        });
+    }
+}
+
+// 2. CONVERSÃO BASE64
+function lerBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
-        reader.onload = () => {
-            // Remove o prefixo (ex: "data:image/png;base64,") para enviar só o binário codificado
-            const base64Limpo = reader.result.split(',')[1];
-            resolve(base64Limpo);
-        };
-        reader.onerror = error => reject(error);
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = erro => reject(erro);
     });
 }
 
-// Função principal de envio
-async function executarUploadDropbox() {
-    const inputArquivo = document.getElementById('arquivo-anexo');
-    const pastaDestino = document.getElementById('dropbox-pasta').value;
-    const statusTxt = document.getElementById('status-upload');
+// 3. ENVIO DIRETO PARA O DROPBOX
+async function enviarParaDropbox() {
+    const inputArquivo = document.getElementById('db-arquivo');
+    const inputPasta = document.getElementById('db-pasta').value.trim() || '/anexos';
+    const inputNome = document.getElementById('db-nome').value.trim();
+    const statusTxt = document.getElementById('upload-status');
 
     if (!inputArquivo.files.length) {
         alert('Selecione um arquivo primeiro!');
@@ -47,43 +126,42 @@ async function executarUploadDropbox() {
     }
 
     const file = inputArquivo.files[0];
-    statusTxt.innerText = 'Enviando arquivo ao Dropbox... ⏳';
+    const nomeFinal = inputNome ? inputNome : file.name;
+
+    statusTxt.style.color = '#0061fe';
+    statusTxt.innerText = 'Enviando para o Dropbox... Aguarde.';
 
     try {
-        const base64Data = await converterArquivoBase64(file);
-
-        // Envia para o Google Apps Script
-        const response = await fetch(SCRIPT_URL, {
+        const base64 = await lerBase64(file);
+        const resposta = await fetch(SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({
                 acao: 'upload_dropbox',
-                base64: base64Data,
-                nomeArquivo: file.name,
-                pasta: pastaDestino
+                base64: base64,
+                nomeArquivo: nomeFinal,
+                pasta: inputPasta
             })
         });
 
-        const resultado = await response.json();
+        const resultado = await resposta.json();
 
         if (resultado.status === 'sucesso') {
-            statusTxt.innerText = '✓ Anexo enviado com sucesso!';
-            console.log('Link gerado:', resultado.link);
-            
-            // Exemplo: se você quiser colocar o link direto na caixa de texto da nota atual:
-            const txtArea = document.getElementById('texto-principal');
-            if (txtArea) {
-                txtArea.value += `\n📎 Anexo: ${resultado.link}`;
-            }
-
-            alert('Arquivo salvo na pasta ' + pastaDestino + '!\nLink: ' + resultado.link);
+            statusTxt.style.color = '#16a34a';
+            statusTxt.innerHTML = `✓ Salvo na pasta <b>${inputPasta}</b>!<br><a href="${resultado.link}" target="_blank" class="item-link">🔗 Ver Arquivo: ${resultado.link}</a>`;
+            inputArquivo.value = '';
+            inputNome.value = '';
         } else {
-            statusTxt.innerText = 'Erro no envio.';
-            alert('Erro: ' + resultado.mensagem);
+            statusTxt.style.color = '#dc2626';
+            statusTxt.innerText = 'Erro: ' + resultado.mensagem;
         }
-    } catch (erro) {
-        console.error(erro);
-        statusTxt.innerText = 'Falha de conexão.';
-        alert('Erro ao processar o upload.');
+    } catch (err) {
+        statusTxt.style.color = '#dc2626';
+        statusTxt.innerText = 'Falha ao processar o upload.';
     }
 }
+
+// Inicializar carregamento
+carregarDados();
 </script>
+</body>
+</html>
