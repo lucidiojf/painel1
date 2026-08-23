@@ -1,450 +1,89 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Geral</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: #f4f6f9; color: #333; padding: 15px; padding-bottom: 75px; }
-        .container { max-width: 600px; margin: 0 auto; }
-        
-        /* ABAS NA PARTE INFERIOR */
-        .tabs { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            width: 100%; 
-            display: flex; 
-            background: #ffffff; 
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1); 
-            z-index: 1000; 
-        }
-        .tab-btn { 
-            flex: 1; 
-            padding: 12px 5px; 
-            border: none; 
-            background: #f8f9fa; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 0.9rem; 
-            color: #666;
-            border-top: 3px solid transparent;
-        }
-        .tab-btn.active { 
-            background: #ffffff; 
-            color: #007bff; 
-            border-top: 3px solid #007bff; 
-        }
+<!-- INTERFACE: ESCOLHA DA PASTA E ARQUIVO -->
+<div style="margin: 10px 0; display: flex; flex-direction: column; gap: 8px;">
+    <label style="font-size: 14px; font-weight: bold; color: #374151;">Pasta no Dropbox:</label>
+    <select id="dropbox-pasta" style="padding: 8px; border-radius: 6px; border: 1px solid #d1d5db; font-size: 16px;">
+        <option value="/notas">📁 /notas</option>
+        <option value="/gastos">📁 /gastos</option>
+        <option value="/documentos">📁 /documentos</option>
+        <option value="/exames">📁 /exames</option>
+    </select>
 
-        .tab-content { display: none; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tab-content.active { display: block; }
-        
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; font-weight: 500; }
-        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        button.btn-primary { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 5px; }
-        
-        .card-item { background: #f8f9fa; border-left: 4px solid #007bff; padding: 10px; margin-top: 10px; border-radius: 4px; }
-        
-        .generator-box { background: #eef6ff; border: 1px dashed #007bff; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
-        .tools-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 10px; border-radius: 6px; margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+    <label style="font-size: 14px; font-weight: bold; color: #374151;">Anexo:</label>
+    <input type="file" id="arquivo-anexo" style="font-size: 14px;">
 
-        /* SANFONA NATIVA (<details>) */
-        details.nota-sanfona { width: 100%; }
-        details.nota-sanfona summary { 
-            font-weight: 600; 
-            font-size: 0.95rem; 
-            color: #222; 
-            cursor: pointer; 
-            outline: none;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-right: 10px;
-        }
-        .nota-corpo-expandido { 
-            margin-top: 10px; 
-            padding-top: 10px; 
-            border-top: 1px dashed #ddd; 
-            white-space: pre-wrap; 
-            word-break: break-word; 
-            line-height: 1.4; 
-            font-size: 0.9rem; 
-            color: #444; 
-        }
-
-        .total-box { margin-top: 15px; padding: 10px; background: #eef6ff; font-weight: bold; text-align: right; border-radius: 4px; color: #007bff; font-size: 1.05rem; }
-        .btn-sec { padding: 6px 10px; font-size: 0.8rem; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-
-    <!-- ABA DESPESAS -->
-    <div id="tab-despesas" class="tab-content active">
-        <div class="form-group">
-            <label>Descrição</label>
-            <input type="text" id="gasto-nome">
-        </div>
-        <div class="form-group">
-            <label>Valor (R$)</label>
-            <input type="number" step="0.01" id="gasto-valor">
-        </div>
-        <button class="btn-primary" onclick="addGasto()">Adicionar Gasto</button>
-        <div id="lista-despesas"></div>
-        <div id="total-despesas" class="total-box">Total: R$ 0,00</div>
-    </div>
-
-    <!-- ABA TAREFAS -->
-    <div id="tab-tarefas" class="tab-content">
-        <div class="form-group">
-            <label>Tarefa</label>
-            <input type="text" id="tarefa-nome">
-        </div>
-        <button class="btn-primary" onclick="addTarefa()">Adicionar Tarefa</button>
-        <div id="lista-tarefas"></div>
-    </div>
-
-    <!-- ABA NOTAS -->
-    <div id="tab-notas" class="tab-content">
-        <!-- GERADOR DE LINK DO GITHUB NO TOPO DA ABA -->
-        <div class="generator-box">
-            <label style="font-size: 0.85rem; font-weight: bold;">📎 Gerador de Link Fixo (GitHub):</label>
-            <input type="text" id="nome-foto-gh" placeholder="Ex: recibo1.jpg" style="margin-top: 5px;" oninput="gerarLinkGitHub()">
-        </div>
-
-        <div class="form-group">
-            <label>Texto / Conteúdo</label>
-            <textarea id="nota-texto" rows="3"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Link / Anexo</label>
-            <input type="text" id="nota-link">
-        </div>
-        <button class="btn-primary" onclick="addNota()">Fixar Nota</button>
-        
-        <div id="lista-notas"></div>
-
-        <!-- FERRAMENTAS: DROPBOX, BACKUP E RESTAURAÇÃO -->
-        <div class="tools-box">
-            <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-sec" style="background: #0061ff;">📦 Upload Dropbox</a>
-            <a href="https://github.com/lucidiojf/painel1/upload/main" target="_blank" class="btn-sec" style="background: #24292e;">🐙 Upload GitHub</a>
-            <button onclick="gerarBackup()" class="btn-sec" style="background: #28a745;">💾 Baixar Backup</button>
-            <button onclick="document.getElementById('input-restore').click()" class="btn-sec" style="background: #ffc107; color: #333;">📂 Restaurar Backup</button>
-            <input type="file" id="input-restore" style="display: none;" onchange="recuperarBackup(event)" accept=".json">
-        </div>
-    </div>
-
-</div>
-
-<!-- NAVEGAÇÃO POR ABAS NO RODAPÉ -->
-<div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('despesas', this)">💰 Gastos</button>
-    <button class="tab-btn" onclick="switchTab('tarefas', this)">📋 Tarefas</button>
-    <button class="tab-btn" onclick="switchTab('notas', this)">📝 Notas</button>
+    <button type="button" onclick="executarUploadDropbox()" style="background: #0061fe; color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer;">
+        📤 Enviar para Dropbox
+    </button>
+    
+    <span id="status-upload" style="font-size: 13px; color: #6b7280;"></span>
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
-    
-    let despesas = [];
-    let tarefas = [];
-    let notas = [];
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
 
-    function carregarDadosNuvem() {
-        const script = document.createElement('script');
-        script.src = `${SCRIPT_URL}?callback=receberDadosNuvem&t=${Date.now()}`;
-        document.body.appendChild(script);
-    }
-
-    function receberDadosNuvem(data) {
-        if (data) {
-            despesas = data.despesas || [];
-            tarefas = data.tarefas || [];
-            notas = data.notas || [];
-            renderAll();
-        }
-    }
-
-    function enviarDadosNuvem() {
-        fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ despesas, tarefas, notas })
-        });
-    }
-
-    function switchTab(tab, btn) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
-        btn.classList.add('active');
-        document.getElementById(`tab-${tab}`).classList.add('active');
-    }
-
-    function gerarLinkGitHub() {
-        const arq = document.getElementById('nome-foto-gh').value.trim();
-        if (arq) {
-            document.getElementById('nota-link').value = `https://lucidiojf.github.io/painel1/${arq}`;
-        }
-    }
-
-    function renderAll() {
-        renderDespesas();
-        renderTarefas();
-        renderNotas();
-    }
-
-    function renderDespesas() {
-        const container = document.getElementById('lista-despesas');
-        const totalContainer = document.getElementById('total-despesas');
-        if (!container) return;
-        container.innerHTML = '';
-        
-        let soma = 0;
-
-        despesas.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card-item';
-            const nomeStr = item.nome || item.desc || '';
-            const val = parseFloat(item.valor) || 0;
-            soma += val;
-            const valStr = val > 0 ? ` - R$ ${val.toFixed(2)}` : '';
-
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><strong>${nomeStr}</strong>${valStr}</div>
-                    <button onclick="removerGasto(${index})" style="background:none;border:none;cursor:pointer;">🗑️</button>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-
-        if(totalContainer) {
-            totalContainer.innerText = `Total: R$ ${soma.toFixed(2).replace('.', ',')}`;
-        }
-    }
-
-    function renderTarefas() {
-        const container = document.getElementById('lista-tarefas');
-        if (!container) return;
-        container.innerHTML = '';
-        tarefas.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card-item';
-            const nomeStr = item.nome || item.texto || '';
-
-            const textEncoded = encodeURIComponent(nomeStr);
-            const linkAgenda = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${textEncoded}`;
-            const linkTasks = `https://tasks.google.com/embed/list/~default?add=${textEncoded}`;
-
-            div.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="flex:1; margin-right:10px;">${nomeStr}</div>
-                    <div style="display:flex; gap:6px; align-items:center;">
-                        <a href="${linkAgenda}" target="_blank" title="Enviar para o Google Agenda" style="text-decoration:none; font-size:1.1rem;">📅</a>
-                        <a href="${linkTasks}" target="_blank" title="Enviar para o Google Tasks" style="text-decoration:none; font-size:1.1rem;">☑️</a>
-                        <button onclick="removerTarefa(${index})" style="background:none;border:none;cursor:pointer; font-size:1.1rem;">🗑️</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function renderNotas() {
-        const container = document.getElementById('lista-notas');
-        if (!container) return;
-        container.innerHTML = '';
-        notas.forEach((item, index) => {
-            const div = document.createElement('div');
-            div.className = 'card-item';
-            
-            let txt = '';
-            let lnk = '';
-
-            if (typeof item === 'string') {
-                if (item.startsWith('http://') || item.startsWith('https://')) {
-                    lnk = item;
-                } else {
-                    txt = item;
-                }
-            } else {
-                txt = item.texto || item.titulo || '';
-                lnk = item.link || '';
-            }
-
-            const linhas = txt.split('\n').filter(l => l.trim().length > 0);
-            const primeiraLinha = linhas[0] || lnk || 'Nota sem texto';
-
-            div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <details class="nota-sanfona" style="flex: 1; margin-right: 10px;">
-                        <summary>${primeiraLinha}</summary>
-                        <div class="nota-corpo-expandido">
-                            ${txt ? `<div>${txt}</div>` : ''}
-                            ${lnk ? `<a href="${lnk}" target="_blank" style="word-break:break-all; color:#007bff; display:block; margin-top:8px;">${lnk}</a>` : ''}
-                            <div style="margin-top: 10px; text-align: right;">
-                                <button onclick="baixarNotaTxt(${index})" class="btn-sec" style="background:#17a2b8;">📄 Baixar TXT</button>
-                            </div>
-                        </div>
-                    </details>
-                    <div style="display: flex; gap: 8px; flex-shrink: 0; align-items: center;">
-                        <button onclick="editarNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;" title="Editar">✏️</button>
-                        <button onclick="removerNota(${index})" style="background:none;border:none;cursor:pointer;font-size:1.1rem;" title="Excluir">🗑️</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function baixarNotaTxt(index) {
-        const item = notas[index];
-        if (!item) return;
-
-        let txt = '';
-        let lnk = '';
-
-        if (typeof item === 'string') {
-            if (item.startsWith('http://') || item.startsWith('https://')) {
-                lnk = item;
-            } else {
-                txt = item;
-            }
-        } else {
-            txt = item.texto || item.titulo || '';
-            lnk = item.link || '';
-        }
-
-        let conteudo = txt;
-        if (lnk) {
-            conteudo += (conteudo ? '\n\nLink / Anexo:\n' : '') + lnk;
-        }
-
-        const linhas = txt.split('\n').filter(l => l.trim().length > 0);
-        const nomeArquivo = (linhas[0] || 'nota').replace(/[^a-zA-Z0-9_-]/g, '_').substring(0, 20);
-
-        const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `${nomeArquivo}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-    }
-
-    function addGasto() {
-        const nome = document.getElementById('gasto-nome').value.trim();
-        const valor = document.getElementById('gasto-valor').value.trim();
-        if(!nome) return;
-        despesas.push({ id: Date.now(), nome: nome, valor: valor ? parseFloat(valor) : 0, anexo: "" });
-        document.getElementById('gasto-nome').value = '';
-        document.getElementById('gasto-valor').value = '';
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function removerGasto(index) {
-        despesas.splice(index, 1);
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function addTarefa() {
-        const nome = document.getElementById('tarefa-nome').value.trim();
-        if(!nome) return;
-        tarefas.push({ id: Date.now(), nome: nome, data: "", prioridade: "baixa", anexo: "" });
-        document.getElementById('tarefa-nome').value = '';
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function removerTarefa(index) {
-        tarefas.splice(index, 1);
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function addNota() {
-        const texto = document.getElementById('nota-texto').value.trim();
-        const link = document.getElementById('nota-link').value.trim();
-        if(!texto && !link) return;
-
-        notas.push({ id: Date.now(), texto: texto, link: link });
-        document.getElementById('nota-texto').value = '';
-        document.getElementById('nota-link').value = '';
-        document.getElementById('nome-foto-gh').value = '';
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function editarNota(index) {
-        const item = notas[index];
-        if (!item) return;
-
-        if (typeof item === 'string') {
-            if (item.startsWith('http://') || item.startsWith('https://')) {
-                document.getElementById('nota-link').value = item;
-                document.getElementById('nota-texto').value = '';
-            } else {
-                document.getElementById('nota-texto').value = item;
-                document.getElementById('nota-link').value = '';
-            }
-        } else {
-            document.getElementById('nota-texto').value = item.texto || item.titulo || '';
-            document.getElementById('nota-link').value = item.link || '';
-        }
-
-        notas.splice(index, 1);
-        renderAll();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function removerNota(index) {
-        notas.splice(index, 1);
-        renderAll();
-        enviarDadosNuvem();
-    }
-
-    function gerarBackup() {
-        const payload = { despesas, tarefas, notas };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload, null, 2));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", `backup_painel_${Date.now()}.json`);
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-    }
-
-    function recuperarBackup(event) {
-        const fileReader = new FileReader();
-        fileReader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.despesas || data.tarefas || data.notas) {
-                    despesas = data.despesas || [];
-                    tarefas = data.tarefas || [];
-                    notas = data.notas || [];
-                    renderAll();
-                    enviarDadosNuvem();
-                    alert("Backup restaurado e sincronizado com sucesso!");
-                } else {
-                    alert("Formato de arquivo JSON inválido!");
-                }
-            } catch (err) {
-                alert("Erro ao ler o arquivo JSON.");
-            }
+// Função para converter o arquivo selecionado em Base64
+function converterArquivoBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            // Remove o prefixo (ex: "data:image/png;base64,") para enviar só o binário codificado
+            const base64Limpo = reader.result.split(',')[1];
+            resolve(base64Limpo);
         };
-        fileReader.readAsText(event.target.files[0]);
+        reader.onerror = error => reject(error);
+    });
+}
+
+// Função principal de envio
+async function executarUploadDropbox() {
+    const inputArquivo = document.getElementById('arquivo-anexo');
+    const pastaDestino = document.getElementById('dropbox-pasta').value;
+    const statusTxt = document.getElementById('status-upload');
+
+    if (!inputArquivo.files.length) {
+        alert('Selecione um arquivo primeiro!');
+        return;
     }
 
-    carregarDadosNuvem();
-</script>
+    const file = inputArquivo.files[0];
+    statusTxt.innerText = 'Enviando arquivo ao Dropbox... ⏳';
 
-</body>
-</html>
+    try {
+        const base64Data = await converterArquivoBase64(file);
+
+        // Envia para o Google Apps Script
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify({
+                acao: 'upload_dropbox',
+                base64: base64Data,
+                nomeArquivo: file.name,
+                pasta: pastaDestino
+            })
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.status === 'sucesso') {
+            statusTxt.innerText = '✓ Anexo enviado com sucesso!';
+            console.log('Link gerado:', resultado.link);
+            
+            // Exemplo: se você quiser colocar o link direto na caixa de texto da nota atual:
+            const txtArea = document.getElementById('texto-principal');
+            if (txtArea) {
+                txtArea.value += `\n📎 Anexo: ${resultado.link}`;
+            }
+
+            alert('Arquivo salvo na pasta ' + pastaDestino + '!\nLink: ' + resultado.link);
+        } else {
+            statusTxt.innerText = 'Erro no envio.';
+            alert('Erro: ' + resultado.mensagem);
+        }
+    } catch (erro) {
+        console.error(erro);
+        statusTxt.innerText = 'Falha de conexão.';
+        alert('Erro ao processar o upload.');
+    }
+}
+</script>
