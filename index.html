@@ -9,18 +9,15 @@
         body { background: #f8fafc; color: #1e293b; padding: 12px; }
         .container { max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-        /* STATUS E SINCRONIZAÇÃO */
         .top-bar { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #10b981; padding: 8px 12px; border-radius: 8px; }
         .status-badge { color: #065f46; font-size: 13px; font-weight: 600; }
-        .btn-sync { background: #10b981; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .btn-sync { background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
 
-        /* ABAS PRINCIPAIS */
         .tabs { display: flex; gap: 6px; background: #e2e8f0; padding: 4px; border-radius: 10px; }
         .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: #475569; border-radius: 6px; cursor: pointer; }
         .tab-btn.active { background: #ffffff; color: #0284c7; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* CARDS E FORMULÁRIOS */
-        .card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+        .card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
         .section-title { font-size: 16px; font-weight: 700; color: #0284c7; margin-bottom: 10px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
         .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
@@ -29,26 +26,19 @@
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
-        /* CAIXA DE UPLOAD DUAL (GITHUB / DROPBOX) */
+        /* UPLOAD CARD */
         .upload-card { background: #f0fdf4; border: 1px dashed #22c55e; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
         .upload-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
-        .up-tab-btn { flex: 1; padding: 5px; font-size: 12px; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; color: #475569; }
+        .up-tab-btn { flex: 1; padding: 6px; font-size: 12px; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; color: #475569; }
         .up-tab-btn.active-gh { background: #22c55e; color: white; border-color: #22c55e; }
         .up-tab-btn.active-db { background: #0061fe; color: white; border-color: #0061fe; }
-        .row-inputs { display: flex; gap: 6px; margin-bottom: 6px; }
 
-        /* SANFONA (ACCORDION) NOTAS */
+        /* NOTAS SANFONA */
         .nota-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; background: #ffffff; }
-        .nota-header { padding: 10px 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid transparent; }
-        .nota-header.open { border-bottom-color: #e2e8f0; background: #f1f5f9; }
-        .nota-title { font-size: 14px; font-weight: 700; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; }
-        .nota-body { display: none; padding: 12px; font-size: 14px; color: #334155; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
-        .nota-body.open { display: block; }
-        
-        .item-actions { display: flex; gap: 6px; align-items: center; }
-        .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 15px; padding: 2px; }
+        .nota-header { padding: 10px 12px; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .nota-title { font-size: 14px; font-weight: 700; color: #1e293b; max-width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .nota-body { display: none; padding: 12px; font-size: 14px; color: #334155; line-height: 1.5; white-space: pre-wrap; word-break: break-word; border-top: 1px solid #e2e8f0; }
 
-        /* ITENS TAREFAS E GASTOS */
         .list-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .badge { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .badge-baixa { background: #dcfce7; color: #15803d; }
@@ -57,35 +47,33 @@
         .total-box { background: #0284c7; color: #ffffff; text-align: center; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 16px; margin-bottom: 12px; }
         .link-anexo { color: #0284c7; text-decoration: none; font-weight: 600; font-size: 13px; display: inline-block; margin-top: 4px; }
         
-        .btn-gtask { background: #4f46e5; color: white; font-size: 11px; padding: 3px 6px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
-        .btn-gcal { background: #2563eb; color: white; font-size: 11px; padding: 3px 6px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
+        .btn-gtask { background: #4f46e5; color: white; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
+        .btn-gcal { background: #2563eb; color: white; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
+        .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 16px; padding: 2px; }
     </style>
 </head>
 <body>
 
 <div class="container">
 
-    <!-- BARRA SUPERIOR -->
     <div class="top-bar">
-        <span class="status-badge" id="sync-status">✅ Tudo Atualizado!</span>
+        <span class="status-badge" id="sync-status">✅ Pronto</span>
         <button class="btn-sync" onclick="carregarDados()">Atualizar 🔄</button>
     </div>
 
-    <!-- ABAS DO PAINEL -->
     <div class="tabs">
         <button class="tab-btn active" id="tab-btn-notas" onclick="selecionarAba('notas')">Notas</button>
         <button class="tab-btn" id="tab-btn-tarefas" onclick="selecionarAba('tarefas')">Tarefas</button>
         <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- CAIXA DE UPLOAD DUAL (GITHUB E DROPBOX) -->
+    <!-- ÁREA DE UPLOAD -->
     <div class="upload-card" id="upload-box-container">
         <div class="upload-tabs">
-            <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 Upload GitHub</button>
-            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Upload Dropbox</button>
+            <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 GitHub</button>
+            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Dropbox</button>
         </div>
 
-        <!-- CONFIG GITHUB -->
         <div id="gh-controls">
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
                 <input type="password" id="gh-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Token GitHub (ghp_...)">
@@ -93,7 +81,6 @@
             </div>
         </div>
 
-        <!-- CONFIG DROPBOX -->
         <div id="db-controls" style="display: none;">
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
                 <input type="password" id="db-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Token Dropbox">
@@ -104,12 +91,12 @@
             </div>
         </div>
 
-        <div class="row-inputs">
-            <input type="text" id="up-custom-name" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Renomear (ex: recibo_mes)">
-            <input type="file" id="up-file" class="input-field" style="padding: 4px; font-size: 12px;">
+        <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+            <input type="text" id="up-custom-name" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Renomear (ex: recibo_x)">
+            <input type="file" id="up-file" class="input-field" style="padding: 4px; font-size: 12px; flex: 1;">
         </div>
 
-        <button type="button" class="btn-action" id="btn-upload-exec" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="executarUpload()">📤 Enviar Arquivo e Preencher Link</button>
+        <button type="button" class="btn-action" id="btn-upload-exec" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="executarUpload()">📤 Enviar Arquivo</button>
         <div id="upload-status-text" style="font-size: 12px; font-weight: 600; margin-top: 4px; text-align: center;"></div>
     </div>
 
@@ -118,10 +105,10 @@
         <div class="section-title">Notas & Links Rápidos</div>
         <input type="hidden" id="edit-nota-id" value="">
         <div class="form-group">
-            <textarea id="nota-texto" class="input-field" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
+            <textarea id="nota-texto" class="input-field" placeholder="Digite a anotação aqui..."></textarea>
         </div>
         <div class="form-group">
-            <input type="text" id="nota-link" class="input-field" placeholder="Link do documento associado (Opcional)">
+            <input type="text" id="nota-link" class="input-field" placeholder="Link associado (Opcional)">
         </div>
         <button class="btn-action" id="btn-salvar-nota" onclick="salvarNota()">Fixar Nota</button>
 
@@ -136,7 +123,7 @@
         <div class="section-title">Criar Evento ou Tarefa</div>
         <input type="hidden" id="edit-tarefa-id" value="">
         <div class="form-group">
-            <input type="text" id="tarefa-nome" class="input-field" placeholder="Ex: Cir Alex">
+            <input type="text" id="tarefa-nome" class="input-field" placeholder="Ex: Procedimento cirúrgico">
         </div>
         <div class="form-group">
             <input type="datetime-local" id="tarefa-data" class="input-field">
@@ -149,7 +136,7 @@
             </select>
         </div>
         <div class="form-group">
-            <input type="text" id="tarefa-link" class="input-field" placeholder="Link de documento anexo (Opcional)">
+            <input type="text" id="tarefa-link" class="input-field" placeholder="Link de anexo (Opcional)">
         </div>
         <button class="btn-action" id="btn-salvar-tarefa" onclick="salvarTarefa()">Salvar no Painel</button>
 
@@ -165,13 +152,13 @@
         <div class="section-title">Adicionar Item / Despesa</div>
         <input type="hidden" id="edit-despesa-id" value="">
         <div class="form-group">
-            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto Energia">
+            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto CRM">
         </div>
         <div class="form-group">
             <input type="number" step="0.01" id="despesa-valor" class="input-field" placeholder="Valor R$">
         </div>
         <div class="form-group">
-            <input type="text" id="despesa-link" class="input-field" placeholder="Link do Boleto/Recibo (Opcional)">
+            <input type="text" id="despesa-link" class="input-field" placeholder="Link do Recibo (Opcional)">
         </div>
         <button class="btn-action" id="btn-salvar-despesa" onclick="salvarDespesa()">Salvar na Lista</button>
 
@@ -194,10 +181,13 @@ let uploadMode = 'gh';
 
 // CARREGAR TOKENS SALVOS
 window.addEventListener('DOMContentLoaded', () => {
-    const gh = localStorage.getItem('gh_user_token');
-    const db = localStorage.getItem('dropbox_user_token');
-    if (gh && document.getElementById('gh-token')) document.getElementById('gh-token').value = gh;
-    if (db && document.getElementById('db-token')) document.getElementById('db-token').value = db;
+    try {
+        const gh = localStorage.getItem('gh_user_token');
+        const db = localStorage.getItem('dropbox_user_token');
+        if (gh && document.getElementById('gh-token')) document.getElementById('gh-token').value = gh;
+        if (db && document.getElementById('db-token')) document.getElementById('db-token').value = db;
+    } catch(e) {}
+    carregarDados();
 });
 
 function salvarToken(tipo) {
@@ -205,16 +195,15 @@ function salvarToken(tipo) {
         const val = document.getElementById('gh-token').value.trim();
         if (!val) return alert('Cole o token do GitHub!');
         localStorage.setItem('gh_user_token', val);
-        alert('Token GitHub salvo!');
+        alert('Token GitHub salvo com sucesso!');
     } else {
         const val = document.getElementById('db-token').value.trim();
         if (!val) return alert('Cole o token do Dropbox!');
         localStorage.setItem('dropbox_user_token', val);
-        alert('Token Dropbox salvo!');
+        alert('Token Dropbox salvo com sucesso!');
     }
 }
 
-// SELEÇÃO DE MODO DE UPLOAD
 function setUploadMode(mode) {
     uploadMode = mode;
     const btnGh = document.getElementById('btn-mode-gh');
@@ -230,7 +219,7 @@ function setUploadMode(mode) {
         ghDiv.style.display = 'block';
         dbDiv.style.display = 'none';
         btnExec.style.background = '#22c55e';
-        btnExec.innerText = '📤 Enviar para GitHub e Preencher Link';
+        btnExec.innerText = '📤 Enviar para GitHub';
         cardContainer.style.borderColor = '#22c55e';
         cardContainer.style.background = '#f0fdf4';
     } else {
@@ -239,127 +228,140 @@ function setUploadMode(mode) {
         ghDiv.style.display = 'none';
         dbDiv.style.display = 'block';
         btnExec.style.background = '#0061fe';
-        btnExec.innerText = '📤 Enviar para Dropbox e Preencher Link';
+        btnExec.innerText = '📤 Enviar para Dropbox';
         cardContainer.style.borderColor = '#0061fe';
         cardContainer.style.background = '#eff6ff';
     }
 }
 
-// NAVEGAÇÃO ENTRE ABAS PRINCIPAIS
 function selecionarAba(aba) {
     abaAtual = aba;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`tab-btn-${aba}`).classList.add('active');
+    const btn = document.getElementById('tab-btn-' + aba);
+    if (btn) btn.classList.add('active');
 
     document.getElementById('section-notas').style.display = aba === 'notas' ? 'block' : 'none';
     document.getElementById('section-tarefas').style.display = aba === 'tarefas' ? 'block' : 'none';
     document.getElementById('section-despesas').style.display = aba === 'despesas' ? 'block' : 'none';
 }
 
-// CARREGAR DADOS DO SHEETS
 function carregarDados() {
-    document.getElementById('sync-status').innerText = '⏳ Sincronizando...';
+    document.getElementById('sync-status').innerText = '⏳ Carregando...';
     const script = document.createElement('script');
     script.src = `${SCRIPT_URL}?callback=receberDadosGerais&t=${Date.now()}`;
     document.body.appendChild(script);
 }
 
 function receberDadosGerais(data) {
-    if (data) {
-        dadosGerais.despesas = Array.isArray(data.despesas) ? data.despesas : [];
-        dadosGerais.tarefas = Array.isArray(data.tarefas) ? data.tarefas : [];
-        dadosGerais.notas = Array.isArray(data.notas) ? data.notas : [];
+    try {
+        let parsed = data;
+        if (typeof data === 'string') {
+            parsed = JSON.parse(data);
+        }
+        dadosGerais.despesas = Array.isArray(parsed.despesas) ? parsed.despesas : [];
+        dadosGerais.tarefas = Array.isArray(parsed.tarefas) ? parsed.tarefas : [];
+        dadosGerais.notas = Array.isArray(parsed.notas) ? parsed.notas : [];
         renderizarTudo();
         document.getElementById('sync-status').innerText = '✅ Tudo Atualizado!';
+    } catch(err) {
+        document.getElementById('sync-status').innerText = '⚠️ Erro ao processar dados';
     }
 }
 
-// RENDERIZAÇÃO BLINDADA CONTRA ERROS
 function renderizarTudo() {
     // 1. NOTAS
     const boxNotas = document.getElementById('lista-notas');
     boxNotas.innerHTML = '';
-    (dadosGerais.notas || []).forEach(n => {
-        const txt = String(n.texto || '');
-        const primeiraLinha = txt.split('\n')[0].replace(/\\n/g, ' ') || 'Nota sem título';
-        const linkHtml = n.link ? `<br><a href="${n.link}" target="_blank" class="link-anexo">📎 Abrir Anexo</a>` : '';
+    if (!dadosGerais.notas.length) {
+        boxNotas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhuma nota cadastrada.</p>';
+    } else {
+        dadosGerais.notas.forEach(n => {
+            const txt = String(n.texto || '');
+            const primeiraLinha = txt.split('\n')[0] || 'Nota sem título';
+            const linkHtml = n.link ? `<br><a href="${n.link}" target="_blank" class="link-anexo">📎 Abrir Anexo</a>` : '';
 
-        boxNotas.innerHTML += `
-            <div class="nota-item">
-                <div class="nota-header" onclick="toggleSanfona(this)">
-                    <span class="nota-title">📝 ${primeiraLinha}</span>
-                    <div class="item-actions" onclick="event.stopPropagation()">
-                        <button class="icon-btn" onclick="editarNota(${n.id})" title="Editar">✏️</button>
-                        <button class="icon-btn" onclick="excluirItem('notas', ${n.id})" title="Excluir">🗑️</button>
+            boxNotas.innerHTML += `
+                <div class="nota-item">
+                    <div class="nota-header" onclick="toggleSanfona(this)">
+                        <span class="nota-title">📝 ${primeiraLinha}</span>
+                        <div onclick="event.stopPropagation()">
+                            <button class="icon-btn" onclick="editarNota(${n.id})" title="Editar">✏️</button>
+                            <button class="icon-btn" onclick="excluirItem('notas', ${n.id})" title="Excluir">🗑️</button>
+                        </div>
                     </div>
-                </div>
-                <div class="nota-body">${txt}${linkHtml}</div>
-            </div>`;
-    });
+                    <div class="nota-body">${txt}${linkHtml}</div>
+                </div>`;
+        });
+    }
 
     // 2. TAREFAS
     const boxTarefas = document.getElementById('lista-tarefas');
     boxTarefas.innerHTML = '';
-    (dadosGerais.tarefas || []).forEach(t => {
-        let dataFmt = 'Sem data';
-        if (t.data) {
-            const d = new Date(t.data);
-            if (!isNaN(d.getTime())) {
-                dataFmt = d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
-            } else {
-                dataFmt = String(t.data);
+    if (!dadosGerais.tarefas.length) {
+        boxTarefas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhuma tarefa cadastrada.</p>';
+    } else {
+        dadosGerais.tarefas.forEach(t => {
+            let dataFmt = 'Sem data';
+            if (t.data) {
+                const d = new Date(t.data);
+                dataFmt = !isNaN(d.getTime()) ? d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : String(t.data);
             }
-        }
-        const badgeClass = `badge-${t.prioridade || 'baixa'}`;
-        const linkHtml = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="link-anexo">📎 Anexo</a>` : '';
+            const badgeClass = `badge-${t.prioridade || 'baixa'}`;
+            const linkHtml = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="link-anexo">📎 Anexo</a>` : '';
 
-        boxTarefas.innerHTML += `
-            <div class="list-card">
-                <div>
-                    <strong>${t.nome || 'Tarefa'}</strong><br>
-                    <small style="color: #64748b;">📅 ${dataFmt} </small>
-                    <span class="badge ${badgeClass}">${t.prioridade || 'baixa'}</span>
-                    ${linkHtml}
-                    <div style="margin-top: 6px; display: flex; gap: 4px;">
-                        <button class="btn-gcal" onclick="enviarParaCalendar(${t.id})">📅 Calendar</button>
-                        <button class="btn-gtask" onclick="enviarParaTasks(${t.id})">☑️ Tasks</button>
+            boxTarefas.innerHTML += `
+                <div class="list-card">
+                    <div>
+                        <strong>${t.nome || 'Tarefa'}</strong><br>
+                        <small style="color: #64748b;">📅 ${dataFmt} </small>
+                        <span class="badge ${badgeClass}">${t.prioridade || 'baixa'}</span>
+                        ${linkHtml}
+                        <div style="margin-top: 6px; display: flex; gap: 4px;">
+                            <button class="btn-gcal" onclick="enviarParaCalendar(${t.id})">📅 Calendar</button>
+                            <button class="btn-gtask" onclick="enviarParaTasks(${t.id})">☑️ Tasks</button>
+                        </div>
                     </div>
-                </div>
-                <div class="item-actions">
-                    <button class="icon-btn" onclick="editarTarefa(${t.id})">✏️</button>
-                    <button class="icon-btn" onclick="excluirItem('tarefas', ${t.id})">🗑️</button>
-                </div>
-            </div>`;
-    });
+                    <div>
+                        <button class="icon-btn" onclick="editarTarefa(${t.id})">✏️</button>
+                        <button class="icon-btn" onclick="excluirItem('tarefas', ${t.id})">🗑️</button>
+                    </div>
+                </div>`;
+        });
+    }
 
     // 3. GASTOS
     const boxDespesas = document.getElementById('lista-despesas');
     boxDespesas.innerHTML = '';
     let total = 0;
-    (dadosGerais.despesas || []).forEach(d => {
-        const val = parseFloat(d.valor || 0) || 0;
-        total += val;
-        const linkHtml = d.anexo ? `<br><a href="${d.anexo}" target="_blank" class="link-anexo">📎 Recibo</a>` : '';
+    if (!dadosGerais.despesas.length) {
+        boxDespesas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhum gasto registrado.</p>';
+    } else {
+        dadosGerais.despesas.forEach(d => {
+            const val = parseFloat(d.valor || 0) || 0;
+            total += val;
+            const linkHtml = d.anexo ? `<br><a href="${d.anexo}" target="_blank" class="link-anexo">📎 Recibo</a>` : '';
 
-        boxDespesas.innerHTML += `
-            <div class="list-card">
-                <div><strong>${d.nome || 'Gasto'}</strong>${linkHtml}</div>
-                <div style="display:flex; align-items:center; gap: 10px;">
-                    <span style="font-weight:700; color:#0284c7;">R$ ${val.toFixed(2)}</span>
-                    <button class="icon-btn" onclick="editarDespesa(${d.id})">✏️</button>
-                    <button class="icon-btn" onclick="excluirItem('despesas', ${d.id})">🗑️</button>
-                </div>
-            </div>`;
-    });
+            boxDespesas.innerHTML += `
+                <div class="list-card">
+                    <div><strong>${d.nome || 'Gasto'}</strong>${linkHtml}</div>
+                    <div style="display:flex; align-items:center; gap: 8px;">
+                        <span style="font-weight:700; color:#0284c7;">R$ ${val.toFixed(2)}</span>
+                        <button class="icon-btn" onclick="editarDespesa(${d.id})">✏️</button>
+                        <button class="icon-btn" onclick="excluirItem('despesas', ${d.id})">🗑️</button>
+                    </div>
+                </div>`;
+        });
+    }
     document.getElementById('total-despesas').innerText = `Total Local: R$ ${total.toFixed(2)}`;
 }
 
 function toggleSanfona(header) {
-    header.classList.toggle('open');
-    header.nextElementSibling.classList.toggle('open');
+    const body = header.nextElementSibling;
+    if (body) {
+        body.style.display = body.style.display === 'block' ? 'none' : 'block';
+    }
 }
 
-// PERSISTIR DADOS NO SHEETS
 async function persistirDados() {
     document.getElementById('sync-status').innerText = 'Salvando na nuvem... ⏳';
     try {
@@ -369,13 +371,12 @@ async function persistirDados() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dadosGerais)
         });
-        document.getElementById('sync-status').innerText = '✅ Salvo com sucesso!';
+        document.getElementById('sync-status').innerText = '✅ Salvo online!';
     } catch (e) {
         document.getElementById('sync-status').innerText = '⚠️ Erro ao salvar online.';
     }
 }
 
-// NORMALIZAÇÃO PARA NOMES SEGUROS
 function sanitizarNome(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9._-]/g, "_");
 }
@@ -389,13 +390,13 @@ function lerArquivoBase64(file) {
     });
 }
 
-// EXECUÇÃO DO UPLOAD (GITHUB OU DROPBOX)
+// UPLOAD UNIFICADO E PROTEGIDO
 async function executarUpload() {
     const inputFile = document.getElementById('up-file');
     const customName = document.getElementById('up-custom-name').value.trim();
     const statusTxt = document.getElementById('upload-status-text');
 
-    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo primeiro!');
+    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
 
     const file = inputFile.files[0];
     let nomeFinal = file.name;
@@ -409,9 +410,8 @@ async function executarUpload() {
     statusTxt.innerText = 'Subindo arquivo... ⏳';
 
     if (uploadMode === 'gh') {
-        // --- UPLOAD GITHUB ---
         const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
-        if (!token) return alert('Cole o token do GitHub e clique em Salvar!');
+        if (!token) return alert('Cole o Token do GitHub e clique em Salvar!');
         localStorage.setItem('gh_user_token', token);
 
         try {
@@ -425,30 +425,28 @@ async function executarUpload() {
             });
 
             const resData = await resposta.json();
-            if (resData.content && resData.content.download_url) {
+            if (resData.content) {
                 const urlFinal = `https://${GITHUB_USER}.github.io/${GITHUB_REPO}/${nomeFinal}`;
                 concluirEnvio(urlFinal);
             } else {
-                throw new Error(resData.message || 'Erro no envio GitHub');
+                throw new Error(resData.message || 'Erro GitHub');
             }
         } catch (e) {
             statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = '❌ Erro no GitHub: ' + e.message;
+            statusTxt.innerText = '❌ ' + e.message;
             alert('Erro no GitHub: ' + e.message);
         }
 
     } else {
-        // --- UPLOAD DROPBOX (CORRIGIDO) ---
         const token = document.getElementById('db-token').value.trim() || localStorage.getItem('dropbox_user_token');
         const pasta = document.getElementById('db-pasta').value.trim() || '/documentos';
-        if (!token) return alert('Cole o token do Dropbox e clique em Salvar!');
+        if (!token) return alert('Cole o Token do Dropbox e clique em Salvar!');
         localStorage.setItem('dropbox_user_token', token);
 
         const pastaFormatada = pasta.startsWith('/') ? pasta : '/' + pasta;
         const caminhoDropbox = `${pastaFormatada}/${nomeFinal}`;
 
         try {
-            // 1. Upload do binário com cabeçalho seguro em ASCII
             const uploadRes = await fetch('https://content.dropboxapi.com/2/files/upload', {
                 method: 'POST',
                 headers: {
@@ -460,9 +458,8 @@ async function executarUpload() {
             });
 
             const uploadData = await uploadRes.json();
-            if (uploadData.error) throw new Error(uploadData.error_summary || JSON.stringify(uploadData.error));
+            if (uploadData.error) throw new Error(uploadData.error_summary || 'Erro Dropbox');
 
-            // 2. Link público
             const linkRes = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
                 method: 'POST',
                 headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
@@ -477,7 +474,7 @@ async function executarUpload() {
 
         } catch (e) {
             statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = '❌ Erro no Dropbox: ' + e.message;
+            statusTxt.innerText = '❌ ' + e.message;
             alert('Erro no Dropbox: ' + e.message);
         }
     }
@@ -486,7 +483,7 @@ async function executarUpload() {
 function concluirEnvio(urlFinal) {
     const statusTxt = document.getElementById('upload-status-text');
     statusTxt.style.color = '#16a34a';
-    statusTxt.innerText = '✅ Enviado com sucesso!';
+    statusTxt.innerText = '✅ Enviado!';
     document.getElementById('up-file').value = '';
     document.getElementById('up-custom-name').value = '';
 
@@ -494,55 +491,15 @@ function concluirEnvio(urlFinal) {
     if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
     if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
 
-    alert('Arquivo enviado e link preenchido no formulário!');
+    alert('Arquivo enviado e link preenchido!');
 }
 
-// SINCRONIZAÇÃO GCALENDAR / GTASKS
-async function enviarParaCalendar(id) {
-    const t = dadosGerais.tarefas.find(x => x.id == id);
-    if (!t) return;
-    if (!t.data) return alert('Defina uma data/hora na tarefa para enviar ao Calendar!');
-    
-    document.getElementById('sync-status').innerText = 'Enviando ao Calendar...';
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ acao: 'sync_gcalendar', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
-        });
-        alert('Evento enviado ao seu Google Agenda!');
-        document.getElementById('sync-status').innerText = '✅ Evento adicionado!';
-    } catch(e) {
-        alert('Falha ao enviar ao Calendar.');
-    }
-}
-
-async function enviarParaTasks(id) {
-    const t = dadosGerais.tarefas.find(x => x.id == id);
-    if (!t) return;
-
-    document.getElementById('sync-status').innerText = 'Enviando ao Tasks...';
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ acao: 'sync_gtasks', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
-        });
-        alert('Tarefa enviada ao seu Google Tasks!');
-        document.getElementById('sync-status').innerText = '✅ Tarefa adicionada!';
-    } catch(e) {
-        alert('Falha ao enviar ao Tasks.');
-    }
-}
-
-// OPERAÇÕES DE FORMULÁRIO (NOTAS, TAREFAS, GASTOS)
+// FORMULÁRIOS
 function salvarNota() {
     const idEdit = document.getElementById('edit-nota-id').value;
     const texto = document.getElementById('nota-texto').value.trim();
     const link = document.getElementById('nota-link').value.trim();
-    if (!texto) return alert('Digite a anotação!');
+    if (!texto) return alert('Digite a nota!');
 
     if (idEdit) {
         const item = dadosGerais.notas.find(n => n.id == idEdit);
@@ -574,7 +531,7 @@ function salvarTarefa() {
     const data = document.getElementById('tarefa-data').value;
     const prioridade = document.getElementById('tarefa-prioridade').value;
     const anexo = document.getElementById('tarefa-link').value.trim();
-    if (!nome) return alert('Digite o nome da tarefa!');
+    if (!nome) return alert('Digite a tarefa!');
 
     if (idEdit) {
         const item = dadosGerais.tarefas.find(t => t.id == idEdit);
@@ -609,7 +566,7 @@ function salvarDespesa() {
     const nome = document.getElementById('despesa-nome').value.trim();
     const valor = parseFloat(document.getElementById('despesa-valor').value) || 0;
     const anexo = document.getElementById('despesa-link').value.trim();
-    if (!nome) return alert('Digite a descrição do gasto!');
+    if (!nome) return alert('Digite a descrição!');
 
     if (idEdit) {
         const item = dadosGerais.despesas.find(d => d.id == idEdit);
@@ -639,13 +596,39 @@ function editarDespesa(id) {
 }
 
 function excluirItem(tipo, id) {
-    if (!confirm('Deseja realmente excluir este item?')) return;
+    if (!confirm('Deseja excluir este item?')) return;
     dadosGerais[tipo] = dadosGerais[tipo].filter(item => item.id != id);
     renderizarTudo();
     persistirDados();
 }
 
-carregarDados();
+async function enviarParaCalendar(id) {
+    const t = dadosGerais.tarefas.find(x => x.id == id);
+    if (!t || !t.data) return alert('Defina data/hora na tarefa!');
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'sync_gcalendar', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
+        });
+        alert('Enviado ao Google Calendar!');
+    } catch(e) { alert('Erro no envio ao Calendar.'); }
+}
+
+async function enviarParaTasks(id) {
+    const t = dadosGerais.tarefas.find(x => x.id == id);
+    if (!t) return;
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'sync_gtasks', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
+        });
+        alert('Enviado ao Google Tasks!');
+    } catch(e) { alert('Erro no envio ao Tasks.'); }
+}
 </script>
 </body>
 </html>
