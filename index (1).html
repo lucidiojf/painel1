@@ -73,7 +73,8 @@
 
         <div id="gh-controls">
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
-                <input type="password" id="gh-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Cole o Token GitHub (ghp_...)">
+                <!-- Bloqueio de auto-completar do navegador -->
+                <input type="text" id="gh-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Cole o Token GitHub (ghp_...)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
                 <button type="button" onclick="salvarTokenGitHub()" style="background: #15803d; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
             </div>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
@@ -183,18 +184,28 @@ const DROPBOX_URL_PADRAO = 'https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
 
-window.onload = function() {
+function aplicarTokensSalvos() {
     try {
         const gh = localStorage.getItem('gh_user_token');
-        if (gh && document.getElementById('gh-token')) document.getElementById('gh-token').value = gh;
+        if (gh && document.getElementById('gh-token')) {
+            document.getElementById('gh-token').value = gh;
+        }
 
         let dbReq = localStorage.getItem('dropbox_req_url');
         if (!dbReq || !dbReq.includes('OhtiEZWwAfFn9QH2AYAS')) {
             dbReq = DROPBOX_URL_PADRAO;
             localStorage.setItem('dropbox_req_url', DROPBOX_URL_PADRAO);
         }
-        if (document.getElementById('db-req-url')) document.getElementById('db-req-url').value = dbReq;
+        if (document.getElementById('db-req-url')) {
+            document.getElementById('db-req-url').value = dbReq;
+        }
     } catch(e) {}
+}
+
+window.onload = function() {
+    aplicarTokensSalvos();
+    // Re-aplica após 300ms para sobrepor qualquer preenchimento automático indesejado do navegador
+    setTimeout(aplicarTokensSalvos, 300);
     
     renderizarTudo();
     carregarDados();
@@ -251,7 +262,7 @@ function salvarTokenGitHub() {
     const val = document.getElementById('gh-token').value.trim();
     if (!val) return alert('Cole o token do GitHub (ghp_...)!');
     localStorage.setItem('gh_user_token', val);
-    alert('Novo Token do GitHub salvo com sucesso no aparelho!');
+    alert('Token GitHub salvo no dispositivo com sucesso!');
 }
 
 function abrirSolicitacaoDropbox() {
