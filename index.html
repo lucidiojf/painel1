@@ -67,7 +67,7 @@
         <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- ÁREA DE UPLOAD -->
+    <!-- ÁREA DE UPLOAD DUAL (GITHUB E DROPBOX) -->
     <div class="upload-card" id="upload-box-container">
         <div class="upload-tabs">
             <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 GitHub</button>
@@ -377,10 +377,6 @@ async function persistirDados() {
     }
 }
 
-function sanitizarNome(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9._-]/g, "_");
-}
-
 function lerArquivoBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -390,43 +386,44 @@ function lerArquivoBase64(file) {
     });
 }
 
-// UPLOAD UNIFICADO E PROTEGIDO
+// UPLOAD DUAL COM TRATAMENTO MOBILE ESTREITO
 async function executarUpload() {
     const inputFile = document.getElementById('up-file');
     const customName = document.getElementById('up-custom-name').value.trim();
     const statusTxt = document.getElementById('upload-status-text');
 
-    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
+    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo primeiro!');
 
     const file = inputFile.files[0];
-    let nomeFinal = file.name;
-    if (customName) {
-        const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
-        nomeFinal = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
-    }
-    nomeFinal = `${Date.now()}_${sanitizarNome(nomeFinal)}`;
-
     statusTxt.style.color = '#0284c7';
     statusTxt.innerText = 'Subindo arquivo... ⏳';
 
     if (uploadMode === 'gh') {
+        // --- UPLOAD GITHUB ---
         const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
         if (!token) return alert('Cole o Token do GitHub e clique em Salvar!');
         localStorage.setItem('gh_user_token', token);
 
+        let nomeFinalGh = file.name;
+        if (customName) {
+            const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
+            nomeFinalGh = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
+        }
+        nomeFinalGh = `${Date.now()}_${nomeFinalGh.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+
         try {
             const base64Content = await lerArquivoBase64(file);
-            const urlApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${nomeFinal}`;
+            const urlApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${nomeFinalGh}`;
 
             const resposta = await fetch(urlApi, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Upload: ${nomeFinal}`, content: base64Content })
+                body: JSON.stringify({ message: `Upload: ${nomeFinalGh}`, content: base64Content })
             });
 
             const resData = await resposta.json();
             if (resData.content) {
-                const urlFinal = `https://${GITHUB_USER}.github.io/${GITHUB_REPO}/${nomeFinal}`;
+                const urlFinal = `https://${GITHUB_USER}.github.io/${GITHUB_REPO}/${nomeFinalGh}`;
                 concluirEnvio(urlFinal);
             } else {
                 throw new Error(resData.message || 'Erro GitHub');
@@ -438,43 +435,75 @@ async function executarUpload() {
         }
 
     } else {
+        // --- UPLOAD DROPBOX BLINDADO CONTRA ERRO NO CELULAR ---
         const token = document.getElementById('db-token').value.trim() || localStorage.getItem('dropbox_user_token');
         const pasta = document.getElementById('db-pasta').value.trim() || '/documentos';
-        if (!token) return alert('Cole o Token do Dropbox e clique em Salvar!');
+        if (!token) return alert('Cole o token do Dropbox e clique em Salvar!');
         localStorage.setItem('dropbox_user_token', token);
 
-        const pastaFormatada = pasta.startsWith('/') ? pasta : '/' + pasta;
-        const caminhoDropbox = `${pastaFormatada}/${nomeFinal}`;
+        // 1. Limpeza total de metadados e símbolos problemáticos
+        const nomeArquivoSeguro = (customName ? customName : file.name)
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+        const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
+        const nomeFinalDb = nomeArquivoSeguro.includes('.') ? nomeArquivoSeguro : (ext ? `${nomeArquivoSeguro}.${ext}` : nomeArquivoSeguro);
+        
+        const pastaFormatada = pasta.startsWith('/') ? pasta.replace(/\/+$/, '') : '/' + pasta.replace(/\/+$/, '');
+        const caminhoDropbox = `${pastaFormatada}/${Date.now()}_${nomeFinalDb}`;
+
+        // 2. Formatação estrita em ASCII para o cabeçalho HTTP
+        const dropboxArgJson = JSON.stringify({
+            path: caminhoDropbox,
+            mode: 'add',
+            autorename: true,
+            mute: false,
+            strict_conflict: false
+        }).replace(/[\u007f-\uffff]/g, function(c) { 
+            return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+        });
 
         try {
             const uploadRes = await fetch('https://content.dropboxapi.com/2/files/upload', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,
-                    'Dropbox-API-Arg': JSON.stringify({ path: caminhoDropbox, mode: 'add', autorename: true }),
+                    'Dropbox-API-Arg': dropboxArgJson,
                     'Content-Type': 'application/octet-stream'
                 },
                 body: file
             });
 
             const uploadData = await uploadRes.json();
-            if (uploadData.error) throw new Error(uploadData.error_summary || 'Erro Dropbox');
+            if (uploadData.error) {
+                throw new Error(uploadData.error_summary || JSON.stringify(uploadData.error));
+            }
 
+            // Gera o link público direto
             const linkRes = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
                 method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ path: uploadData.path_lower, settings: { requested_visibility: 'public' } })
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    path: uploadData.path_lower,
+                    settings: { requested_visibility: 'public' }
+                })
             });
 
             const linkData = await linkRes.json();
             let urlFinal = linkData.url || (linkData.error && linkData.error.shared_link_already_exists ? linkData.error.shared_link_already_exists.metadata.url : '');
+
+            if (!urlFinal) throw new Error('Não foi possível obter o link do arquivo.');
             urlFinal = urlFinal.replace('?dl=0', '?raw=1');
 
             concluirEnvio(urlFinal);
 
         } catch (e) {
             statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = '❌ ' + e.message;
+            statusTxt.innerText = '❌ Erro no Dropbox';
             alert('Erro no Dropbox: ' + e.message);
         }
     }
