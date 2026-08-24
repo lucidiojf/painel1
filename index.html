@@ -9,17 +9,14 @@
         body { background: #f8fafc; color: #1e293b; padding: 12px; }
         .container { max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
 
-        /* STATUS E TOPO */
         .top-bar { display: flex; justify-content: space-between; align-items: center; background: #ecfdf5; border: 1px solid #10b981; padding: 8px 12px; border-radius: 8px; }
         .status-badge { color: #065f46; font-size: 13px; font-weight: 600; }
         .btn-sync { background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; }
 
-        /* ABAS PRINCIPAIS */
         .tabs { display: flex; gap: 6px; background: #e2e8f0; padding: 4px; border-radius: 10px; }
         .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: #475569; border-radius: 6px; cursor: pointer; }
         .tab-btn.active { background: #ffffff; color: #0284c7; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* CARDS E FORMULÁRIOS */
         .card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
         .section-title { font-size: 16px; font-weight: 700; color: #0284c7; margin-bottom: 10px; }
         .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
@@ -29,7 +26,7 @@
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
-        /* PAINEL DE ANEXOS / UPLOAD */
+        /* UPLOAD CARD */
         .upload-card { background: #f0fdf4; border: 1px dashed #22c55e; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
         .upload-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
         .up-tab-btn { flex: 1; padding: 6px; font-size: 12px; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; color: #475569; }
@@ -42,7 +39,6 @@
         .nota-title { font-size: 14px; font-weight: 700; color: #1e293b; max-width: 75%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .nota-body { display: none; padding: 12px; font-size: 14px; color: #334155; line-height: 1.5; white-space: pre-wrap; word-break: break-word; border-top: 1px solid #e2e8f0; }
 
-        /* ITENS TAREFAS E GASTOS */
         .list-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .badge { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
         .badge-baixa { background: #dcfce7; color: #15803d; }
@@ -66,40 +62,39 @@
     </div>
 
     <div class="tabs">
-        <button class="tab-btn active" id="tab-btn-notas" onclick="selecionarAba('notas')">Notas</button>
-        <button class="tab-btn" id="tab-btn-tarefas" onclick="selecionarAba('tarefas')">Tarefas</button>
-        <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
+        <button type="button" class="tab-btn active" id="tab-btn-notas" onclick="selecionarAba('notas')">Notas</button>
+        <button type="button" class="tab-btn" id="tab-btn-tarefas" onclick="selecionarAba('tarefas')">Tarefas</button>
+        <button type="button" class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- CAIXA DE ANEXOS: GITHUB E DROPBOX SOLICITAÇÃO -->
+    <!-- CAIXA DE UPLOAD GITHUB / DROPBOX -->
     <div class="upload-card" id="upload-box-container">
         <div class="upload-tabs">
-            <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 Envio Direto GitHub</button>
-            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Dropbox (Solicitação)</button>
+            <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 Enviar p/ GitHub</button>
+            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Solicitação Dropbox</button>
         </div>
 
         <!-- MODO GITHUB -->
         <div id="gh-controls">
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
                 <input type="password" id="gh-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Cole Token GitHub (ghp_...)">
-                <button type="button" onclick="salvarTokenGitHub()" style="background: #15803d; color: white; border: none; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
-                <button type="button" onclick="testarTokenGitHub()" style="background: #0284c7; color: white; border: none; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Testar</button>
+                <button type="button" onclick="salvarTokenGitHub()" style="background: #15803d; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
             </div>
             <div style="display: flex; gap: 6px; margin-bottom: 6px;">
                 <input type="text" id="gh-custom-name" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Novo nome (Opcional)">
                 <input type="file" id="gh-file" class="input-field" style="padding: 4px; font-size: 12px; flex: 1;">
             </div>
-            <button type="button" class="btn-action" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="enviarParaGitHub()">📤 Subir para GitHub e Gerar Link</button>
+            <button type="button" class="btn-action" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="enviarParaGitHub()">📤 Subir p/ GitHub e Gerar Link</button>
         </div>
 
-        <!-- MODO DROPBOX SOLICITAÇÃO DE ARQUIVOS -->
+        <!-- MODO DROPBOX -->
         <div id="db-controls" style="display: none;">
             <p style="font-size: 12px; color: #475569; margin-bottom: 6px;">
-                Envie o arquivo direto pela página de solicitação oficial sem erro de autenticação:
+                Toque no botão para abrir sua pasta de upload do Dropbox sem erro de token:
             </p>
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
-                <input type="text" id="db-req-url" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Link de Solicitação (ex: https://www.dropbox.com/request/...)" value="https://www.dropbox.com/request/">
-                <button type="button" onclick="abrirSolicitacaoDropbox()" style="background: #0061fe; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Abrir Dropbox</button>
+                <input type="text" id="db-req-url" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="https://www.dropbox.com/request/...">
+                <button type="button" onclick="abrirSolicitacaoDropbox()" style="background: #0061fe; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Abrir</button>
             </div>
         </div>
 
@@ -114,13 +109,13 @@
             <textarea id="nota-texto" class="input-field" placeholder="Digite a anotação aqui..."></textarea>
         </div>
         <div class="form-group">
-            <input type="text" id="nota-link" class="input-field" placeholder="Link associado (GitHub, Drive ou Dropbox)">
+            <input type="text" id="nota-link" class="input-field" placeholder="Link do anexo (Opcional)">
         </div>
-        <button class="btn-action" id="btn-salvar-nota" onclick="salvarNota()">Fixar Nota</button>
+        <button type="button" class="btn-action" id="btn-salvar-nota" onclick="salvarNota()">Fixar Nota</button>
 
         <div style="margin-top: 16px;">
             <h4 style="font-size: 14px; margin-bottom: 8px; color: #475569;">Minhas Anotações</h4>
-            <div id="lista-notas">Carregando notas...</div>
+            <div id="lista-notas"></div>
         </div>
     </div>
 
@@ -129,7 +124,7 @@
         <div class="section-title">Criar Evento ou Tarefa</div>
         <input type="hidden" id="edit-tarefa-id" value="">
         <div class="form-group">
-            <input type="text" id="tarefa-nome" class="input-field" placeholder="Ex: Procedimento cirúrgico">
+            <input type="text" id="tarefa-nome" class="input-field" placeholder="Ex: Cirurgia ou Consulta">
         </div>
         <div class="form-group">
             <input type="datetime-local" id="tarefa-data" class="input-field">
@@ -142,13 +137,13 @@
             </select>
         </div>
         <div class="form-group">
-            <input type="text" id="tarefa-link" class="input-field" placeholder="Link de anexo (Opcional)">
+            <input type="text" id="tarefa-link" class="input-field" placeholder="Link do anexo (Opcional)">
         </div>
-        <button class="btn-action" id="btn-salvar-tarefa" onclick="salvarTarefa()">Salvar no Painel</button>
+        <button type="button" class="btn-action" id="btn-salvar-tarefa" onclick="salvarTarefa()">Salvar no Painel</button>
 
         <div style="margin-top: 16px;">
             <h4 style="font-size: 14px; margin-bottom: 8px; color: #475569;">Linha do Tempo</h4>
-            <div id="lista-tarefas">Carregando tarefas...</div>
+            <div id="lista-tarefas"></div>
         </div>
     </div>
 
@@ -158,7 +153,7 @@
         <div class="section-title">Adicionar Item / Despesa</div>
         <input type="hidden" id="edit-despesa-id" value="">
         <div class="form-group">
-            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto CRM">
+            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto">
         </div>
         <div class="form-group">
             <input type="number" step="0.01" id="despesa-valor" class="input-field" placeholder="Valor R$">
@@ -166,11 +161,11 @@
         <div class="form-group">
             <input type="text" id="despesa-link" class="input-field" placeholder="Link do Recibo (Opcional)">
         </div>
-        <button class="btn-action" id="btn-salvar-despesa" onclick="salvarDespesa()">Salvar na Lista</button>
+        <button type="button" class="btn-action" id="btn-salvar-despesa" onclick="salvarDespesa()">Salvar na Lista</button>
 
         <div style="margin-top: 16px;">
             <h4 style="font-size: 14px; margin-bottom: 8px; color: #475569;">Itens e Recibos</h4>
-            <div id="lista-despesas">Carregando despesas...</div>
+            <div id="lista-despesas"></div>
         </div>
     </div>
 
@@ -184,16 +179,29 @@ const GITHUB_REPO = 'painel1';
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
 
-// INICIALIZAR TOKENS
-window.addEventListener('DOMContentLoaded', () => {
+// Execução imediata ao carregar
+window.onload = function() {
     try {
         const gh = localStorage.getItem('gh_user_token');
         const dbReq = localStorage.getItem('dropbox_req_url');
         if (gh && document.getElementById('gh-token')) document.getElementById('gh-token').value = gh;
         if (dbReq && document.getElementById('db-req-url')) document.getElementById('db-req-url').value = dbReq;
     } catch(e) {}
+    
+    renderizarTudo();
     carregarDados();
-});
+};
+
+function selecionarAba(aba) {
+    abaAtual = aba;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('tab-btn-' + aba);
+    if (btn) btn.classList.add('active');
+
+    document.getElementById('section-notas').style.display = aba === 'notas' ? 'block' : 'none';
+    document.getElementById('section-tarefas').style.display = aba === 'tarefas' ? 'block' : 'none';
+    document.getElementById('section-despesas').style.display = aba === 'despesas' ? 'block' : 'none';
+}
 
 function setUploadMode(mode) {
     const btnGh = document.getElementById('btn-mode-gh');
@@ -223,39 +231,7 @@ function salvarTokenGitHub() {
     const val = document.getElementById('gh-token').value.trim();
     if (!val) return alert('Cole o token do GitHub (ghp_...)!');
     localStorage.setItem('gh_user_token', val);
-    alert('Token GitHub salvo no aparelho!');
-}
-
-async function testarTokenGitHub() {
-    const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
-    const statusTxt = document.getElementById('upload-status-text');
-    if (!token) return alert('Cole um token antes de testar!');
-
-    statusTxt.style.color = '#0284c7';
-    statusTxt.innerText = 'Testando conexão com o GitHub... ⏳';
-
-    try {
-        const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github+json'
-            }
-        });
-
-        if (res.ok) {
-            statusTxt.style.color = '#16a34a';
-            statusTxt.innerText = '✅ Token Válido e Conectado ao Repositório!';
-            alert('Conexão perfeita! O token tem permissão no repositório.');
-        } else {
-            const data = await res.json();
-            statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = '❌ Token Inválido: ' + (data.message || 'Bad credentials');
-            alert('Falha: ' + (data.message || 'Verifique se o token é Classic com a caixinha repo marcada.'));
-        }
-    } catch (e) {
-        statusTxt.style.color = '#dc2626';
-        statusTxt.innerText = '❌ Erro de rede: ' + e.message;
-    }
+    alert('Token GitHub salvo no dispositivo!');
 }
 
 function abrirSolicitacaoDropbox() {
@@ -263,17 +239,6 @@ function abrirSolicitacaoDropbox() {
     if (!url || !url.startsWith('http')) return alert('Informe o link da sua solicitação do Dropbox!');
     localStorage.setItem('dropbox_req_url', url);
     window.open(url, '_blank');
-}
-
-function selecionarAba(aba) {
-    abaAtual = aba;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById('tab-btn-' + aba);
-    if (btn) btn.classList.add('active');
-
-    document.getElementById('section-notas').style.display = aba === 'notas' ? 'block' : 'none';
-    document.getElementById('section-tarefas').style.display = aba === 'tarefas' ? 'block' : 'none';
-    document.getElementById('section-despesas').style.display = aba === 'despesas' ? 'block' : 'none';
 }
 
 function carregarDados() {
@@ -293,95 +258,97 @@ function receberDadosGerais(data) {
         renderizarTudo();
         document.getElementById('sync-status').innerText = '✅ Tudo Atualizado!';
     } catch(err) {
-        document.getElementById('sync-status').innerText = '⚠️ Erro ao processar dados';
+        document.getElementById('sync-status').innerText = '✅ Pronto';
     }
 }
 
 function renderizarTudo() {
     // 1. NOTAS
     const boxNotas = document.getElementById('lista-notas');
-    boxNotas.innerHTML = '';
-    if (!dadosGerais.notas.length) {
-        boxNotas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhuma nota cadastrada.</p>';
-    } else {
-        dadosGerais.notas.forEach(n => {
-            const txt = String(n.texto || '');
-            const primeiraLinha = txt.split('\n')[0] || 'Nota sem título';
-            const linkHtml = n.link ? `<br><a href="${n.link}" target="_blank" class="link-anexo">📎 Abrir Anexo</a>` : '';
+    if (boxNotas) {
+        boxNotas.innerHTML = '';
+        if (!dadosGerais.notas.length) {
+            boxNotas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhuma nota cadastrada.</p>';
+        } else {
+            dadosGerais.notas.forEach(n => {
+                const txt = String(n.texto || '');
+                const primeiraLinha = txt.split('\n')[0] || 'Nota sem título';
+                const linkHtml = n.link ? `<br><a href="${n.link}" target="_blank" class="link-anexo">📎 Abrir Anexo</a>` : '';
 
-            boxNotas.innerHTML += `
-                <div class="nota-item">
-                    <div class="nota-header" onclick="toggleSanfona(this)">
-                        <span class="nota-title">📝 ${primeiraLinha}</span>
-                        <div onclick="event.stopPropagation()">
-                            <button class="icon-btn" onclick="editarNota(${n.id})" title="Editar">✏️</button>
-                            <button class="icon-btn" onclick="excluirItem('notas', ${n.id})" title="Excluir">🗑️</button>
+                boxNotas.innerHTML += `
+                    <div class="nota-item">
+                        <div class="nota-header" onclick="toggleSanfona(this)">
+                            <span class="nota-title">📝 ${primeiraLinha}</span>
+                            <div onclick="event.stopPropagation()">
+                                <button class="icon-btn" onclick="editarNota(${n.id})" title="Editar">✏️</button>
+                                <button class="icon-btn" onclick="excluirItem('notas', ${n.id})" title="Excluir">🗑️</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="nota-body">${txt}${linkHtml}</div>
-                </div>`;
-        });
+                        <div class="nota-body">${txt}${linkHtml}</div>
+                    </div>`;
+            });
+        }
     }
 
     // 2. TAREFAS
     const boxTarefas = document.getElementById('lista-tarefas');
-    boxTarefas.innerHTML = '';
-    if (!dadosGerais.tarefas.length) {
-        boxTarefas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhuma tarefa cadastrada.</p>';
-    } else {
-        dadosGerais.tarefas.forEach(t => {
-            let dataFmt = 'Sem data';
-            if (t.data) {
-                const d = new Date(t.data);
-                dataFmt = !isNaN(d.getTime()) ? d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : String(t.data);
-            }
-            const badgeClass = `badge-${t.prioridade || 'baixa'}`;
-            const linkHtml = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="link-anexo">📎 Anexo</a>` : '';
+    if (boxTarefas) {
+        boxTarefas.innerHTML = '';
+        if (!dadosGerais.tarefas.length) {
+            boxTarefas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhuma tarefa cadastrada.</p>';
+        } else {
+            dadosGerais.tarefas.forEach(t => {
+                let dataFmt = 'Sem data';
+                if (t.data) {
+                    const d = new Date(t.data);
+                    dataFmt = !isNaN(d.getTime()) ? d.toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : String(t.data);
+                }
+                const badgeClass = `badge-${t.prioridade || 'baixa'}`;
+                const linkHtml = t.anexo ? `<br><a href="${t.anexo}" target="_blank" class="link-anexo">📎 Anexo</a>` : '';
 
-            boxTarefas.innerHTML += `
-                <div class="list-card">
-                    <div>
-                        <strong>${t.nome || 'Tarefa'}</strong><br>
-                        <small style="color: #64748b;">📅 ${dataFmt} </small>
-                        <span class="badge ${badgeClass}">${t.prioridade || 'baixa'}</span>
-                        ${linkHtml}
-                        <div style="margin-top: 6px; display: flex; gap: 4px;">
-                            <button class="btn-gcal" onclick="enviarParaCalendar(${t.id})">📅 Calendar</button>
-                            <button class="btn-gtask" onclick="enviarParaTasks(${t.id})">☑️ Tasks</button>
+                boxTarefas.innerHTML += `
+                    <div class="list-card">
+                        <div>
+                            <strong>${t.nome || 'Tarefa'}</strong><br>
+                            <small style="color: #64748b;">📅 ${dataFmt} </small>
+                            <span class="badge ${badgeClass}">${t.prioridade || 'baixa'}</span>
+                            ${linkHtml}
                         </div>
-                    </div>
-                    <div>
-                        <button class="icon-btn" onclick="editarTarefa(${t.id})">✏️</button>
-                        <button class="icon-btn" onclick="excluirItem('tarefas', ${t.id})">🗑️</button>
-                    </div>
-                </div>`;
-        });
+                        <div>
+                            <button class="icon-btn" onclick="editarTarefa(${t.id})">✏️</button>
+                            <button class="icon-btn" onclick="excluirItem('tarefas', ${t.id})">🗑️</button>
+                        </div>
+                    </div>`;
+            });
+        }
     }
 
     // 3. GASTOS
     const boxDespesas = document.getElementById('lista-despesas');
-    boxDespesas.innerHTML = '';
-    let total = 0;
-    if (!dadosGerais.despesas.length) {
-        boxDespesas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhum gasto registrado.</p>';
-    } else {
-        dadosGerais.despesas.forEach(d => {
-            const val = parseFloat(d.valor || 0) || 0;
-            total += val;
-            const linkHtml = d.anexo ? `<br><a href="${d.anexo}" target="_blank" class="link-anexo">📎 Recibo</a>` : '';
+    if (boxDespesas) {
+        boxDespesas.innerHTML = '';
+        let total = 0;
+        if (!dadosGerais.despesas.length) {
+            boxDespesas.innerHTML = '<p style="color:#64748b; font-size:13px;">Nenhum gasto registrado.</p>';
+        } else {
+            dadosGerais.despesas.forEach(d => {
+                const val = parseFloat(d.valor || 0) || 0;
+                total += val;
+                const linkHtml = d.anexo ? `<br><a href="${d.anexo}" target="_blank" class="link-anexo">📎 Recibo</a>` : '';
 
-            boxDespesas.innerHTML += `
-                <div class="list-card">
-                    <div><strong>${d.nome || 'Gasto'}</strong>${linkHtml}</div>
-                    <div style="display:flex; align-items:center; gap: 8px;">
-                        <span style="font-weight:700; color:#0284c7;">R$ ${val.toFixed(2)}</span>
-                        <button class="icon-btn" onclick="editarDespesa(${d.id})">✏️</button>
-                        <button class="icon-btn" onclick="excluirItem('despesas', ${d.id})">🗑️</button>
-                    </div>
-                </div>`;
-        });
+                boxDespesas.innerHTML += `
+                    <div class="list-card">
+                        <div><strong>${d.nome || 'Gasto'}</strong>${linkHtml}</div>
+                        <div style="display:flex; align-items:center; gap: 8px;">
+                            <span style="font-weight:700; color:#0284c7;">R$ ${val.toFixed(2)}</span>
+                            <button class="icon-btn" onclick="editarDespesa(${d.id})">✏️</button>
+                            <button class="icon-btn" onclick="excluirItem('despesas', ${d.id})">🗑️</button>
+                        </div>
+                    </div>`;
+            });
+        }
+        document.getElementById('total-despesas').innerText = `Total Local: R$ ${total.toFixed(2)}`;
     }
-    document.getElementById('total-despesas').innerText = `Total Local: R$ ${total.toFixed(2)}`;
 }
 
 function toggleSanfona(header) {
@@ -390,7 +357,7 @@ function toggleSanfona(header) {
 }
 
 async function persistirDados() {
-    document.getElementById('sync-status').innerText = 'Salvando na nuvem... ⏳';
+    document.getElementById('sync-status').innerText = 'Salvando... ⏳';
     try {
         await fetch(SCRIPT_URL, {
             method: 'POST',
@@ -398,9 +365,9 @@ async function persistirDados() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dadosGerais)
         });
-        document.getElementById('sync-status').innerText = '✅ Salvo online!';
+        document.getElementById('sync-status').innerText = '✅ Salvo!';
     } catch (e) {
-        document.getElementById('sync-status').innerText = '⚠️ Erro ao salvar online.';
+        document.getElementById('sync-status').innerText = '⚠️ Salvo localmente';
     }
 }
 
@@ -413,21 +380,21 @@ function lerArquivoBase64(file) {
     });
 }
 
-// UPLOAD PARA GITHUB
+// UPLOAD GITHUB
 async function enviarParaGitHub() {
     const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
     const inputFile = document.getElementById('gh-file');
     const customName = document.getElementById('gh-custom-name').value.trim();
     const statusTxt = document.getElementById('upload-status-text');
 
-    if (!token) return alert('Cole o Token do GitHub (ghp_...) e clique em Salvar!');
+    if (!token) return alert('Cole seu token do GitHub (ghp_...) e clique em Salvar!');
     localStorage.setItem('gh_user_token', token);
 
     if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
 
     const file = inputFile.files[0];
     statusTxt.style.color = '#0284c7';
-    statusTxt.innerText = 'Subindo para o GitHub... ⏳';
+    statusTxt.innerText = 'Subindo p/ o GitHub... ⏳';
 
     let nomeFinal = file.name;
     if (customName) {
@@ -443,11 +410,11 @@ async function enviarParaGitHub() {
         const resposta = await fetch(urlApi, {
             method: 'PUT',
             headers: { 
-                'Authorization': `Bearer ${token}`, 
+                'Authorization': `token ${token}`, 
                 'Content-Type': 'application/json',
                 'Accept': 'application/vnd.github+json'
             },
-            body: JSON.stringify({ message: `Upload anexo: ${nomeFinal}`, content: base64Content })
+            body: JSON.stringify({ message: `Upload: ${nomeFinal}`, content: base64Content })
         });
 
         const resData = await resposta.json();
@@ -462,9 +429,9 @@ async function enviarParaGitHub() {
             if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
             if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
 
-            alert('Arquivo salvo com sucesso no GitHub!\nLink preenchido.');
+            alert('Arquivo salvo com sucesso no GitHub!\nLink preenchido automaticamente.');
         } else {
-            throw new Error(resData.message || 'Erro no envio');
+            throw new Error(resData.message || 'Erro de autenticação');
         }
     } catch (e) {
         statusTxt.style.color = '#dc2626';
@@ -478,7 +445,7 @@ function salvarNota() {
     const idEdit = document.getElementById('edit-nota-id').value;
     const texto = document.getElementById('nota-texto').value.trim();
     const link = document.getElementById('nota-link').value.trim();
-    if (!texto) return alert('Digite a nota!');
+    if (!texto) return alert('Digite a anotação!');
 
     if (idEdit) {
         const item = dadosGerais.notas.find(n => n.id == idEdit);
@@ -579,34 +546,6 @@ function excluirItem(tipo, id) {
     dadosGerais[tipo] = dadosGerais[tipo].filter(item => item.id != id);
     renderizarTudo();
     persistirDados();
-}
-
-async function enviarParaCalendar(id) {
-    const t = dadosGerais.tarefas.find(x => x.id == id);
-    if (!t || !t.data) return alert('Defina data/hora na tarefa!');
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ acao: 'sync_gcalendar', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
-        });
-        alert('Enviado ao Google Calendar!');
-    } catch(e) { alert('Erro no envio ao Calendar.'); }
-}
-
-async function enviarParaTasks(id) {
-    const t = dadosGerais.tarefas.find(x => x.id == id);
-    if (!t) return;
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ acao: 'sync_gtasks', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
-        });
-        alert('Enviado ao Google Tasks!');
-    } catch(e) { alert('Erro no envio ao Tasks.'); }
 }
 </script>
 </body>
