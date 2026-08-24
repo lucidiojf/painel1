@@ -26,12 +26,9 @@
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
-        /* UPLOAD CARD */
+        /* UPLOAD PERMANENTE GOOGLE DRIVE */
         .upload-card { background: #f0fdf4; border: 1px dashed #22c55e; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
-        .upload-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
-        .up-tab-btn { flex: 1; padding: 6px; font-size: 12px; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; color: #475569; }
-        .up-tab-btn.active-gh { background: #22c55e; color: white; border-color: #22c55e; }
-        .up-tab-btn.active-db { background: #0061fe; color: white; border-color: #0061fe; }
+        .upload-header { font-size: 12px; font-weight: 700; color: #15803d; margin-bottom: 6px; display: flex; justify-content: space-between; }
 
         /* NOTAS SANFONA */
         .nota-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; background: #ffffff; }
@@ -67,37 +64,17 @@
         <button class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- ÁREA DE UPLOAD DUAL (GITHUB E DROPBOX) -->
-    <div class="upload-card" id="upload-box-container">
-        <div class="upload-tabs">
-            <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 GitHub</button>
-            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Dropbox</button>
+    <!-- CAIXA DE UPLOAD DIRETO (SEM TOKENS) -->
+    <div class="upload-card">
+        <div class="upload-header">
+            <span>📁 Anexar Arquivo / Foto (Google Drive)</span>
+            <span id="upload-status-text"></span>
         </div>
-
-        <div id="gh-controls">
-            <div style="display: flex; gap: 4px; margin-bottom: 6px;">
-                <input type="password" id="gh-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Token GitHub (ghp_...)">
-                <button type="button" onclick="salvarToken('gh')" style="background: #15803d; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
-            </div>
-        </div>
-
-        <div id="db-controls" style="display: none;">
-            <div style="display: flex; gap: 4px; margin-bottom: 6px;">
-                <input type="password" id="db-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Token Dropbox">
-                <button type="button" onclick="salvarToken('db')" style="background: #0061fe; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
-            </div>
-            <div style="margin-bottom: 6px;">
-                <input type="text" id="db-pasta" class="input-field" style="padding: 6px; font-size: 12px;" placeholder="Pasta Dropbox" value="/documentos">
-            </div>
-        </div>
-
         <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-            <input type="text" id="up-custom-name" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Renomear (ex: recibo_x)">
+            <input type="text" id="up-custom-name" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Renomear (Opcional)">
             <input type="file" id="up-file" class="input-field" style="padding: 4px; font-size: 12px; flex: 1;">
         </div>
-
-        <button type="button" class="btn-action" id="btn-upload-exec" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="executarUpload()">📤 Enviar Arquivo</button>
-        <div id="upload-status-text" style="font-size: 12px; font-weight: 600; margin-top: 4px; text-align: center;"></div>
+        <button type="button" class="btn-action" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="enviarArquivoDrive()">📤 Subir Anexo e Preencher Link</button>
     </div>
 
     <!-- 1. NOTAS -->
@@ -172,67 +149,11 @@
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
-const GITHUB_USER = 'lucidiojf';
-const GITHUB_REPO = 'painel1';
 
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
-let uploadMode = 'gh';
 
-// CARREGAR TOKENS SALVOS
-window.addEventListener('DOMContentLoaded', () => {
-    try {
-        const gh = localStorage.getItem('gh_user_token');
-        const db = localStorage.getItem('dropbox_user_token');
-        if (gh && document.getElementById('gh-token')) document.getElementById('gh-token').value = gh;
-        if (db && document.getElementById('db-token')) document.getElementById('db-token').value = db;
-    } catch(e) {}
-    carregarDados();
-});
-
-function salvarToken(tipo) {
-    if (tipo === 'gh') {
-        const val = document.getElementById('gh-token').value.trim();
-        if (!val) return alert('Cole o token do GitHub!');
-        localStorage.setItem('gh_user_token', val);
-        alert('Token GitHub salvo com sucesso!');
-    } else {
-        const val = document.getElementById('db-token').value.trim();
-        if (!val) return alert('Cole o token do Dropbox!');
-        localStorage.setItem('dropbox_user_token', val);
-        alert('Token Dropbox salvo com sucesso!');
-    }
-}
-
-function setUploadMode(mode) {
-    uploadMode = mode;
-    const btnGh = document.getElementById('btn-mode-gh');
-    const btnDb = document.getElementById('btn-mode-db');
-    const ghDiv = document.getElementById('gh-controls');
-    const dbDiv = document.getElementById('db-controls');
-    const btnExec = document.getElementById('btn-upload-exec');
-    const cardContainer = document.getElementById('upload-box-container');
-
-    if (mode === 'gh') {
-        btnGh.className = 'up-tab-btn active-gh';
-        btnDb.className = 'up-tab-btn';
-        ghDiv.style.display = 'block';
-        dbDiv.style.display = 'none';
-        btnExec.style.background = '#22c55e';
-        btnExec.innerText = '📤 Enviar para GitHub';
-        cardContainer.style.borderColor = '#22c55e';
-        cardContainer.style.background = '#f0fdf4';
-    } else {
-        btnGh.className = 'up-tab-btn';
-        btnDb.className = 'up-tab-btn active-db';
-        ghDiv.style.display = 'none';
-        dbDiv.style.display = 'block';
-        btnExec.style.background = '#0061fe';
-        btnExec.innerText = '📤 Enviar para Dropbox';
-        cardContainer.style.borderColor = '#0061fe';
-        cardContainer.style.background = '#eff6ff';
-    }
-}
+window.addEventListener('DOMContentLoaded', carregarDados);
 
 function selecionarAba(aba) {
     abaAtual = aba;
@@ -255,16 +176,14 @@ function carregarDados() {
 function receberDadosGerais(data) {
     try {
         let parsed = data;
-        if (typeof data === 'string') {
-            parsed = JSON.parse(data);
-        }
+        if (typeof data === 'string') parsed = JSON.parse(data);
         dadosGerais.despesas = Array.isArray(parsed.despesas) ? parsed.despesas : [];
         dadosGerais.tarefas = Array.isArray(parsed.tarefas) ? parsed.tarefas : [];
         dadosGerais.notas = Array.isArray(parsed.notas) ? parsed.notas : [];
         renderizarTudo();
         document.getElementById('sync-status').innerText = '✅ Tudo Atualizado!';
     } catch(err) {
-        document.getElementById('sync-status').innerText = '⚠️ Erro ao processar dados';
+        document.getElementById('sync-status').innerText = '⚠️ Erro ao carregar';
     }
 }
 
@@ -357,9 +276,7 @@ function renderizarTudo() {
 
 function toggleSanfona(header) {
     const body = header.nextElementSibling;
-    if (body) {
-        body.style.display = body.style.display === 'block' ? 'none' : 'block';
-    }
+    if (body) body.style.display = body.style.display === 'block' ? 'none' : 'block';
 }
 
 async function persistirDados() {
@@ -373,10 +290,11 @@ async function persistirDados() {
         });
         document.getElementById('sync-status').innerText = '✅ Salvo online!';
     } catch (e) {
-        document.getElementById('sync-status').innerText = '⚠️ Erro ao salvar online.';
+        document.getElementById('sync-status').innerText = '⚠️ Erro ao salvar';
     }
 }
 
+// UPLOAD DIRETO PARA O GOOGLE DRIVE
 function lerArquivoBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -386,141 +304,58 @@ function lerArquivoBase64(file) {
     });
 }
 
-// UPLOAD DUAL COM TRATAMENTO MOBILE ESTREITO
-async function executarUpload() {
+async function enviarArquivoDrive() {
     const inputFile = document.getElementById('up-file');
     const customName = document.getElementById('up-custom-name').value.trim();
     const statusTxt = document.getElementById('upload-status-text');
 
-    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo primeiro!');
+    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
 
     const file = inputFile.files[0];
-    statusTxt.style.color = '#0284c7';
-    statusTxt.innerText = 'Subindo arquivo... ⏳';
-
-    if (uploadMode === 'gh') {
-        // --- UPLOAD GITHUB ---
-        const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
-        if (!token) return alert('Cole o Token do GitHub e clique em Salvar!');
-        localStorage.setItem('gh_user_token', token);
-
-        let nomeFinalGh = file.name;
-        if (customName) {
-            const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
-            nomeFinalGh = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
-        }
-        nomeFinalGh = `${Date.now()}_${nomeFinalGh.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9._-]/g, "_")}`;
-
-        try {
-            const base64Content = await lerArquivoBase64(file);
-            const urlApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${nomeFinalGh}`;
-
-            const resposta = await fetch(urlApi, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: `Upload: ${nomeFinalGh}`, content: base64Content })
-            });
-
-            const resData = await resposta.json();
-            if (resData.content) {
-                const urlFinal = `https://${GITHUB_USER}.github.io/${GITHUB_REPO}/${nomeFinalGh}`;
-                concluirEnvio(urlFinal);
-            } else {
-                throw new Error(resData.message || 'Erro GitHub');
-            }
-        } catch (e) {
-            statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = '❌ ' + e.message;
-            alert('Erro no GitHub: ' + e.message);
-        }
-
-    } else {
-        // --- UPLOAD DROPBOX BLINDADO CONTRA ERRO NO CELULAR ---
-        const token = document.getElementById('db-token').value.trim() || localStorage.getItem('dropbox_user_token');
-        const pasta = document.getElementById('db-pasta').value.trim() || '/documentos';
-        if (!token) return alert('Cole o token do Dropbox e clique em Salvar!');
-        localStorage.setItem('dropbox_user_token', token);
-
-        // 1. Limpeza total de metadados e símbolos problemáticos
-        const nomeArquivoSeguro = (customName ? customName : file.name)
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .replace(/[^a-zA-Z0-9._-]/g, "_");
-
+    let nomeFinal = file.name;
+    if (customName) {
         const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
-        const nomeFinalDb = nomeArquivoSeguro.includes('.') ? nomeArquivoSeguro : (ext ? `${nomeArquivoSeguro}.${ext}` : nomeArquivoSeguro);
-        
-        const pastaFormatada = pasta.startsWith('/') ? pasta.replace(/\/+$/, '') : '/' + pasta.replace(/\/+$/, '');
-        const caminhoDropbox = `${pastaFormatada}/${Date.now()}_${nomeFinalDb}`;
+        nomeFinal = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
+    }
 
-        // 2. Formatação estrita em ASCII para o cabeçalho HTTP
-        const dropboxArgJson = JSON.stringify({
-            path: caminhoDropbox,
-            mode: 'add',
-            autorename: true,
-            mute: false,
-            strict_conflict: false
-        }).replace(/[\u007f-\uffff]/g, function(c) { 
-            return '\\u' + ('0000' + c.charCodeAt(0).toString(16)).slice(-4);
+    statusTxt.style.color = '#0284c7';
+    statusTxt.innerText = 'Enviando ao Drive... ⏳';
+
+    try {
+        const base64Content = await lerArquivoBase64(file);
+        const payload = {
+            acao: 'upload_arquivo',
+            nome: nomeFinal,
+            mimeType: file.type || 'application/octet-stream',
+            base64: base64Content
+        };
+
+        const res = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(payload)
         });
 
-        try {
-            const uploadRes = await fetch('https://content.dropboxapi.com/2/files/upload', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Dropbox-API-Arg': dropboxArgJson,
-                    'Content-Type': 'application/octet-stream'
-                },
-                body: file
-            });
+        const data = await res.json();
+        if (data.status === 'sucesso' && data.url) {
+            statusTxt.style.color = '#16a34a';
+            statusTxt.innerText = '✅ Anexo pronto!';
+            inputFile.value = '';
+            document.getElementById('up-custom-name').value = '';
 
-            const uploadData = await uploadRes.json();
-            if (uploadData.error) {
-                throw new Error(uploadData.error_summary || JSON.stringify(uploadData.error));
-            }
+            if (abaAtual === 'notas') document.getElementById('nota-link').value = data.url;
+            if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = data.url;
+            if (abaAtual === 'despesas') document.getElementById('despesa-link').value = data.url;
 
-            // Gera o link público direto
-            const linkRes = await fetch('https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    path: uploadData.path_lower,
-                    settings: { requested_visibility: 'public' }
-                })
-            });
-
-            const linkData = await linkRes.json();
-            let urlFinal = linkData.url || (linkData.error && linkData.error.shared_link_already_exists ? linkData.error.shared_link_already_exists.metadata.url : '');
-
-            if (!urlFinal) throw new Error('Não foi possível obter o link do arquivo.');
-            urlFinal = urlFinal.replace('?dl=0', '?raw=1');
-
-            concluirEnvio(urlFinal);
-
-        } catch (e) {
-            statusTxt.style.color = '#dc2626';
-            statusTxt.innerText = '❌ Erro no Dropbox';
-            alert('Erro no Dropbox: ' + e.message);
+            alert('Arquivo salvo no Google Drive e link preenchido!');
+        } else {
+            throw new Error(data.mensagem || 'Falha no upload');
         }
+
+    } catch(e) {
+        statusTxt.style.color = '#dc2626';
+        statusTxt.innerText = '❌ Erro no envio';
+        alert('Erro ao enviar ao Drive: ' + e.message);
     }
-}
-
-function concluirEnvio(urlFinal) {
-    const statusTxt = document.getElementById('upload-status-text');
-    statusTxt.style.color = '#16a34a';
-    statusTxt.innerText = '✅ Enviado!';
-    document.getElementById('up-file').value = '';
-    document.getElementById('up-custom-name').value = '';
-
-    if (abaAtual === 'notas') document.getElementById('nota-link').value = urlFinal;
-    if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
-    if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
-
-    alert('Arquivo enviado e link preenchido!');
 }
 
 // FORMULÁRIOS
