@@ -27,9 +27,10 @@
         .btn-action:active { background: #0284c7; color: white; }
 
         /* UPLOAD CARD */
-        .upload-card { background: #f0fdf4; border: 1px dashed #22c55e; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .upload-card { background: #f0fdf4; border: 1px dashed #0284c7; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
         .upload-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
         .up-tab-btn { flex: 1; padding: 6px; font-size: 12px; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; color: #475569; }
+        .up-tab-btn.active-drive { background: #0284c7; color: white; border-color: #0284c7; }
         .up-tab-btn.active-gh { background: #22c55e; color: white; border-color: #22c55e; }
         .up-tab-btn.active-db { background: #0061fe; color: white; border-color: #0061fe; }
 
@@ -47,8 +48,6 @@
         .total-box { background: #0284c7; color: #ffffff; text-align: center; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 16px; margin-bottom: 12px; }
         .link-anexo { color: #0284c7; text-decoration: none; font-weight: 600; font-size: 13px; display: inline-block; margin-top: 4px; }
         
-        .btn-gtask { background: #4f46e5; color: white; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
-        .btn-gcal { background: #2563eb; color: white; font-size: 11px; padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; }
         .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 16px; padding: 2px; }
     </style>
 </head>
@@ -67,15 +66,28 @@
         <button type="button" class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- CAIXA DE UPLOAD GITHUB / DROPBOX -->
+    <!-- ÁREA DE UPLOAD (GOOGLE DRIVE / GITHUB / DROPBOX) -->
     <div class="upload-card" id="upload-box-container">
         <div class="upload-tabs">
-            <button type="button" class="up-tab-btn active-gh" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 Enviar p/ GitHub</button>
-            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Solicitação Dropbox</button>
+            <button type="button" class="up-tab-btn active-drive" id="btn-mode-drive" onclick="setUploadMode('drive')">📁 Google Drive</button>
+            <button type="button" class="up-tab-btn" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 GitHub</button>
+            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Dropbox</button>
         </div>
 
-        <!-- MODO GITHUB -->
-        <div id="gh-controls">
+        <!-- 1. MODO DRIVE (SEM TOKEN - 100% DIRETO) -->
+        <div id="drive-controls">
+            <p style="font-size: 12px; color: #0369a1; margin-bottom: 6px; font-weight: 600;">
+                ⭐ Envio 100% automático direto para o seu Google Drive (não precisa de token).
+            </p>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="text" id="drive-custom-name" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Nome do arquivo (Opcional)">
+                <input type="file" id="drive-file" class="input-field" style="padding: 4px; font-size: 12px; flex: 1;">
+            </div>
+            <button type="button" class="btn-action" style="background: #0284c7; color: white; padding: 8px; font-size: 13px;" onclick="enviarParaGoogleDrive()">📤 Enviar p/ Google Drive e Preencher Link</button>
+        </div>
+
+        <!-- 2. MODO GITHUB -->
+        <div id="gh-controls" style="display: none;">
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
                 <input type="password" id="gh-token" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="🔑 Cole Token GitHub (ghp_...)">
                 <button type="button" onclick="salvarTokenGitHub()" style="background: #15803d; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Salvar</button>
@@ -87,13 +99,13 @@
             <button type="button" class="btn-action" style="background: #22c55e; color: white; padding: 8px; font-size: 13px;" onclick="enviarParaGitHub()">📤 Subir p/ GitHub e Gerar Link</button>
         </div>
 
-        <!-- MODO DROPBOX -->
+        <!-- 3. MODO DROPBOX (SOLICITAÇÃO) -->
         <div id="db-controls" style="display: none;">
             <p style="font-size: 12px; color: #475569; margin-bottom: 6px;">
-                Toque no botão para abrir sua pasta de upload do Dropbox sem erro de token:
+                Cole o link da sua pasta de solicitação de arquivos do Dropbox:
             </p>
             <div style="display: flex; gap: 4px; margin-bottom: 6px;">
-                <input type="text" id="db-req-url" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="https://www.dropbox.com/request/...">
+                <input type="text" id="db-req-url" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="https://www.dropbox.com/request/SEU_CODIGO">
                 <button type="button" onclick="abrirSolicitacaoDropbox()" style="background: #0061fe; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Abrir</button>
             </div>
         </div>
@@ -109,7 +121,7 @@
             <textarea id="nota-texto" class="input-field" placeholder="Digite a anotação aqui..."></textarea>
         </div>
         <div class="form-group">
-            <input type="text" id="nota-link" class="input-field" placeholder="Link do anexo (Opcional)">
+            <input type="text" id="nota-link" class="input-field" placeholder="Link do anexo (Drive, GitHub ou Dropbox)">
         </div>
         <button type="button" class="btn-action" id="btn-salvar-nota" onclick="salvarNota()">Fixar Nota</button>
 
@@ -137,7 +149,7 @@
             </select>
         </div>
         <div class="form-group">
-            <input type="text" id="tarefa-link" class="input-field" placeholder="Link do anexo (Opcional)">
+            <input type="text" id="tarefa-link" class="input-field" placeholder="Link de anexo (Opcional)">
         </div>
         <button type="button" class="btn-action" id="btn-salvar-tarefa" onclick="salvarTarefa()">Salvar no Painel</button>
 
@@ -153,7 +165,7 @@
         <div class="section-title">Adicionar Item / Despesa</div>
         <input type="hidden" id="edit-despesa-id" value="">
         <div class="form-group">
-            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto">
+            <input type="text" id="despesa-nome" class="input-field" placeholder="Ex: Boleto CRM">
         </div>
         <div class="form-group">
             <input type="number" step="0.01" id="despesa-valor" class="input-field" placeholder="Valor R$">
@@ -179,7 +191,6 @@ const GITHUB_REPO = 'painel1';
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
 
-// Execução imediata ao carregar
 window.onload = function() {
     try {
         const gh = localStorage.getItem('gh_user_token');
@@ -204,23 +215,35 @@ function selecionarAba(aba) {
 }
 
 function setUploadMode(mode) {
+    const btnDrive = document.getElementById('btn-mode-drive');
     const btnGh = document.getElementById('btn-mode-gh');
     const btnDb = document.getElementById('btn-mode-db');
+
+    const driveDiv = document.getElementById('drive-controls');
     const ghDiv = document.getElementById('gh-controls');
     const dbDiv = document.getElementById('db-controls');
     const cardContainer = document.getElementById('upload-box-container');
 
-    if (mode === 'gh') {
+    btnDrive.className = 'up-tab-btn';
+    btnGh.className = 'up-tab-btn';
+    btnDb.className = 'up-tab-btn';
+
+    driveDiv.style.display = 'none';
+    ghDiv.style.display = 'none';
+    dbDiv.style.display = 'none';
+
+    if (mode === 'drive') {
+        btnDrive.className = 'up-tab-btn active-drive';
+        driveDiv.style.display = 'block';
+        cardContainer.style.borderColor = '#0284c7';
+        cardContainer.style.background = '#f0f9ff';
+    } else if (mode === 'gh') {
         btnGh.className = 'up-tab-btn active-gh';
-        btnDb.className = 'up-tab-btn';
         ghDiv.style.display = 'block';
-        dbDiv.style.display = 'none';
         cardContainer.style.borderColor = '#22c55e';
         cardContainer.style.background = '#f0fdf4';
     } else {
-        btnGh.className = 'up-tab-btn';
         btnDb.className = 'up-tab-btn active-db';
-        ghDiv.style.display = 'none';
         dbDiv.style.display = 'block';
         cardContainer.style.borderColor = '#0061fe';
         cardContainer.style.background = '#eff6ff';
@@ -231,12 +254,12 @@ function salvarTokenGitHub() {
     const val = document.getElementById('gh-token').value.trim();
     if (!val) return alert('Cole o token do GitHub (ghp_...)!');
     localStorage.setItem('gh_user_token', val);
-    alert('Token GitHub salvo no dispositivo!');
+    alert('Token GitHub salvo!');
 }
 
 function abrirSolicitacaoDropbox() {
     const url = document.getElementById('db-req-url').value.trim();
-    if (!url || !url.startsWith('http')) return alert('Informe o link da sua solicitação do Dropbox!');
+    if (!url || !url.startsWith('http')) return alert('Cole o link completo de solicitação do Dropbox!');
     localStorage.setItem('dropbox_req_url', url);
     window.open(url, '_blank');
 }
@@ -367,7 +390,7 @@ async function persistirDados() {
         });
         document.getElementById('sync-status').innerText = '✅ Salvo!';
     } catch (e) {
-        document.getElementById('sync-status').innerText = '⚠️ Salvo localmente';
+        document.getElementById('sync-status').innerText = '⚠️ Salvo local';
     }
 }
 
@@ -380,14 +403,69 @@ function lerArquivoBase64(file) {
     });
 }
 
-// UPLOAD GITHUB
+// 1. UPLOAD DIRETO PARA GOOGLE DRIVE (SEM TOKEN)
+async function enviarParaGoogleDrive() {
+    const inputFile = document.getElementById('drive-file');
+    const customName = document.getElementById('drive-custom-name').value.trim();
+    const statusTxt = document.getElementById('upload-status-text');
+
+    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
+
+    const file = inputFile.files[0];
+    statusTxt.style.color = '#0284c7';
+    statusTxt.innerText = 'Subindo p/ o Google Drive... ⏳';
+
+    let nomeFinal = file.name;
+    if (customName) {
+        const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
+        nomeFinal = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
+    }
+
+    try {
+        const base64 = await lerArquivoBase64(file);
+        const payload = {
+            acao: 'upload_drive',
+            nomeArquivo: `${Date.now()}_${nomeFinal}`,
+            mimeType: file.type || 'application/octet-stream',
+            base64: base64
+        };
+
+        const resposta = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+
+        const resData = await resposta.json();
+        if (resData.status === 'sucesso' && resData.url) {
+            statusTxt.style.color = '#16a34a';
+            statusTxt.innerText = '✅ Enviado ao Google Drive!';
+            inputFile.value = '';
+            document.getElementById('drive-custom-name').value = '';
+
+            if (abaAtual === 'notas') document.getElementById('nota-link').value = resData.url;
+            if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = resData.url;
+            if (abaAtual === 'despesas') document.getElementById('despesa-link').value = resData.url;
+
+            alert('Arquivo salvo no seu Google Drive!\nLink gerado e preenchido.');
+        } else {
+            throw new Error(resData.mensagem || 'Falha no upload do Drive');
+        }
+    } catch (e) {
+        statusTxt.style.color = '#dc2626';
+        statusTxt.innerText = '❌ Erro no Drive: ' + e.message;
+        alert('Erro no envio do Drive: ' + e.message);
+    }
+}
+
+// 2. UPLOAD GITHUB
 async function enviarParaGitHub() {
     const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
     const inputFile = document.getElementById('gh-file');
     const customName = document.getElementById('gh-custom-name').value.trim();
     const statusTxt = document.getElementById('upload-status-text');
 
-    if (!token) return alert('Cole seu token do GitHub (ghp_...) e clique em Salvar!');
+    if (!token) return alert('Cole o Token do GitHub (ghp_...) e clique em Salvar!');
     localStorage.setItem('gh_user_token', token);
 
     if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
@@ -429,7 +507,7 @@ async function enviarParaGitHub() {
             if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
             if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
 
-            alert('Arquivo salvo com sucesso no GitHub!\nLink preenchido automaticamente.');
+            alert('Arquivo salvo no GitHub!\nLink preenchido.');
         } else {
             throw new Error(resData.message || 'Erro de autenticação');
         }
