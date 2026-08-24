@@ -370,4 +370,244 @@ function renderizarTudo() {
             total += val;
             const linkHtml = d.anexo ? `<br><a href="${d.anexo}" target="_blank" class="link-anexo">📎 Recibo</a>` : '';
 
-            boxD
+            boxDespesas.innerHTML += `
+                <div class="list-card">
+                    <div><strong>${d.nome || 'Gasto'}</strong>${linkHtml}</div>
+                    <div style="display:flex; align-items:center; gap: 8px;">
+                        <span style="font-weight:700; color:#0284c7;">R$ ${val.toFixed(2)}</span>
+                        <button class="icon-btn" onclick="editarDespesa(${d.id})">✏️</button>
+                        <button class="icon-btn" onclick="excluirItem('despesas', ${d.id})">🗑️</button>
+                    </div>
+                </div>`;
+        });
+    }
+    document.getElementById('total-despesas').innerText = `Total Local: R$ ${total.toFixed(2)}`;
+}
+
+function toggleSanfona(header) {
+    const body = header.nextElementSibling;
+    if (body) body.style.display = body.style.display === 'block' ? 'none' : 'block';
+}
+
+async function persistirDados() {
+    document.getElementById('sync-status').innerText = 'Salvando na nuvem... ⏳';
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dadosGerais)
+        });
+        document.getElementById('sync-status').innerText = '✅ Salvo online!';
+    } catch (e) {
+        document.getElementById('sync-status').innerText = '⚠️ Erro ao salvar online.';
+    }
+}
+
+function lerArquivoBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+// UPLOAD PARA GITHUB
+async function enviarParaGitHub() {
+    const token = document.getElementById('gh-token').value.trim() || localStorage.getItem('gh_user_token');
+    const inputFile = document.getElementById('gh-file');
+    const customName = document.getElementById('gh-custom-name').value.trim();
+    const statusTxt = document.getElementById('upload-status-text');
+
+    if (!token) return alert('Cole o Token do GitHub (ghp_...) e clique em Salvar!');
+    localStorage.setItem('gh_user_token', token);
+
+    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
+
+    const file = inputFile.files[0];
+    statusTxt.style.color = '#0284c7';
+    statusTxt.innerText = 'Subindo para o GitHub... ⏳';
+
+    let nomeFinal = file.name;
+    if (customName) {
+        const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
+        nomeFinal = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
+    }
+    nomeFinal = `${Date.now()}_${nomeFinal.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-zA-Z0-9._-]/g, "_")}`;
+
+    try {
+        const base64Content = await lerArquivoBase64(file);
+        const urlApi = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${nomeFinal}`;
+
+        const resposta = await fetch(urlApi, {
+            method: 'PUT',
+            headers: { 
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.github+json'
+            },
+            body: JSON.stringify({ message: `Upload anexo: ${nomeFinal}`, content: base64Content })
+        });
+
+        const resData = await resposta.json();
+        if (resposta.ok && resData.content) {
+            const urlFinal = `https://${GITHUB_USER}.github.io/${GITHUB_REPO}/${nomeFinal}`;
+            statusTxt.style.color = '#16a34a';
+            statusTxt.innerText = '✅ Enviado ao GitHub!';
+            inputFile.value = '';
+            document.getElementById('gh-custom-name').value = '';
+
+            if (abaAtual === 'notas') document.getElementById('nota-link').value = urlFinal;
+            if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
+            if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
+
+            alert('Arquivo salvo com sucesso no GitHub!\nLink preenchido.');
+        } else {
+            throw new Error(resData.message || 'Erro no envio');
+        }
+    } catch (e) {
+        statusTxt.style.color = '#dc2626';
+        statusTxt.innerText = '❌ ' + e.message;
+        alert('Erro no GitHub: ' + e.message);
+    }
+}
+
+// FORMULÁRIOS
+function salvarNota() {
+    const idEdit = document.getElementById('edit-nota-id').value;
+    const texto = document.getElementById('nota-texto').value.trim();
+    const link = document.getElementById('nota-link').value.trim();
+    if (!texto) return alert('Digite a nota!');
+
+    if (idEdit) {
+        const item = dadosGerais.notas.find(n => n.id == idEdit);
+        if (item) { item.texto = texto; item.link = link; }
+        document.getElementById('edit-nota-id').value = '';
+        document.getElementById('btn-salvar-nota').innerText = 'Fixar Nota';
+    } else {
+        dadosGerais.notas.unshift({ id: Date.now(), texto, link });
+    }
+    document.getElementById('nota-texto').value = '';
+    document.getElementById('nota-link').value = '';
+    renderizarTudo();
+    persistirDados();
+}
+
+function editarNota(id) {
+    const item = dadosGerais.notas.find(n => n.id == id);
+    if (!item) return;
+    document.getElementById('edit-nota-id').value = item.id;
+    document.getElementById('nota-texto').value = item.texto;
+    document.getElementById('nota-link').value = item.link || '';
+    document.getElementById('btn-salvar-nota').innerText = 'Salvar Alteração';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function salvarTarefa() {
+    const idEdit = document.getElementById('edit-tarefa-id').value;
+    const nome = document.getElementById('tarefa-nome').value.trim();
+    const data = document.getElementById('tarefa-data').value;
+    const prioridade = document.getElementById('tarefa-prioridade').value;
+    const anexo = document.getElementById('tarefa-link').value.trim();
+    if (!nome) return alert('Digite a tarefa!');
+
+    if (idEdit) {
+        const item = dadosGerais.tarefas.find(t => t.id == idEdit);
+        if (item) { item.nome = nome; item.data = data; item.prioridade = prioridade; item.anexo = anexo; }
+        document.getElementById('edit-tarefa-id').value = '';
+        document.getElementById('btn-salvar-tarefa').innerText = 'Salvar no Painel';
+    } else {
+        dadosGerais.tarefas.unshift({ id: Date.now(), nome, data, prioridade, anexo });
+    }
+    document.getElementById('tarefa-nome').value = '';
+    document.getElementById('tarefa-data').value = '';
+    document.getElementById('tarefa-link').value = '';
+    renderizarTudo();
+    persistirDados();
+}
+
+function editarTarefa(id) {
+    const item = dadosGerais.tarefas.find(t => t.id == id);
+    if (!item) return;
+    document.getElementById('edit-tarefa-id').value = item.id;
+    document.getElementById('tarefa-nome').value = item.nome;
+    document.getElementById('tarefa-data').value = item.data || '';
+    document.getElementById('tarefa-prioridade').value = item.prioridade || 'baixa';
+    document.getElementById('tarefa-link').value = item.anexo || '';
+    document.getElementById('btn-salvar-tarefa').innerText = 'Salvar Alteração';
+    selecionarAba('tarefas');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function salvarDespesa() {
+    const idEdit = document.getElementById('edit-despesa-id').value;
+    const nome = document.getElementById('despesa-nome').value.trim();
+    const valor = parseFloat(document.getElementById('despesa-valor').value) || 0;
+    const anexo = document.getElementById('despesa-link').value.trim();
+    if (!nome) return alert('Digite a descrição!');
+
+    if (idEdit) {
+        const item = dadosGerais.despesas.find(d => d.id == idEdit);
+        if (item) { item.nome = nome; item.valor = valor; item.anexo = anexo; }
+        document.getElementById('edit-despesa-id').value = '';
+        document.getElementById('btn-salvar-despesa').innerText = 'Salvar na Lista';
+    } else {
+        dadosGerais.despesas.unshift({ id: Date.now(), nome, valor, anexo });
+    }
+    document.getElementById('despesa-nome').value = '';
+    document.getElementById('despesa-valor').value = '';
+    document.getElementById('despesa-link').value = '';
+    renderizarTudo();
+    persistirDados();
+}
+
+function editarDespesa(id) {
+    const item = dadosGerais.despesas.find(d => d.id == id);
+    if (!item) return;
+    document.getElementById('edit-despesa-id').value = item.id;
+    document.getElementById('despesa-nome').value = item.nome;
+    document.getElementById('despesa-valor').value = item.valor;
+    document.getElementById('despesa-link').value = item.anexo || '';
+    document.getElementById('btn-salvar-despesa').innerText = 'Salvar Alteração';
+    selecionarAba('despesas');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function excluirItem(tipo, id) {
+    if (!confirm('Deseja excluir este item?')) return;
+    dadosGerais[tipo] = dadosGerais[tipo].filter(item => item.id != id);
+    renderizarTudo();
+    persistirDados();
+}
+
+async function enviarParaCalendar(id) {
+    const t = dadosGerais.tarefas.find(x => x.id == id);
+    if (!t || !t.data) return alert('Defina data/hora na tarefa!');
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'sync_gcalendar', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
+        });
+        alert('Enviado ao Google Calendar!');
+    } catch(e) { alert('Erro no envio ao Calendar.'); }
+}
+
+async function enviarParaTasks(id) {
+    const t = dadosGerais.tarefas.find(x => x.id == id);
+    if (!t) return;
+    try {
+        await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'sync_gtasks', titulo: t.nome, dataHora: t.data, prioridade: t.prioridade, anexo: t.anexo })
+        });
+        alert('Enviado ao Google Tasks!');
+    } catch(e) { alert('Erro no envio ao Tasks.'); }
+}
+</script>
+</body>
+</html>
