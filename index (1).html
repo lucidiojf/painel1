@@ -26,10 +26,15 @@
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
-        /* QUADRO DE ANEXOS ESTILO CLÁSSICO */
-        .upload-card { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .btn-upload-direct { background: #0284c7; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; text-align: center; text-decoration: none; display: block; }
-        .btn-dropbox-direct { background: #0061fe; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; text-decoration: none; display: block; }
+        /* UPLOAD CARD */
+        .upload-card { background: #f0f9ff; border: 1px dashed #0284c7; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .upload-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+        .up-tab-btn { flex: 1; padding: 6px; font-size: 12px; font-weight: 700; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 6px; cursor: pointer; color: #475569; }
+        .up-tab-btn.active-drive { background: #0284c7; color: white; border-color: #0284c7; }
+        .up-tab-btn.active-gh { background: #22c55e; color: white; border-color: #22c55e; }
+        .up-tab-btn.active-db { background: #0061fe; color: white; border-color: #0061fe; }
+
+        .btn-direct-link { color: white; border: none; padding: 8px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; text-align: center; text-decoration: none; display: block; width: 100%; }
 
         /* SANFONA NOTAS */
         .nota-item { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px; overflow: hidden; background: #ffffff; }
@@ -63,26 +68,51 @@
         <button type="button" class="tab-btn" id="tab-btn-despesas" onclick="selecionarAba('despesas')">Gastos</button>
     </div>
 
-    <!-- ÁREA DE SUBIR ARQUIVOS (SEM DEPENDÊNCIA DE TOKENS) -->
-    <div class="upload-card">
-        <a href="https://github.com/lucidiojf/painel1/upload/main" target="_blank" class="btn-upload-direct">
-            🐙 Subir Foto/PDF para o GitHub
-        </a>
-        
-        <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; font-size: 12px;">
-            <div style="font-weight: 700; color: #0284c7; margin-bottom: 4px;">📑 Gerador Rápido de Link GitHub:</div>
-            <div style="display: flex; gap: 4px;">
-                <input type="text" id="quick-filename" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Nome do arquivo que subiu (ex: recibo.pdf)">
-                <button type="button" onclick="aplicarLinkGerado()" style="background: #0284c7; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Preencher Link</button>
+    <!-- ÁREA DE UPLOAD (GOOGLE DRIVE / GITHUB / DROPBOX) -->
+    <div class="upload-card" id="upload-box-container">
+        <div class="upload-tabs">
+            <button type="button" class="up-tab-btn active-drive" id="btn-mode-drive" onclick="setUploadMode('drive')">📁 Google Drive</button>
+            <button type="button" class="up-tab-btn" id="btn-mode-gh" onclick="setUploadMode('gh')">🐙 GitHub (Manual)</button>
+            <button type="button" class="up-tab-btn" id="btn-mode-db" onclick="setUploadMode('db')">📦 Dropbox</button>
+        </div>
+
+        <!-- 1. MODO GOOGLE DRIVE (DIRETO E SEM TOKEN) -->
+        <div id="drive-controls">
+            <p style="font-size: 12px; color: #0369a1; margin-bottom: 6px; font-weight: 600;">
+                ⭐ Upload direto para a pasta <b>Painel_Anexos</b> do Google Drive (sem token):
+            </p>
+            <div style="display: flex; gap: 6px; margin-bottom: 6px;">
+                <input type="text" id="drive-custom-name" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Nome do arquivo (Opcional)">
+                <input type="file" id="drive-file" class="input-field" style="padding: 4px; font-size: 12px; flex: 1;">
             </div>
-            <div style="margin-top: 4px; color: #64748b; font-size: 11px; word-break: break-all;" id="preview-link-gh">
-                Padrão: <code>https://lucidiojf.github.io/painel1/nome_do_arquivo.pdf</code>
+            <button type="button" class="btn-action" style="background: #0284c7; color: white; padding: 8px; font-size: 13px;" onclick="enviarParaGoogleDrive()">📤 Enviar p/ Google Drive e Preencher Link</button>
+        </div>
+
+        <!-- 2. MODO GITHUB LINK RÁPIDO (SEM TOKEN) -->
+        <div id="gh-controls" style="display: none;">
+            <a href="https://github.com/lucidiojf/painel1/upload/main" target="_blank" class="btn-direct-link" style="background: #22c55e; margin-bottom: 8px;">
+                🐙 Abrir Página de Upload do GitHub
+            </a>
+            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; font-size: 12px;">
+                <div style="font-weight: 700; color: #15803d; margin-bottom: 4px;">Gerador de Link Direto Instantâneo:</div>
+                <div style="display: flex; gap: 4px;">
+                    <input type="text" id="quick-filename" class="input-field" style="padding: 6px; font-size: 12px; flex: 1;" placeholder="Nome do arquivo (ex: exame.pdf)">
+                    <button type="button" onclick="aplicarLinkGitHub()" style="background: #15803d; color: white; border: none; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;">Preencher Link</button>
+                </div>
             </div>
         </div>
 
-        <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-dropbox-direct">
-            📦 Abrir Solicitação de Arquivos do Dropbox
-        </a>
+        <!-- 3. MODO DROPBOX SOLICITAÇÃO -->
+        <div id="db-controls" style="display: none;">
+            <p style="font-size: 12px; color: #475569; margin-bottom: 6px;">
+                Toque no botão para enviar arquivos sem necessidade de login ou token:
+            </p>
+            <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-direct-link" style="background: #0061fe;">
+                📦 Abrir Solicitação Dropbox
+            </a>
+        </div>
+
+        <div id="upload-status-text" style="font-size: 12px; font-weight: 600; margin-top: 4px; text-align: center;"></div>
     </div>
 
     <!-- 1. NOTAS -->
@@ -93,7 +123,7 @@
             <textarea id="nota-texto" class="input-field" placeholder="Digite a anotação ou lembrete clínico aqui..."></textarea>
         </div>
         <div class="form-group">
-            <input type="text" id="nota-link" class="input-field" placeholder="Link do documento/foto associado (Opcional)">
+            <input type="text" id="nota-link" class="input-field" placeholder="Link do documento/foto (Drive, GitHub ou Dropbox)">
         </div>
         <button type="button" class="btn-action" id="btn-salvar-nota" onclick="salvarNota()">Fixar Nota</button>
 
@@ -157,7 +187,7 @@
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNU1UIq_W8m3CVCQqKXSDLGg1A4vVk_3hk4g8q02MLhmY-5jirQz6VIiSy74KsP3YN/exec';
-const GITHUB_BASE_URL = ''https://raw.githubusercontent.com/lucidiojf/painel1/main/';';
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/lucidiojf/painel1/main/';
 
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
@@ -178,17 +208,52 @@ function selecionarAba(aba) {
     document.getElementById('section-despesas').style.display = aba === 'despesas' ? 'block' : 'none';
 }
 
-function aplicarLinkGerado() {
+function setUploadMode(mode) {
+    const btnDrive = document.getElementById('btn-mode-drive');
+    const btnGh = document.getElementById('btn-mode-gh');
+    const btnDb = document.getElementById('btn-mode-db');
+
+    const driveDiv = document.getElementById('drive-controls');
+    const ghDiv = document.getElementById('gh-controls');
+    const dbDiv = document.getElementById('db-controls');
+    const cardContainer = document.getElementById('upload-box-container');
+
+    btnDrive.className = 'up-tab-btn';
+    btnGh.className = 'up-tab-btn';
+    btnDb.className = 'up-tab-btn';
+
+    driveDiv.style.display = 'none';
+    ghDiv.style.display = 'none';
+    dbDiv.style.display = 'none';
+
+    if (mode === 'drive') {
+        btnDrive.className = 'up-tab-btn active-drive';
+        driveDiv.style.display = 'block';
+        cardContainer.style.borderColor = '#0284c7';
+        cardContainer.style.background = '#f0f9ff';
+    } else if (mode === 'gh') {
+        btnGh.className = 'up-tab-btn active-gh';
+        ghDiv.style.display = 'block';
+        cardContainer.style.borderColor = '#22c55e';
+        cardContainer.style.background = '#f0fdf4';
+    } else {
+        btnDb.className = 'up-tab-btn active-db';
+        dbDiv.style.display = 'block';
+        cardContainer.style.borderColor = '#0061fe';
+        cardContainer.style.background = '#eff6ff';
+    }
+}
+
+function aplicarLinkGitHub() {
     const nome = document.getElementById('quick-filename').value.trim();
-    if (!nome) return alert('Digite o nome do arquivo que você subiu no GitHub!');
-    
-    const urlFinal = GITHUB_BASE_URL + encodeURIComponent(nome);
-    
+    if (!nome) return alert('Digite o nome do arquivo que subiu!');
+    const urlFinal = GITHUB_RAW_BASE + encodeURIComponent(nome);
+
     if (abaAtual === 'notas') document.getElementById('nota-link').value = urlFinal;
     if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
     if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
 
-    document.getElementById('preview-link-gh').innerHTML = `Link preenchido: <a href="${urlFinal}" target="_blank" style="color:#0284c7; font-weight:700;">${urlFinal}</a>`;
+    alert('Link direto do GitHub preenchido!');
 }
 
 function carregarDados() {
@@ -318,6 +383,70 @@ async function persistirDados() {
         document.getElementById('sync-status').innerText = '✅ Salvo!';
     } catch (e) {
         document.getElementById('sync-status').innerText = '⚠️ Salvo local';
+    }
+}
+
+function lerArquivoBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+// UPLOAD GOOGLE DRIVE DIRETO
+async function enviarParaGoogleDrive() {
+    const inputFile = document.getElementById('drive-file');
+    const customName = document.getElementById('drive-custom-name').value.trim();
+    const statusTxt = document.getElementById('upload-status-text');
+
+    if (!inputFile.files || !inputFile.files.length) return alert('Selecione um arquivo!');
+
+    const file = inputFile.files[0];
+    statusTxt.style.color = '#0284c7';
+    statusTxt.innerText = 'Subindo p/ o Google Drive... ⏳';
+
+    let nomeFinal = file.name;
+    if (customName) {
+        const ext = file.name.includes('.') ? file.name.split('.').pop() : '';
+        nomeFinal = customName.includes('.') ? customName : (ext ? `${customName}.${ext}` : customName);
+    }
+
+    try {
+        const base64 = await lerArquivoBase64(file);
+        const payload = {
+            acao: 'upload_drive',
+            nomeArquivo: `${Date.now()}_${nomeFinal}`,
+            mimeType: file.type || 'application/octet-stream',
+            base64: base64
+        };
+
+        const resposta = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+
+        const resData = await resposta.json();
+        if (resData.status === 'sucesso' && resData.url) {
+            statusTxt.style.color = '#16a34a';
+            statusTxt.innerText = '✅ Enviado ao Google Drive!';
+            inputFile.value = '';
+            document.getElementById('drive-custom-name').value = '';
+
+            if (abaAtual === 'notas') document.getElementById('nota-link').value = resData.url;
+            if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = resData.url;
+            if (abaAtual === 'despesas') document.getElementById('despesa-link').value = resData.url;
+
+            alert('Arquivo salvo no Google Drive!\nLink gerado e preenchido.');
+        } else {
+            throw new Error(resData.mensagem || 'Falha no upload');
+        }
+    } catch (e) {
+        statusTxt.style.color = '#dc2626';
+        statusTxt.innerText = '❌ Erro no Drive: ' + e.message;
+        alert('Erro no envio do Drive: ' + e.message);
     }
 }
 
