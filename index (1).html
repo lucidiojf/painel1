@@ -439,8 +439,7 @@ async function enviarParaGoogleDrive() {
             if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = resData.url;
             if (abaAtual === 'despesas') document.getElementById('despesa-link').value = resData.url;
 
-            alert('Arquivo salvo no Google Drive!
-Link gerado e preenchido.');
+            alert('Arquivo salvo no Google Drive!\nLink gerado e preenchido.');
         } else {
             throw new Error(resData.mensagem || 'Falha no upload');
         }
@@ -492,7 +491,7 @@ function salvarTarefa() {
 
     if (idEdit) {
         const item = dadosGerais.tarefas.find(t => t.id == idEdit);
-        if (item) { item.nome = nome; item.data = data; item.prioridade = brain_data = prioridade; item.anexo = anexo; }
+        if (item) { item.nome = nome; item.data = data; item.prioridade = prioridade; item.anexo = anexo; }
         document.getElementById('edit-tarefa-id').value = '';
         document.getElementById('btn-salvar-tarefa').innerText = 'Salvar no Painel';
     } else {
