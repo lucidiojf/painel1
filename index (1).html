@@ -102,12 +102,12 @@
             </div>
         </div>
 
-        <!-- 3. MODO DROPBOX SOLICITAÇÃO -->
+        <!-- 3. MODO DROPBOX SOLICITAÇÃO DIRETA -->
         <div id="db-controls" style="display: none;">
             <p style="font-size: 12px; color: #475569; margin-bottom: 6px;">
-                Toque no botão para enviar arquivos sem necessidade de login ou token:
+                Toque no botão para enviar arquivos direto para a pasta do Dropbox:
             </p>
-            <a href="https://www.dropbox.com/request/OhtiEZWwAfFn9QH2AYAS" target="_blank" class="btn-direct-link" style="background: #0061fe;">
+            <a href="https://www.dropbox.com/request/8u5j5n328j1fxyh2mmqb" target="_blank" class="btn-direct-link" style="background: #0061fe;">
                 📦 Abrir Solicitação Dropbox
             </a>
         </div>
@@ -253,7 +253,7 @@ function aplicarLinkGitHub() {
     if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = urlFinal;
     if (abaAtual === 'despesas') document.getElementById('despesa-link').value = urlFinal;
 
-    alert('Link direto do GitHub preenchido!');
+    alert('Link direto do GitHub preenchido com sucesso!');
 }
 
 function carregarDados() {
@@ -439,7 +439,8 @@ async function enviarParaGoogleDrive() {
             if (abaAtual === 'tarefas') document.getElementById('tarefa-link').value = resData.url;
             if (abaAtual === 'despesas') document.getElementById('despesa-link').value = resData.url;
 
-            alert('Arquivo salvo no Google Drive!\nLink gerado e preenchido.');
+            alert('Arquivo salvo no Google Drive!
+Link gerado e preenchido.');
         } else {
             throw new Error(resData.mensagem || 'Falha no upload');
         }
@@ -491,7 +492,7 @@ function salvarTarefa() {
 
     if (idEdit) {
         const item = dadosGerais.tarefas.find(t => t.id == idEdit);
-        if (item) { item.nome = nome; item.data = data; item.prioridade = prioridade; item.anexo = anexo; }
+        if (item) { item.nome = nome; item.data = data; item.prioridade = brain_data = prioridade; item.anexo = anexo; }
         document.getElementById('edit-tarefa-id').value = '';
         document.getElementById('btn-salvar-tarefa').innerText = 'Salvar no Painel';
     } else {
