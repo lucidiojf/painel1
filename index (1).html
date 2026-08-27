@@ -23,6 +23,9 @@
         .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
         textarea.input-field { resize: vertical; min-height: 80px; }
 
+        .checkbox-group { display: flex; gap: 16px; margin-top: 4px; margin-bottom: 8px; font-size: 13px; color: #334155; font-weight: 600; }
+        .checkbox-item { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
         .btn-action { background: #38bdf8; color: #0f172a; border: none; padding: 10px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; }
         .btn-action:active { background: #0284c7; color: white; }
 
@@ -153,6 +156,17 @@
         <div class="form-group">
             <input type="text" id="tarefa-link" class="input-field" placeholder="Link de anexo (Opcional)">
         </div>
+
+        <!-- INTEGRAÇÃO GOOGLE CALENDAR / GOOGLE TASKS -->
+        <div class="checkbox-group">
+            <label class="checkbox-item">
+                <input type="checkbox" id="sync-calendar" checked> 📅 Google Calendar
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" id="sync-tasks" checked> ✅ Google Tasks
+            </label>
+        </div>
+
         <button type="button" class="btn-action" id="btn-salvar-tarefa" onclick="salvarTarefa()">Salvar no Painel</button>
 
         <div style="margin-top: 16px;">
@@ -481,12 +495,15 @@ function editarNota(id) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function salvarTarefa() {
+async function salvarTarefa() {
     const idEdit = document.getElementById('edit-tarefa-id').value;
     const nome = document.getElementById('tarefa-nome').value.trim();
     const data = document.getElementById('tarefa-data').value;
     const prioridade = document.getElementById('tarefa-prioridade').value;
     const anexo = document.getElementById('tarefa-link').value.trim();
+    const syncCal = document.getElementById('sync-calendar').checked;
+    const syncTask = document.getElementById('sync-tasks').checked;
+
     if (!nome) return alert('Digite a tarefa!');
 
     if (idEdit) {
@@ -496,7 +513,26 @@ function salvarTarefa() {
         document.getElementById('btn-salvar-tarefa').innerText = 'Salvar no Painel';
     } else {
         dadosGerais.tarefas.unshift({ id: Date.now(), nome, data, prioridade, anexo });
+
+        // Envio assíncrono para Calendar / Tasks via Google Apps Script
+        if (syncCal || syncTask) {
+            document.getElementById('sync-status').innerText = 'Sincronizando Google... ⏳';
+            try {
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        acao: 'sync_google_eventos',
+                        nome: nome,
+                        data: data,
+                        syncCalendar: syncCal,
+                        syncTasks: syncTask
+                    })
+                });
+            } catch(e) {}
+        }
     }
+
     document.getElementById('tarefa-nome').value = '';
     document.getElementById('tarefa-data').value = '';
     document.getElementById('tarefa-link').value = '';
