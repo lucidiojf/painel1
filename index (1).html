@@ -514,13 +514,14 @@ async function salvarTarefa() {
     } else {
         dadosGerais.tarefas.unshift({ id: Date.now(), nome, data, prioridade, anexo });
 
-        // Envio assíncrono para Calendar / Tasks via Google Apps Script
+        // Disparo com no-cors garantido
         if (syncCal || syncTask) {
             document.getElementById('sync-status').innerText = 'Sincronizando Google... ⏳';
             try {
-                fetch(SCRIPT_URL, {
+                await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         acao: 'sync_google_eventos',
                         nome: nome,
