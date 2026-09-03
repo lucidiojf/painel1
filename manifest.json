@@ -1,0 +1,31 @@
+{
+  "name": "Painel Geral",
+  "short_name": "Painel",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/906/906334.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "share_target": {
+    "action": "./index.html",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "share_title",
+      "text": "share_text",
+      "url": "share_url",
+      "files": [
+        {
+          "name": "shared_files",
+          "accept": ["image/*", "application/pdf", "text/*"]
+        }
+      ]
+    }
+  }
+}
