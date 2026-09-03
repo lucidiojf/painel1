@@ -207,9 +207,41 @@ const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/lucidiojf/painel1/mai
 let dadosGerais = { despesas: [], tarefas: [], notas: [] };
 let abaAtual = 'notas';
 
-window.onload = function() {
+// INICIALIZAÇÃO + CAPTURA DO MENU COMPARTILHAR
+window.onload = async function() {
     renderizarTudo();
     carregarDados();
+
+    // 1. Registra o Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+    }
+
+    // 2. Trata dados vindos do botão "Compartilhar" do celular
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('shared') === 'true') {
+        selecionarAba('notas');
+
+        const texto = params.get('text');
+        const link = params.get('link');
+        if (texto) document.getElementById('nota-texto').value = decodeURIComponent(texto);
+        if (link) document.getElementById('nota-link').value = decodeURIComponent(link);
+
+        if (params.get('hasFile') === 'true') {
+            try {
+                const cache = await caches.open('share-cache');
+                const resp = await cache.match('shared-file');
+                if (resp) {
+                    const nome = decodeURIComponent(params.get('fileName') || 'arquivo_compartilhado');
+                    setUploadMode('drive');
+                    document.getElementById('drive-custom-name').value = nome;
+                    
+                    const txtAtual = document.getElementById('nota-texto').value;
+                    document.getElementById('nota-texto').value = txtAtual ? `${txtAtual}\n[Arquivo recebido: ${nome}]` : `[Arquivo recebido: ${nome}]`;
+                }
+            } catch(e) {}
+        }
+    }
 };
 
 function selecionarAba(aba) {
