@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH Oficial Limpa</title>
+  <title>SISTEMA HM - Emissão de AIH Oficial (Final)</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f1f5f9; margin: 0; padding: 20px; color: #1e293b; }
     .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
     h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 22px; }
+    .box-matriz { background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .box-matriz span { font-weight: 700; color: #b45309; font-size: 14px; }
     fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fafafa; }
     legend { font-weight: 700; color: #0284c7; padding: 0 8px; font-size: 15px; }
     .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
@@ -19,6 +21,10 @@
     label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #475569; }
     input, select, textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #fff; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 5px; }
+    th { background: #e0f2fe; text-align: left; padding: 8px; border: 1px solid #cbd5e1; color: #0369a1; }
+    td { padding: 4px; border: 1px solid #cbd5e1; }
+    .btn-template { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-right: 5px; }
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 14px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 15px; font-weight: bold; text-align: center; font-size: 15px; }
@@ -40,88 +46,97 @@
 <body>
 
 <div class="container">
-  <h2>Emissão de AIH Hospitalar - Gabarito Limpo</h2>
+  <h2>Emissão de AIH Oficial (Gabarito Limpo)</h2>
 
-  <!-- FORMULÁRIO ENVIANDO PARA IFRAME OCULTO (100% GARANTIDO NO GOOGLE SHEETS) -->
-  <form id="formAih"
+  <!-- OBRIGATÓRIO SELECIONAR A MATRIZ CASO NÃO CARREGUE LOCAL -->
+  <div class="box-matriz">
+    <div>
+      <span id="txtMatriz">PDF Raiz Branco (AIH-FG.pdf): Carregamento Automático</span>
+      <div style="font-size: 12px; color: #92400e; margin-top: 4px;">Certifique-se de que o arquivo original está na mesma pasta.</div>
+    </div>
+    <input type="file" id="inputPdfRaiz" accept="application/pdf" style="display: none;">
+    <button type="button" class="btn-template" onclick="document.getElementById('inputPdfRaiz').click()">Selecionar PDF Matriz</button>
+  </div>
+
+  <form id="formAih">
     <!-- DADOS DO PACIENTE -->
     <fieldset>
-      <legend>Identificação do Paciente e Internação</legend>
+      <legend>Identificação do Paciente e Admissão</legend>
       <div class="grid-3">
         <div class="form-group">
           <label>Nº Prontuário:</label>
-          <input type="text" name="prontuario" id="prontuario" value="5284" required>
+          <input type="text" id="prontuario" value="5284" required>
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" name="nomePaciente" id="nomePaciente" value="PAULO CABRAL" required>
+          <input type="text" id="nomePaciente" value="PEDRO CARAI" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
-          <input type="text" name="cns" id="cns" value="705006647751551">
+          <input type="text" id="cns" value="705006647751551">
         </div>
       </div>
       <div class="grid-4">
         <div class="form-group">
           <label>Data de Nascimento:</label>
-          <input type="text" name="dataNasc" id="dataNasc" value="10/12/1954">
+          <input type="text" id="dataNasc" value="10/12/1954">
         </div>
         <div class="form-group">
           <label>Sexo:</label>
-          <select name="sexo" id="sexo">
+          <select id="sexo">
             <option value="M" selected>Masculino</option>
             <option value="F">Feminino</option>
           </select>
         </div>
         <div class="form-group">
           <label>Raça / Cor:</label>
-          <input type="text" name="racaCor" id="racaCor" value="PARDA">
+          <input type="text" id="racaCor" value="PARDA">
         </div>
         <div class="form-group">
           <label>Telefone:</label>
-          <input type="text" name="telefone" id="telefone" value="84 99980 5728">
+          <input type="text" id="telefone" value="84 99980 5728">
         </div>
       </div>
       <div class="grid-3">
         <div class="form-group">
           <label>Nome da Mãe:</label>
-          <input type="text" name="nomeMae" id="nomeMae" value="OLIVIA BATISTA DA SILVA">
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA DA SILVA">
         </div>
         <div class="form-group">
           <label>Endereço Completo:</label>
-          <input type="text" name="endereco" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
+          <input type="text" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
         </div>
         <div class="form-group">
           <label>Município:</label>
-          <input type="text" name="municipio" id="municipio" value="FRUTUOSO GOMES - RN">
+          <input type="text" id="municipio" value="FRUTUOSO GOMES - RN">
         </div>
       </div>
       <div class="grid-4">
         <div class="form-group">
-          <label>Data Internação:</label>
-          <input type="text" name="dataInternacao" id="dataInternacao" value="19/03/23">
+          <label>Data Admissão:</label>
+          <input type="text" id="dataInternacao" value="19/03/23">
         </div>
         <div class="form-group">
           <label>Data Saída (Alta):</label>
-          <input type="text" name="dataSaida" id="dataSaida" value="02/04/23">
+          <input type="text" id="dataSaida" value="02/04/23">
         </div>
         <div class="form-group">
           <label>Diagnóstico Inicial:</label>
-          <input type="text" name="diagInicial" id="diagInicial" value="ERISIPELA">
+          <input type="text" id="diagInicial" value="ERISIPELA">
         </div>
         <div class="form-group">
           <label>CID-10 Principal:</label>
-          <input type="text" name="cidPrincipal" id="cidPrincipal" value="A 46">
+          <input type="text" id="cidPrincipal" value="A 46">
         </div>
       </div>
       <div class="grid-2">
         <div class="form-group">
           <label>Procedimento SIGTAP:</label>
-          <input type="text" name="procCod" id="procCod" value="0303080078">
+          <input type="text" id="procCod1" value="0303080078">
         </div>
         <div class="form-group">
           <label>Enfermaria / Leito:</label>
-          <input type="text" name="leito" id="leito" value="01 / MASC">
+          <input type="text" id="leito" value="01 / MASC">
         </div>
       </div>
     </fieldset>
@@ -132,11 +147,11 @@
       <div class="grid-2">
         <div class="form-group">
           <label>Cirurgião Operador:</label>
-          <input type="text" name="cirurgiaoOperador" id="cirurgiaoOperador" value="DR LUCIDIO">
+          <input type="text" id="cirurgiaoOperador" value="DR LUCIDIO">
         </div>
         <div class="form-group">
           <label>Médico Anestesista:</label>
-          <input type="text" name="anestesistaNome" id="anestesistaNome" value="DR HIAGO - CRM: 8.830">
+          <input type="text" id="anestesistaNome" value="DR HIAGO - CRM: 8.830">
         </div>
       </div>
 
@@ -148,7 +163,7 @@
 
       <div class="form-group">
         <label>Relatório Cirúrgico:</label>
-        <textarea name="relatorioCirurgico" id="relatorioCirurgico" rows="4"></textarea>
+        <textarea id="relatorioCirurgico" rows="4"></textarea>
       </div>
     </fieldset>
 
@@ -157,10 +172,10 @@
   </form>
 </div>
 
-<!-- Iframe invisível -->
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+<!-- Iframe invisível para processar o download da matriz limpa se não tiver local -->
+<iframe id="frameDownloadMatriz" style="display: none;"></iframe>
 
-<!-- MODAL VIEWER -->
+<!-- MODAL DO VIEWER DE IMPRESSÃO -->
 <div class="modal-overlay" id="pdfModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -179,11 +194,20 @@
 </div>
 
 <script>
-  // ATENÇÃO: Cole aqui a URL do seu Apps Script
-  const SCRIPT_URL = "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI";
+  // ATENÇÃO: Cole aqui a URL gerada na Nova Versão do seu Apps Script (terminada em /exec)
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec";
 
-  let matrizLimpaBytes = null;
+  let matrizBrancaBytes = null;
   let currentBlobUrl = null;
+
+  // Carregamento manual do PDF Raiz
+  document.getElementById('inputPdfRaiz').addEventListener('change', async (e) => {
+    if (e.target.files.length) {
+      matrizBrancaBytes = await e.target.files[0].arrayBuffer();
+      document.getElementById('txtMatriz').innerText = "PDF Branco Carregado: " + e.target.files[0].name;
+      document.getElementById('txtMatriz').style.color = "#16a34a";
+    }
+  });
 
   const MODELOS = {
     cesariana: `Incisão Pfannenstiel transversa arciforme. Abertura por planos. Histerotomia transversa semicircular segmento inferior útero. Concepto vivo, em boas condições. Extração manual da placenta. Revisão da cavidade uterina. Histerorrafia em 02 planos. Fechamento de parede por planos anatômicos. Pele suturada com mononylon 3-0. Curativo estéril.`,
@@ -191,88 +215,82 @@
   };
 
   function inserirModelo(tipo) {
-    if (MODELOS[tipo]) {
-      document.getElementById('relatorioCirurgico').value = MODELOS[tipo];
-    }
+    if (MODELOS[tipo]) document.getElementById('relatorioCirurgico').value = MODELOS[tipo];
   }
 
-  // Carrega o PDF oficial limpo que você subiu no repositório
+  // Preenche diretamente sobre as coordenadas exatas do PDF Branco Original
   async function carimbarNoPdfBranco(dados) {
-    if (!matrizLimpaBytes) {
-      // BUSCA EXATA DO ARQUIVO LIMPO ENVIADO[cite: 1]
+    if (!matrizBrancaBytes) {
+      // Tenta puxar automaticamente da pasta se estiver lá
       try {
-        const res = await fetch('./AIH COMPLETA.pdf');
-        if (res.ok) {
-          matrizLimpaBytes = await res.arrayBuffer();
-        } else {
-          // Fallback caso o nome tenha mudado
-          const res2 = await fetch('./AIH%20COMPLETA.pdf');
-          if (res2.ok) matrizLimpaBytes = await res2.arrayBuffer();
-        }
+        const res = await fetch('./AIH-FG.pdf');
+        if (res.ok) matrizBrancaBytes = await res.arrayBuffer();
       } catch (e) {}
     }
-
-    if (!matrizLimpaBytes) {
-      throw new Error("Não foi possível carregar o arquivo 'AIH COMPLETA.pdf' no GitHub Pages. Verifique se ele está na mesma pasta do repositório.");
+    if (!matrizBrancaBytes) {
+      throw new Error("O arquivo AIH-FG.pdf original limpo não foi localizado na mesma pasta do sistema.");
     }
 
-    const { PDFDocument, StandardFonts } = PDFLib;
-    const pdfDoc = await PDFDocument.load(matrizLimpaBytes);
+    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+    const pdfDoc = await PDFDocument.load(matrizBrancaBytes);
     const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-    const fontNorm = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const pages = pdfDoc.getPages();
 
     // ==========================================
-    // PÁGINA 1: AIH PRINCIPAL (Coordenadas Corrigidas para o Gabarito Limpo)[cite: 2]
+    // PÁGINA 1: AIH PRINCIPAL (Carimba dados)[cite: 2]
     // ==========================================
     if (pages[0]) {
       const p1 = pages[0];
-      const h1 = p1.getHeight();
-
-      // Linha do Prontuário/Datas
-      p1.drawText(dados.dataInternacao || '', { x: 130, y: h1 - 50, size: 9, font: fontNorm });
-      p1.drawText(dados.prontuario || '', { x: 400, y: h1 - 65, size: 9, font });
-      p1.drawText(dados.dataSaida || '', { x: 440, y: h1 - 88, size: 9, font });
-
-      // Dados do Paciente[cite: 2]
-      p1.drawText(`Nome do Paciente: ${dados.nomePaciente}`, { x: 45, y: h1 - 105, size: 10, font });
-      p1.drawText(dados.cns || '', { x: 420, y: h1 - 120, size: 9, font: fontNorm });
-      p1.drawText(dados.dataNasc || '', { x: 175, y: h1 - 132, size: 9, font: fontNorm });
-      p1.drawText(dados.sexo || '', { x: 65, y: h1 - 132, size: 9, font: fontNorm });
-      p1.drawText(dados.racaCor || '', { x: 285, y: h1 - 132, size: 9, font: fontNorm });
-
-      p1.drawText(dados.nomeMae || '', { x: 110, y: h1 - 150, size: 9, font });
-      p1.drawText(dados.endereco || '', { x: 110, y: h1 - 165, size: 8.5, font: fontNorm });
-      p1.drawText(dados.municipio || '', { x: 110, y: h1 - 177, size: 8.5, font: fontNorm });
-      p1.drawText(dados.telefone || '', { x: 420, y: h1 - 165, size: 8.5, font: fontNorm });
+      p1.drawText(dados.prontuario || '', { x: 130, y: 724, size: 9, font });
+      p1.drawText(dados.dataSaida || '', { x: 450, y: 712, size: 9, font });
+      p1.drawText(dados.dataInternacao || '', { x: 430, y: 686, size: 9, font });
+      p1.drawText(dados.nomePaciente || '', { x: 155, y: 673, size: 9, font });
+      p1.drawText(dados.sexo || '', { x: 75, y: 660, size: 9, font });
+      p1.drawText(dados.dataNasc || '', { x: 175, y: 660, size: 9, font });
+      p1.drawText(dados.racaCor || '', { x: 285, y: 660, size: 9, font });
+      p1.drawText(dados.cns || '', { x: 420, y: 660, size: 9, font });
+      p1.drawText(dados.nomeMae || '', { x: 130, y: 647, size: 9, font });
+      p1.drawText(dados.endereco || '', { x: 110, y: 620, size: 8, font });
+      p1.drawText(dados.municipio || '', { x: 110, y: 607, size: 8, font });
+      p1.drawText(dados.telefone || '', { x: 420, y: 594, size: 8, font });
       
-      p1.drawText(dados.procCod || '', { x: 165, y: h1 - 225, size: 9, font });
-      p1.drawText(dados.cidPrincipal || '', { x: 115, y: h1 - 280, size: 9, font });
+      p1.drawText(dados.procCod || '', { x: 165, y: 554, size: 9, font });
+      p1.drawText(dados.cidPrincipal || '', { x: 115, y: 501, size: 9, font });
 
-      // Tabela de Produção[cite: 2]
-      p1.drawText(dados.procCod || '', { x: 80, y: h1 - 380, size: 8, font: fontNorm });
-      p1.drawText("1", { x: 215, y: h1 - 380, size: 8, font: fontNorm });
-      p1.drawText("2380846", { x: 385, y: h1 - 380, size: 8, font: fontNorm });
-      p1.drawText("08.349.052/0001-80", { x: 450, y: h1 - 380, size: 8, font: fontNorm });
+      // Tabela de Procedimentos (Linha 1)
+      p1.drawText(dados.procCod || '', { x: 80, y: 398, size: 8, font });
+      p1.drawText("1", { x: 215, y: 398, size: 8, font });
+      p1.drawText("2380846", { x: 385, y: 398, size: 8, font });
+      p1.drawText("08.349.052/0001-80", { x: 450, y: 398, size: 8, font });
     }
 
-    // PÁGINA 2: LAUDO SUS[cite: 2]
+    // ==========================================
+    // PÁGINA 2: LAUDO SUS
+    // ==========================================
     if (pages[1]) {
       const p2 = pages[1];
       p2.drawText(dados.nomePaciente || '', { x: 45, y: 692, size: 9, font });
-      // p2.drawText... (mapeamento continua conforme necessidade, usando coordinates limpas)
+      p2.drawText(dados.prontuario || '', { x: 370, y: 692, size: 9, font });
+      p2.drawText(dados.cns || '', { x: 45, y: 668, size: 9, font });
+      p2.drawText(dados.dataNasc || '', { x: 285, y: 668, size: 9, font });
+      p2.drawText(dados.nomeMae || '', { x: 45, y: 645, size: 8, font });
+      p2.drawText(dados.diagInicial || '', { x: 45, y: 462, size: 9, font });
+      p2.drawText(dados.cidPrincipal || '', { x: 285, y: 462, size: 9, font });
+      p2.drawText(dados.procCod || '', { x: 375, y: 428, size: 9, font });
     }
 
-    // PÁGINA 5: BOLETIM CIRÚRGICO[cite: 2]
+    // ==========================================
+    // PÁGINA 5: BOLETIM CIRÚRGICO
+    // ==========================================
     if (pages[4]) {
-      const p5 = pages[4];
-      p5.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
-      p5.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8, font: fontNorm });
-      p5.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8, font: fontNorm });
+      const pL = pages[4];
+      pL.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
+      pL.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8, font });
+      pL.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8, font });
 
       if (dados.relatorioCirurgico) {
-        p5.drawText(dados.relatorioCirurgico, {
-          x: 45, y: 440, size: 7.5, font: fontNorm, maxWidth: 510, lineHeight: 10.5
+        pL.drawText(dados.relatorioCirurgico, {
+          x: 45, y: 440, size: 7.5, font, maxWidth: 510, lineHeight: 10.5
         });
       }
     }
@@ -280,23 +298,15 @@
     return await pdfDoc.save();
   }
 
-  // Envio do formulário
+  // Evento de Submissão: Salva e Carimba
   document.getElementById('formAih').addEventListener('submit', async function(e) {
+    e.preventDefault();
     const st = document.getElementById('msgStatus');
     const btn = document.getElementById('btnSalvar');
 
     st.style.color = '#0284c7';
-    st.innerText = 'Gravando na planilha e carimbando no PDF branco...';
+    st.innerText = 'Processando: Gravando na planilha e carimbando PDF Branco...';
     btn.disabled = true;
-
-   // === ADICIONE ESTE NOVO BLOCO NO LUGAR ===
-if (SCRIPT_URL && !SCRIPT_URL.includes("https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec")) {
-  // Cria uma imagem invisível para enviar os dados via GET
-  const ping = new Image();
-  const params = new URLSearchParams(payload).toString();
-  ping.src = `${SCRIPT_URL}?${params}`;
-}
-// =========================================
 
     const payload = {
       prontuario: document.getElementById('prontuario').value,
@@ -313,14 +323,21 @@ if (SCRIPT_URL && !SCRIPT_URL.includes("https://script.google.com/macros/s/AKfyc
       dataSaida: document.getElementById('dataSaida').value,
       diagInicial: document.getElementById('diagInicial').value,
       cidPrincipal: document.getElementById('cidPrincipal').value,
-      procCod: document.getElementById('procCod').value,
+      procCod: document.getElementById('procCod1').value,
       cirurgiaoOperador: document.getElementById('cirurgiaoOperador').value,
       anestesistaNome: document.getElementById('anestesistaNome').value,
       relatorioCirurgico: document.getElementById('relatorioCirurgico').value
     };
 
+    // 1. Gravação no Google Sheets (Via GET Ping - Funciona 100% em arquivos locais locais sem falha de segurança)
+    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL")) {
+      const ping = new Image();
+      const params = new URLSearchParams(payload).toString();
+      ping.src = SCRIPT_URL + "?" + params;
+    }
+
+    // 2. Carimba os dados sobre o PDF Branco Puro[cite: 1, 2]
     try {
-      // 1. Gera o PDF sobre o gabarito limpo[cite: 1]
       const pdfBytes = await carimbarNoPdfBranco(payload);
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       
@@ -333,18 +350,17 @@ if (SCRIPT_URL && !SCRIPT_URL.includes("https://script.google.com/macros/s/AKfyc
       btnDl.onclick = function() {
         const link = document.createElement('a');
         link.href = currentBlobUrl;
-        link.download = `AIH_${payload.prontuario || 'Documento'}.pdf`;
+        link.download = `AIH_${payload.prontuario || 'Preenchida'}.pdf`;
         link.click();
       };
 
       document.getElementById('pdfModal').style.display = 'flex';
       st.style.color = '#16a34a';
-      st.innerText = 'Sucesso! Dados enviados ao Google Sheets e visualizador aberto.';
+      st.innerText = 'Registro finalizado! Planilha atualizada e PDF oficial limpo gerado.';
     } catch (pdfErr) {
-      st.style.color = '#dc2626';
-      st.innerText = 'Erro ao processar PDF: ' + pdfErr.message;
+      status.style.color = '#dc2626';
+      status.innerText = 'Erro: ' + pdfErr.message;
     } finally {
-      // Deixa o form enviar para o iframe oculto
       btn.disabled = false;
     }
   });
