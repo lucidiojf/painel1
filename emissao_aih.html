@@ -52,7 +52,7 @@
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="PEDRO CACHORRA" required>
+          <input type="text" id="nomePaciente" value="PAULO CACHORRA" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
@@ -62,7 +62,7 @@
       <div class="grid-4">
         <div class="form-group">
           <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1958">
+          <input type="text" id="dataNasc" value="10/12/1960">
         </div>
         <div class="form-group">
           <label>Sexo:</label>
@@ -83,7 +83,7 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="MARIA FRANCISCA">
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA DA SILVA">
         </div>
         <div class="form-group">
           <label>Endereço Completo:</label>
@@ -208,40 +208,40 @@
     const pages = pdfDoc.getPages();
 
     // =========================================================================
-    // PÁGINA 1: AIH PRINCIPAL (Calibragem Exata sobre as Linhas)
+    // PÁGINA 1: AIH PRINCIPAL (Coordenadas com elevação precisa para cada linha)[cite: 1]
     // =========================================================================
     if (pages[0]) {
       const p1 = pages[0];
 
       // Topo: Prontuário e Datas
       p1.drawText(dados.prontuario || '', { x: 235, y: 708, size: 9, font });
-      p1.drawText(dados.dataInternacao || '', { x: 155, y: 648, size: 9, font: fontNorm });
+      p1.drawText(dados.dataInternacao || '', { x: 135, y: 648, size: 9, font: fontNorm });
       p1.drawText(dados.dataSaida || '', { x: 440, y: 644, size: 9, font: fontNorm });
 
-      // Linha 1: Nome do Paciente (Sobre o sublinhado)
-      p1.drawText(dados.nomePaciente || '', { x: 130, y: 574, size: 9.5, font });
+      // Linha 1: Nome do Paciente (Subiu para a linha de Nome do Paciente:)[cite: 1]
+      p1.drawText(dados.nomePaciente || '', { x: 125, y: 593, size: 9.5, font });
 
-      // Linha 2: Sexo, Nascimento, Raça/Cor, CNS
-      p1.drawText(dados.sexo || '', { x: 60, y: 554, size: 9, font: fontNorm });
-      p1.drawText(dados.dataNasc || '', { x: 165, y: 554, size: 9, font: fontNorm });
-      p1.drawText(dados.racaCor || '', { x: 320, y: 554, size: 9, font: fontNorm });
-      p1.drawText(dados.cns || '', { x: 420, y: 554, size: 9, font: fontNorm });
+      // Linha 2: Sexo, Nascimento, Raça/Cor, CNS (Subiu para a linha de Sexo / Dt Nasc)[cite: 1]
+      p1.drawText(dados.sexo || '', { x: 55, y: 574, size: 9, font: fontNorm });
+      p1.drawText(dados.dataNasc || '', { x: 145, y: 574, size: 9, font: fontNorm });
+      p1.drawText(dados.racaCor || '', { x: 310, y: 574, size: 9, font: fontNorm });
+      p1.drawText(dados.cns || '', { x: 420, y: 574, size: 9, font: fontNorm });
 
-      // Linha 3: Nome da Mãe
-      p1.drawText(dados.nomeMae || '', { x: 110, y: 536, size: 8.5, font: fontNorm });
+      // Linha 3: Nome da Mãe (Subiu para a linha de Nome da mãe:)[cite: 1]
+      p1.drawText(dados.nomeMae || '', { x: 110, y: 556, size: 8.5, font: fontNorm });
 
-      // Linha 4: Endereço
-      p1.drawText(dados.endereco || '', { x: 95, y: 518, size: 8.5, font: fontNorm });
+      // Linha 4: Endereço (Subiu para a linha de Endereço:)[cite: 1]
+      p1.drawText(dados.endereco || '', { x: 85, y: 538, size: 8.5, font: fontNorm });
 
-      // Linha 5: Município e Telefone
-      p1.drawText(dados.municipio || '', { x: 95, y: 500, size: 8.5, font: fontNorm });
-      p1.drawText(dados.telefone || '', { x: 420, y: 500, size: 8.5, font: fontNorm });
+      // Linha 5: Município e Telefone (Subiu para a linha de Município:)[cite: 1]
+      p1.drawText(dados.municipio || '', { x: 85, y: 520, size: 8.5, font: fontNorm });
+      p1.drawText(dados.telefone || '', { x: 420, y: 520, size: 8.5, font: fontNorm });
 
-      // Procedimento Solicitado / Realizado e CID
-      p1.drawText(dados.procCod || '', { x: 165, y: 436, size: 9, font });
-      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 382, size: 9, font });
+      // Procedimento Solicitado e CID Principal
+      p1.drawText(dados.procCod || '', { x: 165, y: 440, size: 9, font });
+      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 385, size: 9, font });
 
-      // Tabela de Procedimentos Realizados (Linha 1 da grade)
+      // Tabela de Produção SUS (Linha 1 da grade)
       p1.drawText(dados.procCod || '', { x: 80, y: 284, size: 8.5, font: fontNorm });
       p1.drawText("1", { x: 215, y: 284, size: 8.5, font: fontNorm });
       p1.drawText("2380846", { x: 385, y: 284, size: 8.5, font: fontNorm });
