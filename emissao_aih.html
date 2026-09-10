@@ -52,17 +52,17 @@
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="MANE CACHORRA" required>
+          <input type="text" id="nomePaciente" value="PEDRO CACHORRA" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
-          <input type="text" id="cns" value="705006647751551">
+          <input type="text" id="cns" value="704006647751551">
         </div>
       </div>
       <div class="grid-4">
         <div class="form-group">
           <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1954">
+          <input type="text" id="dataNasc" value="10/12/1958">
         </div>
         <div class="form-group">
           <label>Sexo:</label>
@@ -83,7 +83,7 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="OLIVIA BATISTA DA SILVA">
+          <input type="text" id="nomeMae" value="MARIA FRANCISCA">
         </div>
         <div class="form-group">
           <label>Endereço Completo:</label>
@@ -208,45 +208,71 @@
     const pages = pdfDoc.getPages();
 
     // =========================================================================
-    // PÁGINA 1: AIH PRINCIPAL (Coordenadas Rebaixadas para as Linhas Corretas)
+    // PÁGINA 1: AIH PRINCIPAL (Calibragem Exata sobre as Linhas)
     // =========================================================================
     if (pages[0]) {
       const p1 = pages[0];
 
-      // Bloco do Topo (Prontuário e Datas)
+      // Topo: Prontuário e Datas
       p1.drawText(dados.prontuario || '', { x: 235, y: 708, size: 9, font });
-      p1.drawText(dados.dataInternacao || '', { x: 130, y: 648, size: 9, font: fontNorm });
-      p1.drawText(dados.dataSaida || '', { x: 440, y: 648, size: 9, font: fontNorm });
+      p1.drawText(dados.dataInternacao || '', { x: 155, y: 648, size: 9, font: fontNorm });
+      p1.drawText(dados.dataSaida || '', { x: 440, y: 644, size: 9, font: fontNorm });
 
-      // Bloco Identificação do Paciente
-      p1.drawText(dados.nomePaciente || '', { x: 130, y: 556, size: 9.5, font });
-      p1.drawText(dados.sexo || '', { x: 65, y: 538, size: 9, font: fontNorm });
-      p1.drawText(dados.dataNasc || '', { x: 175, y: 538, size: 9, font: fontNorm });
-      p1.drawText(dados.racaCor || '', { x: 340, y: 538, size: 9, font: fontNorm });
-      p1.drawText(dados.cns || '', { x: 420, y: 538, size: 9, font: fontNorm });
+      // Linha 1: Nome do Paciente (Sobre o sublinhado)
+      p1.drawText(dados.nomePaciente || '', { x: 130, y: 574, size: 9.5, font });
 
-      p1.drawText(dados.nomeMae || '', { x: 110, y: 520, size: 8.5, font: fontNorm });
-      p1.drawText(dados.endereco || '', { x: 100, y: 502, size: 8.5, font: fontNorm });
-      p1.drawText(dados.municipio || '', { x: 100, y: 484, size: 8.5, font: fontNorm });
-      p1.drawText(dados.telefone || '', { x: 420, y: 484, size: 8.5, font: fontNorm });
+      // Linha 2: Sexo, Nascimento, Raça/Cor, CNS
+      p1.drawText(dados.sexo || '', { x: 60, y: 554, size: 9, font: fontNorm });
+      p1.drawText(dados.dataNasc || '', { x: 165, y: 554, size: 9, font: fontNorm });
+      p1.drawText(dados.racaCor || '', { x: 320, y: 554, size: 9, font: fontNorm });
+      p1.drawText(dados.cns || '', { x: 420, y: 554, size: 9, font: fontNorm });
+
+      // Linha 3: Nome da Mãe
+      p1.drawText(dados.nomeMae || '', { x: 110, y: 536, size: 8.5, font: fontNorm });
+
+      // Linha 4: Endereço
+      p1.drawText(dados.endereco || '', { x: 95, y: 518, size: 8.5, font: fontNorm });
+
+      // Linha 5: Município e Telefone
+      p1.drawText(dados.municipio || '', { x: 95, y: 500, size: 8.5, font: fontNorm });
+      p1.drawText(dados.telefone || '', { x: 420, y: 500, size: 8.5, font: fontNorm });
 
       // Procedimento Solicitado / Realizado e CID
-      p1.drawText(dados.procCod || '', { x: 165, y: 432, size: 9, font });
-      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 378, size: 9, font });
+      p1.drawText(dados.procCod || '', { x: 165, y: 436, size: 9, font });
+      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 382, size: 9, font });
 
-      // Tabela Procedimentos Realizados (Linha 1)
+      // Tabela de Procedimentos Realizados (Linha 1 da grade)
       p1.drawText(dados.procCod || '', { x: 80, y: 284, size: 8.5, font: fontNorm });
       p1.drawText("1", { x: 215, y: 284, size: 8.5, font: fontNorm });
       p1.drawText("2380846", { x: 385, y: 284, size: 8.5, font: fontNorm });
       p1.drawText("08.349.052/0001-80", { x: 450, y: 284, size: 8.5, font: fontNorm });
     }
 
-    // ==========================================
+    // =========================================================================
+    // PÁGINA 2: LAUDO DE SOLICITAÇÃO SUS
+    // =========================================================================
+    if (pages[1]) {
+      const p2 = pages[1];
+      p2.drawText(dados.nomePaciente || '', { x: 50, y: 686, size: 9, font });
+      p2.drawText(dados.prontuario || '', { x: 375, y: 686, size: 9, font });
+      p2.drawText(dados.cns || '', { x: 50, y: 660, size: 9, font: fontNorm });
+      p2.drawText(dados.dataNasc || '', { x: 285, y: 660, size: 9, font: fontNorm });
+      p2.drawText(dados.racaCor || '', { x: 440, y: 660, size: 8.5, font: fontNorm });
+      p2.drawText(dados.nomeMae || '', { x: 50, y: 636, size: 8.5, font: fontNorm });
+      p2.drawText(dados.endereco || '', { x: 50, y: 612, size: 8.5, font: fontNorm });
+      p2.drawText(dados.municipio || '', { x: 50, y: 588, size: 8.5, font: fontNorm });
+      p2.drawText(dados.diagInicial || '', { x: 50, y: 456, size: 9, font });
+      p2.drawText(dados.cidPrincipal || '', { x: 285, y: 456, size: 9, font });
+      p2.drawText(dados.procCod || '', { x: 370, y: 420, size: 9, font });
+    }
+
+    // =========================================================================
     // PÁGINA 5: BOLETIM CIRÚRGICO
-    // ==========================================
+    // =========================================================================
     if (pages[4]) {
       const p5 = pages[4];
       p5.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
+      p5.drawText(dados.prontuario || '', { x: 460, y: 700, size: 9, font });
       p5.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8.5, font: fontNorm });
       p5.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8.5, font: fontNorm });
 
@@ -291,7 +317,6 @@
       relatorioCirurgico: document.getElementById('relatorioCirurgico').value
     };
 
-    // 1. Gravação assíncrona garantida no Google Sheets
     if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL_DO_GOOGLE")) {
       const p = new URLSearchParams(payload);
       fetch(`${SCRIPT_URL}?${p.toString()}`, {
@@ -300,7 +325,6 @@
       }).catch(err => console.warn("Aviso Sheets:", err));
     }
 
-    // 2. Preenchimento do PDF
     try {
       const pdfBytes = await carimbarNoPdfBranco(payload);
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
