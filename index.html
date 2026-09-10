@@ -3,78 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Sistema Hospitalar - AIH & Prontuário</title>
-  <!-- Biblioteca pdf-lib para desenhar o texto direto no PDF modelo -->
-  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <title>Hospital Maternidade Severina Carlos de Andrade - AIH</title>
   <style>
     :root {
       --primary: #0284c7;
       --primary-dark: #0369a1;
-      --bg: #f1f5f9;
-      --card-bg: #ffffff;
+      --bg: #f8fafc;
       --border: #cbd5e1;
       --text: #0f172a;
     }
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 12px; }
-    .container { max-width: 720px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); overflow: hidden; }
-    
-    header { background: #1e293b; color: #fff; padding: 16px; text-align: center; }
-    header h1 { font-size: 1.15rem; font-weight: 700; }
-    header p { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; }
 
+    /* FORMULÁRIO EM TELA */
+    .no-print { max-width: 720px; margin: 0 auto; background: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; }
+    header { background: #1e293b; color: #fff; padding: 16px; text-align: center; }
+    header h1 { font-size: 1.15rem; font-weight: bold; }
+    header p { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; }
+    
     .nav-tabs { display: flex; background: #e2e8f0; border-bottom: 1px solid var(--border); overflow-x: auto; }
-    .tab-btn { flex: 1; min-width: 120px; padding: 12px 8px; border: none; background: transparent; font-size: 0.85rem; font-weight: 600; color: #64748b; cursor: pointer; text-align: center; }
+    .tab-btn { flex: 1; min-width: 110px; padding: 12px 8px; border: none; background: transparent; font-size: 0.85rem; font-weight: 600; color: #64748b; cursor: pointer; text-align: center; }
     .tab-btn.active { background: #fff; color: var(--primary); border-bottom: 3px solid var(--primary); }
 
     .form-section { padding: 16px; display: none; }
     .form-section.active { display: block; }
+    .section-title { font-size: 0.95rem; font-weight: 700; color: var(--primary-dark); margin: 14px 0 8px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+    .section-title:first-of-type { margin-top: 0; }
 
-    .group-title { font-size: 0.95rem; font-weight: 700; color: var(--primary-dark); margin: 16px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
-    .group-title:first-of-type { margin-top: 0; }
-
-    .form-group { margin-bottom: 12px; }
+    .form-group { margin-bottom: 10px; }
     label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; }
-    input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; background: #fff; color: #1e293b; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); ring: 2px solid #bae6fd; }
-    
+    input, select, textarea { width: 100%; padding: 9px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; background: #fff; }
     .row { display: flex; gap: 8px; }
-    .col-2 { flex: 2; }
     .col-1 { flex: 1; }
+    .col-2 { flex: 2; }
 
     .footer-bar { padding: 16px; background: #fff; border-top: 1px solid #e2e8f0; }
-    .btn-submit { width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-submit { width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; }
     .btn-submit:active { background: var(--primary-dark); }
-
     #status { margin-top: 10px; font-size: 0.85rem; text-align: center; font-weight: 600; }
+
+    /* MODELOS DE IMPRESSÃO A4 */
+    .print-area { display: none; }
+
+    @media print {
+      body { background: #fff; padding: 0; margin: 0; color: #000; }
+      .no-print { display: none !important; }
+      .print-area { display: block !important; }
+      .page-a4 { width: 100%; box-sizing: border-box; padding: 15mm 15mm 15mm 15mm; page-break-after: always; font-size: 10pt; line-height: 1.25; }
+      .page-a4:last-child { page-break-after: avoid; }
+      
+      .doc-header { text-align: center; margin-bottom: 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+      .doc-header h2 { font-size: 11pt; font-weight: bold; text-transform: uppercase; margin: 0; }
+      .doc-header h3 { font-size: 10pt; margin: 2px 0; font-weight: bold; }
+      .doc-header p { font-size: 8pt; margin: 0; }
+
+      .box-title { font-size: 9pt; font-weight: bold; background: #f1f5f9; border: 1px solid #000; padding: 3px 6px; margin-top: 6px; text-transform: uppercase; }
+      table.grid { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+      table.grid td, table.grid th { border: 1px solid #000; padding: 4px 6px; font-size: 8.5pt; vertical-align: top; }
+      table.grid th { background: #f8fafc; font-weight: bold; text-align: left; }
+      .val { font-weight: bold; font-family: monospace, sans-serif; font-size: 9.5pt; }
+      .field-label { font-size: 7.5pt; text-transform: uppercase; color: #333; display: block; margin-bottom: 2px; }
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
+<!-- FORMULÁRIO DE ENTRADA (CELULAR DA ENFERMAGEM) -->
+<div class="no-print">
   <header>
     <h1>Hospital Maternidade Severina Carlos de Andrade</h1>
-    <p>Frutuoso Gomes - RN • Emissão Integrada de AIH & Prontuário</p>
+    <p>Frutuoso Gomes - RN • Sistema de AIH & Prontuário</p>
   </header>
 
   <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab(0)">1. Paciente</button>
-    <button class="tab-btn" onclick="switchTab(1)">2. Internação & Laudo</button>
-    <button class="tab-btn" onclick="switchTab(2)">3. Cirurgia & Anestesia</button>
+    <button type="button" class="tab-btn active" onclick="switchTab(0)">1. Paciente</button>
+    <button type="button" class="tab-btn" onclick="switchTab(1)">2. Internação</button>
+    <button type="button" class="tab-btn" onclick="switchTab(2)">3. Cirurgia / Anestesia</button>
   </div>
 
-  <form id="hospitalForm">
-    <!-- ABA 1: DADOS DO PACIENTE -->
+  <form id="mainForm">
+    <!-- ABA 1: PACIENTE -->
     <div class="form-section active">
-      <div class="group-title">Identificação Básica</div>
+      <div class="section-title">Identificação</div>
       <div class="row">
         <div class="form-group col-1">
           <label>Nº Prontuário *</label>
-          <input type="text" id="prontuario" required placeholder="Ex: 1234">
+          <input type="text" id="prontuario" required placeholder="Ex: 9999">
         </div>
         <div class="form-group col-1">
           <label>Nº AIH</label>
-          <input type="text" id="numeroAih" placeholder="Se houver">
+          <input type="text" id="numeroAih" placeholder="Opcional">
         </div>
       </div>
 
@@ -86,7 +104,7 @@
       <div class="row">
         <div class="form-group col-2">
           <label>Cartão SUS (CNS) *</label>
-          <input type="text" id="cns" maxlength="18" placeholder="000.0000.0000.0000">
+          <input type="text" id="cns" placeholder="000.0000.0000.0000">
         </div>
         <div class="form-group col-1">
           <label>Sexo</label>
@@ -116,7 +134,7 @@
 
       <div class="row">
         <div class="form-group col-1">
-          <label>RG / Doc</label>
+          <label>RG</label>
           <input type="text" id="rg">
         </div>
         <div class="form-group col-1">
@@ -125,7 +143,7 @@
         </div>
       </div>
 
-      <div class="group-title">Filiação e Contato</div>
+      <div class="section-title">Filiação e Residência</div>
       <div class="form-group">
         <label>Nome da Mãe *</label>
         <input type="text" id="mae" required>
@@ -136,7 +154,7 @@
       </div>
       <div class="row">
         <div class="form-group col-2">
-          <label>Endereço (Rua, Nº, Bairro)</label>
+          <label>Endereço Completo</label>
           <input type="text" id="endereco">
         </div>
         <div class="form-group col-1">
@@ -146,7 +164,7 @@
       </div>
       <div class="row">
         <div class="form-group col-2">
-          <label>Município de Residência</label>
+          <label>Município</label>
           <input type="text" id="municipio" value="FRUTUOSO GOMES - RN">
         </div>
         <div class="form-group col-1">
@@ -156,12 +174,12 @@
       </div>
     </div>
 
-    <!-- ABA 2: INTERNAÇÃO & LAUDO -->
+    <!-- ABA 2: INTERNAÇÃO -->
     <div class="form-section">
-      <div class="group-title">Dados da Internação</div>
+      <div class="section-title">Dados Clínicos da Internação</div>
       <div class="row">
         <div class="form-group col-1">
-          <label>Data Admissão *</label>
+          <label>Data Internação *</label>
           <input type="date" id="dataInternacao" required>
         </div>
         <div class="form-group col-1">
@@ -172,16 +190,15 @@
 
       <div class="row">
         <div class="form-group col-1">
-          <label>Especialidade / Serviço</label>
+          <label>Especialidade</label>
           <input type="text" id="especialidade" value="CLINICA MÉDICA">
         </div>
         <div class="form-group col-1">
-          <label>Enfermaria / Leito</label>
-          <input type="text" id="leito" placeholder="Ex: M / Leito 02">
+          <label>Leito / Enfermaria</label>
+          <input type="text" id="leito" value="02 / ENFERMARIA M">
         </div>
       </div>
 
-      <div class="group-title">Diagnóstico e Procedimento SUS</div>
       <div class="row">
         <div class="form-group col-1">
           <label>CID-10 Principal *</label>
@@ -200,13 +217,13 @@
         </div>
         <div class="form-group col-2">
           <label>Descrição do Procedimento</label>
-          <input type="text" id="descProcedimento" value="TRATAMENTO DE OUTRAS DOENÇAS BACTERIANAS">
+          <input type="text" id="descProcedimento" value="TRATAMENTO DE ESTAFILOCOCCIAS">
         </div>
       </div>
 
       <div class="form-group">
-        <label>Sinais / Sintomas Clínicos (Justificativa)</label>
-        <textarea id="historico" rows="3" placeholder="Quadro clínico de entrada..."></textarea>
+        <label>Sinais Clínicos / Justificativa da Internação</label>
+        <textarea id="historico" rows="3" placeholder="Sinais clínicos, histórico e motivo do atendimento..."></textarea>
       </div>
 
       <div class="row">
@@ -215,7 +232,7 @@
           <input type="text" id="medicoSolicitante" value="DR LUCIDIO JACOME FERREIRA">
         </div>
         <div class="form-group col-1">
-          <label>CPF / CRM Solicitante</label>
+          <label>Documento Solicitante</label>
           <input type="text" id="docSolicitante" value="CRM 1675 / RN">
         </div>
       </div>
@@ -223,7 +240,7 @@
 
     <!-- ABA 3: CIRURGIA & ANESTESIA -->
     <div class="form-section">
-      <div class="group-title">Boletim Operatório & Ficha Anestésica</div>
+      <div class="section-title">Equipe Cirúrgica & Anestésica</div>
       <div class="row">
         <div class="form-group col-1">
           <label>Cirurgião Operador</label>
@@ -242,7 +259,7 @@
         </div>
         <div class="form-group col-1">
           <label>Tipo Anestesia / Técnica</label>
-          <input type="text" id="anestesiaTipo" placeholder="Ex: Raqui / Punção L3-L4">
+          <input type="text" id="anestesiaTipo" value="Raqui / Punção em L3-L4">
         </div>
       </div>
 
@@ -259,19 +276,241 @@
 
       <div class="form-group">
         <label>Relatório do Ato Cirúrgico</label>
-        <textarea id="relatorioCirurgico" rows="4" placeholder="Descrição do tempo cirúrgico, incisão, achados e fechamento..."></textarea>
+        <textarea id="relatorioCirurgico" rows="4" placeholder="Descrição do procedimento cirúrgico realizado..."></textarea>
       </div>
     </div>
 
     <div class="footer-bar">
-      <button type="button" class="btn-submit" onclick="salvarEImprimir()">Salvar no Banco & Gerar Documentos</button>
+      <button type="button" class="btn-submit" onclick="processarEnvio()">Salvar no Banco & Abrir Impressão</button>
       <div id="status"></div>
     </div>
   </form>
 </div>
 
+<!-- ================================================================= -->
+<!-- ESPELHO DE IMPRESSÃO (4 PÁGINAS A4 OFICIAIS FORMATADAS) -->
+<!-- ================================================================= -->
+<div class="print-area">
+  
+  <!-- FOLHA 1: AIH -->
+  <div class="page-a4">
+    <div class="doc-header">
+      <h2>Prefeitura Municipal de Frutuoso Gomes</h2>
+      <h3>Hospital Maternidade Severina Carlos de Andrade</h3>
+      <p>C.N.P.J 08.349.052/0001-80 • Frutuoso Gomes - RN</p>
+      <h2 style="margin-top: 6px; border-top: 1px solid #000; padding-top: 4px;">Autorização para Internação Hospitalar</h2>
+    </div>
+
+    <table class="grid">
+      <tr>
+        <td style="width: 25%;"><span class="field-label">Nº AIH</span><span class="val" id="p1_aih"></span></td>
+        <td style="width: 25%;"><span class="field-label">Nº Prontuário</span><span class="val" id="p1_prontuario"></span></td>
+        <td style="width: 25%;"><span class="field-label">Tipo</span><span class="val">( X ) Continuidade</span></td>
+        <td style="width: 25%;"><span class="field-label">Órgão Emissor</span><span class="val">SESAP</span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">Data da Internação</span><span class="val" id="p1_dataInt"></span></td>
+        <td colspan="2"><span class="field-label">Data da Saída</span><span class="val" id="p1_dataSai"></span></td>
+      </tr>
+    </table>
+
+    <div class="box-title">Dados do Paciente</div>
+    <table class="grid">
+      <tr>
+        <td colspan="3"><span class="field-label">Nome do Paciente</span><span class="val" id="p1_nome"></span></td>
+        <td><span class="field-label">Sexo</span><span class="val" id="p1_sexo"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">Cartão SUS</span><span class="val" id="p1_cns"></span></td>
+        <td><span class="field-label">Data Nascimento</span><span class="val" id="p1_nasc"></span></td>
+        <td><span class="field-label">Raça / Cor</span><span class="val" id="p1_raca"></span></td>
+        <td><span class="field-label">Telefone</span><span class="val" id="p1_fone"></span></td>
+      </tr>
+      <tr>
+        <td colspan="4"><span class="field-label">Nome da Mãe</span><span class="val" id="p1_mae"></span></td>
+      </tr>
+      <tr>
+        <td colspan="3"><span class="field-label">Endereço</span><span class="val" id="p1_end"></span></td>
+        <td><span class="field-label">Município</span><span class="val" id="p1_mun"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">RG / Doc</span><span class="val" id="p1_rg"></span></td>
+        <td colspan="2"><span class="field-label">CPF</span><span class="val" id="p1_cpf"></span></td>
+      </tr>
+    </table>
+
+    <div class="box-title">Dados do Procedimento</div>
+    <table class="grid">
+      <tr>
+        <td colspan="2"><span class="field-label">Procedimento Solicitado / Realizado</span><span class="val" id="p1_proc"></span></td>
+        <td><span class="field-label">Especialidade</span><span class="val" id="p1_esp"></span></td>
+        <td><span class="field-label">Leito / Enferm.</span><span class="val" id="p1_leito"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">CID Principal</span><span class="val" id="p1_cid"></span></td>
+        <td><span class="field-label">Caráter de Atendimento</span><span class="val">Urgência / Emergência</span></td>
+        <td colspan="2"><span class="field-label">Motivo da Saída</span><span class="val">ALTA HOSPITALAR</span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">Profissional Solicitante</span><span class="val" id="p1_med"></span></td>
+        <td colspan="2"><span class="field-label">Data Autorização</span><span class="val" id="p1_dataAut"></span></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FOLHA 2: LAUDO SUS -->
+  <div class="page-a4">
+    <div class="doc-header">
+      <h2>Sistema Único de Saúde - Ministério da Saúde</h2>
+      <h3>Laudo para Solicitação de Autorização de Internação Hospitalar</h3>
+      <p>Estabelecimento Solicitante: Hospital Maternidade Severina Carlos de Andrade • CNES: 2380846</p>
+    </div>
+
+    <div class="box-title">Identificação do Paciente</div>
+    <table class="grid">
+      <tr>
+        <td colspan="3"><span class="field-label">5. Nome do Paciente</span><span class="val" id="p2_nome"></span></td>
+        <td><span class="field-label">6. Prontuário</span><span class="val" id="p2_pront"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">7. Cartão Nacional de Saúde (CNS)</span><span class="val" id="p2_cns"></span></td>
+        <td><span class="field-label">8. Data Nasc.</span><span class="val" id="p2_nasc"></span></td>
+        <td><span class="field-label">9. Sexo</span><span class="val" id="p2_sexo"></span></td>
+        <td><span class="field-label">10. Raça/Cor</span><span class="val" id="p2_raca"></span></td>
+      </tr>
+      <tr>
+        <td colspan="3"><span class="field-label">11. Nome da Mãe</span><span class="val" id="p2_mae"></span></td>
+        <td><span class="field-label">Telefone</span><span class="val" id="p2_fone"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">12. Endereço</span><span class="val" id="p2_end"></span></td>
+        <td><span class="field-label">13. Município</span><span class="val" id="p2_mun"></span></td>
+        <td><span class="field-label">14. Cód. IBGE</span><span class="val" id="p2_ibge"></span></td>
+      </tr>
+    </table>
+
+    <div class="box-title">Justificativa da Internação</div>
+    <table class="grid">
+      <tr>
+        <td style="height: 110px;"><span class="field-label">17. Principais Sinais e Sintomas Clínicos</span><span class="val" id="p2_hist"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">18. Condições que Justificam a Internação</span><span class="val">QUADRO CLÍNICO AGUDO COM NECESSIDADE DE SUPORTE INTRA-HOSPITALAR</span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">19. Principais Resultados de Provas Diagnósticas</span><span class="val">HISTÓRIA CLÍNICA + EXAME FÍSICO DIRECIONADO</span></td>
+      </tr>
+    </table>
+
+    <div class="box-title">Procedimento Solicitado & Diagnóstico</div>
+    <table class="grid">
+      <tr>
+        <td colspan="2"><span class="field-label">20. Diagnóstico Inicial</span><span class="val" id="p2_diag"></span></td>
+        <td><span class="field-label">21. CID 10 Principal</span><span class="val" id="p2_cid"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">24. Descrição do Procedimento</span><span class="val" id="p2_descProc"></span></td>
+        <td><span class="field-label">25. Cód. Procedimento</span><span class="val" id="p2_codProc"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">26. Clínica</span><span class="val" id="p2_esp"></span></td>
+        <td><span class="field-label">27. Caráter</span><span class="val">Urgência / Emergência</span></td>
+        <td><span class="field-label">29. Doc. Solicitante</span><span class="val" id="p2_docSol"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">30. Nome do Profissional Solicitante</span><span class="val" id="p2_medSol"></span></td>
+        <td colspan="1"><span class="field-label">31. Data / Assinatura</span><span class="val" id="p2_dataSol"></span><br><br>__________________________</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FOLHA 3: PRONTUÁRIO CLÍNICO -->
+  <div class="page-a4">
+    <div class="doc-header">
+      <h2>Estado do Rio Grande do Norte</h2>
+      <h3>Secretaria Municipal de Saúde de Frutuoso Gomes</h3>
+      <p>Hospital Maternidade Severina Carlos de Andrade</p>
+      <h2 style="margin-top: 6px; border-top: 1px solid #000; padding-top: 4px;">Prontuário de Internação</h2>
+    </div>
+
+    <table class="grid">
+      <tr>
+        <td colspan="3"><span class="field-label">Paciente</span><span class="val" id="p3_nome"></span></td>
+        <td><span class="field-label">Nº Prontuário</span><span class="val" id="p3_pront"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">Endereço</span><span class="val" id="p3_end"></span></td>
+        <td><span class="field-label">Município/UF</span><span class="val" id="p3_mun"></span></td>
+        <td><span class="field-label">Data Nasc.</span><span class="val" id="p3_nasc"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">RG</span><span class="val" id="p3_rg"></span></td>
+        <td><span class="field-label">CPF</span><span class="val" id="p3_cpf"></span></td>
+        <td><span class="field-label">Sexo</span><span class="val" id="p3_sexo"></span></td>
+        <td><span class="field-label">Leito / Enferm.</span><span class="val" id="p3_leito"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">Nome da Mãe</span><span class="val" id="p3_mae"></span></td>
+        <td colspan="2"><span class="field-label">Nome do Pai</span><span class="val" id="p3_pai"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">Data Admissão</span><span class="val" id="p3_dataAdm"></span></td>
+        <td><span class="field-label">Data Alta</span><span class="val" id="p3_dataAlta"></span></td>
+        <td colspan="2"><span class="field-label">Diagnóstico</span><span class="val" id="p3_diag"></span></td>
+      </tr>
+    </table>
+
+    <div class="box-title">História Clínica, Exame Físico e Tratamento</div>
+    <table class="grid">
+      <tr>
+        <td style="height: 380px; vertical-align: top;">
+          <span class="field-label">Evolução de Admissão / Anotações Médicas e de Enfermagem:</span>
+          <div class="val" id="p3_hist" style="margin-top: 8px; line-height: 1.5;"></div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FOLHA 4: BOLETIM OPERATÓRIO & ANESTESIA -->
+  <div class="page-a4">
+    <div class="doc-header">
+      <h2>Hospital Maternidade Severina Carlos de Andrade</h2>
+      <h3>Boletim Operatório & Ficha de Anestesia</h3>
+      <p>Frutuoso Gomes - RN</p>
+    </div>
+
+    <table class="grid">
+      <tr>
+        <td colspan="2"><span class="field-label">Paciente</span><span class="val" id="p4_nome"></span></td>
+        <td><span class="field-label">Prontuário</span><span class="val" id="p4_pront"></span></td>
+        <td><span class="field-label">Data</span><span class="val" id="p4_data"></span></td>
+      </tr>
+      <tr>
+        <td><span class="field-label">Cirurgião Operador</span><span class="val" id="p4_cirurgiao"></span></td>
+        <td><span class="field-label">1º Auxiliar</span><span class="val" id="p4_auxiliar"></span></td>
+        <td colspan="2"><span class="field-label">Anestesista</span><span class="val" id="p4_anestesista"></span></td>
+      </tr>
+      <tr>
+        <td colspan="2"><span class="field-label">Tipo Anestesia / Técnica</span><span class="val" id="p4_tipoAnestesia"></span></td>
+        <td><span class="field-label">Início</span><span class="val" id="p4_inicio"></span></td>
+        <td><span class="field-label">Fim</span><span class="val" id="p4_fim"></span></td>
+      </tr>
+    </table>
+
+    <div class="box-title">Relatório de Intervenção Cirúrgica</div>
+    <table class="grid">
+      <tr>
+        <td style="height: 480px; vertical-align: top;">
+          <span class="field-label">Descrição do Ato Cirúrgico / Achados e Fechamento:</span>
+          <div class="val" id="p4_relatorio" style="margin-top: 10px; line-height: 1.6;"></div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+
 <script>
-  // Controla alternância visual das abas
   function switchTab(index) {
     const tabs = document.querySelectorAll('.tab-btn');
     const sections = document.querySelectorAll('.form-section');
@@ -279,12 +518,17 @@
     sections.forEach((sec, i) => sec.classList.toggle('active', i === index));
   }
 
-  // URL do seu Google Apps Script (Web App) que salva na Planilha
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec";
-  // O seu PDF de 4 páginas em branco (salve na mesma pasta com o nome modelo_completo.pdf)
-  const URL_PDF_BASE = "AIH FG MODELO.pdf";
+  // ATENÇÃO: Cole aqui a URL exata do Apps Script que você gerou (terminada em /exec)
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybH-COLE_SUA_URL_AQUI/exec";
 
-  async function salvarEImprimir() {
+  function formatarDataBR(dataISO) {
+    if (!dataISO) return '';
+    const partes = dataISO.split('-');
+    if (partes.length !== 3) return dataISO;
+    return partes[2] + '/' + partes[1] + '/' + partes[0];
+  }
+
+  async function processarEnvio() {
     const status = document.getElementById("status");
     const prontuario = document.getElementById("prontuario").value;
     const paciente = document.getElementById("paciente").value;
@@ -296,9 +540,8 @@
     }
 
     status.style.color = "#0284c7";
-    status.innerText = "Gravando dados e gerando páginas...";
+    status.innerText = "Gravando na planilha e montando impressão...";
 
-    // Coleta do formulário unificado
     const dados = {
       prontuario: document.getElementById("prontuario").value,
       numeroAih: document.getElementById("numeroAih").value,
@@ -335,8 +578,87 @@
       relatorioCirurgico: document.getElementById("relatorioCirurgico").value
     };
 
-    // 1. Envia assíncrono para o Google Sheets (Banco de Dados)
-    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL")) {
+    // 1. INJEÇÃO DOS DADOS NOS CAMPOS DO ESPELHO DE IMPRESSÃO
+    const dataIntBR = formatarDataBR(dados.dataInternacao);
+    const dataSaiBR = formatarDataBR(dados.dataSaida);
+    const dataNascBR = formatarDataBR(dados.nascimento);
+
+    // Folha 1
+    document.getElementById("p1_aih").innerText = dados.numeroAih;
+    document.getElementById("p1_prontuario").innerText = dados.prontuario;
+    document.getElementById("p1_dataInt").innerText = dataIntBR;
+    document.getElementById("p1_dataSai").innerText = dataSaiBR;
+    document.getElementById("p1_nome").innerText = dados.paciente;
+    document.getElementById("p1_sexo").innerText = dados.sexo;
+    document.getElementById("p1_cns").innerText = dados.cns;
+    document.getElementById("p1_nasc").innerText = dataNascBR;
+    document.getElementById("p1_raca").innerText = dados.raca;
+    document.getElementById("p1_fone").innerText = dados.telefone;
+    document.getElementById("p1_mae").innerText = dados.mae;
+    document.getElementById("p1_end").innerText = dados.endereco;
+    document.getElementById("p1_mun").innerText = dados.municipio;
+    document.getElementById("p1_rg").innerText = dados.rg;
+    document.getElementById("p1_cpf").innerText = dados.cpf;
+    document.getElementById("p1_proc").innerText = dados.codProcedimento + ' - ' + dados.descProcedimento;
+    document.getElementById("p1_esp").innerText = dados.especialidade;
+    document.getElementById("p1_leito").innerText = dados.leito;
+    document.getElementById("p1_cid").innerText = dados.cidPrincipal;
+    document.getElementById("p1_med").innerText = dados.medicoSolicitante;
+    document.getElementById("p1_dataAut").innerText = dataIntBR;
+
+    // Folha 2
+    document.getElementById("p2_nome").innerText = dados.paciente;
+    document.getElementById("p2_pront").innerText = dados.prontuario;
+    document.getElementById("p2_cns").innerText = dados.cns;
+    document.getElementById("p2_nasc").innerText = dataNascBR;
+    document.getElementById("p2_sexo").innerText = dados.sexo;
+    document.getElementById("p2_raca").innerText = dados.raca;
+    document.getElementById("p2_mae").innerText = dados.mae;
+    document.getElementById("p2_fone").innerText = dados.telefone;
+    document.getElementById("p2_end").innerText = dados.endereco;
+    document.getElementById("p2_mun").innerText = dados.municipio;
+    document.getElementById("p2_ibge").innerText = dados.ibge;
+    document.getElementById("p2_hist").innerText = dados.historico;
+    document.getElementById("p2_diag").innerText = dados.diagInicial;
+    document.getElementById("p2_cid").innerText = dados.cidPrincipal;
+    document.getElementById("p2_descProc").innerText = dados.descProcedimento;
+    document.getElementById("p2_codProc").innerText = dados.codProcedimento;
+    document.getElementById("p2_esp").innerText = dados.especialidade;
+    document.getElementById("p2_docSol").innerText = dados.docSolicitante;
+    document.getElementById("p2_medSol").innerText = dados.medicoSolicitante;
+    document.getElementById("p2_dataSol").innerText = dataIntBR;
+
+    // Folha 3
+    document.getElementById("p3_nome").innerText = dados.paciente;
+    document.getElementById("p3_pront").innerText = dados.prontuario;
+    document.getElementById("p3_end").innerText = dados.endereco;
+    document.getElementById("p3_mun").innerText = dados.municipio;
+    document.getElementById("p3_nasc").innerText = dataNascBR;
+    document.getElementById("p3_rg").innerText = dados.rg;
+    document.getElementById("p3_cpf").innerText = dados.cpf;
+    document.getElementById("p3_sexo").innerText = dados.sexo;
+    document.getElementById("p3_leito").innerText = dados.leito;
+    document.getElementById("p3_mae").innerText = dados.mae;
+    document.getElementById("p3_pai").innerText = dados.pai;
+    document.getElementById("p3_dataAdm").innerText = dataIntBR;
+    document.getElementById("p3_dataAlta").innerText = dataSaiBR;
+    document.getElementById("p3_diag").innerText = dados.diagInicial + ' (' + dados.cidPrincipal + ')';
+    document.getElementById("p3_hist").innerText = dados.historico;
+
+    // Folha 4
+    document.getElementById("p4_nome").innerText = dados.paciente;
+    document.getElementById("p4_pront").innerText = dados.prontuario;
+    document.getElementById("p4_data").innerText = dataIntBR;
+    document.getElementById("p4_cirurgiao").innerText = dados.cirurgiao;
+    document.getElementById("p4_auxiliar").innerText = dados.auxiliar;
+    document.getElementById("p4_anestesista").innerText = dados.anestesista;
+    document.getElementById("p4_tipoAnestesia").innerText = dados.anestesiaTipo;
+    document.getElementById("p4_inicio").innerText = dados.inicioOp;
+    document.getElementById("p4_fim").innerText = dados.fimOp;
+    document.getElementById("p4_relatorio").innerText = dados.relatorioCirurgico;
+
+    // 2. DISPARO PARA A PLANILHA DO GOOGLE
+    if (SCRIPT_URL && !SCRIPT_URL.includes("COLE_SUA_URL")) {
       fetch(SCRIPT_URL, {
         method: "POST",
         mode: "no-cors",
@@ -345,110 +667,13 @@
       }).catch(err => console.error("Erro banco:", err));
     }
 
-    // 2. Injeção direta no PDF de 4 páginas
-    try {
-      const { PDFDocument, rgb, StandardFonts } = PDFLib;
-      const pdfBytes = await fetch(URL_PDF_BASE).then(r => r.arrayBuffer());
-      const pdfDoc = await PDFDocument.load(pdfBytes);
-      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-      const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    status.style.color = "#16a34a";
+    status.innerText = "Pronto! Abrindo janela de impressão...";
 
-      const pages = pdfDoc.getPages();
-
-      // ==========================================
-      // PÁGINA 1: AIH (Autorização de Internação)
-      // ==========================================
-      if (pages.length >= 1) {
-        const p1 = pages[0];
-        const h1 = p1.getSize().height;
-
-        p1.drawText(dados.prontuario, { x: 230, y: h1 - 85, size: 9, font });
-        p1.drawText(dados.paciente, { x: 120, y: h1 - 130, size: 9, font: fontBold });
-        p1.drawText(dados.cns, { x: 80, y: h1 - 146, size: 9, font });
-        p1.drawText(dados.sexo, { x: 228, y: h1 - 146, size: 9, font });
-        p1.drawText(dados.nascimento, { x: 310, y: h1 - 146, size: 9, font });
-        p1.drawText(dados.raca, { x: 440, y: h1 - 146, size: 8, font });
-        p1.drawText(dados.mae, { x: 100, y: h1 - 162, size: 9, font });
-        p1.drawText(dados.endereco, { x: 80, y: h1 - 178, size: 8, font });
-        p1.drawText(dados.municipio, { x: 80, y: h1 - 194, size: 8, font });
-        p1.drawText(dados.codProcedimento, { x: 150, y: h1 - 252, size: 9, font });
-        p1.drawText(dados.cidPrincipal, { x: 100, y: h1 - 296, size: 9, fontBold });
-        p1.drawText(dados.leito, { x: 480, y: h1 - 280, size: 8, font });
-      }
-
-      // ==========================================
-      // PÁGINA 2: LAUDO SUS
-      // ==========================================
-      if (pages.length >= 2) {
-        const p2 = pages[1];
-        const h2 = p2.getSize().height;
-
-        p2.drawText(dados.paciente, { x: 30, y: h2 - 135, size: 9, font: fontBold });
-        p2.drawText(dados.cns, { x: 30, y: h2 - 158, size: 8, font });
-        p2.drawText(dados.nascimento, { x: 210, y: h2 - 158, size: 8, font });
-        p2.drawText(dados.sexo === 'M' ? 'X' : '', { x: 318, y: h2 - 160, size: 10, font: fontBold });
-        p2.drawText(dados.sexo === 'F' ? 'X' : '', { x: 374, y: h2 - 160, size: 10, font: fontBold });
-        p2.drawText(dados.raca, { x: 430, y: h2 - 158, size: 8, font });
-        p2.drawText(dados.mae, { x: 30, y: h2 - 180, size: 8, font });
-        p2.drawText(dados.endereco, { x: 30, y: h2 - 202, size: 8, font });
-        p2.drawText(dados.municipio, { x: 30, y: h2 - 225, size: 8, font });
-        p2.drawText(dados.ibge, { x: 250, y: h2 - 225, size: 8, font });
-        
-        // Sinais e Justificativa
-        p2.drawText(dados.historico.substring(0, 160), { x: 30, y: h2 - 280, size: 8, font });
-        p2.drawText(dados.diagInicial, { x: 30, y: h2 - 380, size: 8, font });
-        p2.drawText(dados.cidPrincipal, { x: 240, y: h2 - 380, size: 9, font: fontBold });
-        p2.drawText(dados.descProcedimento, { x: 30, y: h2 - 405, size: 8, font });
-        p2.drawText(dados.codProcedimento, { x: 370, y: h2 - 405, size: 8, font });
-        p2.drawText(dados.medicoSolicitante, { x: 30, y: h2 - 450, size: 8, font });
-      }
-
-      // ==========================================
-      // PÁGINA 3: PRONTUÁRIO CLÍNICO
-      // ==========================================
-      if (pages.length >= 3) {
-        const p3 = pages[2];
-        const h3 = p3.getSize().height;
-
-        p3.drawText(dados.paciente, { x: 75, y: h3 - 90, size: 9, font: fontBold });
-        p3.drawText(dados.prontuario, { x: 470, y: h3 - 120, size: 9, font });
-        p3.drawText(dados.endereco, { x: 80, y: h3 - 105, size: 8, font });
-        p3.drawText(dados.mae, { x: 90, y: h3 - 150, size: 8, font });
-        p3.drawText(dados.pai, { x: 350, y: h3 - 135, size: 8, font });
-        p3.drawText(dados.leito, { x: 480, y: h3 - 165, size: 8, font });
-        p3.drawText(dados.diagInicial, { x: 140, y: h3 - 225, size: 9, fontBold });
-        p3.drawText(dados.historico, { x: 40, y: h3 - 285, size: 8, font });
-      }
-
-      // ==========================================
-      // PÁGINA 4: ANESTESIA & CIRÚRGICO
-      // ==========================================
-      if (pages.length >= 4) {
-        const p4 = pages[3];
-        const h4 = p4.getSize().height;
-
-        p4.drawText(dados.paciente, { x: 80, y: h4 - 55, size: 9, font: fontBold });
-        p4.drawText(dados.prontuario, { x: 420, y: h4 - 55, size: 9, font });
-        p4.drawText(dados.cirurgiao, { x: 80, y: h4 - 105, size: 9, font });
-        p4.drawText(dados.anestesiaTipo, { x: 350, y: h4 - 88, size: 8, font });
-        p4.drawText(dados.anestesista, { x: 60, y: h4 - 365, size: 8, font });
-        p4.drawText(dados.auxiliar, { x: 80, y: h4 - 455, size: 8, font });
-        p4.drawText(dados.relatorioCirurgico, { x: 40, y: h4 - 510, size: 8, font });
-      }
-
-      // Gera o arquivo final e abre direto a tela de impressão do celular
-      const finalPdfBytes = await pdfDoc.save();
-      const blob = new Blob([finalPdfBytes], { type: "application/pdf" });
-      const blobUrl = URL.createObjectURL(blob);
-
-      window.open(blobUrl, "_blank");
-      status.style.color = "#16a34a";
-      status.innerText = "Pronto! Dados gravados e PDF de 4 páginas gerado.";
-    } catch (err) {
-      console.error(err);
-      status.style.color = "#dc2626";
-      status.innerText = "Erro ao ler o PDF base. Verifique se 'modelo_completo.pdf' está no mesmo local.";
-    }
+    // 3. ABRE A JANELA NATIVA DE IMPRESSÃO / SALVAR EM PDF
+    setTimeout(() => {
+      window.print();
+    }, 400);
   }
 </script>
 </body>
