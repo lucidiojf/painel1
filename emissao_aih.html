@@ -43,7 +43,7 @@
   <h2>Emissão de AIH Hospitalar - Gabarito Limpo</h2>
 
   <!-- FORMULÁRIO ENVIANDO PARA IFRAME OCULTO (100% GARANTIDO NO GOOGLE SHEETS) -->
-  <form id="formAih" target="hidden_iframe" method="POST">
+  <form id="formAih"
     <!-- DADOS DO PACIENTE -->
     <fieldset>
       <legend>Identificação do Paciente e Internação</legend>
@@ -289,9 +289,14 @@
     st.innerText = 'Gravando na planilha e carimbando no PDF branco...';
     btn.disabled = true;
 
-    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL_DO_GOOGLE")) {
-      this.action = SCRIPT_URL;
-    }
+   // === ADICIONE ESTE NOVO BLOCO NO LUGAR ===
+if (SCRIPT_URL && !SCRIPT_URL.includes("https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec")) {
+  // Cria uma imagem invisível para enviar os dados via GET
+  const ping = new Image();
+  const params = new URLSearchParams(payload).toString();
+  ping.src = `${SCRIPT_URL}?${params}`;
+}
+// =========================================
 
     const payload = {
       prontuario: document.getElementById('prontuario').value,
