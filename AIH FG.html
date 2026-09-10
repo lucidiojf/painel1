@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sistema Hospitalar - AIH & Prontuário</title>
+  <!-- Biblioteca pdf-lib para desenhar o texto direto no PDF modelo -->
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f1f5f9;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #0f172a;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg); color: var(--text); padding: 12px; }
+    .container { max-width: 720px; margin: 0 auto; background: var(--card-bg); border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); overflow: hidden; }
+    
+    header { background: #1e293b; color: #fff; padding: 16px; text-align: center; }
+    header h1 { font-size: 1.15rem; font-weight: 700; }
+    header p { font-size: 0.8rem; color: #94a3b8; margin-top: 4px; }
+
+    .nav-tabs { display: flex; background: #e2e8f0; border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .tab-btn { flex: 1; min-width: 120px; padding: 12px 8px; border: none; background: transparent; font-size: 0.85rem; font-weight: 600; color: #64748b; cursor: pointer; text-align: center; }
+    .tab-btn.active { background: #fff; color: var(--primary); border-bottom: 3px solid var(--primary); }
+
+    .form-section { padding: 16px; display: none; }
+    .form-section.active { display: block; }
+
+    .group-title { font-size: 0.95rem; font-weight: 700; color: var(--primary-dark); margin: 16px 0 10px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; }
+    .group-title:first-of-type { margin-top: 0; }
+
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: #475569; margin-bottom: 4px; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.95rem; background: #fff; color: #1e293b; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); ring: 2px solid #bae6fd; }
+    
+    .row { display: flex; gap: 8px; }
+    .col-2 { flex: 2; }
+    .col-1 { flex: 1; }
+
+    .footer-bar { padding: 16px; background: #fff; border-top: 1px solid #e2e8f0; }
+    .btn-submit { width: 100%; background: var(--primary); color: #fff; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn-submit:active { background: var(--primary-dark); }
+
+    #status { margin-top: 10px; font-size: 0.85rem; text-align: center; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Hospital Maternidade Severina Carlos de Andrade</h1>
+    <p>Frutuoso Gomes - RN • Emissão Integrada de AIH & Prontuário</p>
+  </header>
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab(0)">1. Paciente</button>
+    <button class="tab-btn" onclick="switchTab(1)">2. Internação & Laudo</button>
+    <button class="tab-btn" onclick="switchTab(2)">3. Cirurgia & Anestesia</button>
+  </div>
+
+  <form id="hospitalForm">
+    <!-- ABA 1: DADOS DO PACIENTE -->
+    <div class="form-section active">
+      <div class="group-title">Identificação Básica</div>
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Nº Prontuário *</label>
+          <input type="text" id="prontuario" required placeholder="Ex: 1234">
+        </div>
+        <div class="form-group col-1">
+          <label>Nº AIH</label>
+          <input type="text" id="numeroAih" placeholder="Se houver">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Nome Completo do Paciente *</label>
+        <input type="text" id="paciente" required>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-2">
+          <label>Cartão SUS (CNS) *</label>
+          <input type="text" id="cns" maxlength="18" placeholder="000.0000.0000.0000">
+        </div>
+        <div class="form-group col-1">
+          <label>Sexo</label>
+          <select id="sexo">
+            <option value="M">Masc</option>
+            <option value="F">Fem</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Data Nascimento</label>
+          <input type="date" id="nascimento">
+        </div>
+        <div class="form-group col-1">
+          <label>Raça / Cor</label>
+          <select id="raca">
+            <option value="PARDA">PARDA</option>
+            <option value="BRANCA">BRANCA</option>
+            <option value="PRETA">PRETA</option>
+            <option value="AMARELA">AMARELA</option>
+            <option value="INDIGENA">INDÍGENA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>RG / Doc</label>
+          <input type="text" id="rg">
+        </div>
+        <div class="form-group col-1">
+          <label>CPF</label>
+          <input type="text" id="cpf">
+        </div>
+      </div>
+
+      <div class="group-title">Filiação e Contato</div>
+      <div class="form-group">
+        <label>Nome da Mãe *</label>
+        <input type="text" id="mae" required>
+      </div>
+      <div class="form-group">
+        <label>Nome do Pai</label>
+        <input type="text" id="pai">
+      </div>
+      <div class="row">
+        <div class="form-group col-2">
+          <label>Endereço (Rua, Nº, Bairro)</label>
+          <input type="text" id="endereco">
+        </div>
+        <div class="form-group col-1">
+          <label>Telefone</label>
+          <input type="tel" id="telefone">
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-2">
+          <label>Município de Residência</label>
+          <input type="text" id="municipio" value="FRUTUOSO GOMES - RN">
+        </div>
+        <div class="form-group col-1">
+          <label>Cód. IBGE</label>
+          <input type="text" id="ibge" value="2404002">
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 2: INTERNAÇÃO & LAUDO -->
+    <div class="form-section">
+      <div class="group-title">Dados da Internação</div>
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Data Admissão *</label>
+          <input type="date" id="dataInternacao" required>
+        </div>
+        <div class="form-group col-1">
+          <label>Data Alta / Saída</label>
+          <input type="date" id="dataSaida">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Especialidade / Serviço</label>
+          <input type="text" id="especialidade" value="CLINICA MÉDICA">
+        </div>
+        <div class="form-group col-1">
+          <label>Enfermaria / Leito</label>
+          <input type="text" id="leito" placeholder="Ex: M / Leito 02">
+        </div>
+      </div>
+
+      <div class="group-title">Diagnóstico e Procedimento SUS</div>
+      <div class="row">
+        <div class="form-group col-1">
+          <label>CID-10 Principal *</label>
+          <input type="text" id="cidPrincipal" placeholder="Ex: E10.5" required>
+        </div>
+        <div class="form-group col-2">
+          <label>Diagnóstico Inicial</label>
+          <input type="text" id="diagInicial" placeholder="Ex: PÉ DIABÉTICO">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Cód. Procedimento</label>
+          <input type="text" id="codProcedimento" value="0303080060">
+        </div>
+        <div class="form-group col-2">
+          <label>Descrição do Procedimento</label>
+          <input type="text" id="descProcedimento" value="TRATAMENTO DE OUTRAS DOENÇAS BACTERIANAS">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Sinais / Sintomas Clínicos (Justificativa)</label>
+        <textarea id="historico" rows="3" placeholder="Quadro clínico de entrada..."></textarea>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Médico Solicitante</label>
+          <input type="text" id="medicoSolicitante" value="DR LUCIDIO JACOME FERREIRA">
+        </div>
+        <div class="form-group col-1">
+          <label>CPF / CRM Solicitante</label>
+          <input type="text" id="docSolicitante" value="CRM 1675 / RN">
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 3: CIRURGIA & ANESTESIA -->
+    <div class="form-section">
+      <div class="group-title">Boletim Operatório & Ficha Anestésica</div>
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Cirurgião Operador</label>
+          <input type="text" id="cirurgiao" value="LUCIDIO JÁCOME FERREIRA">
+        </div>
+        <div class="form-group col-1">
+          <label>Médico Anestesista</label>
+          <input type="text" id="anestesista" value="DR NUNES">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>1º Auxiliar</label>
+          <input type="text" id="auxiliar" value="DR FRENDSON">
+        </div>
+        <div class="form-group col-1">
+          <label>Tipo Anestesia / Técnica</label>
+          <input type="text" id="anestesiaTipo" placeholder="Ex: Raqui / Punção L3-L4">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-1">
+          <label>Início Cirurgia</label>
+          <input type="time" id="inicioOp">
+        </div>
+        <div class="form-group col-1">
+          <label>Fim Cirurgia</label>
+          <input type="time" id="fimOp">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Relatório do Ato Cirúrgico</label>
+        <textarea id="relatorioCirurgico" rows="4" placeholder="Descrição do tempo cirúrgico, incisão, achados e fechamento..."></textarea>
+      </div>
+    </div>
+
+    <div class="footer-bar">
+      <button type="button" class="btn-submit" onclick="salvarEImprimir()">Salvar no Banco & Gerar Documentos</button>
+      <div id="status"></div>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Controla alternância visual das abas
+  function switchTab(index) {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const sections = document.querySelectorAll('.form-section');
+    tabs.forEach((tab, i) => tab.classList.toggle('active', i === index));
+    sections.forEach((sec, i) => sec.classList.toggle('active', i === index));
+  }
+
+  // URL do seu Google Apps Script (Web App) que salva na Planilha
+  const SCRIPT_URL = "SUA_URL_DO_APPS_SCRIPT_AQUI";
+  // O seu PDF de 4 páginas em branco (salve na mesma pasta com o nome modelo_completo.pdf)
+  const URL_PDF_BASE = "modelo_completo.pdf";
+
+  async function salvarEImprimir() {
+    const status = document.getElementById("status");
+    const prontuario = document.getElementById("prontuario").value;
+    const paciente = document.getElementById("paciente").value;
+
+    if (!prontuario || !paciente) {
+      alert("Por favor, preencha ao menos o Prontuário e o Nome do Paciente.");
+      switchTab(0);
+      return;
+    }
+
+    status.style.color = "#0284c7";
+    status.innerText = "Gravando dados e gerando páginas...";
+
+    // Coleta do formulário unificado
+    const dados = {
+      prontuario: document.getElementById("prontuario").value,
+      numeroAih: document.getElementById("numeroAih").value,
+      paciente: document.getElementById("paciente").value,
+      cns: document.getElementById("cns").value,
+      sexo: document.getElementById("sexo").value,
+      nascimento: document.getElementById("nascimento").value,
+      raca: document.getElementById("raca").value,
+      rg: document.getElementById("rg").value,
+      cpf: document.getElementById("cpf").value,
+      mae: document.getElementById("mae").value,
+      pai: document.getElementById("pai").value,
+      endereco: document.getElementById("endereco").value,
+      telefone: document.getElementById("telefone").value,
+      municipio: document.getElementById("municipio").value,
+      ibge: document.getElementById("ibge").value,
+      dataInternacao: document.getElementById("dataInternacao").value,
+      dataSaida: document.getElementById("dataSaida").value,
+      especialidade: document.getElementById("especialidade").value,
+      leito: document.getElementById("leito").value,
+      cidPrincipal: document.getElementById("cidPrincipal").value,
+      diagInicial: document.getElementById("diagInicial").value,
+      codProcedimento: document.getElementById("codProcedimento").value,
+      descProcedimento: document.getElementById("descProcedimento").value,
+      historico: document.getElementById("historico").value,
+      medicoSolicitante: document.getElementById("medicoSolicitante").value,
+      docSolicitante: document.getElementById("docSolicitante").value,
+      cirurgiao: document.getElementById("cirurgiao").value,
+      anestesista: document.getElementById("anestesista").value,
+      auxiliar: document.getElementById("auxiliar").value,
+      anestesiaTipo: document.getElementById("anestesiaTipo").value,
+      inicioOp: document.getElementById("inicioOp").value,
+      fimOp: document.getElementById("fimOp").value,
+      relatorioCirurgico: document.getElementById("relatorioCirurgico").value
+    };
+
+    // 1. Envia assíncrono para o Google Sheets (Banco de Dados)
+    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL")) {
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dados)
+      }).catch(err => console.error("Erro banco:", err));
+    }
+
+    // 2. Injeção direta no PDF de 4 páginas
+    try {
+      const { PDFDocument, rgb, StandardFonts } = PDFLib;
+      const pdfBytes = await fetch(URL_PDF_BASE).then(r => r.arrayBuffer());
+      const pdfDoc = await PDFDocument.load(pdfBytes);
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+      const pages = pdfDoc.getPages();
+
+      // ==========================================
+      // PÁGINA 1: AIH (Autorização de Internação)
+      // ==========================================
+      if (pages.length >= 1) {
+        const p1 = pages[0];
+        const h1 = p1.getSize().height;
+
+        p1.drawText(dados.prontuario, { x: 230, y: h1 - 85, size: 9, font });
+        p1.drawText(dados.paciente, { x: 120, y: h1 - 130, size: 9, font: fontBold });
+        p1.drawText(dados.cns, { x: 80, y: h1 - 146, size: 9, font });
+        p1.drawText(dados.sexo, { x: 228, y: h1 - 146, size: 9, font });
+        p1.drawText(dados.nascimento, { x: 310, y: h1 - 146, size: 9, font });
+        p1.drawText(dados.raca, { x: 440, y: h1 - 146, size: 8, font });
+        p1.drawText(dados.mae, { x: 100, y: h1 - 162, size: 9, font });
+        p1.drawText(dados.endereco, { x: 80, y: h1 - 178, size: 8, font });
+        p1.drawText(dados.municipio, { x: 80, y: h1 - 194, size: 8, font });
+        p1.drawText(dados.codProcedimento, { x: 150, y: h1 - 252, size: 9, font });
+        p1.drawText(dados.cidPrincipal, { x: 100, y: h1 - 296, size: 9, fontBold });
+        p1.drawText(dados.leito, { x: 480, y: h1 - 280, size: 8, font });
+      }
+
+      // ==========================================
+      // PÁGINA 2: LAUDO SUS
+      // ==========================================
+      if (pages.length >= 2) {
+        const p2 = pages[1];
+        const h2 = p2.getSize().height;
+
+        p2.drawText(dados.paciente, { x: 30, y: h2 - 135, size: 9, font: fontBold });
+        p2.drawText(dados.cns, { x: 30, y: h2 - 158, size: 8, font });
+        p2.drawText(dados.nascimento, { x: 210, y: h2 - 158, size: 8, font });
+        p2.drawText(dados.sexo === 'M' ? 'X' : '', { x: 318, y: h2 - 160, size: 10, font: fontBold });
+        p2.drawText(dados.sexo === 'F' ? 'X' : '', { x: 374, y: h2 - 160, size: 10, font: fontBold });
+        p2.drawText(dados.raca, { x: 430, y: h2 - 158, size: 8, font });
+        p2.drawText(dados.mae, { x: 30, y: h2 - 180, size: 8, font });
+        p2.drawText(dados.endereco, { x: 30, y: h2 - 202, size: 8, font });
+        p2.drawText(dados.municipio, { x: 30, y: h2 - 225, size: 8, font });
+        p2.drawText(dados.ibge, { x: 250, y: h2 - 225, size: 8, font });
+        
+        // Sinais e Justificativa
+        p2.drawText(dados.historico.substring(0, 160), { x: 30, y: h2 - 280, size: 8, font });
+        p2.drawText(dados.diagInicial, { x: 30, y: h2 - 380, size: 8, font });
+        p2.drawText(dados.cidPrincipal, { x: 240, y: h2 - 380, size: 9, font: fontBold });
+        p2.drawText(dados.descProcedimento, { x: 30, y: h2 - 405, size: 8, font });
+        p2.drawText(dados.codProcedimento, { x: 370, y: h2 - 405, size: 8, font });
+        p2.drawText(dados.medicoSolicitante, { x: 30, y: h2 - 450, size: 8, font });
+      }
+
+      // ==========================================
+      // PÁGINA 3: PRONTUÁRIO CLÍNICO
+      // ==========================================
+      if (pages.length >= 3) {
+        const p3 = pages[2];
+        const h3 = p3.getSize().height;
+
+        p3.drawText(dados.paciente, { x: 75, y: h3 - 90, size: 9, font: fontBold });
+        p3.drawText(dados.prontuario, { x: 470, y: h3 - 120, size: 9, font });
+        p3.drawText(dados.endereco, { x: 80, y: h3 - 105, size: 8, font });
+        p3.drawText(dados.mae, { x: 90, y: h3 - 150, size: 8, font });
+        p3.drawText(dados.pai, { x: 350, y: h3 - 135, size: 8, font });
+        p3.drawText(dados.leito, { x: 480, y: h3 - 165, size: 8, font });
+        p3.drawText(dados.diagInicial, { x: 140, y: h3 - 225, size: 9, fontBold });
+        p3.drawText(dados.historico, { x: 40, y: h3 - 285, size: 8, font });
+      }
+
+      // ==========================================
+      // PÁGINA 4: ANESTESIA & CIRÚRGICO
+      // ==========================================
+      if (pages.length >= 4) {
+        const p4 = pages[3];
+        const h4 = p4.getSize().height;
+
+        p4.drawText(dados.paciente, { x: 80, y: h4 - 55, size: 9, font: fontBold });
+        p4.drawText(dados.prontuario, { x: 420, y: h4 - 55, size: 9, font });
+        p4.drawText(dados.cirurgiao, { x: 80, y: h4 - 105, size: 9, font });
+        p4.drawText(dados.anestesiaTipo, { x: 350, y: h4 - 88, size: 8, font });
+        p4.drawText(dados.anestesista, { x: 60, y: h4 - 365, size: 8, font });
+        p4.drawText(dados.auxiliar, { x: 80, y: h4 - 455, size: 8, font });
+        p4.drawText(dados.relatorioCirurgico, { x: 40, y: h4 - 510, size: 8, font });
+      }
+
+      // Gera o arquivo final e abre direto a tela de impressão do celular
+      const finalPdfBytes = await pdfDoc.save();
+      const blob = new Blob([finalPdfBytes], { type: "application/pdf" });
+      const blobUrl = URL.createObjectURL(blob);
+
+      window.open(blobUrl, "_blank");
+      status.style.color = "#16a34a";
+      status.innerText = "Pronto! Dados gravados e PDF de 4 páginas gerado.";
+    } catch (err) {
+      console.error(err);
+      status.style.color = "#dc2626";
+      status.innerText = "Erro ao ler o PDF base. Verifique se 'modelo_completo.pdf' está no mesmo local.";
+    }
+  }
+</script>
+</body>
+</html>
