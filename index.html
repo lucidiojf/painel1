@@ -3,27 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - Preenchimento Oficial de AIH</title>
+  <title>SISTEMA HM - Preenchimento no PDF Raiz</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f1f5f9; margin: 0; padding: 20px; color: #1e293b; }
     .container { max-width: 960px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
     h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 22px; }
+    .box-matriz { background: #eff6ff; border: 2px dashed #3b82f6; border-radius: 8px; padding: 14px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+    .box-matriz span { font-weight: 600; color: #1d4ed8; font-size: 14px; }
     fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fafafa; }
     legend { font-weight: 700; color: #0284c7; padding: 0 8px; font-size: 15px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
     .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
     .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
     .form-group { margin-bottom: 8px; }
     label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #475569; }
     input, select, textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #fff; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
     table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 5px; }
     th { background: #e0f2fe; text-align: left; padding: 8px; border: 1px solid #cbd5e1; color: #0369a1; }
     td { padding: 4px; border: 1px solid #cbd5e1; }
     .btn-template { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-right: 5px; }
-    .btn-template:hover { background: #cbd5e1; }
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 14px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
@@ -49,35 +48,13 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
-    .modal-header {
-      background: #0284c7;
-      color: #fff;
-      padding: 12px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .modal-header { background: #0284c7; color: #fff; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
     .modal-header h3 { margin: 0; font-size: 17px; }
     .modal-body { flex: 1; background: #525659; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
-    .modal-footer {
-      padding: 12px 20px;
-      background: #f8fafc;
-      border-top: 1px solid #e2e8f0;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    .btn-modal {
-      padding: 8px 18px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
+    .modal-footer { padding: 12px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; }
+    .btn-modal { padding: 8px 18px; border-radius: 6px; font-weight: 600; font-size: 14px; cursor: pointer; border: 1px solid transparent; }
     .btn-close { background: #e2e8f0; color: #334155; }
     .btn-print { background: #16a34a; color: #fff; }
     .btn-download { background: #0284c7; color: #fff; }
@@ -86,10 +63,20 @@
 <body>
 
 <div class="container">
-  <h2>Preenchimento e Lançamento de AIH Oficial</h2>
+  <h2>Preenchimento da AIH no Arquivo Raiz Oficial</h2>
+
+  <!-- SELETOR DA MATRIZ ORIGINAL -->
+  <div class="box-matriz" id="boxMatriz">
+    <div>
+      <span id="txtMatriz">PDF Raiz Oficial (AIH-FG.pdf): Não carregado</span>
+      <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Selecione o arquivo AIH-FG.pdf uma vez. O sistema manterá o modelo guardado.</div>
+    </div>
+    <input type="file" id="inputPdfRaiz" accept="application/pdf" style="display: none;">
+    <button type="button" class="btn-template" onclick="document.getElementById('inputPdfRaiz').click()">Carregar PDF Raiz</button>
+  </div>
 
   <form id="formAih">
-    <!-- DADOS DO PACIENTE -->
+    <!-- IDENTIFICAÇÃO -->
     <fieldset>
       <legend>Identificação do Paciente e Internação</legend>
       <div class="grid-3">
@@ -183,7 +170,7 @@
       </div>
     </fieldset>
 
-    <!-- BLOCO 1: PROCEDIMENTOS REALIZADOS (PRODUÇÃO SUS) -->
+    <!-- BLOCO 1: PROCEDIMENTOS REALIZADOS -->
     <fieldset>
       <legend>Procedimentos Realizados</legend>
       <table>
@@ -321,7 +308,7 @@
       </div>
 
       <div style="margin: 10px 0 6px 0;">
-        <span style="font-size: 13px; font-weight: bold; margin-right: 8px;">Modelos Rápidos de Relatório:</span>
+        <span style="font-size: 13px; font-weight: bold; margin-right: 8px;">Modelos Rápidos:</span>
         <button type="button" class="btn-template" onclick="inserirModelo('cesariana')">Cesariana</button>
         <button type="button" class="btn-template" onclick="inserirModelo('colecistectomia')">Colecistectomia</button>
       </div>
@@ -332,16 +319,16 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit" id="btnSalvar">Lançar no PDF Original e Abrir Viewer</button>
+    <button type="submit" class="btn-submit" id="btnSalvar">Preencher no PDF Raiz e Abrir Viewer</button>
     <div id="msgStatus"></div>
   </form>
 </div>
 
-<!-- MODAL DO VIEWER DE IMPRESSÃO -->
+<!-- MODAL DO VIEWER -->
 <div class="modal-overlay" id="pdfModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualizador da AIH Oficial (Pronto para Conferência e Impressão)</h3>
+      <h3>Visualizador do PDF Oficial Raiz</h3>
       <span style="cursor: pointer; font-size: 20px;" onclick="fecharViewer()">&times;</span>
     </div>
     <div class="modal-body">
@@ -356,8 +343,18 @@
 </div>
 
 <script>
-  const SCRIPT_URL = "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI";
+  let pdfRaizBytes = null;
   let currentBlobUrl = null;
+
+  // Gerenciamento do PDF Raiz no armazenamento local
+  const inputMatriz = document.getElementById('inputPdfRaiz');
+  inputMatriz.addEventListener('change', async (e) => {
+    if (!e.target.files.length) return;
+    const file = e.target.files[0];
+    pdfRaizBytes = await file.arrayBuffer();
+    document.getElementById('txtMatriz').innerText = `PDF Raiz Carregado: ${file.name} (Pronto)`;
+    document.getElementById('txtMatriz').style.color = '#16a34a';
+  });
 
   const MODELOS = {
     cesariana: `Incisão Pfannenstiel transversa, ligeiramente semicircular, atingindo pele, subcutâneo e aponeurose, músculos são afastados, peritônio aberto no sentido vertical. Aberta a cavidade, colocar válvula de Doyen no ângulo inferior da incisão. Exposto o segmento inferior do útero, incisão transversa do peritônio visceral, pequena secção transversa no miométrio, afastando e abrindo o miométrio com ajuda de pinça kocher e com os dedos, completando a abertura. Retirada do feto, deslocar e extrair a placenta. Limpeza da cavidade uterina usando compressas, observar se o canal cervical está permeável. Fechamento do miométrio com CG Cromado "1" contínuo ancorado, não incluindo a mucosa. Fechamento do peritônio visceral com CG Simples "2-0" continuo ancorado. Limpeza da cavidade abbominal com compressas, reposição do útero à cavidade. Fechamento do peritônio parietal com CG Simples "2-0" contínuo. Aproximar músculos com CG Simples "2-0" pontos separados. Sutura da aponeurose com CG Cromado "1" contínua ancorada. Fechamento do subcutâneo com CG Simples "2-0" separados e da pele com mononylon "4-0" contínuo. Curativo Simples.`,
@@ -370,22 +367,26 @@
     }
   }
 
-  // Carrega o PDF original e carimba os dados nas posições oficiais
-  async function preencherPdfOriginal(dados) {
-    const res = await fetch('./AIH-FG.pdf');
-    if (!res.ok) {
-      throw new Error('Não foi possível carregar o arquivo AIH-FG.pdf. Certifique-se de que ele está na mesma pasta do index.html.');
+  // Preenche diretamente sobre as 5 páginas oficiais do PDF Raiz
+  async function preencherSobrePdfRaiz(dados) {
+    if (!pdfRaizBytes) {
+      // Tenta ler local se não tiver sido feito upload
+      try {
+        const res = await fetch('./AIH-FG.pdf');
+        if (res.ok) pdfRaizBytes = await res.arrayBuffer();
+      } catch (err) {}
     }
-    const templateBytes = await res.arrayBuffer();
+
+    if (!pdfRaizBytes) {
+      throw new Error('O PDF raiz oficial não foi carregado. Clique no botão "Carregar PDF Raiz" no topo da página e selecione o AIH-FG.pdf.');
+    }
 
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
-    const pdfDoc = await PDFDocument.load(templateBytes);
+    const pdfDoc = await PDFDocument.load(pdfRaizBytes);
     const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
     const pages = pdfDoc.getPages();
 
-    // ==========================================
     // PÁGINA 1: AIH PRINCIPAL
-    // ==========================================
     if (pages[0]) {
       const p1 = pages[0];
       p1.drawText(dados.prontuario || '', { x: 130, y: 724, size: 9, font });
@@ -400,13 +401,11 @@
       p1.drawText(dados.endereco || '', { x: 110, y: 620, size: 8, font });
       p1.drawText(dados.municipio || '', { x: 110, y: 607, size: 8, font });
       p1.drawText(dados.telefone || '', { x: 420, y: 594, size: 8, font });
-      
-      // Procedimentos e Diagnóstico
       p1.drawText(dados.procCod || '', { x: 165, y: 554, size: 9, font });
       p1.drawText(dados.cidPrincipal || '', { x: 115, y: 501, size: 9, font });
       p1.drawText(dados.autorizadorDoc || '', { x: 400, y: 462, size: 8, font });
 
-      // Tabela de Procedimentos Realizados (Linha 1)
+      // Grade Produção
       p1.drawText(dados.procCod || '', { x: 80, y: 398, size: 8, font });
       p1.drawText(dados.procQtd || '1', { x: 215, y: 398, size: 8, font });
       p1.drawText(dados.procCpf || '', { x: 260, y: 398, size: 8, font });
@@ -415,9 +414,7 @@
       p1.drawText(dados.procCnpj || '08.349.052/0001-80', { x: 450, y: 398, size: 8, font });
     }
 
-    // ==========================================
-    // PÁGINA 2: LAUDO SUS
-    // ==========================================
+    // PÁGINA 2: LAUDO SUS[cite: 2]
     if (pages[1]) {
       const p2 = pages[1];
       p2.drawText(dados.nomePaciente || '', { x: 45, y: 692, size: 9, font });
@@ -430,23 +427,17 @@
       p2.drawText(dados.endereco || '', { x: 45, y: 622, size: 8, font });
       p2.drawText(dados.municipio || '', { x: 45, y: 600, size: 8, font });
       p2.drawText(dados.ibge || '2404002', { x: 335, y: 600, size: 8, font });
-
-      // Justificativa e Clínicos
       p2.drawText(dados.sinaisSintomas || '', { x: 45, y: 550, size: 8, font, maxWidth: 500, lineHeight: 11 });
       p2.drawText(dados.diagInicial || '', { x: 45, y: 462, size: 9, font });
       p2.drawText(dados.cidPrincipal || '', { x: 285, y: 462, size: 9, font });
       p2.drawText(dados.procCod || '', { x: 375, y: 428, size: 9, font });
-
-      // Autorizador
       p2.drawText(dados.autorizadorNome || '', { x: 45, y: 220, size: 8, font });
       p2.drawText(dados.autorizadorDoc || '', { x: 175, y: 198, size: 8, font });
       p2.drawText(dados.dataAutorizacao || '', { x: 45, y: 175, size: 8, font });
       p2.drawText(dados.numAih || '', { x: 380, y: 220, size: 9, font });
     }
 
-    // ==========================================
-    // PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO
-    // ==========================================
+    // PÁGINA 3: PRONTUÁRIO[cite: 2]
     if (pages[2]) {
       const p3 = pages[2];
       p3.drawText(dados.nomePaciente || '', { x: 135, y: 730, size: 9, font });
@@ -466,9 +457,7 @@
       p3.drawText(dados.diagInicial || '', { x: 135, y: 514, size: 8, font });
     }
 
-    // ==========================================
-    // PÁGINA 4: FICHA DE ANESTESIA
-    // ==========================================
+    // PÁGINA 4: FICHA DE ANESTESIA[cite: 2]
     if (pages[3]) {
       const p4 = pages[3];
       p4.drawText(dados.nomePaciente || '', { x: 95, y: 755, size: 9, font });
@@ -482,9 +471,7 @@
       p4.drawText(dados.duracaoAnestesia || '', { x: 460, y: 435, size: 8, font });
     }
 
-    // ==========================================
-    // PÁGINA 5: BOLETIM OPERATÓRIO
-    // ==========================================
+    // PÁGINA 5: BOLETIM OPERATÓRIO[cite: 2]
     if (pages[4]) {
       const p5 = pages[4];
       p5.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
@@ -495,7 +482,6 @@
       p5.drawText(dados.inicioCirurgia || '', { x: 80, y: 665, size: 8, font });
       p5.drawText(dados.fimCirurgia || '', { x: 230, y: 665, size: 8, font });
 
-      // Descrição Cirúrgica
       if (dados.relatorioCirurgico) {
         p5.drawText(dados.relatorioCirurgico, {
           x: 45,
@@ -511,14 +497,13 @@
     return await pdfDoc.save();
   }
 
-  // Envio e Abertura do Viewer
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const status = document.getElementById('msgStatus');
     const btn = document.getElementById('btnSalvar');
 
     status.style.color = '#0284c7';
-    status.innerText = 'Carregando AIH oficial e gravando dados...';
+    status.innerText = 'Preenchendo sobre o PDF original...';
     btn.disabled = true;
 
     const payload = {
@@ -567,22 +552,8 @@
       relatorioCirurgico: document.getElementById('relatorioCirurgico').value
     };
 
-    // 1. Envio para a planilha Google Sheets
-    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL_DO_GOOGLE")) {
-      try {
-        await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        });
-      } catch (err) {
-        console.warn('Erro ao salvar no Google Sheets:', err);
-      }
-    }
-
-    // 2. Preenchimento do PDF oficial e exibição no Viewer
     try {
-      const pdfBytes = await preencherPdfOriginal(payload);
+      const pdfBytes = await preencherSobrePdfRaiz(payload);
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       
       if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
@@ -600,7 +571,7 @@
 
       document.getElementById('pdfModal').style.display = 'flex';
       status.style.color = '#16a34a';
-      status.innerText = 'Documento oficial preenchido com sucesso!';
+      status.innerText = 'Documento raiz preenchido com sucesso!';
     } catch (pdfErr) {
       status.style.color = '#dc2626';
       status.innerText = 'Erro: ' + pdfErr.message;
