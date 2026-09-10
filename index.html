@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH e Visualizador de Impressão</title>
+  <title>SISTEMA HM - Preenchimento Oficial de AIH</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f1f5f9; margin: 0; padding: 20px; color: #1e293b; }
-    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .container { max-width: 960px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
     h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 22px; }
     fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fafafa; }
     legend { font-weight: 700; color: #0284c7; padding: 0 8px; font-size: 15px; }
@@ -24,7 +24,7 @@
     td { padding: 4px; border: 1px solid #cbd5e1; }
     .btn-template { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 4px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-right: 5px; }
     .btn-template:hover { background: #cbd5e1; }
-    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 14px 24px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 15px; font-weight: bold; text-align: center; font-size: 14px; }
 
@@ -43,8 +43,8 @@
     .modal-content {
       background: #fff;
       width: 100%;
-      max-width: 900px;
-      height: 90vh;
+      max-width: 950px;
+      height: 92vh;
       border-radius: 10px;
       display: flex;
       flex-direction: column;
@@ -86,12 +86,12 @@
 <body>
 
 <div class="container">
-  <h2>Autorização de Internação Hospitalar (AIH) - Registro e Impressão</h2>
+  <h2>Preenchimento e Lançamento de AIH Oficial</h2>
 
   <form id="formAih">
     <!-- DADOS DO PACIENTE -->
     <fieldset>
-      <legend>Identificação do Paciente e Admissão</legend>
+      <legend>Identificação do Paciente e Internação</legend>
       <div class="grid-3">
         <div class="form-group">
           <label>Nº Prontuário:</label>
@@ -109,7 +109,7 @@
       <div class="grid-4">
         <div class="form-group">
           <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1954">
+          <input type="text" id="dataNasc" value="10/12/54">
         </div>
         <div class="form-group">
           <label>Sexo:</label>
@@ -119,6 +119,48 @@
           </select>
         </div>
         <div class="form-group">
+          <label>Raça / Cor:</label>
+          <input type="text" id="racaCor" value="PARDA">
+        </div>
+        <div class="form-group">
+          <label>Telefone:</label>
+          <input type="text" id="telefone" value="84 99980 5728">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Nome da Mãe:</label>
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA DA SILVA">
+        </div>
+        <div class="form-group">
+          <label>Nome do Pai:</label>
+          <input type="text" id="nomePai" value="JONAS GOMES DA MOTA">
+        </div>
+        <div class="form-group">
+          <label>Endereço Completo:</label>
+          <input type="text" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Município:</label>
+          <input type="text" id="municipio" value="FRUTUOSO GOMES">
+        </div>
+        <div class="form-group">
+          <label>Cód. IBGE:</label>
+          <input type="text" id="ibge" value="2404002">
+        </div>
+        <div class="form-group">
+          <label>Data Admissão:</label>
+          <input type="text" id="dataInternacao" value="19/03/23">
+        </div>
+        <div class="form-group">
+          <label>Data Saída (Alta):</label>
+          <input type="text" id="dataSaida" value="02/04/23">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
           <label>Diagnóstico Inicial:</label>
           <input type="text" id="diagInicial" value="ERISIPELA">
         </div>
@@ -126,6 +168,18 @@
           <label>CID-10 Principal:</label>
           <input type="text" id="cidPrincipal" value="A 46">
         </div>
+        <div class="form-group">
+          <label>Leito / Enfermaria:</label>
+          <input type="text" id="leito" value="01 / MASC">
+        </div>
+        <div class="form-group">
+          <label>Dias de Permanência:</label>
+          <input type="text" id="diasPerm" value="10">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Principais Sinais e Sintomas / Justificativa:</label>
+        <textarea id="sinaisSintomas" rows="2">Paciente com quadro de dor, edema intenso e calor em m.i.d. Leucocitose de 10 mil com 80% de neutrófilos.</textarea>
       </div>
     </fieldset>
 
@@ -199,7 +253,7 @@
         </div>
         <div class="form-group">
           <label>Data da Autorização:</label>
-          <input type="date" id="dataAutorizacao">
+          <input type="text" id="dataAutorizacao" value="19/03/23">
         </div>
       </div>
     </fieldset>
@@ -278,7 +332,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit" id="btnSalvar">Salvar no Sheets e Abrir Viewer</button>
+    <button type="submit" class="btn-submit" id="btnSalvar">Lançar no PDF Original e Abrir Viewer</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -287,7 +341,7 @@
 <div class="modal-overlay" id="pdfModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualizador do Documento (Pronto para Impressão)</h3>
+      <h3>Visualizador da AIH Oficial (Pronto para Conferência e Impressão)</h3>
       <span style="cursor: pointer; font-size: 20px;" onclick="fecharViewer()">&times;</span>
     </div>
     <div class="modal-body">
@@ -295,16 +349,14 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn-modal btn-close" onclick="fecharViewer()">Fechar</button>
-      <button type="button" class="btn-modal btn-download" id="btnDownload">Baixar PDF</button>
-      <button type="button" class="btn-modal btn-print" onclick="dispararImpressao()">Imprimir Agora</button>
+      <button type="button" class="btn-modal btn-download" id="btnDownload">Baixar PDF Preenchido</button>
+      <button type="button" class="btn-modal btn-print" onclick="dispararImpressao()">Imprimir Documento</button>
     </div>
   </div>
 </div>
 
 <script>
-  // Cole a URL do Web App gerada no seu Apps Script aqui:
   const SCRIPT_URL = "SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI";
-
   let currentBlobUrl = null;
 
   const MODELOS = {
@@ -318,67 +370,155 @@
     }
   }
 
-  // Gera o PDF de 2 vias diretamente pelo navegador
-  async function gerarPdfDuasVias(dados) {
+  // Carrega o PDF original e carimba os dados nas posições oficiais
+  async function preencherPdfOriginal(dados) {
+    const res = await fetch('./AIH-FG.pdf');
+    if (!res.ok) {
+      throw new Error('Não foi possível carregar o arquivo AIH-FG.pdf. Certifique-se de que ele está na mesma pasta do index.html.');
+    }
+    const templateBytes = await res.arrayBuffer();
+
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const pdfDoc = await PDFDocument.load(templateBytes);
+    const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const pages = pdfDoc.getPages();
 
-    // Função interna que desenha a via da AIH
-    function desenharVia(page) {
-      const { width, height } = page.getSize();
+    // ==========================================
+    // PÁGINA 1: AIH PRINCIPAL
+    // ==========================================
+    if (pages[0]) {
+      const p1 = pages[0];
+      p1.drawText(dados.prontuario || '', { x: 130, y: 724, size: 9, font });
+      p1.drawText(dados.dataSaida || '', { x: 450, y: 712, size: 9, font });
+      p1.drawText(dados.dataInternacao || '', { x: 430, y: 686, size: 9, font });
+      p1.drawText(dados.nomePaciente || '', { x: 155, y: 673, size: 9, font });
+      p1.drawText(dados.sexo || '', { x: 75, y: 660, size: 9, font });
+      p1.drawText(dados.dataNasc || '', { x: 175, y: 660, size: 9, font });
+      p1.drawText(dados.racaCor || '', { x: 285, y: 660, size: 9, font });
+      p1.drawText(dados.cns || '', { x: 420, y: 660, size: 9, font });
+      p1.drawText(dados.nomeMae || '', { x: 130, y: 647, size: 9, font });
+      p1.drawText(dados.endereco || '', { x: 110, y: 620, size: 8, font });
+      p1.drawText(dados.municipio || '', { x: 110, y: 607, size: 8, font });
+      p1.drawText(dados.telefone || '', { x: 420, y: 594, size: 8, font });
       
-      // Cabeçalho
-      page.drawText('PREFEITURA MUNICIPAL DE FRUTUOSO GOMES - RN', { x: 40, y: height - 40, size: 11, font: fontBold });
-      page.drawText('Hospital Maternidade Severina Carlos de Andrade - CNPJ: 08.349.052/0001-80', { x: 40, y: height - 54, size: 9, font });
-      page.drawText('AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)', { x: 40, y: height - 70, size: 12, font: fontBold, color: rgb(0.01, 0.41, 0.63) });
-      
-      // Linha separadora
-      page.drawLine({ start: { x: 40, y: height - 76 }, end: { x: width - 40, y: height - 76 }, thickness: 1, color: rgb(0.8, 0.8, 0.8) });
+      // Procedimentos e Diagnóstico
+      p1.drawText(dados.procCod || '', { x: 165, y: 554, size: 9, font });
+      p1.drawText(dados.cidPrincipal || '', { x: 115, y: 501, size: 9, font });
+      p1.drawText(dados.autorizadorDoc || '', { x: 400, y: 462, size: 8, font });
 
-      // Dados do Paciente
-      page.drawText(`Prontuário: ${dados.prontuario}     Data Nasc: ${dados.dataNasc}     Sexo: ${dados.sexo}`, { x: 40, y: height - 95, size: 10, font });
-      page.drawText(`Paciente: ${dados.nomePaciente}`, { x: 40, y: height - 110, size: 11, font: fontBold });
-      page.drawText(`Cartão SUS: ${dados.cns}`, { x: 40, y: height - 125, size: 10, font });
-      
-      // Diagnóstico e Procedimento
-      page.drawText(`Diagnóstico: ${dados.diagInicial} (CID: ${dados.cidPrincipal})`, { x: 40, y: height - 145, size: 10, font: fontBold });
-      page.drawText(`Procedimento SIGTAP: ${dados.procCod} | Qtd: ${dados.procQtd} | CNES: ${dados.procCnes}`, { x: 40, y: height - 160, size: 9, font });
-
-      // Equipe Cirúrgica e Anestesia
-      page.drawText(`Cirurgião: ${dados.cirurgiaoOperador}    1º Auxiliar: ${dados.cirurgiao1Aux}`, { x: 40, y: height - 180, size: 9, font });
-      page.drawText(`Anestesista: ${dados.anestesistaNome} (${dados.tipoAnestesia || 'Geral/Raqui'})`, { x: 40, y: height - 195, size: 9, font });
-      
-      // Relatório
-      page.drawText('Descrição / Relatório Operatório:', { x: 40, y: height - 215, size: 9, font: fontBold });
-      const resumoRelatorio = (dados.relatorioCirurgico || 'Sem descrição cirúrgica.').substring(0, 320) + '...';
-      page.drawText(resumoRelatorio, { x: 40, y: height - 230, size: 8, font, maxWidth: width - 80, lineHeight: 10 });
-
-      // Rodapé
-      page.drawText(`Autorizador: ${dados.autorizadorNome || 'SMS'} - Doc: ${dados.autorizadorDoc}`, { x: 40, y: 50, size: 8, font });
-      page.drawText('Assinatura do Responsável / Médico', { x: width - 200, y: 50, size: 8, font });
+      // Tabela de Procedimentos Realizados (Linha 1)
+      p1.drawText(dados.procCod || '', { x: 80, y: 398, size: 8, font });
+      p1.drawText(dados.procQtd || '1', { x: 215, y: 398, size: 8, font });
+      p1.drawText(dados.procCpf || '', { x: 260, y: 398, size: 8, font });
+      p1.drawText(dados.procCbo || '', { x: 335, y: 398, size: 8, font });
+      p1.drawText(dados.procCnes || '2380846', { x: 385, y: 398, size: 8, font });
+      p1.drawText(dados.procCnpj || '08.349.052/0001-80', { x: 450, y: 398, size: 8, font });
     }
 
-    // Cria Página 1
-    const page1 = pdfDoc.addPage([595.28, 841.89]); // A4 Retrato
-    desenharVia(page1);
+    // ==========================================
+    // PÁGINA 2: LAUDO SUS
+    // ==========================================
+    if (pages[1]) {
+      const p2 = pages[1];
+      p2.drawText(dados.nomePaciente || '', { x: 45, y: 692, size: 9, font });
+      p2.drawText(dados.prontuario || '', { x: 370, y: 692, size: 9, font });
+      p2.drawText(dados.cns || '', { x: 45, y: 668, size: 9, font });
+      p2.drawText(dados.dataNasc || '', { x: 285, y: 668, size: 9, font });
+      p2.drawText(dados.racaCor || '', { x: 455, y: 668, size: 8, font });
+      p2.drawText(dados.nomeMae || '', { x: 45, y: 645, size: 8, font });
+      p2.drawText(dados.telefone || '', { x: 435, y: 645, size: 8, font });
+      p2.drawText(dados.endereco || '', { x: 45, y: 622, size: 8, font });
+      p2.drawText(dados.municipio || '', { x: 45, y: 600, size: 8, font });
+      p2.drawText(dados.ibge || '2404002', { x: 335, y: 600, size: 8, font });
 
-    // Cria Página 2 idêntica (Garante as 2 vias na impressão sem deixar metade vazia)
-    const page2 = pdfDoc.addPage([595.28, 841.89]);
-    desenharVia(page2);
+      // Justificativa e Clínicos
+      p2.drawText(dados.sinaisSintomas || '', { x: 45, y: 550, size: 8, font, maxWidth: 500, lineHeight: 11 });
+      p2.drawText(dados.diagInicial || '', { x: 45, y: 462, size: 9, font });
+      p2.drawText(dados.cidPrincipal || '', { x: 285, y: 462, size: 9, font });
+      p2.drawText(dados.procCod || '', { x: 375, y: 428, size: 9, font });
+
+      // Autorizador
+      p2.drawText(dados.autorizadorNome || '', { x: 45, y: 220, size: 8, font });
+      p2.drawText(dados.autorizadorDoc || '', { x: 175, y: 198, size: 8, font });
+      p2.drawText(dados.dataAutorizacao || '', { x: 45, y: 175, size: 8, font });
+      p2.drawText(dados.numAih || '', { x: 380, y: 220, size: 9, font });
+    }
+
+    // ==========================================
+    // PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO
+    // ==========================================
+    if (pages[2]) {
+      const p3 = pages[2];
+      p3.drawText(dados.nomePaciente || '', { x: 135, y: 730, size: 9, font });
+      p3.drawText(dados.prontuario || '', { x: 465, y: 730, size: 9, font });
+      p3.drawText(dados.endereco || '', { x: 95, y: 712, size: 8, font });
+      p3.drawText(dados.dataNasc || '', { x: 140, y: 694, size: 8, font });
+      p3.drawText(dados.sexo || '', { x: 235, y: 694, size: 8, font });
+      p3.drawText(dados.racaCor || '', { x: 505, y: 694, size: 8, font });
+      p3.drawText(dados.municipio || '', { x: 100, y: 676, size: 8, font });
+      p3.drawText(dados.nomePai || '', { x: 110, y: 640, size: 8, font });
+      p3.drawText(dados.nomeMae || '', { x: 115, y: 622, size: 8, font });
+      p3.drawText(dados.leito || '', { x: 480, y: 604, size: 8, font });
+      p3.drawText(dados.dataInternacao || '', { x: 130, y: 568, size: 8, font });
+      p3.drawText(dados.dataSaida || '', { x: 395, y: 586, size: 8, font });
+      p3.drawText(dados.diasPerm || '10', { x: 155, y: 550, size: 8, font });
+      p3.drawText(dados.diagInicial || '', { x: 135, y: 532, size: 8, font });
+      p3.drawText(dados.diagInicial || '', { x: 135, y: 514, size: 8, font });
+    }
+
+    // ==========================================
+    // PÁGINA 4: FICHA DE ANESTESIA
+    // ==========================================
+    if (pages[3]) {
+      const p4 = pages[3];
+      p4.drawText(dados.nomePaciente || '', { x: 95, y: 755, size: 9, font });
+      p4.drawText(dados.prontuario || '', { x: 460, y: 755, size: 9, font });
+      p4.drawText(dados.aptidaoAnestesia || 'Apto', { x: 95, y: 730, size: 8, font });
+      p4.drawText(dados.tipoAnestesia || '', { x: 95, y: 680, size: 8, font });
+      p4.drawText(dados.anestesistaNome || '', { x: 380, y: 375, size: 8, font });
+      p4.drawText(dados.drogasAnestesia || '', { x: 400, y: 660, size: 7, font, maxWidth: 170, lineHeight: 9 });
+      p4.drawText(dados.inicioAnestesia || '', { x: 460, y: 540, size: 8, font });
+      p4.drawText(dados.fimAnestesia || '', { x: 460, y: 470, size: 8, font });
+      p4.drawText(dados.duracaoAnestesia || '', { x: 460, y: 435, size: 8, font });
+    }
+
+    // ==========================================
+    // PÁGINA 5: BOLETIM OPERATÓRIO
+    // ==========================================
+    if (pages[4]) {
+      const p5 = pages[4];
+      p5.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
+      p5.drawText(dados.prontuario || '', { x: 460, y: 700, size: 9, font });
+      p5.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8, font });
+      p5.drawText(dados.cirurgiao1Aux || '', { x: 100, y: 625, size: 8, font });
+      p5.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8, font });
+      p5.drawText(dados.inicioCirurgia || '', { x: 80, y: 665, size: 8, font });
+      p5.drawText(dados.fimCirurgia || '', { x: 230, y: 665, size: 8, font });
+
+      // Descrição Cirúrgica
+      if (dados.relatorioCirurgico) {
+        p5.drawText(dados.relatorioCirurgico, {
+          x: 45,
+          y: 440,
+          size: 7.5,
+          font,
+          maxWidth: 510,
+          lineHeight: 10.5
+        });
+      }
+    }
 
     return await pdfDoc.save();
   }
 
-  // Manipulação do Formulário
+  // Envio e Abertura do Viewer
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const status = document.getElementById('msgStatus');
     const btn = document.getElementById('btnSalvar');
 
     status.style.color = '#0284c7';
-    status.innerText = 'Processando registro e gerando visualizador...';
+    status.innerText = 'Carregando AIH oficial e gravando dados...';
     btn.disabled = true;
 
     const payload = {
@@ -387,8 +527,20 @@
       cns: document.getElementById('cns').value,
       dataNasc: document.getElementById('dataNasc').value,
       sexo: document.getElementById('sexo').value,
+      racaCor: document.getElementById('racaCor').value,
+      telefone: document.getElementById('telefone').value,
+      nomeMae: document.getElementById('nomeMae').value,
+      nomePai: document.getElementById('nomePai').value,
+      endereco: document.getElementById('endereco').value,
+      municipio: document.getElementById('municipio').value,
+      ibge: document.getElementById('ibge').value,
+      dataInternacao: document.getElementById('dataInternacao').value,
+      dataSaida: document.getElementById('dataSaida').value,
       diagInicial: document.getElementById('diagInicial').value,
       cidPrincipal: document.getElementById('cidPrincipal').value,
+      leito: document.getElementById('leito').value,
+      diasPerm: document.getElementById('diasPerm').value,
+      sinaisSintomas: document.getElementById('sinaisSintomas').value,
       procCod: document.getElementById('procCod1').value,
       procQtd: document.getElementById('procQtd1').value,
       procCpf: document.getElementById('procCpf1').value,
@@ -415,7 +567,7 @@
       relatorioCirurgico: document.getElementById('relatorioCirurgico').value
     };
 
-    // 1. Envia para o Sheets (se a URL estiver configurada)
+    // 1. Envio para a planilha Google Sheets
     if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL_DO_GOOGLE")) {
       try {
         await fetch(SCRIPT_URL, {
@@ -428,33 +580,30 @@
       }
     }
 
-    // 2. Cria o PDF e abre o Viewer na tela
+    // 2. Preenchimento do PDF oficial e exibição no Viewer
     try {
-      const pdfBytes = await gerarPdfDuasVias(payload);
+      const pdfBytes = await preencherPdfOriginal(payload);
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       
       if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
       currentBlobUrl = URL.createObjectURL(blob);
 
-      // Injeta no iframe do Viewer
       document.getElementById('pdfFrame').src = currentBlobUrl;
       
-      // Configura botão de download
       const btnDl = document.getElementById('btnDownload');
       btnDl.onclick = function() {
         const link = document.createElement('a');
         link.href = currentBlobUrl;
-        link.download = `AIH_${payload.prontuario || 'Documento'}.pdf`;
+        link.download = `AIH_Oficial_${payload.prontuario || 'Preenchida'}.pdf`;
         link.click();
       };
 
-      // Abre o modal
       document.getElementById('pdfModal').style.display = 'flex';
       status.style.color = '#16a34a';
-      status.innerText = 'Documento pronto no visualizador!';
+      status.innerText = 'Documento oficial preenchido com sucesso!';
     } catch (pdfErr) {
       status.style.color = '#dc2626';
-      status.innerText = 'Erro ao gerar visualizador: ' + pdfErr.message;
+      status.innerText = 'Erro: ' + pdfErr.message;
     } finally {
       btn.disabled = false;
     }
