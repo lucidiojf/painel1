@@ -2,162 +2,163 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>SISTEMA HM - AIH Oficial</title>
+  <title>SISTEMA HM - AIH Oficial no PDF Raiz</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: sans-serif; }
     body { background: #f1f5f9; padding: 20px; color: #1e293b; }
-    .container { max-width: 900px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .container { max-width: 920px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
-    .box-arquivo { background: #eff6ff; border: 2px dashed #3b82f6; padding: 12px; margin-bottom: 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-    fieldset { border: 1px solid #cbd5e1; border-radius: 6px; padding: 15px; margin-bottom: 15px; }
+    .box-arquivo { background: #eff6ff; border: 2px dashed #3b82f6; padding: 14px; margin-bottom: 18px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+    fieldset { border: 1px solid #cbd5e1; border-radius: 6px; padding: 14px; margin-bottom: 14px; background: #fafafa; }
     legend { font-weight: bold; color: #0284c7; }
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px; }
     label { font-size: 12px; font-weight: bold; color: #475569; display: block; margin-bottom: 3px; }
-    input, select, textarea { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; }
-    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 6px; width: 100%; cursor: pointer; }
+    input, select, textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 13px; background: #fff; }
+    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 14px; font-size: 16px; font-weight: bold; border-radius: 6px; width: 100%; cursor: pointer; }
     .btn-submit:hover { background: #0369a1; }
     #status { margin-top: 12px; font-weight: bold; text-align: center; }
 
     /* MODAL DO VIEWER */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
-    .modal-box { background: #fff; width: 90%; max-width: 900px; height: 90vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-box { background: #fff; width: 92%; max-width: 950px; height: 92vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
     .modal-header { background: #0284c7; color: #fff; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
     .modal-footer { padding: 10px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 10px; }
-    .btn-action { padding: 8px 16px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; }
+    .btn-action { padding: 8px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; border: none; font-size: 14px; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Emissão de AIH Hospitalar</h2>
+  <h2>Emissão de AIH Hospitalar - Modelo Oficial</h2>
 
   <div class="box-arquivo">
-    <span id="txtArquivo" style="font-weight: bold; color: #1d4ed8;">Selecione o arquivo matriz (AIH-FG.pdf):</span>
+    <div>
+      <span id="txtArquivo" style="font-weight: bold; color: #1d4ed8;">PDF Raiz (AIH-FG.pdf): Carregamento Automático</span>
+      <div style="font-size: 11px; color: #64748b; margin-top: 3px;">Se o arquivo não carregar sozinho, use o botão ao lado para selecioná-lo:</div>
+    </div>
     <input type="file" id="arquivoPdf" accept="application/pdf">
   </div>
 
-  <form id="formAih">
+  <!-- Formulário configurado para envio direto sem bloqueio de CORS -->
+  <form id="formAih" target="iframeSheets" method="POST">
     <fieldset>
-      <legend>Dados do Paciente</legend>
+      <legend>Identificação do Paciente e Admissão</legend>
       <div class="grid">
         <div>
           <label>Prontuário:</label>
-          <input type="text" id="prontuario" value="5284" required>
+          <input type="text" name="prontuario" id="prontuario" value="22222" required>
         </div>
         <div>
           <label>Nome do Paciente:</label>
-          <input type="text" id="nomePaciente" value="PEDRO CARAI" required>
+          <input type="text" name="nomePaciente" id="nomePaciente" value="PAULO RELAMPAGO" required>
         </div>
         <div>
-          <label>Cartão SUS:</label>
-          <input type="text" id="cns" value="705006647751551">
+          <label>Cartão SUS (CNS):</label>
+          <input type="text" name="cns" id="cns" value="444444">
         </div>
       </div>
 
       <div class="grid">
         <div>
           <label>Nascimento:</label>
-          <input type="text" id="dataNasc" value="20/10/52">
+          <input type="text" name="dataNasc" id="dataNasc" value="10/12/1956">
         </div>
         <div>
           <label>Sexo:</label>
-          <select id="sexo">
+          <select name="sexo" id="sexo">
             <option value="M" selected>Masculino</option>
             <option value="F">Feminino</option>
           </select>
         </div>
         <div>
-          <label>Raça/Cor:</label>
-          <input type="text" id="racaCor" value="BRANCA">
+          <label>Raça / Cor:</label>
+          <input type="text" name="racaCor" id="racaCor" value="BRANCA">
         </div>
         <div>
           <label>Telefone:</label>
-          <input type="text" id="telefone" value="84 99999-0000">
+          <input type="text" name="telefone" id="telefone" value="84 99999-0000">
         </div>
       </div>
 
       <div class="grid">
         <div>
           <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="TEREZINHA M VIEIRA">
+          <input type="text" name="nomeMae" id="nomeMae" value="MARIA JOSE CAROCO">
         </div>
         <div>
-          <label>Endereço:</label>
-          <input type="text" id="endereco" value="ST ARROJADO, SN">
+          <label>Endereço Completo:</label>
+          <input type="text" name="endereco" id="endereco" value="F GOMES">
         </div>
         <div>
           <label>Município:</label>
-          <input type="text" id="municipio" value="FRUTUOSO GOMES">
+          <input type="text" name="municipio" id="municipio" value="FRUTUOSO GOMES - RN">
         </div>
       </div>
 
       <div class="grid">
         <div>
           <label>Data Admissão:</label>
-          <input type="text" id="dataInternacao" value="19/03/23">
+          <input type="text" name="dataInternacao" id="dataInternacao" value="19/03/2026">
         </div>
         <div>
           <label>Data Saída (Alta):</label>
-          <input type="text" id="dataSaida" value="02/04/23">
+          <input type="text" name="dataSaida" id="dataSaida" value="02/04/2026">
         </div>
         <div>
-          <label>Procedimento SIGTAP:</label>
-          <input type="text" id="procCod" value="0303080078">
+          <label>Diagnóstico Inicial:</label>
+          <input type="text" name="diagInicial" id="diagInicial" value="ERISIPELA">
         </div>
         <div>
-          <label>CID Principal:</label>
-          <input type="text" id="cidPrincipal" value="A 46">
+          <label>CID-10 Principal:</label>
+          <input type="text" name="cidPrincipal" id="cidPrincipal" value="A 46">
         </div>
       </div>
-    </fieldset>
 
-    <fieldset>
-      <legend>Boletim Cirúrgico</legend>
       <div class="grid">
         <div>
-          <label>Cirurgião:</label>
-          <input type="text" id="cirurgiaoOperador" value="DR LUCIDIO">
+          <label>Procedimento SIGTAP:</label>
+          <input type="text" name="procCod" id="procCod" value="0303080078">
         </div>
         <div>
-          <label>Auxiliar:</label>
-          <input type="text" id="cirurgiao1Aux" value="DR HALLYSON">
+          <label>Cirurgião Operador:</label>
+          <input type="text" name="cirurgiaoOperador" id="cirurgiaoOperador" value="DR LUCIDIO">
         </div>
         <div>
-          <label>Anestesista:</label>
-          <input type="text" id="anestesistaNome" value="DR HIAGO - CRM: 8.830">
+          <label>Enfermaria / Leito:</label>
+          <input type="text" name="leito" id="leito" value="01 / MASC">
         </div>
-      </div>
-      <div>
-        <label>Descrição Cirúrgica:</label>
-        <textarea id="relatorioCirurgico" rows="3">Procedimento cirúrgico realizado sem intercorrências.</textarea>
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit" id="btnSalvar">Salvar na Planilha e Abrir Documento</button>
+    <button type="submit" class="btn-submit" id="btnSalvar">Salvar no Sheets e Visualizar no PDF Raiz</button>
     <div id="status"></div>
   </form>
 </div>
 
-<!-- VIEWER -->
+<!-- Iframe invisível para gravar na planilha sem abrir página nova -->
+<iframe name="iframeSheets" id="iframeSheets" style="display: none;"></iframe>
+
+<!-- MODAL VIEWER DO PDF RAIZ OFICIAL -->
 <div class="modal" id="modalViewer">
   <div class="modal-box">
     <div class="modal-header">
-      <span style="font-weight: bold;">Conferência de Impressão</span>
+      <span style="font-weight: bold;">AIH Oficial Preenchida (Gabarito Completo)</span>
       <span style="cursor: pointer; font-size: 20px;" onclick="fecharViewer()">&times;</span>
     </div>
     <div style="flex: 1; background: #525659;">
       <iframe id="framePdf" style="width: 100%; height: 100%; border: none;"></iframe>
     </div>
     <div class="modal-footer">
-      <button class="btn-action" style="background: #e2e8f0;" onclick="fecharViewer()">Fechar</button>
+      <button class="btn-action" style="background: #e2e8f0; color: #334155;" onclick="fecharViewer()">Fechar</button>
+      <button class="btn-action" style="background: #0284c7; color: #fff;" id="btnDownload">Baixar PDF</button>
       <button class="btn-action" style="background: #16a34a; color: #fff;" onclick="imprimirPdf()">Imprimir</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ATENÇÃO: Cole sua URL do Google Apps Script abaixo:
+  // ATENÇÃO: Cole a URL do seu Google Apps Script aqui (terminada em /exec):
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec";
 
   let matrizBytes = null;
@@ -166,22 +167,21 @@
   document.getElementById('arquivoPdf').addEventListener('change', async (e) => {
     if (e.target.files.length) {
       matrizBytes = await e.target.files[0].arrayBuffer();
-      document.getElementById('txtArquivo').innerText = "Matriz Carregada com Sucesso!";
+      document.getElementById('txtArquivo').innerText = "PDF Raiz Carregado: " + e.target.files[0].name;
       document.getElementById('txtArquivo').style.color = "#16a34a";
     }
   });
 
-  async function processarPdf(dados) {
+  async function preencherNoPdfRaiz(d) {
     if (!matrizBytes) {
-      // Tenta puxar automaticamente se estiver na mesma pasta
       try {
         const r = await fetch('./AIH-FG.pdf');
         if (r.ok) matrizBytes = await r.arrayBuffer();
-      } catch(e){}
+      } catch(e) {}
     }
 
     if (!matrizBytes) {
-      throw new Error("Por favor, clique em 'Escolher arquivo' no topo e selecione o AIH-FG.pdf.");
+      throw new Error("O arquivo AIH-FG.pdf não foi localizado automaticamente. Por favor, clique em 'Escolher arquivo' no topo e selecione o PDF original.");
     }
 
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
@@ -190,57 +190,152 @@
     const white = rgb(1, 1, 1);
     const pages = doc.getPages();
 
-    const limpar = (p, x, y, w, h) => p.drawRectangle({ x, y, width: w, height: h, color: white });
+    const apagar = (p, x, y, w, h) => p.drawRectangle({ x, y, width: w, height: h, color: white });
 
     // ==========================================
-    // PÁGINA 1: LIMPEZA DAS ÁREAS DE TEXTO ANTIGAS[cite: 3]
+    // PÁGINA 1: AIH OFICIAL (Cobre dados antigos e escreve novos)
     // ==========================================
-    const p1 = pages[0];
-    
-    // Apaga os dados antigos do cabeçalho / paciente
-    limpar(p1, 95, 718, 120, 14);  // Prontuario
-    limpar(p1, 410, 708, 90, 14);  // Data Saida
-    limpar(p1, 410, 682, 90, 14);  // Data Internacao
-    limpar(p1, 135, 668, 300, 15); // Nome do Paciente antigo (FRANCISCO XAVIER)
-    limpar(p1, 65, 654, 30, 14);   // Sexo
-    limpar(p1, 160, 654, 80, 14);  // Nascimento
-    limpar(p1, 280, 654, 80, 14);  // Raca
-    limpar(p1, 410, 654, 130, 14); // CNS
-    limpar(p1, 115, 640, 300, 14); // Nome da Mae
-    limpar(p1, 95, 616, 300, 14);  // Endereco
-    limpar(p1, 95, 602, 200, 14);  // Municipio
-    limpar(p1, 410, 588, 120, 14); // Telefone
-    limpar(p1, 155, 548, 100, 14); // Procedimento
-    limpar(p1, 100, 496, 60, 14);  // CID
+    if (pages[0]) {
+      const p1 = pages[0];
 
-    // ESCREVE OS DADOS NOVOS NAS ALTURAS EXATAS
-    p1.drawText(dados.prontuario, { x: 100, y: 720, size: 9, font });
-    p1.drawText(dados.dataSaida, { x: 415, y: 710, size: 9, font });
-    p1.drawText(dados.dataInternacao, { x: 415, y: 684, size: 9, font });
-    p1.drawText(dados.nomePaciente, { x: 140, y: 670, size: 10, font });
-    p1.drawText(dados.sexo, { x: 70, y: 656, size: 9, font });
-    p1.drawText(dados.dataNasc, { x: 165, y: 656, size: 9, font });
-    p1.drawText(dados.racaCor, { x: 285, y: 656, size: 9, font });
-    p1.drawText(dados.cns, { x: 415, y: 656, size: 9, font });
-    p1.drawText(dados.nomeMae, { x: 120, y: 642, size: 9, font });
-    p1.drawText(dados.endereco, { x: 100, y: 618, size: 8.5, font });
-    p1.drawText(dados.municipio, { x: 100, y: 604, size: 8.5, font });
-    p1.drawText(dados.telefone, { x: 415, y: 590, size: 8.5, font });
-    p1.drawText(dados.procCod, { x: 160, y: 550, size: 9, font });
-    p1.drawText(dados.cidPrincipal, { x: 105, y: 498, size: 9, font });
+      // Borracha sobre o paciente antigo (FRANCISCO XAVIER e dados)
+      apagar(p1, 95, 718, 120, 15);
+      apagar(p1, 410, 706, 95, 15);
+      apagar(p1, 410, 680, 95, 15);
+      apagar(p1, 135, 666, 320, 16);
+      apagar(p1, 65, 652, 35, 15);
+      apagar(p1, 160, 652, 80, 15);
+      apagar(p1, 280, 652, 80, 15);
+      apagar(p1, 410, 652, 135, 15);
+      apagar(p1, 115, 638, 300, 15);
+      apagar(p1, 95, 614, 300, 15);
+      apagar(p1, 95, 600, 200, 15);
+      apagar(p1, 410, 586, 120, 15);
+      apagar(p1, 155, 546, 100, 15);
+      apagar(p1, 100, 494, 60, 15);
+      apagar(p1, 70, 390, 470, 18);
+
+      // Preenchimento dos novos dados
+      p1.drawText(d.prontuario, { x: 100, y: 720, size: 9, font });
+      p1.drawText(d.dataSaida, { x: 415, y: 710, size: 9, font });
+      p1.drawText(d.dataInternacao, { x: 415, y: 684, size: 9, font });
+      p1.drawText(d.nomePaciente, { x: 140, y: 670, size: 10, font });
+      p1.drawText(d.sexo, { x: 70, y: 656, size: 9, font });
+      p1.drawText(d.dataNasc, { x: 165, y: 656, size: 9, font });
+      p1.drawText(d.racaCor, { x: 285, y: 656, size: 9, font });
+      p1.drawText(d.cns, { x: 415, y: 656, size: 9, font });
+      p1.drawText(d.nomeMae, { x: 120, y: 642, size: 9, font });
+      p1.drawText(d.endereco, { x: 100, y: 618, size: 8.5, font });
+      p1.drawText(d.municipio, { x: 100, y: 604, size: 8.5, font });
+      p1.drawText(d.telefone, { x: 415, y: 590, size: 8.5, font });
+      p1.drawText(d.procCod, { x: 160, y: 550, size: 9, font });
+      p1.drawText(d.cidPrincipal, { x: 105, y: 498, size: 9, font });
+
+      p1.drawText(d.procCod, { x: 75, y: 394, size: 8, font });
+      p1.drawText("1", { x: 215, y: 394, size: 8, font });
+      p1.drawText("2380846", { x: 385, y: 394, size: 8, font });
+      p1.drawText("08.349.052/0001-80", { x: 445, y: 394, size: 8, font });
+    }
+
+    // ==========================================
+    // PÁGINA 2: LAUDO SUS
+    // ==========================================
+    if (pages[1]) {
+      const p2 = pages[1];
+      apagar(p2, 40, 684, 300, 16);
+      apagar(p2, 360, 684, 80, 16);
+      apagar(p2, 40, 660, 150, 16);
+      apagar(p2, 275, 660, 80, 16);
+      apagar(p2, 440, 660, 80, 16);
+      apagar(p2, 40, 638, 300, 16);
+      apagar(p2, 40, 614, 400, 16);
+      apagar(p2, 40, 592, 250, 16);
+      apagar(p2, 40, 455, 200, 16);
+      apagar(p2, 270, 455, 60, 16);
+      apagar(p2, 360, 420, 100, 16);
+
+      p2.drawText(d.nomePaciente, { x: 45, y: 688, size: 9, font });
+      p2.drawText(d.prontuario, { x: 365, y: 688, size: 9, font });
+      p2.drawText(d.cns, { x: 45, y: 664, size: 9, font });
+      p2.drawText(d.dataNasc, { x: 280, y: 664, size: 9, font });
+      p2.drawText(d.racaCor, { x: 445, y: 664, size: 8, font });
+      p2.drawText(d.nomeMae, { x: 45, y: 642, size: 8, font });
+      p2.drawText(d.endereco, { x: 45, y: 618, size: 8, font });
+      p2.drawText(d.municipio, { x: 45, y: 596, size: 8, font });
+      p2.drawText(d.diagInicial, { x: 45, y: 459, size: 9, font });
+      p2.drawText(d.cidPrincipal, { x: 275, y: 459, size: 9, font });
+      p2.drawText(d.procCod, { x: 365, y: 424, size: 9, font });
+    }
+
+    // ==========================================
+    // PÁGINA 3: PRONTUÁRIO
+    // ==========================================
+    if (pages[2]) {
+      const p3 = pages[2];
+      apagar(p3, 120, 722, 280, 16);
+      apagar(p3, 450, 722, 80, 16);
+      apagar(p3, 85, 704, 300, 16);
+      apagar(p3, 130, 686, 80, 16);
+      apagar(p3, 490, 686, 70, 16);
+      apagar(p3, 90, 668, 200, 16);
+      apagar(p3, 105, 614, 250, 16);
+      apagar(p3, 470, 596, 70, 16);
+      apagar(p3, 120, 560, 80, 16);
+      apagar(p3, 385, 578, 80, 16);
+      apagar(p3, 125, 524, 150, 16);
+
+      p3.drawText(d.nomePaciente, { x: 125, y: 726, size: 9, font });
+      p3.drawText(d.prontuario, { x: 455, y: 726, size: 9, font });
+      p3.drawText(d.endereco, { x: 90, y: 708, size: 8, font });
+      p3.drawText(d.dataNasc, { x: 135, y: 690, size: 8, font });
+      p3.drawText(d.racaCor, { x: 495, y: 690, size: 8, font });
+      p3.drawText(d.municipio, { x: 95, y: 672, size: 8, font });
+      p3.drawText(d.nomeMae, { x: 110, y: 618, size: 8, font });
+      p3.drawText(d.leito, { x: 475, y: 600, size: 8, font });
+      p3.drawText(d.dataInternacao, { x: 125, y: 564, size: 8, font });
+      p3.drawText(d.dataSaida, { x: 390, y: 582, size: 8, font });
+      p3.drawText(d.diagInicial, { x: 130, y: 528, size: 8, font });
+    }
+
+    // ==========================================
+    // PÁGINA 4: FICHA DE ANESTESIA
+    // ==========================================
+    if (pages[3]) {
+      const p4 = pages[3];
+      apagar(p4, 85, 747, 250, 16);
+      apagar(p4, 450, 747, 80, 16);
+      p4.drawText(d.nomePaciente, { x: 90, y: 751, size: 9, font });
+      p4.drawText(d.prontuario, { x: 455, y: 751, size: 9, font });
+    }
+
+    // ==========================================
+    // PÁGINA 5: BOLETIM CIRÚRGICO
+    // ==========================================
+    if (pages[4]) {
+      const p5 = pages[4];
+      apagar(p5, 75, 747, 280, 16);
+      apagar(p5, 450, 692, 80, 16);
+      apagar(p5, 90, 637, 200, 16);
+
+      p5.drawText(d.nomePaciente, { x: 80, y: 751, size: 9, font });
+      p5.drawText(d.prontuario, { x: 455, y: 696, size: 9, font });
+      p5.drawText(d.cirurgiaoOperador, { x: 95, y: 641, size: 8, font });
+    }
 
     return await doc.save();
   }
 
-  // SUBMISSAO
-  document.getElementById('formAih').addEventListener('submit', async (e) => {
-    e.preventDefault();
+  document.getElementById('formAih').addEventListener('submit', async function(e) {
     const st = document.getElementById('status');
     const btn = document.getElementById('btnSalvar');
 
-    btn.disabled = true;
     st.style.color = "#0284c7";
-    st.innerText = "Gravando na planilha e gerando visualizador...";
+    st.innerText = "Gravando na planilha e preenchendo no PDF Raiz...";
+
+    // Configura a URL de ação do formulário no Google Sheets
+    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL")) {
+      this.action = SCRIPT_URL;
+    }
 
     const dados = {
       prontuario: document.getElementById('prontuario').value,
@@ -255,21 +350,16 @@
       municipio: document.getElementById('municipio').value,
       dataInternacao: document.getElementById('dataInternacao').value,
       dataSaida: document.getElementById('dataSaida').value,
-      procCod: document.getElementById('procCod').value,
+      diagInicial: document.getElementById('diagInicial').value,
       cidPrincipal: document.getElementById('cidPrincipal').value,
-      cirurgiaoOperador: document.getElementById('cirurgiaoOperador').value
+      procCod: document.getElementById('procCod').value,
+      cirurgiaoOperador: document.getElementById('cirurgiaoOperador').value,
+      leito: document.getElementById('leito').value
     };
 
-    // 1. Gravação no Google Sheets via GET Ping (Funciona 100% em arquivo local sem bloqueio CORS)
-    if (SCRIPT_URL && !SCRIPT_URL.includes("SUA_URL")) {
-      const params = new URLSearchParams(dados).toString();
-      const ping = new Image();
-      ping.src = SCRIPT_URL + "?" + params;
-    }
-
-    // 2. Preenchimento do PDF
+    // Gera a sobreposição no PDF Raiz original
     try {
-      const pdfBytes = await processarPdf(dados);
+      const pdfBytes = await preencherNoPdfRaiz(dados);
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
 
       if (pdfUrl) URL.revokeObjectURL(pdfUrl);
@@ -278,13 +368,19 @@
       document.getElementById('framePdf').src = pdfUrl;
       document.getElementById('modalViewer').style.display = "flex";
 
+      const btnDl = document.getElementById('btnDownload');
+      btnDl.onclick = function() {
+        const a = document.createElement('a');
+        a.href = pdfUrl;
+        a.download = `AIH_${dados.prontuario}_${dados.nomePaciente}.pdf`;
+        a.click();
+      };
+
       st.style.color = "#16a34a";
-      st.innerText = "Concluído! Dados enviados ao Sheets e documento gerado.";
+      st.innerText = "Concluído: Registro enviado à planilha e PDF raiz aberto para conferência!";
     } catch (err) {
       st.style.color = "#dc2626";
       st.innerText = err.message;
-    } finally {
-      btn.disabled = false;
     }
   });
 
