@@ -172,7 +172,6 @@
 </div>
 
 <script>
-  // Cole a sua URL do Web App gerada no Google Apps Script aqui:
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec";
 
   let matrizLimpaBytes = null;
@@ -205,52 +204,55 @@
     const { PDFDocument, StandardFonts } = PDFLib;
     const pdfDoc = await PDFDocument.load(matrizLimpaBytes);
     const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const fontNorm = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const pages = pdfDoc.getPages();
 
     // =========================================================================
-    // PÁGINA 1: AIH PRINCIPAL (Coordenadas Reais Medidas a Partir do Rodapé)
+    // PÁGINA 1: AIH PRINCIPAL (Coordenadas Rebaixadas para as Linhas Corretas)
     // =========================================================================
     if (pages[0]) {
       const p1 = pages[0];
 
-      // Bloco do Topo (Cabeçalho da AIH)
-      p1.drawText(dados.prontuario || '', { x: 440, y: 708, size: 9, font });
-      p1.drawText(dados.dataInternacao || '', { x: 130, y: 668, size: 9, font });
-      p1.drawText(dados.dataSaida || '', { x: 440, y: 668, size: 9, font });
+      // Bloco do Topo (Prontuário e Datas)
+      p1.drawText(dados.prontuario || '', { x: 235, y: 708, size: 9, font });
+      p1.drawText(dados.dataInternacao || '', { x: 130, y: 648, size: 9, font: fontNorm });
+      p1.drawText(dados.dataSaida || '', { x: 440, y: 648, size: 9, font: fontNorm });
 
       // Bloco Identificação do Paciente
-      p1.drawText(dados.nomePaciente || '', { x: 130, y: 622, size: 10, font });
-      p1.drawText(dados.sexo || '', { x: 65, y: 605, size: 9, font });
-      p1.drawText(dados.dataNasc || '', { x: 165, y: 605, size: 9, font });
-      p1.drawText(dados.racaCor || '', { x: 285, y: 605, size: 9, font });
-      p1.drawText(dados.cns || '', { x: 420, y: 605, size: 9, font });
+      p1.drawText(dados.nomePaciente || '', { x: 130, y: 556, size: 9.5, font });
+      p1.drawText(dados.sexo || '', { x: 65, y: 538, size: 9, font: fontNorm });
+      p1.drawText(dados.dataNasc || '', { x: 175, y: 538, size: 9, font: fontNorm });
+      p1.drawText(dados.racaCor || '', { x: 340, y: 538, size: 9, font: fontNorm });
+      p1.drawText(dados.cns || '', { x: 420, y: 538, size: 9, font: fontNorm });
 
-      p1.drawText(dados.nomeMae || '', { x: 130, y: 588, size: 9, font });
-      p1.drawText(dados.endereco || '', { x: 100, y: 572, size: 8.5, font });
-      p1.drawText(dados.municipio || '', { x: 100, y: 556, size: 8.5, font });
-      p1.drawText(dados.telefone || '', { x: 420, y: 556, size: 8.5, font });
+      p1.drawText(dados.nomeMae || '', { x: 110, y: 520, size: 8.5, font: fontNorm });
+      p1.drawText(dados.endereco || '', { x: 100, y: 502, size: 8.5, font: fontNorm });
+      p1.drawText(dados.municipio || '', { x: 100, y: 484, size: 8.5, font: fontNorm });
+      p1.drawText(dados.telefone || '', { x: 420, y: 484, size: 8.5, font: fontNorm });
 
-      // Procedimento e Diagnóstico
-      p1.drawText(dados.procCod || '', { x: 160, y: 504, size: 9, font });
-      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 450, size: 9, font });
+      // Procedimento Solicitado / Realizado e CID
+      p1.drawText(dados.procCod || '', { x: 165, y: 432, size: 9, font });
+      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 378, size: 9, font });
 
-      // Tabela de Produção SUS
-      p1.drawText(dados.procCod || '', { x: 80, y: 350, size: 8.5, font });
-      p1.drawText("1", { x: 215, y: 350, size: 8.5, font });
-      p1.drawText("2380846", { x: 385, y: 350, size: 8.5, font });
-      p1.drawText("08.349.052/0001-80", { x: 450, y: 350, size: 8.5, font });
+      // Tabela Procedimentos Realizados (Linha 1)
+      p1.drawText(dados.procCod || '', { x: 80, y: 284, size: 8.5, font: fontNorm });
+      p1.drawText("1", { x: 215, y: 284, size: 8.5, font: fontNorm });
+      p1.drawText("2380846", { x: 385, y: 284, size: 8.5, font: fontNorm });
+      p1.drawText("08.349.052/0001-80", { x: 450, y: 284, size: 8.5, font: fontNorm });
     }
 
+    // ==========================================
     // PÁGINA 5: BOLETIM CIRÚRGICO
+    // ==========================================
     if (pages[4]) {
       const p5 = pages[4];
       p5.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
-      p5.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8.5, font });
-      p5.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8.5, font });
+      p5.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8.5, font: fontNorm });
+      p5.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8.5, font: fontNorm });
 
       if (dados.relatorioCirurgico) {
         p5.drawText(dados.relatorioCirurgico, {
-          x: 45, y: 440, size: 7.5, font, maxWidth: 510, lineHeight: 10.5
+          x: 45, y: 440, size: 7.5, font: fontNorm, maxWidth: 510, lineHeight: 10.5
         });
       }
     }
