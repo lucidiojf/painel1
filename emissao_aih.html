@@ -48,11 +48,11 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Nº Prontuário:</label>
-          <input type="text" id="prontuario" value="5286" required>
+          <input type="text" id="prontuario" value="333" required>
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="MANOEL" required>
+          <input type="text" id="nomePaciente" value="PODENDO" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
@@ -67,8 +67,8 @@
         <div class="form-group">
           <label>Sexo:</label>
           <select id="sexo">
-            <option value="M" selected>Masculino</option>
-            <option value="F">Feminino</option>
+            <option value="M">Masculino</option>
+            <option value="F" selected>Feminino</option>
           </select>
         </div>
         <div class="form-group">
@@ -83,7 +83,7 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="MARIA JOSE">
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
         </div>
         <div class="form-group">
           <label>Endereço Completo:</label>
@@ -208,58 +208,58 @@
     const pages = pdfDoc.getPages();
 
     // =========================================================================
-    // PÁGINA 1: AIH PRINCIPAL (Calibragem com todas as alterações solicitadas)
+    // PÁGINA 1: AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR (AIH)
     // =========================================================================
     if (pages[0]) {
       const p1 = pages[0];
 
-      // Prontuário: Movido para a direita (alinhado no campo Prontuário:)
-      p1.drawText(dados.prontuario || '', { x: 285, y: 708, size: 9, font });
+      // Prontuário: Direita e desce 3 linhas
+      p1.drawText(dados.prontuario || '', { x: 295, y: 660, size: 9, font });
 
-      // Datas: Entrada e Saída subiram 1 linha (y = 675)
-      p1.drawText(dados.dataInternacao || '', { x: 160, y: 675, size: 9, font: fontNorm });
-      p1.drawText(dados.dataSaida || '', { x: 440, y: 675, size: 9, font: fontNorm });
+      // Datas de Internação e Saída: Mantidas no local exato
+      p1.drawText(dados.dataInternacao || '', { x: 160, y: 659, size: 9, font: fontNorm });
+      p1.drawText(dados.dataSaida || '', { x: 440, y: 659, size: 9, font: fontNorm });
 
-      // Nome do Paciente: Subiu 3 linhas (y = 648)
-      p1.drawText(dados.nomePaciente || '', { x: 130, y: 648, size: 9.5, font });
+      // Nome: Sobe 2 linhas e direita 4
+      p1.drawText(dados.nomePaciente || '', { x: 155, y: 645, size: 9.5, font });
 
-      // Sexo: Subiu 5 linhas (y = 632)
-      p1.drawText(dados.sexo || '', { x: 55, y: 632, size: 9, font: fontNorm });
+      // Sexo: Sobe 4 linhas e direita 7
+      p1.drawText(dados.sexo || '', { x: 85, y: 625, size: 9, font: fontNorm });
 
-      // Data de Nascimento, Raça e CNS: Subiram 4 linhas (y = 632)
-      p1.drawText(dados.dataNasc || '', { x: 160, y: 632, size: 9, font: fontNorm });
-      p1.drawText(dados.racaCor || '', { x: 320, y: 632, size: 9, font: fontNorm });
-      p1.drawText(dados.cns || '', { x: 420, y: 632, size: 9, font: fontNorm });
+      // Data de Nascimento: Sobe 4 linhas
+      p1.drawText(dados.dataNasc || '', { x: 180, y: 625, size: 9, font: fontNorm });
+      p1.drawText(dados.racaCor || '', { x: 330, y: 625, size: 9, font: fontNorm });
+      p1.drawText(dados.cns || '', { x: 430, y: 625, size: 9, font: fontNorm });
 
-      // Mãe: Subiu 4 linhas (y = 614)
-      p1.drawText(dados.nomeMae || '', { x: 110, y: 614, size: 8.5, font: fontNorm });
+      // Mãe: Sobe 3 linhas e direita 4
+      p1.drawText(dados.nomeMae || '', { x: 130, y: 608, size: 8.5, font: fontNorm });
 
-      // Endereço: Acompanha a subida das linhas (y = 596)
-      p1.drawText(dados.endereco || '', { x: 85, y: 596, size: 8.5, font: fontNorm });
+      // Endereço: Sobe 3 linhas e direita 7
+      p1.drawText(dados.endereco || '', { x: 110, y: 590, size: 8.5, font: fontNorm });
 
-      // Município e Telefone: (y = 578)
-      p1.drawText(dados.municipio || '', { x: 85, y: 578, size: 8.5, font: fontNorm });
-      p1.drawText(dados.telefone || '', { x: 420, y: 578, size: 8.5, font: fontNorm });
+      // Município e Telefone
+      p1.drawText(dados.municipio || '', { x: 110, y: 572, size: 8.5, font: fontNorm });
+      p1.drawText(dados.telefone || '', { x: 420, y: 572, size: 8.5, font: fontNorm });
 
       // Procedimento Solicitado
-      p1.drawText(dados.procCod || '', { x: 165, y: 518, size: 9, font });
+      p1.drawText(dados.procCod || '', { x: 165, y: 504, size: 9, font });
 
-      // A46 para CID Principal: Posicionado no campo correto (y = 460)
-      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 460, size: 9, font });
+      // A46 para CID Principal
+      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 446, size: 9, font });
 
       // Dados de Saída / Autorizador
-      p1.drawText("ALTA CURADO", { x: 150, y: 432, size: 8.5, font: fontNorm });
-      p1.drawText("08.349.052/0001-80", { x: 260, y: 418, size: 8, font: fontNorm });
-      p1.drawText(dados.dataInternacao || '', { x: 475, y: 418, size: 8, font: fontNorm });
+      p1.drawText("ALTA CURADO", { x: 150, y: 418, size: 8.5, font: fontNorm });
+      p1.drawText("08.349.052/0001-80", { x: 260, y: 404, size: 8, font: fontNorm });
+      p1.drawText(dados.dataInternacao || '', { x: 475, y: 404, size: 8, font: fontNorm });
 
-      // Procedimentos Realizados: Subiu 3 linhas (y = 354)
-      p1.drawText("01", { x: 52, y: 354, size: 8, font: fontNorm });
-      p1.drawText(dados.procCod || '', { x: 105, y: 354, size: 8, font });
-      p1.drawText("1", { x: 212, y: 354, size: 8, font: fontNorm });
-      p1.drawText("08.349.052", { x: 250, y: 354, size: 7.5, font: fontNorm });
-      p1.drawText("225125", { x: 325, y: 354, size: 8, font: fontNorm });
-      p1.drawText("2380846", { x: 395, y: 354, size: 8, font: fontNorm });
-      p1.drawText("08.349.052/0001-80", { x: 462, y: 354, size: 7.5, font: fontNorm });
+      // Procedimentos Realizados: Sobe 3 linhas e direita 2
+      p1.drawText("01", { x: 62, y: 350, size: 8, font: fontNorm });
+      p1.drawText(dados.procCod || '', { x: 115, y: 350, size: 8, font });
+      p1.drawText("1", { x: 222, y: 350, size: 8, font: fontNorm });
+      p1.drawText("08.349.052", { x: 260, y: 350, size: 7.5, font: fontNorm });
+      p1.drawText("225125", { x: 335, y: 350, size: 8, font: fontNorm });
+      p1.drawText("2380846", { x: 405, y: 350, size: 8, font: fontNorm });
+      p1.drawText("08.349.052/0001-80", { x: 472, y: 350, size: 7.5, font: fontNorm });
     }
 
     // =========================================================================
