@@ -1,6 +1,204 @@
-  // Certifique-se de que o arquivo no repositório tenha este nome exato:
-  const URL_PDF_BASE = 'AIH COMPLETA.pdf';
-  const URL_APPS_SCRIPT = ''; // Opcional: URL do Web App do Google Sheets
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMA HM - AIH Oficial</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f1f5f9; margin: 0; padding: 15px; color: #1e293b; }
+    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 20px; }
+    fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 16px; background: #fafafa; }
+    legend { font-weight: 700; color: #0284c7; padding: 0 8px; font-size: 14px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+    .form-group { margin-bottom: 8px; }
+    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
+    input, select, textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #fff; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
+    .btn-template { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: 600; margin: 2px; }
+    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 14px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
+    .btn-submit:hover { background: #0369a1; }
+    #msgStatus { margin-top: 12px; font-weight: bold; text-align: center; font-size: 14px; }
+
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 10px; }
+    .modal-content { background: #fff; width: 100%; max-width: 950px; height: 94vh; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { background: #0284c7; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { margin: 0; font-size: 16px; }
+    .modal-body { flex: 1; background: #525659; }
+    .modal-body iframe { width: 100%; height: 100%; border: none; }
+    .modal-footer { padding: 10px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 8px; }
+    .btn-modal { padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; border: none; }
+    .btn-close { background: #e2e8f0; color: #334155; }
+    .btn-print { background: #16a34a; color: #fff; }
+    .btn-download { background: #0284c7; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Emissão de AIH Hospitalar - Modelo Oficial (v3.2)</h2>
+
+  <form id="formAih">
+    <fieldset>
+      <legend>Identificação do Paciente e Internação</legend>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Nº Prontuário:</label>
+          <input type="text" id="prontuario" value="444" required>
+        </div>
+        <div class="form-group">
+          <label>Nome Completo:</label>
+          <input type="text" id="nomePaciente" value="PRONTO" required>
+        </div>
+        <div class="form-group">
+          <label>Cartão SUS (CNS):</label>
+          <input type="text" id="cns" value="704006647751551">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Data de Nascimento:</label>
+          <input type="text" id="dataNasc" value="10/12/1960">
+        </div>
+        <div class="form-group">
+          <label>Sexo:</label>
+          <select id="sexo">
+            <option value="M">Masculino</option>
+            <option value="F" selected>Feminino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Raça / Cor:</label>
+          <input type="text" id="racaCor" value="PARDA">
+        </div>
+        <div class="form-group">
+          <label>Telefone:</label>
+          <input type="text" id="telefone" value="84 99980 5728">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Nome da Mãe:</label>
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
+        </div>
+        <div class="form-group">
+          <label>Endereço Completo:</label>
+          <input type="text" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
+        </div>
+        <div class="form-group">
+          <label>Município:</label>
+          <input type="text" id="municipio" value="FRUTUOSO GOMES - RN">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Data Internação:</label>
+          <input type="text" id="dataInternacao" value="19/03/23">
+        </div>
+        <div class="form-group">
+          <label>Data Saída (Alta):</label>
+          <input type="text" id="dataSaida" value="02/04/23">
+        </div>
+        <div class="form-group">
+          <label>Diagnóstico Inicial:</label>
+          <input type="text" id="diagInicial" value="ERISIPELA">
+        </div>
+        <div class="form-group">
+          <label>CID-10 Principal:</label>
+          <input type="text" id="cidPrincipal" value="A46">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Procedimento Solicitado / Descrição:</label>
+          <input type="text" id="procedimento" value="TRATAMENTO DE OUTRAS DOENCAS INFECCIOSAS E PARASITARIAS">
+        </div>
+        <div class="form-group">
+          <label>Código Procedimento (SIGTAP):</label>
+          <input type="text" id="codProcedimento" value="03.03.01.019-3">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dados Clínicos / Justificativa da Internação</legend>
+      <div class="form-group">
+        <button type="button" class="btn-template" onclick="preencherTemplate('erisipela')">Template Erisipela</button>
+        <button type="button" class="btn-template" onclick="preencherTemplate('pneumonia')">Template Pneumonia</button>
+        <button type="button" class="btn-template" onclick="preencherTemplate('itu')">Template ITU</button>
+      </div>
+      <div class="form-group">
+        <label>Sinais e Sintomas Clínicos:</label>
+        <textarea id="sinaisSintomas" rows="2">PACIENTE COM HIPEREMIA, EDEMA INTENSO, DOR, CALOR LOCAL EM MEMBRO INFERIOR E PICO FEBRIL.</textarea>
+      </div>
+      <div class="form-group">
+        <label>Condições que Justificam a Internação:</label>
+        <textarea id="justificativa" rows="2">NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.</textarea>
+      </div>
+      <div class="form-group">
+        <label>Principais Resultados de Exames:</label>
+        <textarea id="exames" rows="2">LEUCOGRAMA COM LEUCOCITOSE E DESVIO À ESQUERDA; PCR ELEVADO.</textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Identificação do Estabelecimento e Profissional Solicitante</legend>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Estabelecimento:</label>
+          <input type="text" id="nomeHospital" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE" readonly>
+        </div>
+        <div class="form-group">
+          <label>Código CNES:</label>
+          <input type="text" id="cnesHospital" value="2408371">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Médico Solicitante:</label>
+          <input type="text" id="medicoSolicitante" value="LUCIDIO JACOME FERREIRA FILHO">
+        </div>
+        <div class="form-group">
+          <label>CRM:</label>
+          <input type="text" id="crmSolicitante" value="1675-RN">
+        </div>
+        <div class="form-group">
+          <label>Data Solicitação:</label>
+          <input type="text" id="dataSolicitacao" value="19/03/23">
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn-submit">Gerar AIH em PDF</button>
+    <div id="msgStatus"></div>
+  </form>
+</div>
+
+<div id="modalVisualizacao" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Visualização da AIH Gerada</h3>
+      <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="pdfFrame"></iframe>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal btn-close" onclick="fecharModal()">Fechar</button>
+      <button class="btn-modal btn-print" onclick="imprimirPdf()">Imprimir</button>
+      <button class="btn-modal btn-download" id="btnDownload">Baixar PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* Nome do PDF no mesmo repositório do GitHub */
+  const URL_PDF_BASE = 'AIH%20COMPLETA.pdf';
+  const URL_APPS_SCRIPT = '';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -37,7 +235,7 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo AIH oficial de Frutuoso Gomes...';
+    msg.innerText = 'Preenchendo AIH oficial...';
 
     try {
       await gerarAihPdf();
@@ -53,7 +251,7 @@
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar: ' + URL_PDF_BASE);
+    if (!res.ok) throw new Error('Não foi possível carregar o modelo PDF. Verifique se o arquivo AIH COMPLETA.pdf está na mesma pasta no repositório.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
@@ -61,10 +259,9 @@
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
     const pages = pdfDoc.getPages();
-    const pag1 = pages[0]; // Folha 1: AUTORIZAÇÃO PARA INTERNAÇÃO
-    const pag2 = pages[1]; // Folha 2: LAUDO MÉDICO (Campos 1 a 52)
+    const pag1 = pages[0];
+    const pag2 = pages[1];
 
-    // Captura dos dados
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
       nome: document.getElementById('nomePaciente').value || '',
@@ -91,105 +288,84 @@
       hospital: 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE'
     };
 
-    // Helper de impressão com quebra por coordenadas
-    const print = (page, text, x, y, size = 8.5, isBold = false) => {
+    const print = (page, text, x, y, size, isBold) => {
       if (!text) return;
       page.drawText(String(text).toUpperCase(), {
         x: x,
         y: y,
-        size: size,
+        size: size || 8.5,
         font: isBold ? fontBold : fontRegular,
         color: rgb(0, 0, 0)
       });
     };
 
-    // ==========================================
-    // 📄 PÁGINA 1: AUTORIZAÇÃO PARA INTERNAÇÃO
-    // ==========================================
-    print(pag1, d.dataInternacao, 135, 752, 9);
+    /* FOLHA 1: AUTORIZAÇÃO */
+    print(pag1, d.dataInternacao, 135, 752, 9, false);
     print(pag1, d.prontuario, 360, 752, 9, true);
-    print(pag1, d.dataSaida, 485, 715, 8.5);
+    print(pag1, d.dataSaida, 485, 715, 8.5, false);
 
-    // Dados do Paciente
     print(pag1, d.nome, 125, 680, 8.5, true);
-    print(pag1, d.sexo, 465, 680, 8.5);
-    print(pag1, d.nomeMae, 115, 663, 8);
-    print(pag1, d.dataNasc, 465, 663, 8.5);
-    print(pag1, d.endereco, 100, 646, 8);
-    print(pag1, d.cns, 465, 646, 8.5);
-    print(pag1, d.municipio, 100, 629, 8);
-    print(pag1, d.telefone, 465, 612, 8.5);
+    print(pag1, d.sexo, 465, 680, 8.5, false);
+    print(pag1, d.nomeMae, 115, 663, 8, false);
+    print(pag1, d.dataNasc, 465, 663, 8.5, false);
+    print(pag1, d.endereco, 100, 646, 8, false);
+    print(pag1, d.cns, 465, 646, 8.5, false);
+    print(pag1, d.municipio, 100, 629, 8, false);
+    print(pag1, d.telefone, 465, 612, 8.5, false);
 
-    // Procedimento e Diagnóstico
-    print(pag1, d.procedimento, 145, 578, 7.5);
-    print(pag1, d.codProcedimento, 450, 578, 8);
+    print(pag1, d.procedimento, 145, 578, 7.5, false);
+    print(pag1, d.codProcedimento, 450, 578, 8, false);
     print(pag1, d.cidPrincipal, 115, 508, 9, true);
-    print(pag1, d.medico, 120, 456, 8);
+    print(pag1, d.medico, 120, 456, 8, false);
 
-    // Grade de Procedimentos Realizados (Linha 1)
-    print(pag1, d.procedimento.substring(0, 42), 95, 388, 7);
-    print(pag1, "01", 330, 388, 8);
-    print(pag1, d.cnes, 485, 388, 7.5);
+    print(pag1, d.procedimento.substring(0, 42), 95, 388, 7, false);
+    print(pag1, "01", 330, 388, 8, false);
+    print(pag1, d.cnes, 485, 388, 7.5, false);
 
-
-    // =======================================================
-    // 📄 PÁGINA 2: LAUDO MÉDICO DE SOLICITAÇÃO (CAMPOS 1 A 52)
-    // =======================================================
-    // 1 e 2 - Estabelecimento Solicitante e CNES
+    /* FOLHA 2: LAUDO MÉDICO */
     print(pag2, d.hospital, 45, 735, 7.5, true);
-    print(pag2, d.cnes, 380, 735, 8);
-
-    // 3 e 4 - Estabelecimento Executante e CNES
+    print(pag2, d.cnes, 380, 735, 8, false);
     print(pag2, d.hospital, 45, 712, 7.5, true);
-    print(pag2, d.cnes, 380, 712, 8);
+    print(pag2, d.cnes, 380, 712, 8, false);
 
-    // 5, 6 e 7 - Paciente, Prontuário e CNS
     print(pag2, d.nome, 45, 680, 8.5, true);
     print(pag2, d.prontuario, 305, 680, 8.5, true);
-    print(pag2, d.cns, 420, 680, 8.5);
+    print(pag2, d.cns, 420, 680, 8.5, false);
 
-    // 8, 9, 10, 11 e 12 - Nascimento, Sexo, Cor, Mãe, Telefone
-    print(pag2, d.dataNasc, 45, 650, 8);
+    print(pag2, d.dataNasc, 45, 650, 8, false);
     if (d.sexo === 'M') {
-      print(pag2, "X", 137, 650, 9, true); // Caixa Masculino
+      print(pag2, "X", 137, 650, 9, true);
     } else {
-      print(pag2, "X", 175, 650, 9, true); // Caixa Feminino
+      print(pag2, "X", 175, 650, 9, true);
     }
-    print(pag2, d.racaCor, 230, 650, 7.5);
-    print(pag2, d.nomeMae, 45, 622, 8);
-    print(pag2, d.telefone, 420, 622, 8);
+    print(pag2, d.racaCor, 230, 650, 7.5, false);
+    print(pag2, d.nomeMae, 45, 622, 8, false);
+    print(pag2, d.telefone, 420, 622, 8, false);
 
-    // 15, 16 - Endereço e Município
-    print(pag2, d.endereco, 45, 594, 8);
-    print(pag2, d.municipio, 45, 566, 8);
-    print(pag2, "RN", 535, 566, 8);
+    print(pag2, d.endereco, 45, 594, 8, false);
+    print(pag2, d.municipio, 45, 566, 8, false);
+    print(pag2, "RN", 535, 566, 8, false);
 
-    // 20, 21, 22 - Justificativa da Internação (Área de texto)
-    print(pag2, d.sinais.substring(0, 110), 45, 526, 7.5);
-    if (d.sinais.length > 110) print(pag2, d.sinais.substring(110, 220), 45, 516, 7.5);
+    print(pag2, d.sinais.substring(0, 110), 45, 526, 7.5, false);
+    if (d.sinais.length > 110) print(pag2, d.sinais.substring(110, 220), 45, 516, 7.5, false);
 
-    print(pag2, d.justificativa.substring(0, 110), 45, 488, 7.5);
-    if (d.justificativa.length > 110) print(pag2, d.justificativa.substring(110, 220), 45, 478, 7.5);
+    print(pag2, d.justificativa.substring(0, 110), 45, 488, 7.5, false);
+    if (d.justificativa.length > 110) print(pag2, d.justificativa.substring(110, 220), 45, 478, 7.5, false);
 
-    print(pag2, d.exames.substring(0, 110), 45, 450, 7.5);
-    if (d.exames.length > 110) print(pag2, d.exames.substring(110, 220), 45, 440, 7.5);
+    print(pag2, d.exames.substring(0, 110), 45, 450, 7.5, false);
+    if (d.exames.length > 110) print(pag2, d.exames.substring(110, 220), 45, 440, 7.5, false);
 
-    // 23 e 24 - Diagnóstico e CID Principal
-    print(pag2, d.diagInicial, 45, 412, 8);
+    print(pag2, d.diagInicial, 45, 412, 8, false);
     print(pag2, d.cidPrincipal, 345, 412, 9, true);
 
-    // 27 e 28 - Procedimento e Código SIGTAP
-    print(pag2, d.procedimento, 45, 375, 7.5);
+    print(pag2, d.procedimento, 45, 375, 7.5, false);
     print(pag2, d.codProcedimento, 435, 375, 8.5, true);
 
-    // 33, 34 e 35 - Médico Solicitante, Data e CRM
     print(pag2, d.medico, 45, 318, 8, true);
-    print(pag2, d.dataInternacao, 350, 318, 8);
-    print(pag2, d.crm, 460, 318, 8);
+    print(pag2, d.dataInternacao, 350, 318, 8, false);
+    print(pag2, d.crm, 460, 318, 8, false);
 
-    // ==========================================
-    // Finalização e exibição no Modal
-    // ==========================================
+    /* Geração e Abertura no Modal */
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
@@ -227,3 +403,6 @@
       frame.contentWindow.print();
     }
   }
+</script>
+</body>
+</html>
