@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - 3 Guias AIH</title>
+  <title>SISTEMA HM - AIH 3 Guias</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -52,11 +52,11 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Nº Prontuário:</label>
-          <input type="text" id="prontuario" value="444" required>
+          <input type="text" id="prontuario" value="22222" required>
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="MARIA DE LOURDES" required>
+          <input type="text" id="nomePaciente" value="PAULO RELAMPAGO" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
@@ -66,32 +66,32 @@
       <div class="grid-4">
         <div class="form-group">
           <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1960">
+          <input type="text" id="dataNasc" value="10/12/1956">
         </div>
         <div class="form-group">
           <label>Sexo:</label>
           <select id="sexo">
-            <option value="M">Masculino</option>
-            <option value="F" selected>Feminino</option>
+            <option value="M" selected>Masculino</option>
+            <option value="F">Feminino</option>
           </select>
         </div>
         <div class="form-group">
           <label>Raça / Cor:</label>
-          <input type="text" id="racaCor" value="PARDA">
+          <input type="text" id="racaCor" value="BRANCA">
         </div>
         <div class="form-group">
           <label>Telefone:</label>
-          <input type="text" id="telefone" value="84 99980 5728">
+          <input type="text" id="telefone" value="84 99999-0000">
         </div>
       </div>
       <div class="grid-3">
         <div class="form-group">
           <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
+          <input type="text" id="nomeMae" value="MARIA JOSE CAROCO">
         </div>
         <div class="form-group">
           <label>Endereço Completo:</label>
-          <input type="text" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
+          <input type="text" id="endereco" value="RUA PRINCIPAL, 150">
         </div>
         <div class="form-group">
           <label>Município:</label>
@@ -101,11 +101,11 @@
       <div class="grid-4">
         <div class="form-group">
           <label>Data Internação:</label>
-          <input type="text" id="dataInternacao" value="19/03/23">
+          <input type="text" id="dataInternacao" value="19/03/2026">
         </div>
         <div class="form-group">
           <label>Data Saída (Alta):</label>
-          <input type="text" id="dataSaida" value="02/04/23">
+          <input type="text" id="dataSaida" value="02/04/2026">
         </div>
         <div class="form-group">
           <label>Diagnóstico Inicial:</label>
@@ -113,7 +113,7 @@
         </div>
         <div class="form-group">
           <label>CID-10 Principal:</label>
-          <input type="text" id="cidPrincipal" value="A46">
+          <input type="text" id="cidPrincipal" value="A 46">
         </div>
       </div>
       <div class="grid-2">
@@ -123,7 +123,7 @@
         </div>
         <div class="form-group">
           <label>Código Procedimento (SIGTAP):</label>
-          <input type="text" id="codProcedimento" value="03.03.01.019-3">
+          <input type="text" id="codProcedimento" value="0303080078">
         </div>
       </div>
     </fieldset>
@@ -158,7 +158,7 @@
         </div>
         <div class="form-group">
           <label>Código CNES:</label>
-          <input type="text" id="cnesHospital" value="2408371">
+          <input type="text" id="cnesHospital" value="2380846">
         </div>
       </div>
       <div class="grid-3">
@@ -172,7 +172,7 @@
         </div>
         <div class="form-group">
           <label>Data Solicitação:</label>
-          <input type="text" id="dataSolicitacao" value="19/03/23">
+          <input type="text" id="dataSolicitacao" value="19/03/2026">
         </div>
       </div>
     </fieldset>
@@ -208,25 +208,25 @@
   function preencherTemplate(tipo) {
     if (tipo === 'erisipela') {
       document.getElementById('diagInicial').value = 'ERISIPELA';
-      document.getElementById('cidPrincipal').value = 'A46';
+      document.getElementById('cidPrincipal').value = 'A 46';
       document.getElementById('procedimento').value = 'TRATAMENTO DE OUTRAS DOENCAS INFECCIOSAS E PARASITARIAS';
-      document.getElementById('codProcedimento').value = '03.03.01.019-3';
+      document.getElementById('codProcedimento').value = '0303080078';
       document.getElementById('sinaisSintomas').value = 'PACIENTE COM QUADRO DE HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.';
       document.getElementById('justificativa').value = 'NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.';
       document.getElementById('exames').value = 'LEUCOGRAMA COM LEUCOCITOSE E DESVIO À ESQUERDA; PCR ELEVADO.';
     } else if (tipo === 'pneumonia') {
       document.getElementById('diagInicial').value = 'PNEUMONIA BACTERIANA';
-      document.getElementById('cidPrincipal').value = 'J18.9';
+      document.getElementById('cidPrincipal').value = 'J 18.9';
       document.getElementById('procedimento').value = 'TRATAMENTO DE PNEUMONIAS OU INFLUENZA (GRIPE)';
-      document.getElementById('codProcedimento').value = '03.03.01.018-5';
+      document.getElementById('codProcedimento').value = '0303010185';
       document.getElementById('sinaisSintomas').value = 'TOSSE PRODUTIVA, FEBRE AFERIDA, DISPNEIA E CREPITANTES EM BASES PULMONARES.';
       document.getElementById('justificativa').value = 'INDICAÇÃO DE ANTIBIOTICOTERAPIA PARENTERAL E SUPORTE DE OXIGENOTERAPIA.';
       document.getElementById('exames').value = 'RX DE TÓRAX COM CONDENSAÇÃO PULMONAR; LEUCOCITOSE.';
     } else if (tipo === 'itu') {
       document.getElementById('diagInicial').value = 'INFECÇÃO DO TRATO URINÁRIO';
-      document.getElementById('cidPrincipal').value = 'N39.0';
+      document.getElementById('cidPrincipal').value = 'N 39.0';
       document.getElementById('procedimento').value = 'TRATAMENTO DE OUTRAS DOENÇAS DO SISTEMA URINÁRIO';
-      document.getElementById('codProcedimento').value = '03.03.01.017-7';
+      document.getElementById('codProcedimento').value = '0303010177';
       document.getElementById('sinaisSintomas').value = 'DISÚRIA, POLACIÚRIA, DOR EM BAIXO VENTRE, URINA TURVA E FEBRE.';
       document.getElementById('justificativa').value = 'SINTOMATOLOGIA REFRATÁRIA, HIDRATAÇÃO VENOSA E ANTIBIOTICOTERAPIA.';
       document.getElementById('exames').value = 'EAS COM PIÚRIA MACIÇA E BACTERIÚRIA.';
@@ -237,7 +237,7 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo com coordenadas calibradas...';
+    msg.innerText = 'Gerando guias calibradas...';
 
     try {
       await gerarAihPdf();
@@ -245,7 +245,7 @@
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao processar: ' + err.message;
+      msg.innerText = 'Erro ao processar PDF: ' + err.message;
     }
   });
 
@@ -253,14 +253,14 @@
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o modelo original AIH COMPLETA.pdf.');
+    if (!res.ok) throw new Error('Não foi possível carregar o modelo AIH COMPLETA.pdf.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
     const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    // Mantém exatamente as 3 guias oficiais
+    // Mantém exatamente as 3 primeiras guias
     while (pdfDoc.getPageCount() > 3) {
       pdfDoc.removePage(pdfDoc.getPageCount() - 1);
     }
@@ -292,7 +292,7 @@
       exames: document.getElementById('exames').value || '',
       medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JACOME FERREIRA FILHO',
       crm: document.getElementById('crmSolicitante').value || '1675-RN',
-      cnes: document.getElementById('cnesHospital').value || '2408371',
+      cnes: document.getElementById('cnesHospital').value || '2380846',
       hospital: 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE'
     };
 
@@ -310,108 +310,108 @@
     /* =========================================================
        GUIA 1: AUTORIZAÇÃO PARA INTERNAÇÃO (Calibrada)
        ========================================================= */
-    print(pag1, d.dataInternacao, 120, 755, 8, false);
-    print(pag1, d.prontuario, 360, 755, 8.5, true);
-    print(pag1, d.dataSaida, 480, 735, 8, false);
+    print(pag1, d.dataInternacao, 115, 712, 8, false);
+    print(pag1, d.prontuario, 340, 712, 8.5, true);
+    print(pag1, d.dataSaida, 480, 694, 8, false);
 
     // Bloco: Dados do Paciente
-    print(pag1, d.nome, 120, 695, 8, true);
-    print(pag1, d.sexo, 45, 680, 7.5, false);
-    print(pag1, d.dataNasc, 230, 680, 7.5, false);
-    print(pag1, d.cns, 410, 680, 8, false);
+    print(pag1, d.nome, 120, 648, 8, true);
+    print(pag1, d.sexo, 50, 630, 7.5, false);
+    print(pag1, d.dataNasc, 225, 630, 7.5, false);
+    print(pag1, d.cns, 400, 630, 8, false);
 
-    print(pag1, d.nomeMae, 100, 660, 7.5, false);
-    print(pag1, d.endereco, 85, 642, 7.5, false);
-    print(pag1, d.municipio, 90, 624, 7.5, false);
-    print(pag1, d.telefone, 430, 624, 7.5, false);
+    print(pag1, d.nomeMae, 95, 612, 7.5, false);
+    print(pag1, d.endereco, 80, 594, 7.5, false);
+    print(pag1, d.municipio, 85, 576, 7.5, false);
+    print(pag1, d.telefone, 430, 576, 7.5, false);
 
     // Bloco: Dados do Procedimento
-    print(pag1, d.procedimento, 140, 568, 7, false);
-    print(pag1, d.codProcedimento, 450, 568, 7.5, false);
-    print(pag1, d.cidPrincipal, 85, 508, 8.5, true);
-    print(pag1, d.medico, 120, 460, 7.5, false);
+    print(pag1, d.procedimento, 140, 520, 7, false);
+    print(pag1, d.codProcedimento, 450, 520, 7.5, false);
+    print(pag1, d.cidPrincipal, 85, 462, 8.5, true);
+    print(pag1, d.medico, 120, 415, 7.5, false);
 
     // Grade Procedimentos Realizados (Linha 1)
-    print(pag1, d.procedimento.substring(0, 36), 65, 395, 6.5, false);
-    print(pag1, "01", 240, 395, 7.5, false);
-    print(pag1, d.cnes, 380, 395, 7.5, false);
+    print(pag1, d.procedimento.substring(0, 36), 65, 350, 6.5, false);
+    print(pag1, "01", 240, 350, 7.5, false);
+    print(pag1, d.cnes, 380, 350, 7.5, false);
 
 
     /* =========================================================
-       GUIA 2: LAUDO MÉDICO (CAMPOS 1 A 35) (Calibrada)
+       GUIA 2: LAUDO MÉDICO (52 CAMPOS) (Calibrada)
        ========================================================= */
     // 1 e 2 - Estabelecimento Solicitante
-    print(pag2, d.hospital, 45, 740, 7, true);
-    print(pag2, d.cnes, 380, 740, 7.5, false);
+    print(pag2, d.hospital, 45, 618, 7, true);
+    print(pag2, d.cnes, 380, 618, 7.5, false);
 
     // 3 e 4 - Estabelecimento Executante
-    print(pag2, d.hospital, 45, 715, 7, true);
-    print(pag2, d.cnes, 380, 715, 7.5, false);
+    print(pag2, d.hospital, 45, 592, 7, true);
+    print(pag2, d.cnes, 380, 592, 7.5, false);
 
     // 5, 6 e 7 - Paciente, Prontuário e CNS
-    print(pag2, d.nome, 45, 682, 8, true);
-    print(pag2, d.prontuario, 305, 682, 8, true);
-    print(pag2, d.cns, 420, 682, 8, false);
+    print(pag2, d.nome, 45, 562, 8, true);
+    print(pag2, d.prontuario, 300, 562, 8, true);
+    print(pag2, d.cns, 415, 562, 8, false);
 
     // 8, 9, 10, 11 e 12 - Nascimento, Sexo, Cor, Mãe, Tel
-    print(pag2, d.dataNasc, 45, 650, 7.5, false);
+    print(pag2, d.dataNasc, 45, 532, 7.5, false);
     if (d.sexo === 'M') {
-      print(pag2, "X", 137, 650, 8.5, true);
+      print(pag2, "X", 137, 532, 8.5, true);
     } else {
-      print(pag2, "X", 175, 650, 8.5, true);
+      print(pag2, "X", 175, 532, 8.5, true);
     }
-    print(pag2, d.racaCor, 230, 650, 7.5, false);
-    print(pag2, d.nomeMae, 45, 622, 7.5, false);
-    print(pag2, d.telefone, 420, 622, 7.5, false);
+    print(pag2, d.racaCor, 230, 532, 7.5, false);
+    print(pag2, d.nomeMae, 45, 504, 7.5, false);
+    print(pag2, d.telefone, 415, 504, 7.5, false);
 
     // 15, 16 e 18 - Endereço e Município
-    print(pag2, d.endereco, 45, 594, 7.5, false);
-    print(pag2, d.municipio, 45, 566, 7.5, false);
-    print(pag2, "RN", 535, 566, 7.5, false);
+    print(pag2, d.endereco, 45, 476, 7.5, false);
+    print(pag2, d.municipio, 45, 448, 7.5, false);
+    print(pag2, "RN", 535, 448, 7.5, false);
 
     // 20, 21 e 22 - Justificativa da Internação
-    print(pag2, d.sinais.substring(0, 115), 45, 526, 6.8, false);
-    if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 516, 6.8, false);
+    print(pag2, d.sinais.substring(0, 115), 45, 414, 6.8, false);
+    if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 404, 6.8, false);
 
-    print(pag2, d.justificativa.substring(0, 115), 45, 488, 6.8, false);
-    if (d.justificativa.length > 115) print(pag2, d.justificativa.substring(115, 230), 45, 478, 6.8, false);
+    print(pag2, d.justificativa.substring(0, 115), 45, 376, 6.8, false);
+    if (d.justificativa.length > 115) print(pag2, d.justificativa.substring(115, 230), 45, 366, 6.8, false);
 
-    print(pag2, d.exames.substring(0, 115), 45, 450, 6.8, false);
-    if (d.exames.length > 115) print(pag2, d.exames.substring(115, 230), 45, 440, 6.8, false);
+    print(pag2, d.exames.substring(0, 115), 45, 338, 6.8, false);
+    if (d.exames.length > 115) print(pag2, d.exames.substring(115, 230), 45, 328, 6.8, false);
 
     // 23 e 24 - Diagnóstico e CID
-    print(pag2, d.diagInicial, 45, 412, 7.5, false);
-    print(pag2, d.cidPrincipal, 345, 412, 8.5, true);
+    print(pag2, d.diagInicial, 45, 302, 7.5, false);
+    print(pag2, d.cidPrincipal, 345, 302, 8.5, true);
 
     // 27 e 28 - Procedimento e Código SIGTAP
-    print(pag2, d.procedimento, 45, 375, 7, false);
-    print(pag2, d.codProcedimento, 435, 375, 8, true);
+    print(pag2, d.procedimento, 45, 266, 7, false);
+    print(pag2, d.codProcedimento, 435, 266, 8, true);
 
     // 33, 34 e 35 - Médico Solicitante, Data e CRM
-    print(pag2, d.medico, 45, 318, 7.5, true);
-    print(pag2, d.dataInternacao, 350, 318, 7.5, false);
-    print(pag2, d.crm, 460, 318, 7.5, false);
+    print(pag2, d.medico, 45, 210, 7.5, true);
+    print(pag2, d.dataInternacao, 350, 210, 7.5, false);
+    print(pag2, d.crm, 460, 210, 7.5, false);
 
 
     /* =========================================================
        GUIA 3: PRONTUÁRIO DE INTERNAÇÃO (Folha 3 do documento)
        ========================================================= */
-    print(pag3, d.nome, 105, 765, 8, true);
-    print(pag3, d.prontuario, 480, 765, 8.5, true);
-    print(pag3, d.endereco, 95, 742, 7.5, false);
-    print(pag3, d.municipio, 95, 722, 7.5, false);
-    print(pag3, "RN", 380, 722, 7.5, false);
-    print(pag3, d.dataNasc, 110, 702, 7.5, false);
-    print(pag3, d.racaCor, 260, 702, 7.5, false);
-    print(pag3, d.sexo, 360, 702, 7.5, false);
-    print(pag3, d.nomeMae, 95, 682, 7.5, false);
-    print(pag3, d.dataInternacao, 110, 642, 8, false);
-    print(pag3, d.dataSaida, 260, 642, 8, false);
-    print(pag3, d.diagInicial, 110, 602, 7.5, true);
+    print(pag3, d.nome, 105, 680, 8, true);
+    print(pag3, d.prontuario, 480, 680, 8.5, true);
+    print(pag3, d.endereco, 95, 660, 7.5, false);
+    print(pag3, d.municipio, 95, 642, 7.5, false);
+    print(pag3, "RN", 380, 642, 7.5, false);
+    print(pag3, d.dataNasc, 110, 624, 7.5, false);
+    print(pag3, d.racaCor, 260, 624, 7.5, false);
+    print(pag3, d.sexo, 360, 624, 7.5, false);
+    print(pag3, d.nomeMae, 95, 606, 7.5, false);
+    print(pag3, d.dataInternacao, 110, 570, 8, false);
+    print(pag3, d.dataSaida, 260, 570, 8, false);
+    print(pag3, d.diagInicial, 110, 535, 7.5, true);
 
     const textoProntuario = `${d.sinais} ${d.justificativa}`;
-    print(pag3, textoProntuario.substring(0, 110), 45, 540, 7, false);
-    if (textoProntuario.length > 110) print(pag3, textoProntuario.substring(110, 220), 45, 528, 7, false);
+    print(pag3, textoProntuario.substring(0, 110), 45, 480, 7, false);
+    if (textoProntuario.length > 110) print(pag3, textoProntuario.substring(110, 220), 45, 468, 7, false);
 
     /* Finalização */
     pdfBytesGerado = await pdfDoc.save();
