@@ -166,7 +166,7 @@
     <div class="modal-footer">
       <button type="button" class="btn-modal btn-close" onclick="fecharViewer()">Fechar</button>
       <button type="button" class="btn-modal btn-download" id="btnDownload">Baixar PDF</button>
-      <button type="button" class="btn-modal btn-print" onclick="dispararImpressao()">Imprimir</button>
+      <button type="button" class="btn-print" onclick="dispararImpressao()">Imprimir</button>
     </div>
   </div>
 </div>
@@ -213,53 +213,51 @@
     if (pages[0]) {
       const p1 = pages[0];
 
-      // Prontuário: Direita e desce 3 linhas
-      p1.drawText(dados.prontuario || '', { x: 295, y: 660, size: 9, font });
+      // Prontuário: Pousando exatamente na área amarela marcada
+      p1.drawText(dados.prontuario || '', { x: 245, y: 692, size: 9, font });
 
-      // Datas de Internação e Saída: Mantidas no local exato
+      // Datas: Mantidas exatamente no local consolidado
       p1.drawText(dados.dataInternacao || '', { x: 160, y: 659, size: 9, font: fontNorm });
       p1.drawText(dados.dataSaida || '', { x: 440, y: 659, size: 9, font: fontNorm });
 
-      // Nome: Sobe 2 linhas e direita 4
-      p1.drawText(dados.nomePaciente || '', { x: 155, y: 645, size: 9.5, font });
+      // Nome do Paciente: Subiu para a linha "Nome do Paciente:"
+      p1.drawText(dados.nomePaciente || '', { x: 135, y: 636, size: 9.5, font });
 
-      // Sexo: Sobe 4 linhas e direita 7
-      p1.drawText(dados.sexo || '', { x: 85, y: 625, size: 9, font: fontNorm });
+      // Sexo, Nascimento, Raça, CNS: Subiram para a linha "Sexo: ... Cartão SUS:"
+      p1.drawText(dados.sexo || '', { x: 65, y: 618, size: 9, font: fontNorm });
+      p1.drawText(dados.dataNasc || '', { x: 160, y: 618, size: 9, font: fontNorm });
+      p1.drawText(dados.racaCor || '', { x: 320, y: 618, size: 9, font: fontNorm });
+      p1.drawText(dados.cns || '', { x: 420, y: 618, size: 9, font: fontNorm });
 
-      // Data de Nascimento: Sobe 4 linhas
-      p1.drawText(dados.dataNasc || '', { x: 180, y: 625, size: 9, font: fontNorm });
-      p1.drawText(dados.racaCor || '', { x: 330, y: 625, size: 9, font: fontNorm });
-      p1.drawText(dados.cns || '', { x: 430, y: 625, size: 9, font: fontNorm });
+      // Nome da Mãe: Subiu para a linha "Nome da mãe:"
+      p1.drawText(dados.nomeMae || '', { x: 110, y: 600, size: 8.5, font: fontNorm });
 
-      // Mãe: Sobe 3 linhas e direita 4
-      p1.drawText(dados.nomeMae || '', { x: 130, y: 608, size: 8.5, font: fontNorm });
+      // Endereço: Subiu para a linha "Endereço:"
+      p1.drawText(dados.endereco || '', { x: 85, y: 582, size: 8.5, font: fontNorm });
 
-      // Endereço: Sobe 3 linhas e direita 7
-      p1.drawText(dados.endereco || '', { x: 110, y: 590, size: 8.5, font: fontNorm });
+      // Município e Telefone: Subiram para a linha "Município: ... Telefone:"
+      p1.drawText(dados.municipio || '', { x: 85, y: 564, size: 8.5, font: fontNorm });
+      p1.drawText(dados.telefone || '', { x: 420, y: 564, size: 8.5, font: fontNorm });
 
-      // Município e Telefone
-      p1.drawText(dados.municipio || '', { x: 110, y: 572, size: 8.5, font: fontNorm });
-      p1.drawText(dados.telefone || '', { x: 420, y: 572, size: 8.5, font: fontNorm });
+      // Procedimento Solicitado: Subiu para a linha 1 do bloco
+      p1.drawText(dados.procCod || '', { x: 165, y: 520, size: 9, font });
 
-      // Procedimento Solicitado
-      p1.drawText(dados.procCod || '', { x: 165, y: 504, size: 9, font });
-
-      // A46 para CID Principal
-      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 446, size: 9, font });
+      // CID Principal: Subiu para o campo "CID Principal:"
+      p1.drawText(dados.cidPrincipal || '', { x: 110, y: 456, size: 9, font });
 
       // Dados de Saída / Autorizador
       p1.drawText("ALTA CURADO", { x: 150, y: 418, size: 8.5, font: fontNorm });
       p1.drawText("08.349.052/0001-80", { x: 260, y: 404, size: 8, font: fontNorm });
       p1.drawText(dados.dataInternacao || '', { x: 475, y: 404, size: 8, font: fontNorm });
 
-      // Procedimentos Realizados: Sobe 3 linhas e direita 2
-      p1.drawText("01", { x: 62, y: 350, size: 8, font: fontNorm });
-      p1.drawText(dados.procCod || '', { x: 115, y: 350, size: 8, font });
-      p1.drawText("1", { x: 222, y: 350, size: 8, font: fontNorm });
-      p1.drawText("08.349.052", { x: 260, y: 350, size: 7.5, font: fontNorm });
-      p1.drawText("225125", { x: 335, y: 350, size: 8, font: fontNorm });
-      p1.drawText("2380846", { x: 405, y: 350, size: 8, font: fontNorm });
-      p1.drawText("08.349.052/0001-80", { x: 472, y: 350, size: 7.5, font: fontNorm });
+      // Procedimentos Realizados: Desceu para a 1ª linha vazia da grade
+      p1.drawText("01", { x: 52, y: 336, size: 8, font: fontNorm });
+      p1.drawText(dados.procCod || '', { x: 105, y: 336, size: 8, font });
+      p1.drawText("1", { x: 212, y: 336, size: 8, font: fontNorm });
+      p1.drawText("08.349.052", { x: 250, y: 336, size: 7.5, font: fontNorm });
+      p1.drawText("225125", { x: 325, y: 336, size: 8, font: fontNorm });
+      p1.drawText("2380846", { x: 395, y: 336, size: 8, font: fontNorm });
+      p1.drawText("08.349.052/0001-80", { x: 462, y: 336, size: 7.5, font: fontNorm });
     }
 
     // =========================================================================
@@ -288,26 +286,33 @@
     }
 
     // =========================================================================
-    // PÁGINA 5: BOLETIM CIRÚRGICO
+    // PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO (Folha 3)
     // =========================================================================
-    if (pages[4]) {
-      const p5 = pages[4];
-      p5.drawText(dados.nomePaciente || '', { x: 80, y: 755, size: 9, font });
-      p5.drawText(dados.prontuario || '', { x: 460, y: 700, size: 9, font });
-      p5.drawText(dados.cirurgiaoOperador || '', { x: 100, y: 645, size: 8.5, font: fontNorm });
-      p5.drawText(dados.anestesistaNome || '', { x: 100, y: 590, size: 8.5, font: fontNorm });
+    if (pages[2]) {
+      const p3 = pages[2];
 
-      if (dados.relatorioCirurgico) {
-        p5.drawText(dados.relatorioCirurgico, {
-          x: 90, y: 430, size: 7.5, font: fontNorm, maxWidth: 465, lineHeight: 10.5
-        });
-      }
+      // Cabeçalho e Identificação
+      p3.drawText(dados.nomePaciente || '', { x: 55, y: 708, size: 9, font });
+      p3.drawText(dados.prontuario || '', { x: 460, y: 708, size: 9, font });
+      p3.drawText(dados.endereco || '', { x: 55, y: 680, size: 8.5, font: fontNorm });
+      p3.drawText(dados.municipio || '', { x: 320, y: 680, size: 8.5, font: fontNorm });
+
+      // Dados Pessoais
+      p3.drawText(dados.dataNasc || '', { x: 55, y: 652, size: 8.5, font: fontNorm });
+      p3.drawText(dados.racaCor || '', { x: 320, y: 652, size: 8.5, font: fontNorm });
+      p3.drawText(dados.sexo || '', { x: 420, y: 652, size: 8.5, font: fontNorm });
+
+      // Filiação e Internação
+      p3.drawText(dados.nomeMae || '', { x: 55, y: 624, size: 8.5, font: fontNorm });
+      p3.drawText(dados.leito || '', { x: 420, y: 596, size: 8.5, font: fontNorm });
+      p3.drawText(dados.dataInternacao || '', { x: 55, y: 568, size: 8.5, font: fontNorm });
+      p3.drawText(dados.diagInicial || '', { x: 55, y: 512, size: 8.5, font });
     }
 
     return await pdfDoc.save();
   }
 
-  // Envio e Renderização
+  // Envio para o Google Sheets e Abertura do PDF
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const st = document.getElementById('msgStatus');
