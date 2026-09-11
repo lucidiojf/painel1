@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH Oficial</title>
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <title>SISTEMA HM - 3 Guias AIH</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js?v=4.0"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f1f5f9; margin: 0; padding: 12px; color: #1e293b; }
@@ -40,7 +40,7 @@
 <body>
 
 <div class="container">
-  <h2>Emissão de AIH Hospitalar - Modelo Oficial (v3.4 Calibrada)</h2>
+  <h2>Emissão de AIH Hospitalar - 3 Guias (v4.0)</h2>
 
   <form id="formAih">
     <fieldset>
@@ -133,11 +133,11 @@
       </div>
       <div class="form-group">
         <label>Sinais e Sintomas Clínicos:</label>
-        <textarea id="sinaisSintomas" rows="2">PACIENTE COM QUADRO DE HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.</textarea>
+        <textarea id="sinaisSintomas" rows="2">PACIENTE COM HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.</textarea>
       </div>
       <div class="form-group">
         <label>Condições que Justificam a Internação:</label>
-        <textarea id="justificativa" rows="2">NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO COM ELEVAÇÃO DO MEMBRO.</textarea>
+        <textarea id="justificativa" rows="2">NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.</textarea>
       </div>
       <div class="form-group">
         <label>Principais Resultados de Exames:</label>
@@ -173,7 +173,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH em PDF</button>
+    <button type="submit" class="btn-submit">Gerar as 3 Guias da AIH</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -181,7 +181,7 @@
 <div id="modalVisualizacao" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualização da AIH Gerada</h3>
+      <h3>Visualização da AIH (3 Guias Oficiais)</h3>
       <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -196,7 +196,7 @@
 </div>
 
 <script>
-  const URL_PDF_BASE = 'AIH%20COMPLETA.pdf';
+  const URL_PDF_BASE = 'AIH%20COMPLETA.pdf?v=' + Date.now();
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -207,8 +207,8 @@
       document.getElementById('cidPrincipal').value = 'A46';
       document.getElementById('procedimento').value = 'TRATAMENTO DE OUTRAS DOENCAS INFECCIOSAS E PARASITARIAS';
       document.getElementById('codProcedimento').value = '03.03.01.019-3';
-      document.getElementById('sinaisSintomas').value = 'PACIENTE COM QUADRO DE HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.';
-      document.getElementById('justificativa').value = 'NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO COM ELEVAÇÃO DO MEMBRO.';
+      document.getElementById('sinaisSintomas').value = 'PACIENTE COM HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.';
+      document.getElementById('justificativa').value = 'NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.';
       document.getElementById('exames').value = 'LEUCOGRAMA COM LEUCOCITOSE E DESVIO À ESQUERDA; PCR ELEVADO.';
     } else if (tipo === 'pneumonia') {
       document.getElementById('diagInicial').value = 'PNEUMONIA BACTERIANA';
@@ -233,7 +233,7 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo AIH oficial...';
+    msg.innerText = 'Preenchendo as 3 guias oficiais...';
 
     try {
       await gerarAihPdf();
@@ -256,9 +256,15 @@
     const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
+    // Remove a 4ª folha (ficha cirúrgica), mantendo estritamente as 3 guias
+    if (pdfDoc.getPageCount() > 3) {
+      pdfDoc.removePage(3);
+    }
+
     const pages = pdfDoc.getPages();
-    const pag1 = pages[0]; // Folha 1: AUTORIZAÇÃO
-    const pag2 = pages[1]; // Folha 2: LAUDO MÉDICO (52 CAMPOS)
+    const pag1 = pages[0]; // Guia 1: Autorização
+    const pag2 = pages[1]; // Guia 2: Laudo Médico
+    const pag3 = pages[2]; // Guia 3: Prontuário de Internação
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
@@ -297,14 +303,13 @@
       });
     };
 
-    /* =========================================================
-       📄 FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO
-       ========================================================= */
+    // =========================================================
+    // GUIA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR
+    // =========================================================
     print(pag1, d.dataInternacao, 110, 715, 8, false);
     print(pag1, d.prontuario, 330, 715, 8.5, true);
     print(pag1, d.dataSaida, 485, 698, 8, false);
 
-    // Dados do Paciente
     print(pag1, d.nome, 125, 650, 8, true);
     print(pag1, d.sexo, 45, 634, 7.5, false);
     print(pag1, d.dataNasc, 225, 634, 7.5, false);
@@ -315,33 +320,26 @@
     print(pag1, d.municipio, 85, 584, 7.5, false);
     print(pag1, d.telefone, 430, 584, 7.5, false);
 
-    // Dados do Procedimento
     print(pag1, d.procedimento, 140, 524, 7, false);
     print(pag1, d.cidPrincipal, 85, 468, 8.5, true);
     print(pag1, d.medico, 115, 422, 7.5, false);
 
-    // Procedimentos Realizados (Linha 1 da grade)
     print(pag1, d.procedimento.substring(0, 36), 65, 355, 6.5, false);
     print(pag1, "01", 240, 355, 7.5, false);
     print(pag1, d.cnes, 380, 355, 7.5, false);
 
-    /* =========================================================
-       📄 FOLHA 2: LAUDO MÉDICO DE SOLICITAÇÃO (52 CAMPOS)
-       ========================================================= */
-    // 1 e 2 - Estabelecimento Solicitante
+    // =========================================================
+    // GUIA 2: LAUDO MÉDICO DE SOLICITAÇÃO (52 CAMPOS)
+    // =========================================================
     print(pag2, d.hospital, 45, 618, 7, true);
     print(pag2, d.cnes, 380, 618, 7.5, false);
-
-    // 3 e 4 - Estabelecimento Executante
     print(pag2, d.hospital, 45, 592, 7, true);
     print(pag2, d.cnes, 380, 592, 7.5, false);
 
-    // 5, 6 e 7 - Identificação do Paciente
     print(pag2, d.nome, 45, 562, 8, true);
     print(pag2, d.prontuario, 300, 562, 8, true);
     print(pag2, d.cns, 415, 562, 8, false);
 
-    // 8, 9, 10, 11 e 12 - Nascimento, Sexo, Raça, Mãe, Telefone
     print(pag2, d.dataNasc, 45, 532, 7.5, false);
     if (d.sexo === 'M') {
       print(pag2, "X", 137, 532, 8.5, true);
@@ -352,12 +350,10 @@
     print(pag2, d.nomeMae, 45, 504, 7.5, false);
     print(pag2, d.telefone, 415, 504, 7.5, false);
 
-    // 15, 16 e 18 - Endereço e Município
     print(pag2, d.endereco, 45, 476, 7.5, false);
     print(pag2, d.municipio, 45, 448, 7.5, false);
     print(pag2, "RN", 535, 448, 7.5, false);
 
-    // 20, 21 e 22 - Justificativa Clínica
     print(pag2, d.sinais.substring(0, 115), 45, 414, 6.8, false);
     if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 404, 6.8, false);
 
@@ -367,22 +363,40 @@
     print(pag2, d.exames.substring(0, 115), 45, 338, 6.8, false);
     if (d.exames.length > 115) print(pag2, d.exames.substring(115, 230), 45, 328, 6.8, false);
 
-    // 23 e 24 - Diagnóstico Inicial e CID Principal
     print(pag2, d.diagInicial, 45, 302, 7.5, false);
     print(pag2, d.cidPrincipal, 345, 302, 8.5, true);
 
-    // 27 e 28 - Procedimento Solicitado e Código SIGTAP
     print(pag2, d.procedimento, 45, 266, 7, false);
     print(pag2, d.codProcedimento, 435, 266, 8, true);
 
-    // 33, 34 e 35 - Médico Solicitante, Data e CRM
     print(pag2, d.medico, 45, 210, 7.5, true);
     print(pag2, d.dataInternacao, 350, 210, 7.5, false);
     print(pag2, d.crm, 460, 210, 7.5, false);
 
-    /* =========================================================
-       Geração do Blob e Exibição
-       ========================================================= */
+    // =========================================================
+    // GUIA 3: PRONTUÁRIO DE INTERNAÇÃO
+    // =========================================================
+    print(pag3, d.nome, 105, 680, 8, true);
+    print(pag3, d.prontuario, 480, 680, 8.5, true);
+    print(pag3, d.endereco, 95, 660, 7.5, false);
+    print(pag3, d.municipio, 95, 642, 7.5, false);
+    print(pag3, "RN", 380, 642, 7.5, false);
+    print(pag3, d.dataNasc, 110, 624, 7.5, false);
+    print(pag3, d.racaCor, 260, 624, 7.5, false);
+    print(pag3, d.sexo, 360, 624, 7.5, false);
+    print(pag3, d.nomeMae, 95, 606, 7.5, false);
+    print(pag3, d.dataInternacao, 110, 570, 8, false);
+    print(pag3, d.dataSaida, 260, 570, 8, false);
+    print(pag3, d.diagInicial, 110, 535, 7.5, true);
+
+    // Histórico Clínico no Prontuário
+    const textoProntuario = `${d.sinais} ${d.justificativa}`;
+    print(pag3, textoProntuario.substring(0, 110), 45, 480, 7, false);
+    if (textoProntuario.length > 110) print(pag3, textoProntuario.substring(110, 220), 45, 468, 7, false);
+
+    // =========================================================
+    // GERAÇÃO FINAL DO ARQUIVO
+    // =========================================================
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
@@ -414,5 +428,4 @@
 </script>
 </body>
 </html>
-
 
