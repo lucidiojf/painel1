@@ -52,7 +52,7 @@
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="PIERRE CADU" required>
+          <input type="text" id="nomePaciente" value="TESTE" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
@@ -87,7 +87,7 @@
         </div>
         <div class="form-group">
           <label>Endereço Completo:</label>
-          <input type="text" id="endereco" value="CENTRO">
+          <input type="text" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
         </div>
         <div class="form-group">
           <label>Município:</label>
@@ -208,37 +208,37 @@
     const pages = pdfDoc.getPages();
 
     // =========================================================================
-    // PÁGINA 1: AIH PRINCIPAL (Alinhamento Real com base no print da régua)
+    // PÁGINA 1: AIH PRINCIPAL (Calibragem Fina de Linha por Linha)
     // =========================================================================
     if (pages[0]) {
       const p1 = pages[0];
 
-      // Topo: Prontuário e Datas (corrigidas na horizontal e vertical)
+      // Topo: Prontuário e Datas
       p1.drawText(dados.prontuario || '', { x: 375, y: 690, size: 9, font });
       p1.drawText(dados.dataInternacao || '', { x: 160, y: 662, size: 9, font: fontNorm });
       p1.drawText(dados.dataSaida || '', { x: 440, y: 662, size: 9, font: fontNorm });
 
-      // Linha 1: Nome do Paciente (Subiu 18 pontos para o campo correto)
-      p1.drawText(dados.nomePaciente || '', { x: 130, y: 640, size: 9.5, font });
+      // Linha 1: Nome do Paciente
+      p1.drawText(dados.nomePaciente || '', { x: 130, y: 644, size: 9.5, font });
 
-      // Linha 2: Sexo, Nascimento, Raça/Cor, CNS (Subiram 18 pontos)
-      p1.drawText(dados.sexo || '', { x: 55, y: 622, size: 9, font: fontNorm });
-      p1.drawText(dados.dataNasc || '', { x: 155, y: 622, size: 9, font: fontNorm });
-      p1.drawText(dados.racaCor || '', { x: 310, y: 622, size: 9, font: fontNorm });
-      p1.drawText(dados.cns || '', { x: 420, y: 622, size: 9, font: fontNorm });
+      // Linha 2: Sexo, Nascimento, Raça/Cor, CNS
+      p1.drawText(dados.sexo || '', { x: 45, y: 640, size: 9, font: fontNorm });
+      p1.drawText(dados.dataNasc || '', { x: 155, y: 640, size: 9, font: fontNorm });
+      p1.drawText(dados.racaCor || '', { x: 310, y: 640, size: 9, font: fontNorm });
+      p1.drawText(dados.cns || '', { x: 420, y: 640, size: 9, font: fontNorm });
 
-      // Linha 3: Nome da Mãe (Subiu 18 pontos)
-      p1.drawText(dados.nomeMae || '', { x: 110, y: 604, size: 8.5, font: fontNorm });
+      // Linha 3: Nome da Mãe
+      p1.drawText(dados.nomeMae || '', { x: 110, y: 622, size: 8.5, font: fontNorm });
 
-      // Linha 4: Endereço (Subiu 18 pontos)
-      p1.drawText(dados.endereco || '', { x: 85, y: 586, size: 8.5, font: fontNorm });
+      // Linha 4: Endereço
+      p1.drawText(dados.endereco || '', { x: 85, y: 604, size: 8.5, font: fontNorm });
 
-      // Linha 5: Município e Telefone (Subiram 18 pontos)
-      p1.drawText(dados.municipio || '', { x: 85, y: 568, size: 8.5, font: fontNorm });
-      p1.drawText(dados.telefone || '', { x: 420, y: 568, size: 8.5, font: fontNorm });
+      // Linha 5: Município e Telefone
+      p1.drawText(dados.municipio || '', { x: 85, y: 586, size: 8.5, font: fontNorm });
+      p1.drawText(dados.telefone || '', { x: 420, y: 586, size: 8.5, font: fontNorm });
 
-      // Procedimento e Diagnóstico
-      p1.drawText(dados.procCod || '', { x: 165, y: 504, size: 9, font });
+      // Procedimento Solicitado (Subiu para a linha 1 da seção)
+      p1.drawText(dados.procCod || '', { x: 165, y: 516, size: 9, font });
       p1.drawText(dados.cidPrincipal || '', { x: 110, y: 448, size: 9, font });
 
       // Linhas Inferiores Automáticas
