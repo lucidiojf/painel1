@@ -196,7 +196,6 @@
 </div>
 
 <script>
-  /* Nome do PDF no mesmo repositório do GitHub */
   const URL_PDF_BASE = 'AIH%20COMPLETA.pdf';
   const URL_APPS_SCRIPT = '';
 
@@ -251,7 +250,7 @@
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o modelo PDF. Verifique se o arquivo AIH COMPLETA.pdf está na mesma pasta no repositório.');
+    if (!res.ok) throw new Error('Não foi possível carregar o modelo AIH COMPLETA.pdf.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
@@ -299,7 +298,7 @@
       });
     };
 
-    /* FOLHA 1: AUTORIZAÇÃO */
+    /* FOLHA 1 */
     print(pag1, d.dataInternacao, 135, 752, 9, false);
     print(pag1, d.prontuario, 360, 752, 9, true);
     print(pag1, d.dataSaida, 485, 715, 8.5, false);
@@ -322,7 +321,7 @@
     print(pag1, "01", 330, 388, 8, false);
     print(pag1, d.cnes, 485, 388, 7.5, false);
 
-    /* FOLHA 2: LAUDO MÉDICO */
+    /* FOLHA 2 */
     print(pag2, d.hospital, 45, 735, 7.5, true);
     print(pag2, d.cnes, 380, 735, 8, false);
     print(pag2, d.hospital, 45, 712, 7.5, true);
@@ -365,7 +364,6 @@
     print(pag2, d.dataInternacao, 350, 318, 8, false);
     print(pag2, d.crm, 460, 318, 8, false);
 
-    /* Geração e Abertura no Modal */
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
@@ -406,4 +404,3 @@
 </script>
 </body>
 </html>
-
