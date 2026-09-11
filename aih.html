@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH 3 Guias</title>
+  <title>SISTEMA HM - AIH Completa (4 Folhas)</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -42,7 +42,7 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH - 3 Guias Calibradas</span>
+    <span>Emissão AIH - 4 Folhas Completas</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
@@ -177,7 +177,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar as 3 Guias da AIH</button>
+    <button type="submit" class="btn-submit">Gerar AIH Completa (4 Folhas)</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -185,7 +185,7 @@
 <div id="modalVisualizacao" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualização das 3 Guias da AIH</h3>
+      <h3>Visualização do Documento Completo</h3>
       <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -237,7 +237,7 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Gerando guias calibradas...';
+    msg.innerText = 'Preenchendo as folhas da AIH...';
 
     try {
       await gerarAihPdf();
@@ -245,7 +245,7 @@
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao processar PDF: ' + err.message;
+      msg.innerText = 'Erro ao processar: ' + err.message;
     }
   });
 
@@ -253,22 +253,19 @@
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o modelo AIH COMPLETA.pdf.');
+    if (!res.ok) throw new Error('Não foi possível carregar o modelo base AIH COMPLETA.pdf.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
     const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    // Mantém exatamente as 3 primeiras guias
-    while (pdfDoc.getPageCount() > 3) {
-      pdfDoc.removePage(pdfDoc.getPageCount() - 1);
-    }
-
+    // Mantém todas as folhas intactas (sem remover a 4ª folha)
     const pages = pdfDoc.getPages();
-    const pag1 = pages[0]; // Guia 1: Autorização
-    const pag2 = pages[1]; // Guia 2: Laudo Médico
-    const pag3 = pages[2]; // Guia 3: Prontuário de Internação
+    const pag1 = pages[0]; // Folha 1: Autorização de Internação
+    const pag2 = pages[1]; // Folha 2: Laudo Médico (52 campos)
+    const pag3 = pages[2]; // Folha 3: Prontuário de Internação
+    // pages[3] é a Folha 4: Ficha de Anestesia e Continuação
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
@@ -297,7 +294,7 @@
     };
 
     const print = (page, text, x, y, size, isBold) => {
-      if (!text) return;
+      if (!text || !page) return;
       page.drawText(String(text).toUpperCase(), {
         x: x,
         y: y,
@@ -308,112 +305,116 @@
     };
 
     /* =========================================================
-       GUIA 1: AUTORIZAÇÃO PARA INTERNAÇÃO (Calibrada)
+       📄 FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO
        ========================================================= */
     print(pag1, d.dataInternacao, 115, 712, 8, false);
     print(pag1, d.prontuario, 340, 712, 8.5, true);
     print(pag1, d.dataSaida, 480, 694, 8, false);
 
-    // Bloco: Dados do Paciente
-    print(pag1, d.nome, 120, 648, 8, true);
-    print(pag1, d.sexo, 50, 630, 7.5, false);
-    print(pag1, d.dataNasc, 225, 630, 7.5, false);
-    print(pag1, d.cns, 400, 630, 8, false);
+    // Dados do Paciente (assentado na linha tracejada)
+    print(pag1, d.nome, 120, 642, 8, true);
+    print(pag1, d.sexo, 50, 626, 7.5, false);
+    print(pag1, d.dataNasc, 225, 626, 7.5, false);
+    print(pag1, d.cns, 400, 626, 8, false);
 
-    print(pag1, d.nomeMae, 95, 612, 7.5, false);
-    print(pag1, d.endereco, 80, 594, 7.5, false);
-    print(pag1, d.municipio, 85, 576, 7.5, false);
-    print(pag1, d.telefone, 430, 576, 7.5, false);
+    print(pag1, d.nomeMae, 95, 610, 7.5, false);
+    print(pag1, d.endereco, 80, 592, 7.5, false);
+    print(pag1, d.municipio, 85, 574, 7.5, false);
+    print(pag1, d.telefone, 430, 574, 7.5, false);
 
-    // Bloco: Dados do Procedimento
-    print(pag1, d.procedimento, 140, 520, 7, false);
-    print(pag1, d.codProcedimento, 450, 520, 7.5, false);
-    print(pag1, d.cidPrincipal, 85, 462, 8.5, true);
-    print(pag1, d.medico, 120, 415, 7.5, false);
+    // Dados do Procedimento
+    print(pag1, d.procedimento, 140, 516, 7, false);
+    print(pag1, d.codProcedimento, 450, 516, 7.5, false);
+    print(pag1, d.cidPrincipal, 85, 460, 8.5, true);
+    print(pag1, d.medico, 120, 412, 7.5, false);
 
-    // Grade Procedimentos Realizados (Linha 1)
-    print(pag1, d.procedimento.substring(0, 36), 65, 350, 6.5, false);
-    print(pag1, "01", 240, 350, 7.5, false);
-    print(pag1, d.cnes, 380, 350, 7.5, false);
+    // Linha 1 da Grade de Procedimentos Realizados
+    print(pag1, d.procedimento.substring(0, 36), 65, 348, 6.5, false);
+    print(pag1, "01", 240, 348, 7.5, false);
+    print(pag1, d.cnes, 380, 348, 7.5, false);
 
 
     /* =========================================================
-       GUIA 2: LAUDO MÉDICO (52 CAMPOS) (Calibrada)
+       📄 FOLHA 2: LAUDO MÉDICO (52 CAMPOS)
        ========================================================= */
     // 1 e 2 - Estabelecimento Solicitante
-    print(pag2, d.hospital, 45, 618, 7, true);
-    print(pag2, d.cnes, 380, 618, 7.5, false);
+    print(pag2, d.hospital, 45, 616, 7, true);
+    print(pag2, d.cnes, 380, 616, 7.5, false);
 
     // 3 e 4 - Estabelecimento Executante
-    print(pag2, d.hospital, 45, 592, 7, true);
-    print(pag2, d.cnes, 380, 592, 7.5, false);
+    print(pag2, d.hospital, 45, 590, 7, true);
+    print(pag2, d.cnes, 380, 590, 7.5, false);
 
     // 5, 6 e 7 - Paciente, Prontuário e CNS
-    print(pag2, d.nome, 45, 562, 8, true);
-    print(pag2, d.prontuario, 300, 562, 8, true);
-    print(pag2, d.cns, 415, 562, 8, false);
+    print(pag2, d.nome, 45, 560, 8, true);
+    print(pag2, d.prontuario, 300, 560, 8, true);
+    print(pag2, d.cns, 415, 560, 8, false);
 
     // 8, 9, 10, 11 e 12 - Nascimento, Sexo, Cor, Mãe, Tel
-    print(pag2, d.dataNasc, 45, 532, 7.5, false);
+    print(pag2, d.dataNasc, 45, 530, 7.5, false);
     if (d.sexo === 'M') {
-      print(pag2, "X", 137, 532, 8.5, true);
+      print(pag2, "X", 137, 530, 8.5, true);
     } else {
-      print(pag2, "X", 175, 532, 8.5, true);
+      print(pag2, "X", 175, 530, 8.5, true);
     }
-    print(pag2, d.racaCor, 230, 532, 7.5, false);
-    print(pag2, d.nomeMae, 45, 504, 7.5, false);
-    print(pag2, d.telefone, 415, 504, 7.5, false);
+    print(pag2, d.racaCor, 230, 530, 7.5, false);
+    print(pag2, d.nomeMae, 45, 502, 7.5, false);
+    print(pag2, d.telefone, 415, 502, 7.5, false);
 
     // 15, 16 e 18 - Endereço e Município
-    print(pag2, d.endereco, 45, 476, 7.5, false);
-    print(pag2, d.municipio, 45, 448, 7.5, false);
-    print(pag2, "RN", 535, 448, 7.5, false);
+    print(pag2, d.endereco, 45, 474, 7.5, false);
+    print(pag2, d.municipio, 45, 446, 7.5, false);
+    print(pag2, "RN", 535, 446, 7.5, false);
 
     // 20, 21 e 22 - Justificativa da Internação
-    print(pag2, d.sinais.substring(0, 115), 45, 414, 6.8, false);
-    if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 404, 6.8, false);
+    print(pag2, d.sinais.substring(0, 115), 45, 412, 6.8, false);
+    if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 402, 6.8, false);
 
-    print(pag2, d.justificativa.substring(0, 115), 45, 376, 6.8, false);
-    if (d.justificativa.length > 115) print(pag2, d.justificativa.substring(115, 230), 45, 366, 6.8, false);
+    print(pag2, d.justificativa.substring(0, 115), 45, 374, 6.8, false);
+    if (d.justificativa.length > 115) print(pag2, d.justificativa.substring(115, 230), 45, 364, 6.8, false);
 
-    print(pag2, d.exames.substring(0, 115), 45, 338, 6.8, false);
-    if (d.exames.length > 115) print(pag2, d.exames.substring(115, 230), 45, 328, 6.8, false);
+    print(pag2, d.exames.substring(0, 115), 45, 336, 6.8, false);
+    if (d.exames.length > 115) print(pag2, d.exames.substring(115, 230), 45, 326, 6.8, false);
 
     // 23 e 24 - Diagnóstico e CID
-    print(pag2, d.diagInicial, 45, 302, 7.5, false);
-    print(pag2, d.cidPrincipal, 345, 302, 8.5, true);
+    print(pag2, d.diagInicial, 45, 300, 7.5, false);
+    print(pag2, d.cidPrincipal, 345, 300, 8.5, true);
 
     // 27 e 28 - Procedimento e Código SIGTAP
-    print(pag2, d.procedimento, 45, 266, 7, false);
-    print(pag2, d.codProcedimento, 435, 266, 8, true);
+    print(pag2, d.procedimento, 45, 264, 7, false);
+    print(pag2, d.codProcedimento, 435, 264, 8, true);
 
     // 33, 34 e 35 - Médico Solicitante, Data e CRM
-    print(pag2, d.medico, 45, 210, 7.5, true);
-    print(pag2, d.dataInternacao, 350, 210, 7.5, false);
-    print(pag2, d.crm, 460, 210, 7.5, false);
+    print(pag2, d.medico, 45, 208, 7.5, true);
+    print(pag2, d.dataInternacao, 350, 208, 7.5, false);
+    print(pag2, d.crm, 460, 208, 7.5, false);
 
 
     /* =========================================================
-       GUIA 3: PRONTUÁRIO DE INTERNAÇÃO (Folha 3 do documento)
+       📄 FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO (Exclusivo na pag3)
        ========================================================= */
-    print(pag3, d.nome, 105, 680, 8, true);
-    print(pag3, d.prontuario, 480, 680, 8.5, true);
-    print(pag3, d.endereco, 95, 660, 7.5, false);
-    print(pag3, d.municipio, 95, 642, 7.5, false);
-    print(pag3, "RN", 380, 642, 7.5, false);
-    print(pag3, d.dataNasc, 110, 624, 7.5, false);
-    print(pag3, d.racaCor, 260, 624, 7.5, false);
-    print(pag3, d.sexo, 360, 624, 7.5, false);
-    print(pag3, d.nomeMae, 95, 606, 7.5, false);
-    print(pag3, d.dataInternacao, 110, 570, 8, false);
-    print(pag3, d.dataSaida, 260, 570, 8, false);
-    print(pag3, d.diagInicial, 110, 535, 7.5, true);
+    if (pag3) {
+      print(pag3, d.nome, 105, 680, 8, true);
+      print(pag3, d.prontuario, 480, 680, 8.5, true);
+      print(pag3, d.endereco, 95, 660, 7.5, false);
+      print(pag3, d.municipio, 95, 642, 7.5, false);
+      print(pag3, "RN", 380, 642, 7.5, false);
+      print(pag3, d.dataNasc, 110, 624, 7.5, false);
+      print(pag3, d.racaCor, 260, 624, 7.5, false);
+      print(pag3, d.sexo, 360, 624, 7.5, false);
+      print(pag3, d.nomeMae, 95, 606, 7.5, false);
+      print(pag3, d.dataInternacao, 110, 570, 8, false);
+      print(pag3, d.dataSaida, 260, 570, 8, false);
+      print(pag3, d.diagInicial, 110, 535, 7.5, true);
 
-    const textoProntuario = `${d.sinais} ${d.justificativa}`;
-    print(pag3, textoProntuario.substring(0, 110), 45, 480, 7, false);
-    if (textoProntuario.length > 110) print(pag3, textoProntuario.substring(110, 220), 45, 468, 7, false);
+      const textoProntuario = `${d.sinais} ${d.justificativa}`;
+      print(pag3, textoProntuario.substring(0, 110), 45, 480, 7, false);
+      if (textoProntuario.length > 110) print(pag3, textoProntuario.substring(110, 220), 45, 468, 7, false);
+    }
 
-    /* Finalização */
+    /* =========================================================
+       Geração do Blob e Abertura
+       ========================================================= */
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
