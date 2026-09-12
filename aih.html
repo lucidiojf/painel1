@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - Emissão AIH Oficial</title>
+  <title>SISTEMA HM - AIH Form Robusto</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -41,7 +41,7 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial (Com Sheets)</span>
+    <span>Emissão AIH Oficial</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
@@ -184,7 +184,7 @@
     </fieldset>
 
     <fieldset>
-      <legend>Identificação do Médico e Hospital</legend>
+      <legend>Identificação do Médico</legend>
       <div class="grid-3">
         <div class="form-group">
           <label>Médico Solicitante:</label>
@@ -201,7 +201,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH e Salvar no Sheets</button>
+    <button type="submit" class="btn-submit">Gerar AIH Oficial</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -224,10 +224,7 @@
 </div>
 
 <script>
-  const URL_PDF_BASE = 'AIH%20JOT.pdf?cache=' + Date.now();
-
-  // COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT WEB APP (ex: https://script.google.com/macros/s/.../exec)
-  const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbzReK2XpvU3AgoGojdjB0vQqxl8hZEO9xVyHzaUC3juON_W0elUkTSSpgWRrWEbuI1s/exec';
+  const URL_PDF_BASE = 'AIH%20JOT.pdf?nocache=' + Date.now();
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -236,26 +233,30 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Processando documento e salvando dados...';
+    msg.innerText = 'Preenchendo campos e vinculando fontes...';
 
     try {
       await gerarAihFormPdf();
-      msg.innerText = 'Concluído com sucesso!';
+      msg.innerText = '';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro: ' + err.message;
+      msg.innerText = 'Erro ao processar PDF: ' + err.message;
     }
   });
 
   async function gerarAihFormPdf() {
-    const { PDFDocument } = PDFLib;
+    const { PDFDocument, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o arquivo PDF base AIH JOT.pdf.');
+    if (!res.ok) throw new Error('Não foi possível carregar o arquivo base AIH JOT.pdf.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
+    
+    // EMBUTE FONTE PADRÃO: Essencial para o pdf-lib conseguir pintar textos em formulários do Adobe
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
     const form = pdfDoc.getForm();
 
     const d = {
@@ -292,85 +293,84 @@
       exames: document.getElementById('exames').value || ''
     };
 
-    // Função de injeção direta no Adobe
-    const setCampo = (nomesPossiveis, valor) => {
-      if (valor === undefined || valor === null) return;
-      const texto = String(valor).toUpperCase();
-      const lista = Array.isArray(nomesPossiveis) ? nomesPossiveis : [nomesPossiveis];
+    // Mapeamento lógico de palavras-chave -> valor correspondente
+    const mapaCampos = [
+      { chaves: ['prontuario', 'prontuário', '6. numero do prontuário'], valor: d.prontuario },
+      { chaves: ['nome', 'nome do paciente', '5. nome do paciente'], valor: d.nome },
+      { chaves: ['sus', 'cartão sus', '7. cartão nacional de saúde (cns)'], valor: d.cns },
+      { chaves: ['dn', 'data nasc', '8. data de nascimento'], valor: d.nasc },
+      { chaves: ['sexo', '9. sexo'], valor: d.sexo },
+      { chaves: ['cor', 'raca', 'raça/cor', '10. raça/cor'], valor: d.raca },
+      { chaves: ['mae', 'nome mae', '10. nome da mãe ou responsável'], valor: d.mae },
+      { chaves: ['pai', 'nome pai'], valor: d.pai },
+      { chaves: ['profissao', 'profissão'], valor: d.profissao },
+      { chaves: ['endereço', 'endereco', '12. endereço (rua, nº, bairro)'], valor: `${d.endereco}, ${d.num} - ${d.bairro}` },
+      { chaves: ['n°', 'numero', 'nº'], valor: d.num },
+      { chaves: ['bairro'], valor: d.bairro },
+      { chaves: ['municipio', 'município', '13. município de residência', 'naturalidade'], valor: d.municipio },
+      { chaves: ['estado', 'uf', '15. uf'], valor: d.estado },
+      { chaves: ['cep', '16. cep'], valor: d.cep },
+      { chaves: ['telefone', '11. telefone de contato'], valor: d.tel },
+      { chaves: ['n° doc', 'rg'], valor: d.rg },
+      { chaves: ['cpf pac', 'cpf'], valor: d.cpfPac },
+      { chaves: ['dt intern', 'data internacao', 'data da internação', 'data de admissão:'], valor: d.dtInternacao },
+      { chaves: ['dt saida', 'data saida', 'data da saída', 'alta:'], valor: d.dtSaida },
+      { chaves: ['proced solic', 'proced realiz', '25. código do procedimento'], valor: d.codProced },
+      { chaves: ['desc proced', '24. descrição do procedimento solicitado'], valor: d.procedimento },
+      { chaves: ['mud proc'], valor: 'N' },
+      { chaves: ['especialidade', 'clinica', '26. clinica', 'serviço:'], valor: d.especialidade },
+      { chaves: ['cid princ', 'cid principal', '21. cid 10 principal'], valor: d.cid },
+      { chaves: ['enferm'], valor: 'M' },
+      { chaves: ['leito'], valor: '1' },
+      { chaves: ['mot saida'], valor: 'ALTA' },
+      { chaves: ['cpf sol', 'cpf med sol', '29. nº do documento (cns/cpf) do profissional solicitante'], valor: d.cpfMed },
+      { chaves: ['nome med', '30. nome do profissional solicitante'], valor: d.medico },
+      { chaves: ['data autz', 'dt sol', '31. data da solicitação', 'dt exped', 'dt cir'], valor: d.dtSol },
+      { chaves: ['diagn pre operat', 'diagnóstico inicial:', 'diagnóstico final:', '20. diagnostico inicial'], valor: d.diag },
+      { chaves: ['17. principais sinais e sintomas clinicos', 'sinais'], valor: d.sinais },
+      { chaves: ['18. condições que justificam a internação', 'justificativa'], valor: d.justificativa },
+      { chaves: ['19. principais resultados de provas diagnosticas', 'exames'], valor: d.exames },
+      { chaves: ['sumário de história clínica'], valor: `${d.sinais} ${d.justificativa}` },
+      { chaves: ['boletim cirurgia', 'relatório de internação'], valor: `PROCEDIMENTO REALIZADO: ${d.procedimento} SOB ANESTESIA LOCAL. SEM INTERCORRÊNCIAS.` }
+    ];
 
-      for (const n of lista) {
-        try {
-          const field = form.getTextField(n);
-          if (field) field.setText(texto);
-        } catch (e) {}
-      }
-    };
+    // VARREDURA INTELIGENTE: Pega TODOS os campos reais do PDF e compara
+    const todosCampos = form.getFields();
+    console.log('Total de campos identificados no PDF:', todosCampos.length);
 
-    const marcarCheck = (nomesPossiveis) => {
-      const lista = Array.isArray(nomesPossiveis) ? nomesPossiveis : [nomesPossiveis];
-      for (const n of lista) {
-        try {
-          const cb = form.getCheckBox(n);
-          if (cb) cb.check();
-        } catch (e) {}
-      }
-    };
+    todosCampos.forEach(field => {
+      const nomeReal = field.getName();
+      const nomeLimpo = nomeReal.toLowerCase().trim();
 
-    // Preenchimento de todas as ocorrências
-    setCampo(['Prontuario', 'Prontuario#0', 'Prontuario#1', 'Prontuario#2', 'Prontuario#4'], d.prontuario);
-    setCampo(['NOME', 'NOME#0', 'NOME#1', 'NOME#2', 'NOME#4', 'Nome'], d.nome);
-    setCampo(['SUS', 'SUS#0', 'SUS#1'], d.cns);
-    setCampo(['DN', 'DN#0', 'DN#1', 'DN#2'], d.nasc);
-    setCampo(['SEXO', 'SEXO#0', 'SEXO#1', 'SEXO#2'], d.sexo);
-    setCampo(['COR', 'COR#0', 'COR#1', 'COR#2'], d.raca);
-    setCampo(['TELEFONE', 'TELEFONE#0', 'TELEFONE#1'], d.tel);
-    setCampo(['MAE', 'MAE#0', 'MAE#1', 'MAE#2'], d.mae);
-    setCampo(['PAI'], d.pai);
-    setCampo(['PROFISSAO'], d.profissao);
-    setCampo(['ENDEREÇO', 'ENDEREÇO#0', 'ENDEREÇO#1', 'ENDEREÇO#2'], d.endereco);
-    setCampo(['N°', 'N°#0', 'N°#1'], d.num);
-    setCampo(['BAIRRO', 'BAIRRO#0'], d.bairro);
-    setCampo(['MUNICIPIO', 'MUNICIPIO#0', 'MUNICIPIO#1', 'MUNICIPIO#2', 'NATURALIDADE'], d.municipio);
-    setCampo(['ESTADO', 'ESTADO#0', '15. UF'], d.estado);
-    setCampo(['CEP', 'CEP#0', '16. CEP'], d.cep);
-    setCampo(['N° DOC', 'RG'], d.rg);
-    setCampo(['CPF PAC'], d.cpfPac);
+      // Verifica se é campo de texto
+      try {
+        const tf = form.getTextField(nomeReal);
+        if (tf) {
+          // Procura match no mapa
+          for (const item of mapaCampos) {
+            const bateu = item.chaves.some(chave => nomeLimpo === chave || nomeLimpo.startsWith(chave + '#') || nomeLimpo.includes(chave));
+            if (bateu && item.valor) {
+              tf.setText(String(item.valor).toUpperCase());
+              // Força fonte Helvetica para não sumir no visualizador
+              try { tf.updateAppearances(helveticaFont); } catch(e) {}
+              break;
+            }
+          }
+        }
+      } catch(e) {}
 
-    setCampo(['DT INTERN', 'DT INTERN#0', 'DT INTERN#1', 'Data de Admissão:'], d.dtInternacao);
-    setCampo(['DT SAIDA', 'Alta:'], d.dtSaida);
-    setCampo(['PROCED SOLIC', 'PROCED SOLIC#0', 'PROCED REALIZ', 'PROCED SOLIC#1'], d.codProced);
-    setCampo(['MUD PROC'], 'N');
-    setCampo(['ESPECIALIDADE', 'ESPECIALIDADE#0', 'ESPECIALIDADE#2'], d.especialidade);
-    setCampo(['CID PRINC', 'CID PRINC#0', '21. CID 10 Principal'], d.cid);
-    setCampo(['ENFERM', 'ENFERM#0'], 'M');
-    setCampo(['LEITO', 'LEITO#0'], '1');
-    setCampo(['MOT SAIDA'], 'ALTA');
-    setCampo(['CPF SOL', 'CPF SOL#0', 'CPF MED SOL'], d.cpfMed);
-    setCampo(['DATA AUTZ'], d.dtInternacao);
-    setCampo(['NOME MED'], d.medico);
-    setCampo(['DIAGN PRE OPERAT', 'Diagnóstico Inicial:', 'Diagnóstico Final:', '20. Diagnostico Inicial'], d.diag);
-    setCampo(['DT CIR', 'DT EXPED'], d.dtInternacao);
+      // Se for Checkbox
+      try {
+        const cb = form.getCheckBox(nomeReal);
+        if (cb) {
+          if (nomeLimpo.includes('check box2') || nomeLimpo.includes('check box3') || nomeLimpo.includes('rg') || nomeLimpo.includes('fem')) {
+            cb.check();
+          }
+        }
+      } catch(e) {}
+    });
 
-    setCampo(['17. Principais Sinais e Sintomas Clinicos'], d.sinais);
-    setCampo(['18. Condições que Justificam a Internação'], d.justificativa);
-    setCampo(['19. Principais Resultados de Provas Diagnosticas (Resultado de Exames Realizados)'], d.exames);
-    setCampo(['Sumário de História Clínica, Exame Físico e Tratamento'], `${d.sinais} ${d.justificativa}`);
-
-    marcarCheck(['Check Box2#0', 'Check Box2', 'Check Box3', 'RG', 'Check Box13']);
-
-    // O PULO DO GATO: Estampa e fixa todos os textos nas páginas para nunca saírem em branco
-    form.flatten();
-
-    // Envio para o Google Sheets (se a URL estiver configurada)
-    if (URL_APPS_SCRIPT) {
-      fetch(URL_APPS_SCRIPT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(d)
-      }).catch(err => console.warn('Erro ao salvar no Sheets:', err));
-    }
-
+    // Gera o PDF preservando o formulário e garantindo a exibição
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
