@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH Form Robusto</title>
+  <title>SISTEMA HM - AIH Oficial</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -23,6 +23,7 @@
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
+    #logBox { margin-top: 10px; background: #0f172a; color: #38bdf8; padding: 10px; border-radius: 6px; font-size: 11px; font-family: monospace; max-height: 140px; overflow-y: auto; display: none; }
 
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
     .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
@@ -41,7 +42,7 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial</span>
+    <span>Emissão AIH Oficial (Adobe Form)</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
@@ -203,6 +204,7 @@
 
     <button type="submit" class="btn-submit">Gerar AIH Oficial</button>
     <div id="msgStatus"></div>
+    <div id="logBox"></div>
   </form>
 </div>
 
@@ -224,24 +226,33 @@
 </div>
 
 <script>
-  const URL_PDF_BASE = 'AIH_FORM.pdf?nocache=' + Date.now();
+  // Aponta diretamente para o PDF interativo criado no Adobe
+  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
 
+  function addLog(txt) {
+    const box = document.getElementById('logBox');
+    box.style.display = 'block';
+    box.innerHTML += txt + '<br>';
+  }
+
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
+    document.getElementById('logBox').innerHTML = '';
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo campos e vinculando fontes...';
+    msg.innerText = 'Carregando AIH_FORM.pdf e preenchendo...';
 
     try {
       await gerarAihFormPdf();
-      msg.innerText = '';
+      msg.innerText = 'Documento gerado com sucesso!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao processar PDF: ' + err.message;
+      msg.innerText = 'Erro: ' + err.message;
+      addLog('ERRO FATAL: ' + err.message);
     }
   });
 
@@ -249,15 +260,16 @@
     const { PDFDocument, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o arquivo base AIH JOT.pdf.');
+    if (!res.ok) throw new Error('Não encontrou o arquivo AIH_FORM.pdf no repositório. Verifique se o nome está exato no GitHub.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
-    
-    // EMBUTE FONTE PADRÃO: Essencial para o pdf-lib conseguir pintar textos em formulários do Adobe
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
     const form = pdfDoc.getForm();
+    const fields = form.getFields();
+
+    addLog(`Arquivo AIH_FORM.pdf carregado. Total de campos interativos: ${fields.length}`);
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
@@ -293,84 +305,75 @@
       exames: document.getElementById('exames').value || ''
     };
 
-    // Mapeamento lógico de palavras-chave -> valor correspondente
-    const mapaCampos = [
-      { chaves: ['prontuario', 'prontuário', '6. numero do prontuário'], valor: d.prontuario },
-      { chaves: ['nome', 'nome do paciente', '5. nome do paciente'], valor: d.nome },
-      { chaves: ['sus', 'cartão sus', '7. cartão nacional de saúde (cns)'], valor: d.cns },
-      { chaves: ['dn', 'data nasc', '8. data de nascimento'], valor: d.nasc },
-      { chaves: ['sexo', '9. sexo'], valor: d.sexo },
-      { chaves: ['cor', 'raca', 'raça/cor', '10. raça/cor'], valor: d.raca },
-      { chaves: ['mae', 'nome mae', '10. nome da mãe ou responsável'], valor: d.mae },
-      { chaves: ['pai', 'nome pai'], valor: d.pai },
-      { chaves: ['profissao', 'profissão'], valor: d.profissao },
-      { chaves: ['endereço', 'endereco', '12. endereço (rua, nº, bairro)'], valor: `${d.endereco}, ${d.num} - ${d.bairro}` },
-      { chaves: ['n°', 'numero', 'nº'], valor: d.num },
-      { chaves: ['bairro'], valor: d.bairro },
-      { chaves: ['municipio', 'município', '13. município de residência', 'naturalidade'], valor: d.municipio },
-      { chaves: ['estado', 'uf', '15. uf'], valor: d.estado },
-      { chaves: ['cep', '16. cep'], valor: d.cep },
-      { chaves: ['telefone', '11. telefone de contato'], valor: d.tel },
-      { chaves: ['n° doc', 'rg'], valor: d.rg },
-      { chaves: ['cpf pac', 'cpf'], valor: d.cpfPac },
-      { chaves: ['dt intern', 'data internacao', 'data da internação', 'data de admissão:'], valor: d.dtInternacao },
-      { chaves: ['dt saida', 'data saida', 'data da saída', 'alta:'], valor: d.dtSaida },
-      { chaves: ['proced solic', 'proced realiz', '25. código do procedimento'], valor: d.codProced },
-      { chaves: ['desc proced', '24. descrição do procedimento solicitado'], valor: d.procedimento },
-      { chaves: ['mud proc'], valor: 'N' },
-      { chaves: ['especialidade', 'clinica', '26. clinica', 'serviço:'], valor: d.especialidade },
-      { chaves: ['cid princ', 'cid principal', '21. cid 10 principal'], valor: d.cid },
-      { chaves: ['enferm'], valor: 'M' },
-      { chaves: ['leito'], valor: '1' },
-      { chaves: ['mot saida'], valor: 'ALTA' },
-      { chaves: ['cpf sol', 'cpf med sol', '29. nº do documento (cns/cpf) do profissional solicitante'], valor: d.cpfMed },
-      { chaves: ['nome med', '30. nome do profissional solicitante'], valor: d.medico },
-      { chaves: ['data autz', 'dt sol', '31. data da solicitação', 'dt exped', 'dt cir'], valor: d.dtSol },
-      { chaves: ['diagn pre operat', 'diagnóstico inicial:', 'diagnóstico final:', '20. diagnostico inicial'], valor: d.diag },
-      { chaves: ['17. principais sinais e sintomas clinicos', 'sinais'], valor: d.sinais },
-      { chaves: ['18. condições que justificam a internação', 'justificativa'], valor: d.justificativa },
-      { chaves: ['19. principais resultados de provas diagnosticas', 'exames'], valor: d.exames },
-      { chaves: ['sumário de história clínica'], valor: `${d.sinais} ${d.justificativa}` },
-      { chaves: ['boletim cirurgia', 'relatório de internação'], valor: `PROCEDIMENTO REALIZADO: ${d.procedimento} SOB ANESTESIA LOCAL. SEM INTERCORRÊNCIAS.` }
-    ];
+    let preenchidos = 0;
 
-    // VARREDURA INTELIGENTE: Pega TODOS os campos reais do PDF e compara
-    const todosCampos = form.getFields();
-    console.log('Total de campos identificados no PDF:', todosCampos.length);
+    fields.forEach(f => {
+      const name = f.getName();
+      const n = name.toLowerCase().trim();
 
-    todosCampos.forEach(field => {
-      const nomeReal = field.getName();
-      const nomeLimpo = nomeReal.toLowerCase().trim();
-
-      // Verifica se é campo de texto
       try {
-        const tf = form.getTextField(nomeReal);
+        const tf = form.getTextField(name);
         if (tf) {
-          // Procura match no mapa
-          for (const item of mapaCampos) {
-            const bateu = item.chaves.some(chave => nomeLimpo === chave || nomeLimpo.startsWith(chave + '#') || nomeLimpo.includes(chave));
-            if (bateu && item.valor) {
-              tf.setText(String(item.valor).toUpperCase());
-              // Força fonte Helvetica para não sumir no visualizador
-              try { tf.updateAppearances(helveticaFont); } catch(e) {}
-              break;
-            }
-          }
-        }
-      } catch(e) {}
+          let val = null;
 
-      // Se for Checkbox
-      try {
-        const cb = form.getCheckBox(nomeReal);
-        if (cb) {
-          if (nomeLimpo.includes('check box2') || nomeLimpo.includes('check box3') || nomeLimpo.includes('rg') || nomeLimpo.includes('fem')) {
-            cb.check();
+          if (n.includes('prontuario') || n.includes('prontuário')) val = d.prontuario;
+          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg')) val = d.nome;
+          else if (n.includes('sus')) val = d.cns;
+          else if (n.includes('dn') || n.includes('nasc')) val = d.nasc;
+          else if (n.includes('sexo')) val = d.sexo;
+          else if (n.includes('cor') || n.includes('raca')) val = d.raca;
+          else if (n.includes('mae')) val = d.mae;
+          else if (n.includes('pai')) val = d.pai;
+          else if (n.includes('profiss')) val = d.profissao;
+          else if (n.includes('endereço') || n.includes('endereco')) val = `${d.endereco}, ${d.num} - ${d.bairro}`;
+          else if (n === 'n°' || n.startsWith('n°#') || n.includes('numero')) val = d.num;
+          else if (n.includes('bairro')) val = d.bairro;
+          else if (n.includes('municipio') || n.includes('município') || n.includes('naturalidade')) val = d.municipio;
+          else if (n.includes('estado') || n === 'uf' || n.includes('15. uf')) val = d.estado;
+          else if (n.includes('cep')) val = d.cep;
+          else if (n.includes('telefone')) val = d.tel;
+          else if (n.includes('n° doc') || n === 'rg') val = d.rg;
+          else if (n.includes('cpf pac') || n === 'cpf') val = d.cpfPac;
+          else if (n.includes('dt intern') || n.includes('admissão')) val = d.dtInternacao;
+          else if (n.includes('dt saida') || n.includes('alta')) val = d.dtSaida;
+          else if (n.includes('proced solic') || n.includes('proced realiz') || n.includes('código do procedimento')) val = d.codProced;
+          else if (n.includes('desc proced') || n.includes('descrição do procedimento')) val = d.procedimento;
+          else if (n.includes('mud proc')) val = 'N';
+          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('serviço')) val = d.especialidade;
+          else if (n.includes('cid princ') || n.includes('cid 10 principal')) val = d.cid;
+          else if (n.includes('enferm')) val = 'M';
+          else if (n.includes('leito')) val = '1';
+          else if (n.includes('mot saida')) val = 'ALTA';
+          else if (n.includes('cpf sol') || n.includes('cpf med sol')) val = d.cpfMed;
+          else if (n.includes('nome med') || n.includes('profissional solicitante')) val = d.medico;
+          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol')) val = d.dtSol;
+          else if (n.includes('diagn pre') || n.includes('diagnóstico inicial') || n.includes('diagnostico')) val = d.diag;
+          else if (n.includes('sinais')) val = d.sinais;
+          else if (n.includes('justificativa')) val = d.justificativa;
+          else if (n.includes('exames')) val = d.exames;
+
+          if (val) {
+            tf.setText(String(val).toUpperCase());
+            preenchidos++;
           }
         }
-      } catch(e) {}
+      } catch (e) {}
+
+      try {
+        const cb = form.getCheckBox(name);
+        if (cb) {
+          if (n.includes('check box2') || n.includes('check box3') || n === 'rg' || n.includes('fem')) {
+            cb.check();
+            preenchidos++;
+          }
+        }
+      } catch (e) {}
     });
 
-    // Gera o PDF preservando o formulário e garantindo a exibição
+    addLog(`Sucesso: ${preenchidos} campos preenchidos diretamente dentro do PDF.`);
+
+    form.updateFieldAppearances(helveticaFont);
+
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
