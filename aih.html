@@ -24,6 +24,7 @@
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
+    #painelLog { margin-top: 15px; background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 6px; font-size: 11px; font-family: monospace; max-height: 180px; overflow-y: auto; display: none; }
 
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
     .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
@@ -452,6 +453,7 @@
 
     <button type="submit" class="btn-submit">Gerar AIH e Salvar na Planilha</button>
     <div id="msgStatus"></div>
+    <div id="painelLog"></div>
   </form>
 </div>
 
@@ -478,6 +480,14 @@
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
+
+  function registrarLog(txt) {
+    const box = document.getElementById('painelLog');
+    if (box) {
+      box.style.display = 'block';
+      box.innerHTML += txt + '<br>';
+    }
+  }
 
   /* Banco de Boletins Operatórios */
   const boletins = {
@@ -562,6 +572,8 @@
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
+    const logBox = document.getElementById('painelLog');
+    if (logBox) { logBox.innerHTML = ''; logBox.style.display = 'none'; }
     msg.style.color = '#0284c7';
     msg.innerText = 'Preenchendo documento e registrando na planilha...';
 
@@ -625,7 +637,6 @@
       cirurgia: document.getElementById('txtCirurgia').value || ''
     };
 
-    // Normaliza strings removendo acentos e pontuações para casamento perfeito
     const normalizar = (txt) => {
       return (txt || '')
         .normalize('NFD')
@@ -645,41 +656,109 @@
         if (tf) {
           let val = null;
           let fontSize = 7.5;
+          let isMulti = false;
 
           // ==========================================
-          // CAMPOS DA FOLHA 2 (LAUDO SUS)
+          // 18. JUSTIFICATIVA DA INTERNAÇÃO
           // ==========================================
-          // 17. Sinais e Sintomas
-          if (n.startsWith('17') || n.includes('sinais e sintomas') || n.includes('sinais sintomas') || n.includes('principais sinais')) {
-            val = d.sinais; fontSize = 6.8;
-          }
-          // 18. Condições que Justificam a Internação
-          else if (n.startsWith('18') || n.includes('justificam a internacao') || n.includes('justificativa da internacao') || n.includes('justificam') || n.includes('justificativa')) {
-            val = d.justificativa; fontSize = 6.8;
-          }
-          // 19. Provas Diagnósticas / Exames
-          else if (n.startsWith('19') || n.includes('provas diagnosticas') || n.includes('resultado de exames') || n.includes('provas diagnostica') || n.includes('principais resultados')) {
-            val = d.exames; fontSize = 6.8;
-          }
-          // 20. Diagnóstico Inicial
-          else if (n.startsWith('20') || n.includes('20 diagnostico') || (n.includes('diagnostico inicial') && !n.includes('cid')) || n === 'diagnostico inicial' || n.includes('diagnostico')) {
-            val = d.diag; fontSize = 7.5;
-          }
-          // 21. CID 10 Principal
-          else if (n.startsWith('21') || n.includes('cid 10 principal') || n.includes('cid principal') || n === 'cid' || n.includes('cid 10')) {
-            val = d.cid; fontSize = 8.5;
-          }
-          // 24. Descrição do Procedimento Solicitado
-          else if (n.startsWith('24') || n.includes('descricao do procedimento') || n.includes('procedimento solicitado') || (n.includes('descricao') && n.includes('procedimento'))) {
-            val = d.procedimento; fontSize = 6.8;
-          }
-          // 25. Código do Procedimento
-          else if (n.startsWith('25') || n.includes('codigo do procedimento') || n.includes('codigo procedimento') || n.includes('cod proced') || n.includes('proced solic') || n.includes('proced realiz')) {
-            val = d.codProced; fontSize = 8;
+          if (
+            n.startsWith('18') || 
+            n.includes('justificam') || 
+            n.includes('justificativa') || 
+            n.includes('condicoes que') || 
+            n.includes('condicoes')
+          ) {
+            val = d.justificativa; 
+            fontSize = 6.8; 
+            isMulti = true;
           }
 
           // ==========================================
-          // DEMAIS CAMPOS DO DOCUMENTO
+          // 19. PROVAS DIAGNÓSTICAS / EXAMES
+          // ==========================================
+          else if (
+            n.startsWith('19') || 
+            n.includes('provas') || 
+            n.includes('diagnosticas') || 
+            n.includes('exames') || 
+            n.includes('resultado de exames') || 
+            n.includes('principais resultados')
+          ) {
+            val = d.exames; 
+            fontSize = 6.8; 
+            isMulti = true;
+          }
+
+          // ==========================================
+          // 20. DIAGNÓSTICO INICIAL
+          // ==========================================
+          else if (
+            n.startsWith('20') || 
+            n.includes('20 diagnostico') || 
+            (n.includes('diagnostico') && !n.includes('cid') && !n.includes('pre') && !n.includes('final')) || 
+            n === 'diagnostico inicial' ||
+            n.includes('diag inicial')
+          ) {
+            val = d.diag; 
+            fontSize = 7.5;
+          }
+
+          // ==========================================
+          // 21. CID 10 PRINCIPAL
+          // ==========================================
+          else if (
+            n.startsWith('21') || 
+            n.includes('cid 10 principal') || 
+            n.includes('cid principal') || 
+            n === 'cid' || 
+            n.includes('cid 10') ||
+            n.includes('cid princ')
+          ) {
+            val = d.cid; 
+            fontSize = 8.5;
+          }
+
+          // ==========================================
+          // 24. DESCRIÇÃO DO PROCEDIMENTO
+          // ==========================================
+          else if (
+            n.startsWith('24') || 
+            n.includes('descricao do procedimento') || 
+            n.includes('procedimento solicitado') || 
+            n.includes('desc proced') || 
+            (n.includes('descricao') && n.includes('proced'))
+          ) {
+            val = d.procedimento; 
+            fontSize = 6.8; 
+            isMulti = true;
+          }
+
+          // ==========================================
+          // 25. CÓDIGO DO PROCEDIMENTO (SIGTAP)
+          // ==========================================
+          else if (
+            n.startsWith('25') || 
+            n.includes('codigo do procedimento') || 
+            n.includes('codigo procedimento') || 
+            n.includes('cod proced') || 
+            n.includes('proced solic') || 
+            n.includes('proced realiz')
+          ) {
+            val = d.codProced; 
+            fontSize = 8;
+          }
+
+          // ==========================================
+          // 17. SINAIS E SINTOMAS
+          // ==========================================
+          else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
+            val = d.sinais; 
+            fontSize = 6.8; 
+            isMulti = true;
+          }
+
+          // ==========================================
+          // DEMAIS CAMPOS DO FORMULÁRIO
           // ==========================================
           else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 8.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 7.5; }
@@ -710,12 +789,18 @@
           else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 7.5; }
           else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) { val = d.dtSol; fontSize = 7.5; }
           else if (n.includes('tecnica') || n.includes('tipo anest')) { val = d.tecnicaAnest; fontSize = 7.5; }
-          else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 6.8; }
-          else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 6.8; }
+          else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 6.8; isMulti = true; }
+          else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 6.8; isMulti = true; }
 
           if (val !== null && val !== '') {
+            try { 
+              if (isMulti && typeof tf.enableMultiline === 'function') {
+                tf.enableMultiline();
+              }
+            } catch(e) {}
             try { tf.setFontSize(fontSize); } catch(e) {}
             tf.setText(String(val).toUpperCase());
+            registrarLog(`✔ Campo [${originalName}] preenchido com: ${String(val).substring(0, 20)}...`);
           }
         }
       } catch (e) {}
