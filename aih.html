@@ -20,7 +20,6 @@
     label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 3px; color: #475569; }
     input, select, textarea { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 12px; background: #fff; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
-    .btn-template { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 4px 8px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-right: 4px; }
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
@@ -42,7 +41,7 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial (Modelo Adobe)</span>
+    <span>Emissão AIH Oficial (Com Sheets)</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
@@ -202,7 +201,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH Oficial Completa</button>
+    <button type="submit" class="btn-submit">Gerar AIH e Salvar no Sheets</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -225,8 +224,10 @@
 </div>
 
 <script>
-  // Carrega o PDF gerado pelo Adobe
   const URL_PDF_BASE = 'AIH%20JOT.pdf?cache=' + Date.now();
+
+  // COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT WEB APP (ex: https://script.google.com/macros/s/.../exec)
+  const URL_APPS_SCRIPT = '';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -235,15 +236,15 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo todos os campos do Adobe...';
+    msg.innerText = 'Processando documento e salvando dados...';
 
     try {
       await gerarAihFormPdf();
-      msg.innerText = '';
+      msg.innerText = 'Concluído com sucesso!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao preencher PDF: ' + err.message;
+      msg.innerText = 'Erro: ' + err.message;
     }
   });
 
@@ -257,7 +258,6 @@
     const pdfDoc = await PDFDocument.load(buffer);
     const form = pdfDoc.getForm();
 
-    // Captura os dados do formulário
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
       nome: document.getElementById('nomePaciente').value || '',
@@ -292,7 +292,7 @@
       exames: document.getElementById('exames').value || ''
     };
 
-    // Helper Robusto: Tenta preencher por múltiplas variações de nome do Adobe
+    // Função de injeção direta no Adobe
     const setCampo = (nomesPossiveis, valor) => {
       if (valor === undefined || valor === null) return;
       const texto = String(valor).toUpperCase();
@@ -301,10 +301,7 @@
       for (const n of lista) {
         try {
           const field = form.getTextField(n);
-          if (field) {
-            field.setText(texto);
-            return;
-          }
+          if (field) field.setText(texto);
         } catch (e) {}
       }
     };
@@ -314,122 +311,66 @@
       for (const n of lista) {
         try {
           const cb = form.getCheckBox(n);
-          if (cb) {
-            cb.check();
-            return;
-          }
+          if (cb) cb.check();
         } catch (e) {}
       }
     };
 
-    // =========================================================
-    // 1. FOLHA 1 - AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
-    // =========================================================
-    setCampo(['Prontuario', 'Prontuario#0', 'PRONTUARIO', 'prontuario'], d.prontuario);
-    setCampo(['DT INTERN', 'DT INTERN#0', 'DATA INTERNACAO'], d.dtInternacao);
-    setCampo(['DT SAIDA', 'DATA SAIDA'], d.dtSaida);
-    setCampo(['NOME', 'NOME#0', 'Nome', 'Nome#0'], d.nome);
-    setCampo(['DN', 'DN#0', 'DATA NASC'], d.nasc);
-    setCampo(['SEXO', 'SEXO#0'], d.sexo);
-    setCampo(['COR', 'COR#0', 'RACA'], d.raca);
-    setCampo(['SUS', 'SUS#0', 'CARTAO SUS'], d.cns);
-    setCampo(['MAE', 'MAE#0', 'NOME MAE'], d.mae);
-    setCampo(['ENDEREÇO', 'ENDEREÇO#0', 'ENDERECO', 'ENDERECO#0'], d.endereco);
-    setCampo(['N°', 'N°#0', 'NUMERO'], d.num);
+    // Preenchimento de todas as ocorrências
+    setCampo(['Prontuario', 'Prontuario#0', 'Prontuario#1', 'Prontuario#2', 'Prontuario#4'], d.prontuario);
+    setCampo(['NOME', 'NOME#0', 'NOME#1', 'NOME#2', 'NOME#4', 'Nome'], d.nome);
+    setCampo(['SUS', 'SUS#0', 'SUS#1'], d.cns);
+    setCampo(['DN', 'DN#0', 'DN#1', 'DN#2'], d.nasc);
+    setCampo(['SEXO', 'SEXO#0', 'SEXO#1', 'SEXO#2'], d.sexo);
+    setCampo(['COR', 'COR#0', 'COR#1', 'COR#2'], d.raca);
+    setCampo(['TELEFONE', 'TELEFONE#0', 'TELEFONE#1'], d.tel);
+    setCampo(['MAE', 'MAE#0', 'MAE#1', 'MAE#2'], d.mae);
+    setCampo(['PAI'], d.pai);
+    setCampo(['PROFISSAO'], d.profissao);
+    setCampo(['ENDEREÇO', 'ENDEREÇO#0', 'ENDEREÇO#1', 'ENDEREÇO#2'], d.endereco);
+    setCampo(['N°', 'N°#0', 'N°#1'], d.num);
     setCampo(['BAIRRO', 'BAIRRO#0'], d.bairro);
-    setCampo(['MUNICIPIO', 'MUNICIPIO#0'], d.municipio);
-    setCampo(['ESTADO', 'ESTADO#0'], d.estado);
-    setCampo(['CEP', 'CEP#0'], d.cep);
-    setCampo(['TELEFONE', 'TELEFONE#0'], d.tel);
-    setCampo(['N° DOC', 'RG', 'DOCUMENTO'], d.rg);
-    setCampo(['PROCED SOLIC', 'PROCED SOLIC#0'], d.codProced);
-    setCampo(['PROCED REALIZ', 'PROCED REALIZ#0'], d.codProced);
+    setCampo(['MUNICIPIO', 'MUNICIPIO#0', 'MUNICIPIO#1', 'MUNICIPIO#2', 'NATURALIDADE'], d.municipio);
+    setCampo(['ESTADO', 'ESTADO#0', '15. UF'], d.estado);
+    setCampo(['CEP', 'CEP#0', '16. CEP'], d.cep);
+    setCampo(['N° DOC', 'RG'], d.rg);
+    setCampo(['CPF PAC'], d.cpfPac);
+
+    setCampo(['DT INTERN', 'DT INTERN#0', 'DT INTERN#1', 'Data de Admissão:'], d.dtInternacao);
+    setCampo(['DT SAIDA', 'Alta:'], d.dtSaida);
+    setCampo(['PROCED SOLIC', 'PROCED SOLIC#0', 'PROCED REALIZ', 'PROCED SOLIC#1'], d.codProced);
     setCampo(['MUD PROC'], 'N');
-    setCampo(['ESPECIALIDADE', 'ESPECIALIDADE#0'], d.especialidade);
-    setCampo(['CID PRINC', 'CID PRINC#0'], d.cid);
-    setCampo(['CID SEC', 'CID SEC#0'], '');
+    setCampo(['ESPECIALIDADE', 'ESPECIALIDADE#0', 'ESPECIALIDADE#2'], d.especialidade);
+    setCampo(['CID PRINC', 'CID PRINC#0', '21. CID 10 Principal'], d.cid);
     setCampo(['ENFERM', 'ENFERM#0'], 'M');
     setCampo(['LEITO', 'LEITO#0'], '1');
     setCampo(['MOT SAIDA'], 'ALTA');
-    setCampo(['CPF SOL', 'CPF SOL#0'], d.cpfMed);
+    setCampo(['CPF SOL', 'CPF SOL#0', 'CPF MED SOL'], d.cpfMed);
     setCampo(['DATA AUTZ'], d.dtInternacao);
-    setCampo(['PROCED SOLIC#1'], d.codProced);
+    setCampo(['NOME MED'], d.medico);
+    setCampo(['DIAGN PRE OPERAT', 'Diagnóstico Inicial:', 'Diagnóstico Final:', '20. Diagnostico Inicial'], d.diag);
+    setCampo(['DT CIR', 'DT EXPED'], d.dtInternacao);
 
-    marcarCheck(['Check Box2#0', 'Check Box2', 'Check Box3']);
-    marcarCheck(['RG', 'Check Box_RG']);
-
-    // =========================================================
-    // 2. FOLHA 2 - LAUDO PARA SOLICITAÇÃO (SUS)
-    // =========================================================
-    setCampo(['NOME#1', '5. Nome do Paciente', 'NOME PACIENTE 2'], d.nome);
-    setCampo(['Prontuario#1', '6. Numero do Prontuário'], d.prontuario);
-    setCampo(['SUS#1', '7. Cartão Nacional de Saúde (CNS)'], d.cns);
-    setCampo(['DN#1', '8. Data de Nascimento'], d.nasc);
-    setCampo(['COR#1', '10. Raça/Cor'], d.raca);
-    setCampo(['MAE#1', '10. Nome da Mãe ou Responsável'], d.mae);
-    setCampo(['TELEFONE#1', '11. Telefone de Contato'], d.tel);
-    setCampo(['ENDEREÇO#1', '12. Endereço (Rua, Nº, Bairro)'], `${d.endereco}, ${d.num} - ${d.bairro}`);
-    setCampo(['MUNICIPIO#1', '13. Município de residência'], d.municipio);
-    setCampo(['14. Cod. IBGE Município', 'IBGE'], '2404002');
-    setCampo(['15. UF'], d.estado);
-    setCampo(['16. CEP'], d.cep);
-
-    // Dados Clínicos / Justificativa
-    setCampo(['17. Principais Sinais e Sintomas Clinicos', 'SINAIS', 'SINAIS SINTOMAS'], d.sinais);
-    setCampo(['18. Condições que Justificam a Internação', 'JUSTIFICATIVA'], d.justificativa);
-    setCampo(['19. Principais Resultados de Provas Diagnosticas (Resultado de Exames Realizados)', 'EXAMES'], d.exames);
-    setCampo(['20. Diagnostico Inicial', 'DIAGNOSTICO'], d.diag);
-    setCampo(['21. CID 10 Principal', 'CID 10 PRINCIPAL'], d.cid);
-    setCampo(['24. Descrição do Procedimento Solicitado', 'DESC PROCED'], d.procedimento);
-    setCampo(['25. Código do Procedimento', 'COD PROCED'], d.codProced);
-    setCampo(['26. Clinica', 'CLINICA'], d.especialidade);
-    setCampo(['27. Caráter da Internação'], '02');
-
-    // Médico Solicitante
-    setCampo(['NOME MED', '30. Nome do Profissional Solicitante'], d.medico);
-    setCampo(['CPF MED SOL', '29. Nº do Documento (CNS/CPF) do Profissional Solicitante'], d.cpfMed);
-    setCampo(['DT INTERN#1', '31. Data da Solicitação'], d.dtSol);
-
-    if (d.sexo === 'M') {
-      marcarCheck(['Check Box4', 'Check Box_Masc', 'Masc']);
-    } else {
-      marcarCheck(['Check Box5', 'Check Box_Fem', 'Fem']);
-    }
-
-    // =========================================================
-    // 3. FOLHA 3 - PRONTUÁRIO DE INTERNAÇÃO
-    // =========================================================
-    setCampo(['NOME#2', 'Nome do Paciente:'], d.nome);
-    setCampo(['ENDEREÇO#1', 'ENDEREÇO#2', 'Endereço:'], `${d.endereco}, ${d.num}`);
-    setCampo(['MUNICIPIO#2', 'Município:'], d.municipio);
-    setCampo(['DN#2', 'Data de Nascimento:'], d.nasc);
-    setCampo(['NATURALIDADE'], d.municipio);
-    setCampo(['COR#2', 'Cor:'], d.raca);
-    setCampo(['SEXO#2', 'Sexo:'], d.sexo);
-    setCampo(['PROFISSAO', 'Profissão:'], d.profissao);
-    setCampo(['Prontuario#2', 'Nº do Prontuário:'], d.prontuario);
-    setCampo(['N°#1'], d.num);
-    setCampo(['DT EXPED', 'Data Expedição:'], d.dtInternacao);
-    setCampo(['CPF PAC', 'CPF:'], d.cpfPac);
-    setCampo(['MAE#2', 'Nome da Mãe:'], d.mae);
-    setCampo(['PAI', 'Nome do Pai:'], d.pai);
-    setCampo(['ESPECIALIDADE#2', 'Serviço:'], d.especialidade);
-    setCampo(['Data de Admissão:'], d.dtInternacao);
-    setCampo(['Alta:'], d.dtSaida);
-    setCampo(['Diagnóstico Inicial:'], d.diag);
-    setCampo(['Diagnóstico Final:'], d.diag);
+    setCampo(['17. Principais Sinais e Sintomas Clinicos'], d.sinais);
+    setCampo(['18. Condições que Justificam a Internação'], d.justificativa);
+    setCampo(['19. Principais Resultados de Provas Diagnosticas (Resultado de Exames Realizados)'], d.exames);
     setCampo(['Sumário de História Clínica, Exame Físico e Tratamento'], `${d.sinais} ${d.justificativa}`);
 
-    // =========================================================
-    // 4. FOLHAS 4 E 5 - BOLETIM CIRÚRGICO E ANESTESIA
-    // =========================================================
-    setCampo(['NOME#4', 'Nome:'], d.nome);
-    setCampo(['Prontuario#4', 'Prontuário'], d.prontuario);
-    setCampo(['DIAGN PRE OPERAT'], d.diag);
-    setCampo(['DT CIR', 'Data:'], d.dtInternacao);
-    setCampo(['BOLETIM CIRURGIA', 'RELATÓRIO DE INTERNAÇÃO'], `PROCEDIMENTO REALIZADO: ${d.procedimento} SOB ANESTESIA LOCAL. SEM INTERCORRÊNCIAS.`);
+    marcarCheck(['Check Box2#0', 'Check Box2', 'Check Box3', 'RG', 'Check Box13']);
 
-    // Geração do PDF final
+    // O PULO DO GATO: Estampa e fixa todos os textos nas páginas para nunca saírem em branco
+    form.flatten();
+
+    // Envio para o Google Sheets (se a URL estiver configurada)
+    if (URL_APPS_SCRIPT) {
+      fetch(URL_APPS_SCRIPT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(d)
+      }).catch(err => console.warn('Erro ao salvar no Sheets:', err));
+    }
+
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
