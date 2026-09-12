@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH Form Oficial</title>
+  <title>SISTEMA HM - Emissão AIH Oficial</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -42,7 +42,7 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial (Campos Adobe)</span>
+    <span>Emissão AIH Oficial (Modelo Adobe)</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
@@ -52,11 +52,11 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Nº Prontuário:</label>
-          <input type="text" id="prontuario" value="5555" required>
+          <input type="text" id="prontuario" value="7521" required>
         </div>
         <div class="form-group">
           <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="JOSÉ DA SILVA" required>
+          <input type="text" id="nomePaciente" value="MARIA IRIS PEREIRA DA SILVA" required>
         </div>
         <div class="form-group">
           <label>Cartão SUS (CNS):</label>
@@ -66,42 +66,42 @@
       <div class="grid-4">
         <div class="form-group">
           <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1956">
+          <input type="text" id="dataNasc" value="10/12/1960">
         </div>
         <div class="form-group">
           <label>Sexo:</label>
           <select id="sexo">
-            <option value="M" selected>M - Masculino</option>
-            <option value="F">F - Feminino</option>
+            <option value="F" selected>Feminino</option>
+            <option value="M">Masculino</option>
           </select>
         </div>
         <div class="form-group">
           <label>Raça / Cor:</label>
-          <input type="text" id="racaCor" value="B">
+          <input type="text" id="racaCor" value="PARDA">
         </div>
         <div class="form-group">
           <label>Telefone:</label>
-          <input type="text" id="telefone" value="84 99999-0000">
+          <input type="text" id="telefone" value="84 99980 5728">
         </div>
       </div>
       <div class="grid-3">
         <div class="form-group">
           <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="MARIA">
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
         </div>
         <div class="form-group">
           <label>Nome do Pai:</label>
-          <input type="text" id="nomePai" value="JOSÉ AMARO">
+          <input type="text" id="nomePai" value="FRANCISCO PEREIRA">
         </div>
         <div class="form-group">
           <label>Profissão:</label>
-          <input type="text" id="profissao" value="AGRICULTOR">
+          <input type="text" id="profissao" value="AGRICULTORA">
         </div>
       </div>
       <div class="grid-4">
         <div class="form-group">
-          <label>Endereço / Logradouro:</label>
-          <input type="text" id="endereco" value="CENTRO">
+          <label>Endereço Completo:</label>
+          <input type="text" id="endereco" value="SITIO ARROJADO">
         </div>
         <div class="form-group">
           <label>Nº:</label>
@@ -109,11 +109,11 @@
         </div>
         <div class="form-group">
           <label>Bairro:</label>
-          <input type="text" id="bairro" value="CENTRO">
+          <input type="text" id="bairro" value="ZONA RURAL">
         </div>
         <div class="form-group">
           <label>Município:</label>
-          <input type="text" id="municipio" value="F GOMES">
+          <input type="text" id="municipio" value="FRUTUOSO GOMES">
         </div>
       </div>
       <div class="grid-4">
@@ -123,48 +123,64 @@
         </div>
         <div class="form-group">
           <label>CEP:</label>
-          <input type="text" id="cep" value="59890">
+          <input type="text" id="cep" value="59890-000">
         </div>
         <div class="form-group">
-          <label>RG:</label>
-          <input type="text" id="rg" value="5555">
+          <label>RG / Documento:</label>
+          <input type="text" id="rg" value="1234567">
         </div>
         <div class="form-group">
           <label>CPF do Paciente:</label>
-          <input type="text" id="cpfPac" value="111.111.111-22">
+          <input type="text" id="cpfPac" value="000.000.000-00">
         </div>
       </div>
       <div class="grid-4">
         <div class="form-group">
           <label>Data Internação:</label>
-          <input type="text" id="dataInternacao" value="19/03/2026">
+          <input type="text" id="dataInternacao" value="14/07/2026">
         </div>
         <div class="form-group">
           <label>Data Saída (Alta):</label>
-          <input type="text" id="dataSaida" value="02/04/2026">
+          <input type="text" id="dataSaida" value="14/07/2026">
         </div>
         <div class="form-group">
           <label>Diagnóstico Inicial:</label>
-          <input type="text" id="diagInicial" value="CRISE HIPERTENSIVA">
+          <input type="text" id="diagInicial" value="NEVO MELANOCÍTICO, NÃO ESPECIFICADO">
         </div>
         <div class="form-group">
           <label>CID-10 Principal:</label>
-          <input type="text" id="cidPrincipal" value="I10">
+          <input type="text" id="cidPrincipal" value="D22.9">
         </div>
       </div>
       <div class="grid-3">
         <div class="form-group">
           <label>Procedimento Solicitado:</label>
-          <input type="text" id="procedimento" value="TRATAMENTO DA CRISE HIPERTENSIVA">
+          <input type="text" id="procedimento" value="EXCISAO E SUTURA DE LESAO DE PELE">
         </div>
         <div class="form-group">
           <label>Código SIGTAP:</label>
-          <input type="text" id="codProcedimento" value="0303060107">
+          <input type="text" id="codProcedimento" value="0401020045">
         </div>
         <div class="form-group">
           <label>Especialidade / Clínica:</label>
-          <input type="text" id="especialidade" value="CLINICA MEDICA">
+          <input type="text" id="especialidade" value="CIRURGIA AMBULATORIAL">
         </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dados Clínicos / Justificativa</legend>
+      <div class="form-group">
+        <label>17. Principais Sinais e Sintomas Clínicos:</label>
+        <textarea id="sinaisSintomas" rows="2">LESÃO HIPERCRÔMICA EM REGIÃO DORSAL, COM PRURIDO E ALTERAÇÃO DE BORDOS.</textarea>
+      </div>
+      <div class="form-group">
+        <label>18. Condições que Justificam a Internação:</label>
+        <textarea id="justificativa" rows="2">NECESSIDADE DE RESSECÇÃO CIRÚRGICA COM MARGEM DE SEGURANÇA E ESTUDO HISTOPATOLÓGICO.</textarea>
+      </div>
+      <div class="form-group">
+        <label>19. Principais Resultados de Exames:</label>
+        <textarea id="exames" rows="2">EXAME CLÍNICO DERMATOLÓGICO COMPATÍVEL.</textarea>
       </div>
     </fieldset>
 
@@ -173,7 +189,7 @@
       <div class="grid-3">
         <div class="form-group">
           <label>Médico Solicitante:</label>
-          <input type="text" id="medicoSolicitante" value="DR LUCIDIO">
+          <input type="text" id="medicoSolicitante" value="DR LUCIDIO JACOME FERREIRA">
         </div>
         <div class="form-group">
           <label>CPF do Solicitante:</label>
@@ -181,12 +197,12 @@
         </div>
         <div class="form-group">
           <label>Data Solicitação:</label>
-          <input type="text" id="dataSolicitacao" value="19/03/2026">
+          <input type="text" id="dataSolicitacao" value="14/07/2026">
         </div>
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH Preenchida</button>
+    <button type="submit" class="btn-submit">Gerar AIH Oficial Completa</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -209,8 +225,8 @@
 </div>
 
 <script>
-  // Nome do PDF salvo no Adobe interativo
-  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
+  // Carrega o PDF gerado pelo Adobe
+  const URL_PDF_BASE = 'AIH%20JOT.pdf?cache=' + Date.now();
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -219,7 +235,7 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo formulário interativo do Adobe...';
+    msg.innerText = 'Preenchendo todos os campos do Adobe...';
 
     try {
       await gerarAihFormPdf();
@@ -235,31 +251,31 @@
     const { PDFDocument } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o arquivo AIH_FORM.pdf. Verifique se ele foi salvo no GitHub.');
+    if (!res.ok) throw new Error('Não foi possível carregar o arquivo PDF base AIH JOT.pdf.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
     const form = pdfDoc.getForm();
 
-    // Captura os dados do formulário web
+    // Captura os dados do formulário
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
       nome: document.getElementById('nomePaciente').value || '',
       cns: document.getElementById('cns').value || '',
       nasc: document.getElementById('dataNasc').value || '',
-      sexo: document.getElementById('sexo').value || 'M',
-      raca: document.getElementById('racaCor').value || 'B',
+      sexo: document.getElementById('sexo').value || 'F',
+      raca: document.getElementById('racaCor').value || 'PARDA',
       tel: document.getElementById('telefone').value || '',
       mae: document.getElementById('nomeMae').value || '',
       pai: document.getElementById('nomePai').value || '',
-      profissao: document.getElementById('profissao').value || 'AGRICULTOR',
+      profissao: document.getElementById('profissao').value || 'AGRICULTORA',
       endereco: document.getElementById('endereco').value || '',
       num: document.getElementById('numEndereco').value || 'SN',
-      bairro: document.getElementById('bairro').value || 'CENTRO',
-      municipio: document.getElementById('municipio').value || 'F GOMES',
+      bairro: document.getElementById('bairro').value || 'ZONA RURAL',
+      municipio: document.getElementById('municipio').value || 'FRUTUOSO GOMES',
       estado: document.getElementById('estado').value || 'RN',
-      cep: document.getElementById('cep').value || '59890',
-      rg: document.getElementById('rg').value || '5555',
+      cep: document.getElementById('cep').value || '59890-000',
+      rg: document.getElementById('rg').value || '',
       cpfPac: document.getElementById('cpfPac').value || '',
       dtInternacao: document.getElementById('dataInternacao').value || '',
       dtSaida: document.getElementById('dataSaida').value || '',
@@ -267,104 +283,153 @@
       cid: document.getElementById('cidPrincipal').value || '',
       procedimento: document.getElementById('procedimento').value || '',
       codProced: document.getElementById('codProcedimento').value || '',
-      especialidade: document.getElementById('especialidade').value || 'CLINICA MEDICA',
-      medico: document.getElementById('medicoSolicitante').value || 'DR LUCIDIO',
+      especialidade: document.getElementById('especialidade').value || 'CIRURGIA AMBULATORIAL',
+      medico: document.getElementById('medicoSolicitante').value || 'DR LUCIDIO JACOME FERREIRA',
       cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
-      dtSol: document.getElementById('dataSolicitacao').value || ''
+      dtSol: document.getElementById('dataSolicitacao').value || '',
+      sinais: document.getElementById('sinaisSintomas').value || '',
+      justificativa: document.getElementById('justificativa').value || '',
+      exames: document.getElementById('exames').value || ''
     };
 
-    // Helper seguro: preenche campo de texto apenas se ele existir no PDF
-    const setSafe = (name, value) => {
-      try {
-        const field = form.getTextField(name);
-        if (field) field.setText(String(value).toUpperCase());
-      } catch (err) {
-        // Ignora se o campo não estiver no PDF
+    // Helper Robusto: Tenta preencher por múltiplas variações de nome do Adobe
+    const setCampo = (nomesPossiveis, valor) => {
+      if (valor === undefined || valor === null) return;
+      const texto = String(valor).toUpperCase();
+      const lista = Array.isArray(nomesPossiveis) ? nomesPossiveis : [nomesPossiveis];
+
+      for (const n of lista) {
+        try {
+          const field = form.getTextField(n);
+          if (field) {
+            field.setText(texto);
+            return;
+          }
+        } catch (e) {}
       }
     };
 
-    // Helper seguro para CheckBox
-    const checkSafe = (name) => {
-      try {
-        const cb = form.getCheckBox(name);
-        if (cb) cb.check();
-      } catch (err) {}
+    const marcarCheck = (nomesPossiveis) => {
+      const lista = Array.isArray(nomesPossiveis) ? nomesPossiveis : [nomesPossiveis];
+      for (const n of lista) {
+        try {
+          const cb = form.getCheckBox(n);
+          if (cb) {
+            cb.check();
+            return;
+          }
+        } catch (e) {}
+      }
     };
 
-    /* =========================================================
-       1. FOLHA 1 - AUTORIZAÇÃO (Nomes capturados do Adobe)
-       ========================================================= */
-    setSafe('Prontuario#0', d.prontuario);
-    setSafe('DT INTERN#0', d.dtInternacao);
-    setSafe('DT SAIDA', d.dtSaida);
-    setSafe('NOME#0', d.nome);
-    setSafe('DN#0', d.nasc);
-    setSafe('SEXO#0', d.sexo);
-    setSafe('COR#0', d.raca);
-    setSafe('SUS#0', d.cns);
-    setSafe('MAE#0', d.mae);
-    setSafe('ENDEREÇO#0', d.endereco);
-    setSafe('N°#0', d.num);
-    setSafe('BAIRRO', d.bairro);
-    setSafe('MUNICIPIO#0', d.municipio);
-    setSafe('ESTADO', d.estado);
-    setSafe('CEP#0', d.cep);
-    setSafe('TELEFONE#0', d.tel);
-    setSafe('N° DOC', d.rg);
-    setSafe('PROCED SOLIC#0', d.codProced);
-    setSafe('PROCED REALIZ', d.codProced);
-    setSafe('MUD PROC', 'N');
-    setSafe('ESPECIALIDADE#0', d.especialidade);
-    setSafe('CID PRINC#0', d.cid);
-    setSafe('CID SEC#0', '');
-    setSafe('ENFERM#0', 'M');
-    setSafe('LEITO#0', '1');
-    setSafe('MOT SAIDA', 'ALTA');
-    setSafe('CPF SOL#0', d.cpfMed);
-    setSafe('DATA AUTZ', d.dtInternacao);
-    setSafe('PROCED SOLIC#1', d.codProced); // Linha 1 da grade
+    // =========================================================
+    // 1. FOLHA 1 - AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
+    // =========================================================
+    setCampo(['Prontuario', 'Prontuario#0', 'PRONTUARIO', 'prontuario'], d.prontuario);
+    setCampo(['DT INTERN', 'DT INTERN#0', 'DATA INTERNACAO'], d.dtInternacao);
+    setCampo(['DT SAIDA', 'DATA SAIDA'], d.dtSaida);
+    setCampo(['NOME', 'NOME#0', 'Nome', 'Nome#0'], d.nome);
+    setCampo(['DN', 'DN#0', 'DATA NASC'], d.nasc);
+    setCampo(['SEXO', 'SEXO#0'], d.sexo);
+    setCampo(['COR', 'COR#0', 'RACA'], d.raca);
+    setCampo(['SUS', 'SUS#0', 'CARTAO SUS'], d.cns);
+    setCampo(['MAE', 'MAE#0', 'NOME MAE'], d.mae);
+    setCampo(['ENDEREÇO', 'ENDEREÇO#0', 'ENDERECO', 'ENDERECO#0'], d.endereco);
+    setCampo(['N°', 'N°#0', 'NUMERO'], d.num);
+    setCampo(['BAIRRO', 'BAIRRO#0'], d.bairro);
+    setCampo(['MUNICIPIO', 'MUNICIPIO#0'], d.municipio);
+    setCampo(['ESTADO', 'ESTADO#0'], d.estado);
+    setCampo(['CEP', 'CEP#0'], d.cep);
+    setCampo(['TELEFONE', 'TELEFONE#0'], d.tel);
+    setCampo(['N° DOC', 'RG', 'DOCUMENTO'], d.rg);
+    setCampo(['PROCED SOLIC', 'PROCED SOLIC#0'], d.codProced);
+    setCampo(['PROCED REALIZ', 'PROCED REALIZ#0'], d.codProced);
+    setCampo(['MUD PROC'], 'N');
+    setCampo(['ESPECIALIDADE', 'ESPECIALIDADE#0'], d.especialidade);
+    setCampo(['CID PRINC', 'CID PRINC#0'], d.cid);
+    setCampo(['CID SEC', 'CID SEC#0'], '');
+    setCampo(['ENFERM', 'ENFERM#0'], 'M');
+    setCampo(['LEITO', 'LEITO#0'], '1');
+    setCampo(['MOT SAIDA'], 'ALTA');
+    setCampo(['CPF SOL', 'CPF SOL#0'], d.cpfMed);
+    setCampo(['DATA AUTZ'], d.dtInternacao);
+    setCampo(['PROCED SOLIC#1'], d.codProced);
 
-    // Checkboxes da Folha 1
-    checkSafe('Check Box3'); // Tipo Continuidade
-    checkSafe('RG');         // Tipo Documento RG
+    marcarCheck(['Check Box2#0', 'Check Box2', 'Check Box3']);
+    marcarCheck(['RG', 'Check Box_RG']);
 
-    /* =========================================================
-       2. FOLHA 2 - LAUDO MÉDICO SUS
-       ========================================================= */
-    setSafe('NOME MED', d.medico);
-    setSafe('CPF MED SOL', d.cpfMed);
-    setSafe('DT INTERN#1', d.dtSol);
+    // =========================================================
+    // 2. FOLHA 2 - LAUDO PARA SOLICITAÇÃO (SUS)
+    // =========================================================
+    setCampo(['NOME#1', '5. Nome do Paciente', 'NOME PACIENTE 2'], d.nome);
+    setCampo(['Prontuario#1', '6. Numero do Prontuário'], d.prontuario);
+    setCampo(['SUS#1', '7. Cartão Nacional de Saúde (CNS)'], d.cns);
+    setCampo(['DN#1', '8. Data de Nascimento'], d.nasc);
+    setCampo(['COR#1', '10. Raça/Cor'], d.raca);
+    setCampo(['MAE#1', '10. Nome da Mãe ou Responsável'], d.mae);
+    setCampo(['TELEFONE#1', '11. Telefone de Contato'], d.tel);
+    setCampo(['ENDEREÇO#1', '12. Endereço (Rua, Nº, Bairro)'], `${d.endereco}, ${d.num} - ${d.bairro}`);
+    setCampo(['MUNICIPIO#1', '13. Município de residência'], d.municipio);
+    setCampo(['14. Cod. IBGE Município', 'IBGE'], '2404002');
+    setCampo(['15. UF'], d.estado);
+    setCampo(['16. CEP'], d.cep);
 
-    /* =========================================================
-       3. FOLHA 3 - PRONTUÁRIO DE INTERNAÇÃO
-       ========================================================= */
-    setSafe('NOME#2', d.nome);
-    setSafe('ENDEREÇO#1', d.endereco);
-    setSafe('MUNICIPIO#2', d.municipio);
-    setSafe('DN#2', d.nasc);
-    setSafe('NATURALIDADE', d.municipio);
-    setSafe('COR#2', d.raca);
-    setSafe('SEXO#2', d.sexo);
-    setSafe('PROFISSAO', d.profissao);
-    setSafe('Prontuario#2', d.prontuario);
-    setSafe('N°#1', d.num);
-    setSafe('DT EXPED', d.dtInternacao);
-    setSafe('CPF PAC', d.cpfPac);
-    setSafe('MAE#2', d.mae);
-    setSafe('PAI', d.pai);
-    setSafe('ESPECIALIDADE#2', d.especialidade);
+    // Dados Clínicos / Justificativa
+    setCampo(['17. Principais Sinais e Sintomas Clinicos', 'SINAIS', 'SINAIS SINTOMAS'], d.sinais);
+    setCampo(['18. Condições que Justificam a Internação', 'JUSTIFICATIVA'], d.justificativa);
+    setCampo(['19. Principais Resultados de Provas Diagnosticas (Resultado de Exames Realizados)', 'EXAMES'], d.exames);
+    setCampo(['20. Diagnostico Inicial', 'DIAGNOSTICO'], d.diag);
+    setCampo(['21. CID 10 Principal', 'CID 10 PRINCIPAL'], d.cid);
+    setCampo(['24. Descrição do Procedimento Solicitado', 'DESC PROCED'], d.procedimento);
+    setCampo(['25. Código do Procedimento', 'COD PROCED'], d.codProced);
+    setCampo(['26. Clinica', 'CLINICA'], d.especialidade);
+    setCampo(['27. Caráter da Internação'], '02');
 
-    /* =========================================================
-       4. FOLHAS 4 E 5 - ANESTESIA E BOLETIM CIRÚRGICO
-       ========================================================= */
-    setSafe('NOME#4', d.nome);
-    setSafe('Prontuario#4', d.prontuario);
-    setSafe('DIAGN PRE OPERAT', d.diag);
-    setSafe('DT CIR', d.dtInternacao);
+    // Médico Solicitante
+    setCampo(['NOME MED', '30. Nome do Profissional Solicitante'], d.medico);
+    setCampo(['CPF MED SOL', '29. Nº do Documento (CNS/CPF) do Profissional Solicitante'], d.cpfMed);
+    setCampo(['DT INTERN#1', '31. Data da Solicitação'], d.dtSol);
 
-    // Opcional: form.flatten(); // Descomente se quiser travar o PDF para impressão sem edição
+    if (d.sexo === 'M') {
+      marcarCheck(['Check Box4', 'Check Box_Masc', 'Masc']);
+    } else {
+      marcarCheck(['Check Box5', 'Check Box_Fem', 'Fem']);
+    }
 
-    /* Geração do Blob e Visualização no Modal */
+    // =========================================================
+    // 3. FOLHA 3 - PRONTUÁRIO DE INTERNAÇÃO
+    // =========================================================
+    setCampo(['NOME#2', 'Nome do Paciente:'], d.nome);
+    setCampo(['ENDEREÇO#1', 'ENDEREÇO#2', 'Endereço:'], `${d.endereco}, ${d.num}`);
+    setCampo(['MUNICIPIO#2', 'Município:'], d.municipio);
+    setCampo(['DN#2', 'Data de Nascimento:'], d.nasc);
+    setCampo(['NATURALIDADE'], d.municipio);
+    setCampo(['COR#2', 'Cor:'], d.raca);
+    setCampo(['SEXO#2', 'Sexo:'], d.sexo);
+    setCampo(['PROFISSAO', 'Profissão:'], d.profissao);
+    setCampo(['Prontuario#2', 'Nº do Prontuário:'], d.prontuario);
+    setCampo(['N°#1'], d.num);
+    setCampo(['DT EXPED', 'Data Expedição:'], d.dtInternacao);
+    setCampo(['CPF PAC', 'CPF:'], d.cpfPac);
+    setCampo(['MAE#2', 'Nome da Mãe:'], d.mae);
+    setCampo(['PAI', 'Nome do Pai:'], d.pai);
+    setCampo(['ESPECIALIDADE#2', 'Serviço:'], d.especialidade);
+    setCampo(['Data de Admissão:'], d.dtInternacao);
+    setCampo(['Alta:'], d.dtSaida);
+    setCampo(['Diagnóstico Inicial:'], d.diag);
+    setCampo(['Diagnóstico Final:'], d.diag);
+    setCampo(['Sumário de História Clínica, Exame Físico e Tratamento'], `${d.sinais} ${d.justificativa}`);
+
+    // =========================================================
+    // 4. FOLHAS 4 E 5 - BOLETIM CIRÚRGICO E ANESTESIA
+    // =========================================================
+    setCampo(['NOME#4', 'Nome:'], d.nome);
+    setCampo(['Prontuario#4', 'Prontuário'], d.prontuario);
+    setCampo(['DIAGN PRE OPERAT'], d.diag);
+    setCampo(['DT CIR', 'Data:'], d.dtInternacao);
+    setCampo(['BOLETIM CIRURGIA', 'RELATÓRIO DE INTERNAÇÃO'], `PROCEDIMENTO REALIZADO: ${d.procedimento} SOB ANESTESIA LOCAL. SEM INTERCORRÊNCIAS.`);
+
+    // Geração do PDF final
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
