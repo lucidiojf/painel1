@@ -24,7 +24,6 @@
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
-    #painelLog { margin-top: 15px; background: #0f172a; color: #38bdf8; padding: 12px; border-radius: 6px; font-size: 11px; font-family: monospace; max-height: 180px; overflow-y: auto; display: none; }
 
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
     .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
@@ -147,7 +146,7 @@
       </div>
     </fieldset>
 
-    <!-- BANCO DE DADOS CLINICOS: PATOLOGIAS E SIGTAP -->
+    <!-- BANCO DE DADOS CLINICOS -->
     <fieldset>
       <legend>Dados Clínicos e SIGTAP</legend>
       
@@ -453,7 +452,6 @@
 
     <button type="submit" class="btn-submit">Gerar AIH e Salvar na Planilha</button>
     <div id="msgStatus"></div>
-    <div id="painelLog"></div>
   </form>
 </div>
 
@@ -480,14 +478,6 @@
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
-
-  function registrarLog(txt) {
-    const box = document.getElementById('painelLog');
-    if (box) {
-      box.style.display = 'block';
-      box.innerHTML += txt + '<br>';
-    }
-  }
 
   /* Banco de Boletins Operatórios */
   const boletins = {
@@ -572,8 +562,6 @@
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
-    const logBox = document.getElementById('painelLog');
-    if (logBox) { logBox.innerHTML = ''; logBox.style.display = 'none'; }
     msg.style.color = '#0284c7';
     msg.innerText = 'Preenchendo documento e registrando na planilha...';
 
@@ -659,14 +647,52 @@
           let isMulti = false;
 
           // ==========================================
-          // 18. JUSTIFICATIVA DA INTERNAÇÃO
+          // 24. DESCRIÇÃO DO PROCEDIMENTO (PRIORITÁRIO)
           // ==========================================
           if (
+            n.startsWith('24') ||
+            n.includes('24 descricao') ||
+            n.includes('24 desc') ||
+            (n.includes('descricao') && n.includes('procedimento')) ||
+            (n.includes('desc') && n.includes('procedimento')) ||
+            (n.includes('procedimento solicitado') && !n.includes('codigo') && !n.includes('cod')) ||
+            n === 'procedimento solicitado' ||
+            n === 'descricao do procedimento solicitado' ||
+            n === 'campo24 procedimento' ||
+            n === 'campo24'
+          ) {
+            val = d.procedimento;
+            fontSize = 7;
+            isMulti = true;
+          }
+
+          // ==========================================
+          // 25. CÓDIGO DO PROCEDIMENTO (SIGTAP)
+          // ==========================================
+          else if (
+            n.startsWith('25') ||
+            n.includes('codigo do procedimento') ||
+            n.includes('codigo procedimento') ||
+            n.includes('cod proced') ||
+            n.includes('proced solic') ||
+            n.includes('proced realiz') ||
+            n.includes('codigo')
+          ) {
+            val = d.codProced;
+            fontSize = 8;
+          }
+
+          // ==========================================
+          // 18. JUSTIFICATIVA DA INTERNAÇÃO
+          // ==========================================
+          else if (
             n.startsWith('18') || 
             n.includes('justificam') || 
             n.includes('justificativa') || 
             n.includes('condicoes que') || 
-            n.includes('condicoes')
+            n.includes('condicoes') ||
+            n === 'campo18 justificativa' ||
+            n === 'campo18'
           ) {
             val = d.justificativa; 
             fontSize = 6.8; 
@@ -682,7 +708,9 @@
             n.includes('diagnosticas') || 
             n.includes('exames') || 
             n.includes('resultado de exames') || 
-            n.includes('principais resultados')
+            n.includes('principais resultados') ||
+            n === 'campo19 exames' ||
+            n === 'campo19'
           ) {
             val = d.exames; 
             fontSize = 6.8; 
@@ -697,7 +725,9 @@
             n.includes('20 diagnostico') || 
             (n.includes('diagnostico') && !n.includes('cid') && !n.includes('pre') && !n.includes('final')) || 
             n === 'diagnostico inicial' ||
-            n.includes('diag inicial')
+            n.includes('diag inicial') ||
+            n === 'campo20 diagnostico' ||
+            n === 'campo20'
           ) {
             val = d.diag; 
             fontSize = 7.5;
@@ -719,36 +749,6 @@
           }
 
           // ==========================================
-          // 24. DESCRIÇÃO DO PROCEDIMENTO
-          // ==========================================
-          else if (
-            n.startsWith('24') || 
-            n.includes('descricao do procedimento') || 
-            n.includes('procedimento solicitado') || 
-            n.includes('desc proced') || 
-            (n.includes('descricao') && n.includes('proced'))
-          ) {
-            val = d.procedimento; 
-            fontSize = 6.8; 
-            isMulti = true;
-          }
-
-          // ==========================================
-          // 25. CÓDIGO DO PROCEDIMENTO (SIGTAP)
-          // ==========================================
-          else if (
-            n.startsWith('25') || 
-            n.includes('codigo do procedimento') || 
-            n.includes('codigo procedimento') || 
-            n.includes('cod proced') || 
-            n.includes('proced solic') || 
-            n.includes('proced realiz')
-          ) {
-            val = d.codProced; 
-            fontSize = 8;
-          }
-
-          // ==========================================
           // 17. SINAIS E SINTOMAS
           // ==========================================
           else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
@@ -758,7 +758,7 @@
           }
 
           // ==========================================
-          // DEMAIS CAMPOS DO FORMULÁRIO
+          // DEMAIS CAMPOS DO DOCUMENTO
           // ==========================================
           else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 8.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 7.5; }
@@ -800,7 +800,6 @@
             } catch(e) {}
             try { tf.setFontSize(fontSize); } catch(e) {}
             tf.setText(String(val).toUpperCase());
-            registrarLog(`✔ Campo [${originalName}] preenchido com: ${String(val).substring(0, 20)}...`);
           }
         }
       } catch (e) {}
