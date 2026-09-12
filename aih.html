@@ -1,32 +1,255 @@
-<script>
-  // Aponta diretamente para o PDF interativo do Adobe
-  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISTEMA HM - AIH Oficial</title>
+  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #f1f5f9; margin: 0; padding: 12px; color: #1e293b; }
+    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+    .btn-reload { background: #64748b; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+    fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fafafa; }
+    legend { font-weight: 700; color: #0284c7; padding: 0 6px; font-size: 13px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+    .form-group { margin-bottom: 6px; }
+    label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 3px; color: #475569; }
+    input, select, textarea { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 12px; background: #fff; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
+    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
+    .btn-submit:hover { background: #0369a1; }
+    #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
+    #logBox { margin-top: 10px; background: #0f172a; color: #38bdf8; padding: 10px; border-radius: 6px; font-size: 11px; font-family: monospace; max-height: 140px; overflow-y: auto; display: none; }
 
-  // >>>>> COLE SUA URL DO GOOGLE APPS SCRIPT (TERMINADA EM /exec) DENTRO DAS ASPAS ABAIXO: <<<<<
-  const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
+    .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { background: #0284c7; color: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h3 { margin: 0; font-size: 15px; }
+    .modal-body { flex: 1; background: #525659; }
+    .modal-body iframe { width: 100%; height: 100%; border: none; }
+    .modal-footer { padding: 8px 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 8px; }
+    .btn-modal { padding: 7px 14px; border-radius: 5px; font-weight: 600; font-size: 12px; cursor: pointer; border: none; }
+    .btn-close { background: #e2e8f0; color: #334155; }
+    .btn-print { background: #16a34a; color: #fff; }
+    .btn-download { background: #0284c7; color: #fff; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>
+    <span>Emissão AIH Oficial</span>
+    <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
+  </h2>
+
+  <form id="formAih">
+    <fieldset>
+      <legend>Identificação do Paciente</legend>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Nº Prontuário:</label>
+          <input type="text" id="prontuario" value="7521" required>
+        </div>
+        <div class="form-group">
+          <label>Nome Completo:</label>
+          <input type="text" id="nomePaciente" value="MARIA IRIS PEREIRA DA SILVA" required>
+        </div>
+        <div class="form-group">
+          <label>Cartão SUS (CNS):</label>
+          <input type="text" id="cns" value="704006647751551">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Data de Nascimento:</label>
+          <input type="text" id="dataNasc" value="10/12/1960">
+        </div>
+        <div class="form-group">
+          <label>Sexo:</label>
+          <select id="sexo">
+            <option value="F" selected>Feminino</option>
+            <option value="M">Masculino</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Raça / Cor:</label>
+          <input type="text" id="racaCor" value="PARDA">
+        </div>
+        <div class="form-group">
+          <label>Telefone:</label>
+          <input type="text" id="telefone" value="84 99980 5728">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Nome da Mãe:</label>
+          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
+        </div>
+        <div class="form-group">
+          <label>Nome do Pai:</label>
+          <input type="text" id="nomePai" value="FRANCISCO PEREIRA">
+        </div>
+        <div class="form-group">
+          <label>Profissão:</label>
+          <input type="text" id="profissao" value="AGRICULTORA">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Endereço Completo:</label>
+          <input type="text" id="endereco" value="SITIO ARROJADO">
+        </div>
+        <div class="form-group">
+          <label>Nº:</label>
+          <input type="text" id="numEndereco" value="SN">
+        </div>
+        <div class="form-group">
+          <label>Bairro:</label>
+          <input type="text" id="bairro" value="ZONA RURAL">
+        </div>
+        <div class="form-group">
+          <label>Município:</label>
+          <input type="text" id="municipio" value="FRUTUOSO GOMES">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Estado / UF:</label>
+          <input type="text" id="estado" value="RN">
+        </div>
+        <div class="form-group">
+          <label>CEP:</label>
+          <input type="text" id="cep" value="59890-000">
+        </div>
+        <div class="form-group">
+          <label>RG / Documento:</label>
+          <input type="text" id="rg" value="1234567">
+        </div>
+        <div class="form-group">
+          <label>CPF do Paciente:</label>
+          <input type="text" id="cpfPac" value="000.000.000-00">
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="form-group">
+          <label>Data Internação:</label>
+          <input type="text" id="dataInternacao" value="14/07/2026">
+        </div>
+        <div class="form-group">
+          <label>Data Saída (Alta):</label>
+          <input type="text" id="dataSaida" value="14/07/2026">
+        </div>
+        <div class="form-group">
+          <label>Diagnóstico Inicial:</label>
+          <input type="text" id="diagInicial" value="NEVO MELANOCÍTICO, NÃO ESPECIFICADO">
+        </div>
+        <div class="form-group">
+          <label>CID-10 Principal:</label>
+          <input type="text" id="cidPrincipal" value="D22.9">
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Procedimento Solicitado:</label>
+          <input type="text" id="procedimento" value="EXCISAO E SUTURA DE LESAO DE PELE">
+        </div>
+        <div class="form-group">
+          <label>Código SIGTAP:</label>
+          <input type="text" id="codProcedimento" value="0401020045">
+        </div>
+        <div class="form-group">
+          <label>Especialidade / Clínica:</label>
+          <input type="text" id="especialidade" value="CIRURGIA AMBULATORIAL">
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dados Clínicos / Justificativa</legend>
+      <div class="form-group">
+        <label>17. Principais Sinais e Sintomas Clínicos:</label>
+        <textarea id="sinaisSintomas" rows="2">LESÃO HIPERCRÔMICA EM REGIÃO DORSAL, COM PRURIDO E ALTERAÇÃO DE BORDOS.</textarea>
+      </div>
+      <div class="form-group">
+        <label>18. Condições que Justificam a Internação:</label>
+        <textarea id="justificativa" rows="2">NECESSIDADE DE RESSECÇÃO CIRÚRGICA COM MARGEM DE SEGURANÇA E ESTUDO HISTOPATOLÓGICO.</textarea>
+      </div>
+      <div class="form-group">
+        <label>19. Principais Resultados de Exames:</label>
+        <textarea id="exames" rows="2">EXAME CLÍNICO DERMATOLÓGICO COMPATÍVEL.</textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Identificação do Médico</legend>
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Médico Solicitante:</label>
+          <input type="text" id="medicoSolicitante" value="DR LUCIDIO JACOME FERREIRA">
+        </div>
+        <div class="form-group">
+          <label>CPF do Solicitante:</label>
+          <input type="text" id="cpfSolicitante" value="175.499.574-87">
+        </div>
+        <div class="form-group">
+          <label>Data Solicitação:</label>
+          <input type="text" id="dataSolicitacao" value="14/07/2026">
+        </div>
+      </div>
+    </fieldset>
+
+    <button type="submit" class="btn-submit">Gerar AIH Oficial</button>
+    <div id="msgStatus"></div>
+    <div id="logBox"></div>
+  </form>
+</div>
+
+<div id="modalVisualizacao" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Visualização da AIH Gerada</h3>
+      <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="pdfFrame"></iframe>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal btn-close" onclick="fecharModal()">Fechar</button>
+      <button class="btn-modal btn-print" onclick="imprimirPdf()">Imprimir</button>
+      <button class="btn-modal btn-download" id="btnDownload">Baixar PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const URL_PDF_BASE = 'AIH_FORM.pdf?nocache=' + Date.now();
+  
+  // COLE SUA URL /exec AQUI:
+  const URL_APPS_SCRIPT = 'COLE_AQUI_SUA_URL_EXEC';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
 
   function addLog(txt) {
     const box = document.getElementById('logBox');
-    if (box) {
-      box.style.display = 'block';
-      box.innerHTML += txt + '<br>';
-    }
+    box.style.display = 'block';
+    box.innerHTML += txt + '<br>';
   }
 
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
-    const logBox = document.getElementById('logBox');
-    if (logBox) logBox.innerHTML = '';
+    document.getElementById('logBox').innerHTML = '';
     msg.style.color = '#0284c7';
-    msg.innerText = 'Gerando PDF e enviando para o Sheets...';
+    msg.innerText = 'Processando documento e salvando dados...';
 
     try {
       await gerarAihFormPdf();
-      msg.innerText = 'Documento gerado e salvo com sucesso!';
+      msg.innerText = 'Concluído com sucesso!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
@@ -43,12 +266,12 @@
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
-    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
     const form = pdfDoc.getForm();
     const fields = form.getFields();
 
-    addLog(`AIH_FORM.pdf carregado. Total de campos: ${fields.length}`);
+    addLog(`Total de campos encontrados: ${fields.length}`);
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
@@ -84,7 +307,7 @@
       exames: document.getElementById('exames') ? document.getElementById('exames').value : ''
     };
 
-    let preenchidos = 0;
+    let count = 0;
 
     fields.forEach(f => {
       const name = f.getName();
@@ -94,46 +317,48 @@
         const tf = form.getTextField(name);
         if (tf) {
           let val = null;
+          let fontSize = 8; // Tamanho compacto para não truncar
 
-          if (n.includes('prontuario') || n.includes('prontuário')) val = d.prontuario;
-          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg')) val = d.nome;
-          else if (n.includes('sus')) val = d.cns;
-          else if (n.includes('dn') || n.includes('nasc')) val = d.nasc;
-          else if (n.includes('sexo')) val = d.sexo;
-          else if (n.includes('cor') || n.includes('raca')) val = d.raca;
-          else if (n.includes('mae')) val = d.mae;
-          else if (n.includes('pai')) val = d.pai;
-          else if (n.includes('profiss')) val = d.profissao;
-          else if (n.includes('endereço') || n.includes('endereco')) val = `${d.endereco}, ${d.num} - ${d.bairro}`;
-          else if (n === 'n°' || n.startsWith('n°#') || n.includes('numero')) val = d.num;
-          else if (n.includes('bairro')) val = d.bairro;
-          else if (n.includes('municipio') || n.includes('município') || n.includes('naturalidade')) val = d.municipio;
-          else if (n.includes('estado') || n === 'uf' || n.includes('15. uf')) val = d.estado;
-          else if (n.includes('cep')) val = d.cep;
-          else if (n.includes('telefone')) val = d.tel;
-          else if (n.includes('n° doc') || n === 'rg') val = d.rg;
-          else if (n.includes('cpf pac') || n === 'cpf') val = d.cpfPac;
-          else if (n.includes('dt intern') || n.includes('admissão')) val = d.dtInternacao;
-          else if (n.includes('dt saida') || n.includes('alta')) val = d.dtSaida;
-          else if (n.includes('proced solic') || n.includes('proced realiz') || n.includes('código do procedimento')) val = d.codProced;
-          else if (n.includes('desc proced') || n.includes('descrição do procedimento')) val = d.procedimento;
-          else if (n.includes('mud proc')) val = 'N';
-          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('serviço')) val = d.especialidade;
-          else if (n.includes('cid princ') || n.includes('cid 10 principal')) val = d.cid;
-          else if (n.includes('enferm')) val = 'M';
-          else if (n.includes('leito')) val = '1';
-          else if (n.includes('mot saida')) val = 'ALTA';
-          else if (n.includes('cpf sol') || n.includes('cpf med sol')) val = d.cpfMed;
-          else if (n.includes('nome med') || n.includes('profissional solicitante')) val = d.medico;
-          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol')) val = d.dtSol;
-          else if (n.includes('diagn pre') || n.includes('diagnóstico inicial') || n.includes('diagnostico')) val = d.diag;
-          else if (n.includes('sinais')) val = d.sinais;
-          else if (n.includes('justificativa')) val = d.justificativa;
-          else if (n.includes('exames')) val = d.exames;
+          if (n.includes('prontuario') || n.includes('prontuário')) { val = d.prontuario; fontSize = 8.5; }
+          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg')) { val = d.nome; fontSize = 8; }
+          else if (n.includes('sus')) { val = d.cns; fontSize = 8; }
+          else if (n.includes('dn') || n.includes('nasc')) { val = d.nasc; fontSize = 8; }
+          else if (n.includes('sexo')) { val = d.sexo; fontSize = 8; }
+          else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8; }
+          else if (n.includes('mae')) { val = d.mae; fontSize = 8; }
+          else if (n.includes('pai')) { val = d.pai; fontSize = 8; }
+          else if (n.includes('profiss')) { val = d.profissao; fontSize = 8; }
+          else if (n.includes('endereço') || n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 7.5; }
+          else if (n === 'n°' || n.startsWith('n°#') || n.includes('numero')) { val = d.num; fontSize = 8; }
+          else if (n.includes('bairro')) { val = d.bairro; fontSize = 8; }
+          else if (n.includes('municipio') || n.includes('município') || n.includes('naturalidade')) { val = d.municipio; fontSize = 8; }
+          else if (n.includes('estado') || n === 'uf' || n.includes('15. uf')) { val = d.estado; fontSize = 8; }
+          else if (n.includes('cep')) { val = d.cep; fontSize = 8; }
+          else if (n.includes('telefone')) { val = d.tel; fontSize = 8; }
+          else if (n.includes('n° doc') || n === 'rg') { val = d.rg; fontSize = 8; }
+          else if (n.includes('cpf pac') || n === 'cpf') { val = d.cpfPac; fontSize = 8; }
+          else if (n.includes('dt intern') || n.includes('admissão')) { val = d.dtInternacao; fontSize = 8; }
+          else if (n.includes('dt saida') || n.includes('alta')) { val = d.dtSaida; fontSize = 8; }
+          else if (n.includes('proced solic') || n.includes('proced realiz') || n.includes('código do procedimento')) { val = d.codProced; fontSize = 8; }
+          else if (n.includes('desc proced') || n.includes('descrição do procedimento')) { val = d.procedimento; fontSize = 7; }
+          else if (n.includes('mud proc')) { val = 'N'; fontSize = 8; }
+          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('serviço')) { val = d.especialidade; fontSize = 7.5; }
+          else if (n.includes('cid princ') || n.includes('cid 10 principal')) { val = d.cid; fontSize = 8.5; }
+          else if (n.includes('enferm')) { val = 'M'; fontSize = 8; }
+          else if (n.includes('leito')) { val = '1'; fontSize = 8; }
+          else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8; }
+          else if (n.includes('cpf sol') || n.includes('cpf med sol')) { val = d.cpfMed; fontSize = 8; }
+          else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8; }
+          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol')) { val = d.dtSol; fontSize = 8; }
+          else if (n.includes('diagn pre') || n.includes('diagnóstico inicial') || n.includes('diagnostico')) { val = d.diag; fontSize = 7.5; }
+          else if (n.includes('sinais')) { val = d.sinais; fontSize = 6.8; }
+          else if (n.includes('justificativa')) { val = d.justificativa; fontSize = 6.8; }
+          else if (n.includes('exames')) { val = d.exames; fontSize = 6.8; }
 
           if (val) {
+            try { tf.setFontSize(fontSize); } catch(e) {}
             tf.setText(String(val).toUpperCase());
-            preenchidos++;
+            count++;
           }
         }
       } catch (e) {}
@@ -143,26 +368,26 @@
         if (cb) {
           if (n.includes('check box2') || n.includes('check box3') || n === 'rg' || n.includes('fem')) {
             cb.check();
-            preenchidos++;
+            count++;
           }
         }
       } catch (e) {}
     });
 
-    addLog(`Sucesso: ${preenchidos} campos preenchidos no PDF.`);
-    form.updateFieldAppearances(helveticaFont);
+    addLog(`Campos preenchidos: ${count}`);
+    form.updateFieldAppearances(helvetica);
 
-    // ENVIO PARA O GOOGLE SHEETS
-    if (URL_APPS_SCRIPT && URL_APPS_SCRIPT !== 'COLE_SUA_URL_AQUI') {
+    // ENVIO PARA O GOOGLE SHEETS COM MÉTODO À PROVA DE BLOQUEIOS
+    if (URL_APPS_SCRIPT && URL_APPS_SCRIPT.startsWith('http')) {
       fetch(URL_APPS_SCRIPT, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(d)
       }).then(() => {
-        addLog('Dados enviados com sucesso para a planilha Google!');
+        addLog('Dados enviados para a planilha Google!');
       }).catch(err => {
-        addLog('Erro ao salvar no Sheets: ' + err.message);
+        addLog('Falha ao enviar ao Sheets: ' + err.message);
       });
     }
 
@@ -195,3 +420,5 @@
     }
   }
 </script>
+</body>
+</html>
