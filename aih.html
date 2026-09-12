@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH Oficial</title>
+  <title>SISTEMA HM - AIH Form Oficial</title>
   <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -42,7 +42,7 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial - Modelo HM</span>
+    <span>Emissão AIH Oficial (Campos Adobe)</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
@@ -71,8 +71,8 @@
         <div class="form-group">
           <label>Sexo:</label>
           <select id="sexo">
-            <option value="M" selected>Masculino</option>
-            <option value="F">Feminino</option>
+            <option value="M" selected>M - Masculino</option>
+            <option value="F">F - Feminino</option>
           </select>
         </div>
         <div class="form-group">
@@ -100,20 +100,38 @@
       </div>
       <div class="grid-4">
         <div class="form-group">
-          <label>Endereço Completo:</label>
-          <input type="text" id="endereco" value="CENTRO, SN">
+          <label>Endereço / Logradouro:</label>
+          <input type="text" id="endereco" value="CENTRO">
+        </div>
+        <div class="form-group">
+          <label>Nº:</label>
+          <input type="text" id="numEndereco" value="SN">
+        </div>
+        <div class="form-group">
+          <label>Bairro:</label>
+          <input type="text" id="bairro" value="CENTRO">
         </div>
         <div class="form-group">
           <label>Município:</label>
           <input type="text" id="municipio" value="F GOMES">
         </div>
+      </div>
+      <div class="grid-4">
         <div class="form-group">
-          <label>UF / CEP:</label>
-          <input type="text" id="ufCep" value="RN / 59890">
+          <label>Estado / UF:</label>
+          <input type="text" id="estado" value="RN">
         </div>
         <div class="form-group">
-          <label>RG / Documento:</label>
+          <label>CEP:</label>
+          <input type="text" id="cep" value="59890">
+        </div>
+        <div class="form-group">
+          <label>RG:</label>
           <input type="text" id="rg" value="5555">
+        </div>
+        <div class="form-group">
+          <label>CPF do Paciente:</label>
+          <input type="text" id="cpfPac" value="111.111.111-22">
         </div>
       </div>
       <div class="grid-4">
@@ -134,58 +152,31 @@
           <input type="text" id="cidPrincipal" value="I10">
         </div>
       </div>
-      <div class="grid-2">
+      <div class="grid-3">
         <div class="form-group">
-          <label>Procedimento Solicitado / Descrição:</label>
+          <label>Procedimento Solicitado:</label>
           <input type="text" id="procedimento" value="TRATAMENTO DA CRISE HIPERTENSIVA">
         </div>
         <div class="form-group">
-          <label>Código Procedimento (SIGTAP):</label>
+          <label>Código SIGTAP:</label>
           <input type="text" id="codProcedimento" value="0303060107">
         </div>
+        <div class="form-group">
+          <label>Especialidade / Clínica:</label>
+          <input type="text" id="especialidade" value="CLINICA MEDICA">
+        </div>
       </div>
     </fieldset>
 
     <fieldset>
-      <legend>Dados Clínicos / Justificativa</legend>
-      <div class="form-group">
-        <button type="button" class="btn-template" onclick="preencherTemplate('hipertensao')">Template Hipertensão</button>
-        <button type="button" class="btn-template" onclick="preencherTemplate('erisipela')">Template Erisipela</button>
-        <button type="button" class="btn-template" onclick="preencherTemplate('pneumonia')">Template Pneumonia</button>
-      </div>
-      <div class="form-group">
-        <label>17. Principais Sinais e Sintomas Clínicos:</label>
-        <textarea id="sinaisSintomas" rows="2">CEFALEIA, NÁUSEAS, TAQUICARDIA E NÍVEIS PRESSÓRICOS ELEVADOS.</textarea>
-      </div>
-      <div class="form-group">
-        <label>18. Condições que Justificam a Internação:</label>
-        <textarea id="justificativa" rows="2">NECESSIDADE DE ESTABILIZAÇÃO PRESSÓRICA VENOSA E MONITORIZAÇÃO CLÍNICA.</textarea>
-      </div>
-      <div class="form-group">
-        <label>19. Principais Resultados de Exames:</label>
-        <textarea id="exames" rows="2">HC + EF, ECG COM SOBRECARGA VENTRICULAR.</textarea>
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Identificação do Estabelecimento e Solicitante</legend>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Estabelecimento:</label>
-          <input type="text" id="nomeHospital" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE" readonly>
-        </div>
-        <div class="form-group">
-          <label>Código CNES:</label>
-          <input type="text" id="cnesHospital" value="2380846">
-        </div>
-      </div>
+      <legend>Identificação do Médico e Hospital</legend>
       <div class="grid-3">
         <div class="form-group">
           <label>Médico Solicitante:</label>
-          <input type="text" id="medicoSolicitante" value="LUCIDIO JACOME FERREIRA FILHO">
+          <input type="text" id="medicoSolicitante" value="DR LUCIDIO">
         </div>
         <div class="form-group">
-          <label>CPF Solicitante / CRM:</label>
+          <label>CPF do Solicitante:</label>
           <input type="text" id="cpfSolicitante" value="175.499.574-87">
         </div>
         <div class="form-group">
@@ -195,7 +186,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH Oficial em PDF</button>
+    <button type="submit" class="btn-submit">Gerar AIH Preenchida</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -203,7 +194,7 @@
 <div id="modalVisualizacao" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualização do Documento Oficial</h3>
+      <h3>Visualização da AIH Gerada</h3>
       <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -218,252 +209,162 @@
 </div>
 
 <script>
-  // Carrega o PDF base limpo do Jotform
-  const URL_PDF_BASE = 'AIH%20JOT.pdf?v=' + Date.now();
+  // Nome do PDF salvo no Adobe interativo
+  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
-
-  function preencherTemplate(tipo) {
-    if (tipo === 'hipertensao') {
-      document.getElementById('diagInicial').value = 'CRISE HIPERTENSIVA';
-      document.getElementById('cidPrincipal').value = 'I10';
-      document.getElementById('procedimento').value = 'TRATAMENTO DA CRISE HIPERTENSIVA';
-      document.getElementById('codProcedimento').value = '0303060107';
-      document.getElementById('sinaisSintomas').value = 'CEFALEIA, NÁUSEAS, TAQUICARDIA E NÍVEIS PRESSÓRICOS ELEVADOS.';
-      document.getElementById('justificativa').value = 'NECESSIDADE DE ESTABILIZAÇÃO PRESSÓRICA VENOSA E MONITORIZAÇÃO CLÍNICA.';
-      document.getElementById('exames').value = 'HC + EF, ECG COM SOBRECARGA VENTRICULAR.';
-    } else if (tipo === 'erisipela') {
-      document.getElementById('diagInicial').value = 'ERISIPELA';
-      document.getElementById('cidPrincipal').value = 'A 46';
-      document.getElementById('procedimento').value = 'TRATAMENTO DE OUTRAS DOENCAS INFECCIOSAS E PARASITARIAS';
-      document.getElementById('codProcedimento').value = '0303080078';
-      document.getElementById('sinaisSintomas').value = 'PACIENTE COM QUADRO DE HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.';
-      document.getElementById('justificativa').value = 'NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.';
-      document.getElementById('exames').value = 'LEUCOGRAMA COM LEUCOCITOSE E DESVIO À ESQUERDA; PCR ELEVADO.';
-    } else if (tipo === 'pneumonia') {
-      document.getElementById('diagInicial').value = 'PNEUMONIA BACTERIANA';
-      document.getElementById('cidPrincipal').value = 'J 18.9';
-      document.getElementById('procedimento').value = 'TRATAMENTO DE PNEUMONIAS OU INFLUENZA (GRIPE)';
-      document.getElementById('codProcedimento').value = '0303010185';
-      document.getElementById('sinaisSintomas').value = 'TOSSE PRODUTIVA, FEBRE AFERIDA, DISPNEIA E CREPITANTES EM BASES PULMONARES.';
-      document.getElementById('justificativa').value = 'INDICAÇÃO DE ANTIBIOTICOTERAPIA PARENTERAL E SUPORTE DE OXIGENOTERAPIA.';
-      document.getElementById('exames').value = 'RX DE TÓRAX COM CONDENSAÇÃO PULMONAR; LEUCOCITOSE.';
-    }
-  }
 
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo formulário no modelo Jotform...';
+    msg.innerText = 'Preenchendo formulário interativo do Adobe...';
 
     try {
-      await gerarAihPdf();
+      await gerarAihFormPdf();
       msg.innerText = '';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao processar PDF: ' + err.message;
+      msg.innerText = 'Erro ao preencher PDF: ' + err.message;
     }
   });
 
-  async function gerarAihPdf() {
-    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+  async function gerarAihFormPdf() {
+    const { PDFDocument } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o arquivo AIH JOT.pdf no repositório.');
+    if (!res.ok) throw new Error('Não foi possível carregar o arquivo AIH_FORM.pdf. Verifique se ele foi salvo no GitHub.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
-    const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const form = pdfDoc.getForm();
 
-    const pages = pdfDoc.getPages();
-    const pag1 = pages[0]; // Folha 1: Autorização
-    const pag2 = pages[1]; // Folha 2: Laudo SUS
-    const pag3 = pages[2]; // Folha 3: Prontuário de Internação
-
+    // Captura os dados do formulário web
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
       nome: document.getElementById('nomePaciente').value || '',
       cns: document.getElementById('cns').value || '',
-      dataNasc: document.getElementById('dataNasc').value || '',
+      nasc: document.getElementById('dataNasc').value || '',
       sexo: document.getElementById('sexo').value || 'M',
-      racaCor: document.getElementById('racaCor').value || 'B',
-      telefone: document.getElementById('telefone').value || '',
-      nomeMae: document.getElementById('nomeMae').value || '',
-      nomePai: document.getElementById('nomePai').value || '',
+      raca: document.getElementById('racaCor').value || 'B',
+      tel: document.getElementById('telefone').value || '',
+      mae: document.getElementById('nomeMae').value || '',
+      pai: document.getElementById('nomePai').value || '',
       profissao: document.getElementById('profissao').value || 'AGRICULTOR',
       endereco: document.getElementById('endereco').value || '',
+      num: document.getElementById('numEndereco').value || 'SN',
+      bairro: document.getElementById('bairro').value || 'CENTRO',
       municipio: document.getElementById('municipio').value || 'F GOMES',
-      ufCep: document.getElementById('ufCep').value || 'RN / 59890',
+      estado: document.getElementById('estado').value || 'RN',
+      cep: document.getElementById('cep').value || '59890',
       rg: document.getElementById('rg').value || '5555',
-      dataInternacao: document.getElementById('dataInternacao').value || '',
-      dataSaida: document.getElementById('dataSaida').value || '',
-      diagInicial: document.getElementById('diagInicial').value || '',
-      cidPrincipal: document.getElementById('cidPrincipal').value || '',
+      cpfPac: document.getElementById('cpfPac').value || '',
+      dtInternacao: document.getElementById('dataInternacao').value || '',
+      dtSaida: document.getElementById('dataSaida').value || '',
+      diag: document.getElementById('diagInicial').value || '',
+      cid: document.getElementById('cidPrincipal').value || '',
       procedimento: document.getElementById('procedimento').value || '',
-      codProcedimento: document.getElementById('codProcedimento').value || '',
-      sinais: document.getElementById('sinaisSintomas').value || '',
-      justificativa: document.getElementById('justificativa').value || '',
-      exames: document.getElementById('exames').value || '',
-      medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA',
+      codProced: document.getElementById('codProcedimento').value || '',
+      especialidade: document.getElementById('especialidade').value || 'CLINICA MEDICA',
+      medico: document.getElementById('medicoSolicitante').value || 'DR LUCIDIO',
       cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
-      dataSolicitacao: document.getElementById('dataSolicitacao').value || '',
-      cnes: document.getElementById('cnesHospital').value || '2380846'
+      dtSol: document.getElementById('dataSolicitacao').value || ''
     };
 
-    const print = (page, text, x, y, size, isBold) => {
-      if (!text || !page) return;
-      page.drawText(String(text).toUpperCase(), {
-        x: x,
-        y: y,
-        size: size || 7.5,
-        font: isBold ? fontBold : fontRegular,
-        color: rgb(0, 0, 0)
-      });
+    // Helper seguro: preenche campo de texto apenas se ele existir no PDF
+    const setSafe = (name, value) => {
+      try {
+        const field = form.getTextField(name);
+        if (field) field.setText(String(value).toUpperCase());
+      } catch (err) {
+        // Ignora se o campo não estiver no PDF
+      }
+    };
+
+    // Helper seguro para CheckBox
+    const checkSafe = (name) => {
+      try {
+        const cb = form.getCheckBox(name);
+        if (cb) cb.check();
+      } catch (err) {}
     };
 
     /* =========================================================
-       📄 FOLHA 1: AUTORIZAÇÃO DE INTERNAÇÃO (MODELO JOTFORM)
+       1. FOLHA 1 - AUTORIZAÇÃO (Nomes capturados do Adobe)
        ========================================================= */
-    print(pag1, d.dataInternacao, 130, 715, 8, false);
-    print(pag1, d.prontuario, 335, 715, 8, true);
-    print(pag1, "X", 328, 700, 8, true); // (X) Continuidade
-    print(pag1, d.dataSaida, 480, 700, 8, false);
+    setSafe('Prontuario#0', d.prontuario);
+    setSafe('DT INTERN#0', d.dtInternacao);
+    setSafe('DT SAIDA', d.dtSaida);
+    setSafe('NOME#0', d.nome);
+    setSafe('DN#0', d.nasc);
+    setSafe('SEXO#0', d.sexo);
+    setSafe('COR#0', d.raca);
+    setSafe('SUS#0', d.cns);
+    setSafe('MAE#0', d.mae);
+    setSafe('ENDEREÇO#0', d.endereco);
+    setSafe('N°#0', d.num);
+    setSafe('BAIRRO', d.bairro);
+    setSafe('MUNICIPIO#0', d.municipio);
+    setSafe('ESTADO', d.estado);
+    setSafe('CEP#0', d.cep);
+    setSafe('TELEFONE#0', d.tel);
+    setSafe('N° DOC', d.rg);
+    setSafe('PROCED SOLIC#0', d.codProced);
+    setSafe('PROCED REALIZ', d.codProced);
+    setSafe('MUD PROC', 'N');
+    setSafe('ESPECIALIDADE#0', d.especialidade);
+    setSafe('CID PRINC#0', d.cid);
+    setSafe('CID SEC#0', '');
+    setSafe('ENFERM#0', 'M');
+    setSafe('LEITO#0', '1');
+    setSafe('MOT SAIDA', 'ALTA');
+    setSafe('CPF SOL#0', d.cpfMed);
+    setSafe('DATA AUTZ', d.dtInternacao);
+    setSafe('PROCED SOLIC#1', d.codProced); // Linha 1 da grade
 
-    // Bloco: Paciente
-    print(pag1, d.nome, 120, 672, 8, true);
-    print(pag1, d.sexo, 45, 658, 7.5, false);
-    print(pag1, d.dataNasc, 220, 658, 7.5, false);
-    print(pag1, d.racaCor, 355, 658, 7.5, false);
-    print(pag1, d.cns, 415, 658, 8, false);
-
-    print(pag1, d.nomeMae, 100, 642, 7.5, false);
-    print(pag1, d.endereco, 80, 626, 7.5, false);
-    print(pag1, "SN", 260, 626, 7.5, false);
-    print(pag1, "CENTRO", 340, 626, 7.5, false);
-
-    print(pag1, d.municipio, 85, 610, 7.5, false);
-    print(pag1, "RN", 260, 610, 7.5, false);
-    print(pag1, "59890", 340, 610, 7.5, false);
-    print(pag1, d.telefone, 450, 610, 7.5, false);
-
-    print(pag1, "X", 137, 595, 8, true); // (X) Identidade
-    print(pag1, d.rg, 140, 580, 8, false);
-
-    // Bloco: Procedimento
-    print(pag1, d.codProcedimento, 145, 550, 8, false);
-    print(pag1, "N", 460, 550, 8, false);
-    print(pag1, d.codProcedimento, 140, 535, 8, false);
-    print(pag1, "CLINICA MEDICA", 100, 520, 7.5, false);
-    print(pag1, "M", 475, 520, 8, false);
-
-    print(pag1, d.cidPrincipal, 90, 492, 8.5, true);
-    print(pag1, "1", 460, 492, 8, false);
-    print(pag1, "ALTA", 155, 462, 7.5, false);
-    print(pag1, d.cpfMed, 115, 448, 8, false);
-    print(pag1, "185.901.284-15", 420, 448, 7.5, false);
-    print(pag1, d.dataInternacao, 420, 432, 7.5, false);
-
-    // Grade de Procedimentos Realizados (Linha 1)
-    print(pag1, d.codProcedimento, 85, 385, 8, false);
-    print(pag1, "01", 195, 385, 8, false);
-    print(pag1, d.cpfMed, 245, 385, 7.5, false);
-
+    // Checkboxes da Folha 1
+    checkSafe('Check Box3'); // Tipo Continuidade
+    checkSafe('RG');         // Tipo Documento RG
 
     /* =========================================================
-       📄 FOLHA 2: LAUDO PARA SOLICITAÇÃO (SUS)
+       2. FOLHA 2 - LAUDO MÉDICO SUS
        ========================================================= */
-    // 5, 6 e 7 - Nome, Prontuário e CNS
-    print(pag2, d.nome, 45, 622, 8, true);
-    print(pag2, d.prontuario, 305, 622, 8, true);
-    print(pag2, d.cns, 420, 622, 8, false);
-
-    // 8, 9, 10, 11 e 12 - Nascimento, Sexo, Cor, Mãe, Tel
-    print(pag2, d.dataNasc, 45, 592, 7.5, false);
-    if (d.sexo === 'M') {
-      print(pag2, "X", 137, 592, 8.5, true); // Masc
-    } else {
-      print(pag2, "X", 175, 592, 8.5, true); // Fem
-    }
-    print(pag2, d.racaCor, 230, 592, 7.5, false);
-    print(pag2, d.nomeMae, 45, 564, 7.5, false);
-    print(pag2, d.telefone, 420, 564, 7.5, false);
-
-    // 13, 14, 15 e 16 - Endereço e Município
-    print(pag2, d.endereco, 45, 536, 7.5, false);
-    print(pag2, d.municipio, 45, 508, 7.5, false);
-    print(pag2, "2404002", 305, 508, 7.5, false);
-    print(pag2, "RN", 450, 508, 7.5, false);
-    print(pag2, "59890", 495, 508, 7.5, false);
-
-    // 17, 18 e 19 - Justificativa da Internação
-    print(pag2, d.sinais.substring(0, 115), 45, 470, 7, false);
-    if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 460, 7, false);
-
-    print(pag2, d.justificativa.substring(0, 115), 45, 432, 7, false);
-    if (d.justificativa.length > 115) print(pag2, d.justificativa.substring(115, 230), 45, 422, 7, false);
-
-    print(pag2, d.exames.substring(0, 115), 45, 394, 7, false);
-
-    // 20 e 21 - Diagnóstico e CID
-    print(pag2, d.diagInicial, 45, 362, 7.5, false);
-    print(pag2, d.cidPrincipal, 345, 362, 8.5, true);
-
-    // 24 e 25 - Procedimento e Código
-    print(pag2, d.procedimento, 45, 326, 7, false);
-    print(pag2, d.codProcedimento, 435, 326, 8, true);
-
-    // 26, 27, 29, 30 e 31 - Dados do Solicitante
-    print(pag2, "CLINICA MÉDICA", 45, 295, 7.5, false);
-    print(pag2, "02", 185, 295, 7.5, false);
-    print(pag2, d.cpfMed, 380, 295, 7.5, false);
-    print(pag2, d.medico, 45, 268, 7.5, true);
-    print(pag2, d.dataSolicitacao, 350, 268, 7.5, false);
-
+    setSafe('NOME MED', d.medico);
+    setSafe('CPF MED SOL', d.cpfMed);
+    setSafe('DT INTERN#1', d.dtSol);
 
     /* =========================================================
-       📄 FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO (JOTFORM)
+       3. FOLHA 3 - PRONTUÁRIO DE INTERNAÇÃO
        ========================================================= */
-    print(pag3, d.nome, 105, 742, 8, true);
-    print(pag3, d.prontuario, 480, 742, 8.5, true);
+    setSafe('NOME#2', d.nome);
+    setSafe('ENDEREÇO#1', d.endereco);
+    setSafe('MUNICIPIO#2', d.municipio);
+    setSafe('DN#2', d.nasc);
+    setSafe('NATURALIDADE', d.municipio);
+    setSafe('COR#2', d.raca);
+    setSafe('SEXO#2', d.sexo);
+    setSafe('PROFISSAO', d.profissao);
+    setSafe('Prontuario#2', d.prontuario);
+    setSafe('N°#1', d.num);
+    setSafe('DT EXPED', d.dtInternacao);
+    setSafe('CPF PAC', d.cpfPac);
+    setSafe('MAE#2', d.mae);
+    setSafe('PAI', d.pai);
+    setSafe('ESPECIALIDADE#2', d.especialidade);
 
-    print(pag3, d.endereco, 80, 722, 7.5, false);
-    print(pag3, d.municipio, 270, 722, 7.5, false);
-    print(pag3, "RN", 450, 722, 7.5, false);
+    /* =========================================================
+       4. FOLHAS 4 E 5 - ANESTESIA E BOLETIM CIRÚRGICO
+       ========================================================= */
+    setSafe('NOME#4', d.nome);
+    setSafe('Prontuario#4', d.prontuario);
+    setSafe('DIAGN PRE OPERAT', d.diag);
+    setSafe('DT CIR', d.dtInternacao);
 
-    print(pag3, d.dataNasc, 110, 702, 7.5, false);
-    print(pag3, d.municipio, 270, 702, 7.5, false);
-    print(pag3, d.racaCor, 450, 702, 7.5, false);
+    // Opcional: form.flatten(); // Descomente se quiser travar o PDF para impressão sem edição
 
-    print(pag3, d.sexo, 55, 682, 7.5, false);
-    print(pag3, d.profissao, 270, 682, 7.5, false);
-
-    print(pag3, d.rg, 55, 662, 7.5, false);
-    print(pag3, "59890", 270, 662, 7.5, false);
-    print(pag3, "111111112", 450, 662, 7.5, false);
-
-    print(pag3, d.nomePai, 80, 622, 7.5, false);
-    print(pag3, d.nomeMae, 80, 604, 7.5, false);
-
-    print(pag3, "CLINICA MEDICA", 70, 584, 7.5, false);
-    print(pag3, "M", 340, 584, 7.5, false);
-    print(pag3, "1", 450, 584, 7.5, false);
-
-    print(pag3, d.dataInternacao, 110, 560, 7.5, false);
-    print(pag3, "X", 32, 542, 8, true); // [X] Alta
-    print(pag3, d.dataSaida, 55, 542, 7.5, false);
-    print(pag3, "05 DIAS", 130, 524, 7.5, false);
-
-    print(pag3, d.diagInicial, 110, 502, 7.5, true);
-    print(pag3, d.diagInicial, 110, 482, 7.5, true);
-
-    // Sumário de História Clínica
-    print(pag3, `${d.sinais} ${d.justificativa}`, 45, 420, 7.5, false);
-
-    /* Finalização */
+    /* Geração do Blob e Visualização no Modal */
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
