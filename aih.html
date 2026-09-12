@@ -588,6 +588,14 @@
     const form = pdfDoc.getForm();
     const fields = form.getFields();
 
+    const nomeProced = document.getElementById('procedimento').value || '';
+    const codProced = document.getElementById('codProcedimento').value || '';
+
+    // FORMATAÇÃO CASO O PDF TENHA APENAS A CAIXA ÚNICA DA DESCRIÇÃO
+    const procedCompleto = (nomeProced && codProced && !nomeProced.includes(codProced))
+      ? `${nomeProced} - ${codProced}`
+      : nomeProced;
+
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
       nome: document.getElementById('nomePaciente').value || '',
@@ -611,8 +619,9 @@
       dtSaida: document.getElementById('dataSaida').value || '',
       diag: document.getElementById('diagInicial').value || '',
       cid: document.getElementById('cidPrincipal').value || '',
-      procedimento: document.getElementById('procedimento').value || '',
-      codProced: document.getElementById('codProcedimento').value || '',
+      procedimento: nomeProced,
+      codProced: codProced,
+      procedComCodigo: procedCompleto,
       especialidade: document.getElementById('especialidade').value || 'CLINICA MEDICA',
       medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA',
       cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
@@ -646,9 +655,9 @@
           let fontSize = 7.5;
           let isMulti = false;
 
-          // ==========================================
-          // 24. DESCRIÇÃO DO PROCEDIMENTO (PRIORITÁRIO)
-          // ==========================================
+          // ==========================================================
+          // 24. DESCRIÇÃO DO PROCEDIMENTO (COM CÓDIGO EMBUTIDO)
+          // ==========================================================
           if (
             n.startsWith('24') ||
             n.includes('24 descricao') ||
@@ -661,30 +670,29 @@
             n === 'campo24 procedimento' ||
             n === 'campo24'
           ) {
-            val = d.procedimento;
+            val = d.procedComCodigo;
             fontSize = 7;
             isMulti = true;
           }
 
-          // ==========================================
-          // 25. CÓDIGO DO PROCEDIMENTO (SIGTAP)
-          // ==========================================
+          // ==========================================================
+          // 25. CÓDIGO DO PROCEDIMENTO (SIGTAP CASO EXISTA CAIXA SEPARADA)
+          // ==========================================================
           else if (
             n.startsWith('25') ||
             n.includes('codigo do procedimento') ||
             n.includes('codigo procedimento') ||
             n.includes('cod proced') ||
             n.includes('proced solic') ||
-            n.includes('proced realiz') ||
-            n.includes('codigo')
+            n.includes('proced realiz')
           ) {
             val = d.codProced;
             fontSize = 8;
           }
 
-          // ==========================================
+          // ==========================================================
           // 18. JUSTIFICATIVA DA INTERNAÇÃO
-          // ==========================================
+          // ==========================================================
           else if (
             n.startsWith('18') || 
             n.includes('justificam') || 
@@ -699,9 +707,9 @@
             isMulti = true;
           }
 
-          // ==========================================
+          // ==========================================================
           // 19. PROVAS DIAGNÓSTICAS / EXAMES
-          // ==========================================
+          // ==========================================================
           else if (
             n.startsWith('19') || 
             n.includes('provas') || 
@@ -717,9 +725,9 @@
             isMulti = true;
           }
 
-          // ==========================================
+          // ==========================================================
           // 20. DIAGNÓSTICO INICIAL
-          // ==========================================
+          // ==========================================================
           else if (
             n.startsWith('20') || 
             n.includes('20 diagnostico') || 
@@ -733,9 +741,9 @@
             fontSize = 7.5;
           }
 
-          // ==========================================
+          // ==========================================================
           // 21. CID 10 PRINCIPAL
-          // ==========================================
+          // ==========================================================
           else if (
             n.startsWith('21') || 
             n.includes('cid 10 principal') || 
@@ -748,18 +756,18 @@
             fontSize = 8.5;
           }
 
-          // ==========================================
+          // ==========================================================
           // 17. SINAIS E SINTOMAS
-          // ==========================================
+          // ==========================================================
           else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
             val = d.sinais; 
             fontSize = 6.8; 
             isMulti = true;
           }
 
-          // ==========================================
+          // ==========================================================
           // DEMAIS CAMPOS DO DOCUMENTO
-          // ==========================================
+          // ==========================================================
           else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 8.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 7.5; }
           else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 8; }
@@ -817,7 +825,7 @@
 
     form.updateFieldAppearances(helvetica);
 
-    // Envio direto para o Google Apps Script
+    // Envio para o Google Apps Script (preserva os dados em colunas separadas)
     fetch(URL_APPS_SCRIPT, {
       method: 'POST',
       mode: 'no-cors',
