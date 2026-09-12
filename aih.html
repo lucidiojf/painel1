@@ -201,7 +201,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH Oficial</button>
+    <button type="submit" class="btn-submit">Gerar AIH e Salvar no Sheets</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -225,7 +225,7 @@
 
 <script>
   const URL_PDF_BASE = 'AIH%20JOT.pdf?v=' + Date.now();
-  const URL_APPS_SCRIPT = 'COLE_AQUI_SUA_URL_EXEC';
+  const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -234,7 +234,7 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo documento e salvando dados...';
+    msg.innerText = 'Preenchendo documento e salvando dados na planilha...';
 
     try {
       await gerarAihPdfDireto();
@@ -258,11 +258,11 @@
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
     const pages = pdfDoc.getPages();
-    const pag1 = pages[0]; // Folha 1: Autorização
-    const pag2 = pages[1]; // Folha 2: Laudo SUS
-    const pag3 = pages[2]; // Folha 3: Prontuário
-    const pag4 = pages[3]; // Folha 4: Ficha Anestesia
-    const pag5 = pages[4]; // Folha 5: Boletim Operatório
+    const pag1 = pages[0];
+    const pag2 = pages[1];
+    const pag3 = pages[2];
+    const pag4 = pages[3];
+    const pag5 = pages[4];
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
@@ -309,12 +309,10 @@
       });
     };
 
-    /* =========================================================
-       FOLHA 1: AUTORIZAÇÃO DE INTERNAÇÃO (Layout Fixo e Visível)
-       ========================================================= */
+    // FOLHA 1
     draw(pag1, d.dtInternacao, 130, 715, 8);
     draw(pag1, d.prontuario, 335, 715, 8.5, true);
-    draw(pag1, "X", 328, 700, 8, true); // (X) Continuidade
+    draw(pag1, "X", 328, 700, 8, true);
     draw(pag1, d.dtSaida, 480, 700, 8);
 
     draw(pag1, d.nome, 120, 672, 8, true);
@@ -333,7 +331,7 @@
     draw(pag1, d.cep, 340, 610, 7.5);
     draw(pag1, d.tel, 450, 610, 7.5);
 
-    draw(pag1, "X", 137, 595, 8, true); // (X) Identidade
+    draw(pag1, "X", 137, 595, 8, true);
     draw(pag1, d.rg, 140, 580, 8);
 
     draw(pag1, d.codProced, 145, 550, 8);
@@ -353,9 +351,7 @@
     draw(pag1, "01", 195, 385, 8);
     draw(pag1, d.cpfMed, 245, 385, 7.5);
 
-    /* =========================================================
-       FOLHA 2: LAUDO PARA SOLICITAÇÃO (SUS)
-       ========================================================= */
+    // FOLHA 2
     draw(pag2, d.nome, 45, 622, 8, true);
     draw(pag2, d.prontuario, 305, 622, 8, true);
     draw(pag2, d.cns, 420, 622, 8);
@@ -396,9 +392,7 @@
     draw(pag2, d.medico, 45, 268, 7.5, true);
     draw(pag2, d.dtSol, 350, 268, 7.5);
 
-    /* =========================================================
-       FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO
-       ========================================================= */
+    // FOLHA 3
     if (pag3) {
       draw(pag3, d.nome, 105, 742, 8, true);
       draw(pag3, d.prontuario, 480, 742, 8.5, true);
@@ -426,7 +420,7 @@
       draw(pag3, "1", 450, 584, 7.5);
 
       draw(pag3, d.dtInternacao, 110, 560, 7.5);
-      draw(pag3, "X", 32, 542, 8, true); // [X] Alta
+      draw(pag3, "X", 32, 542, 8, true);
       draw(pag3, d.dtSaida, 55, 542, 7.5);
       draw(pag3, "05 DIAS", 130, 524, 7.5);
 
@@ -436,9 +430,7 @@
       draw(pag3, `${d.sinais} ${d.justificativa}`, 45, 420, 7.5);
     }
 
-    /* =========================================================
-       FOLHAS 4 E 5: ANESTESIA E BOLETIM OPERATÓRIO
-       ========================================================= */
+    // FOLHAS 4 E 5
     if (pag4) {
       draw(pag4, d.nome, 65, 755, 8, true);
       draw(pag4, d.prontuario, 480, 755, 8.5, true);
@@ -454,15 +446,13 @@
       draw(pag5, d.dtInternacao, 480, 508, 7.5);
     }
 
-    // ENVIO PARA O GOOGLE SHEETS
-    if (URL_APPS_SCRIPT && URL_APPS_SCRIPT.startsWith('http')) {
-      fetch(URL_APPS_SCRIPT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(d)
-      }).catch(err => console.warn('Erro Sheets:', err));
-    }
+    // ENVIO PARA O GOOGLE SHEETS VIA URL DO APPS SCRIPT
+    fetch(URL_APPS_SCRIPT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(d)
+    }).catch(err => console.warn('Erro Sheets:', err));
 
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
