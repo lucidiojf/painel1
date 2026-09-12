@@ -23,7 +23,6 @@
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
-    #logBox { margin-top: 10px; background: #0f172a; color: #38bdf8; padding: 10px; border-radius: 6px; font-size: 11px; font-family: monospace; max-height: 140px; overflow-y: auto; display: none; }
 
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
     .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
@@ -204,7 +203,6 @@
 
     <button type="submit" class="btn-submit">Gerar AIH Oficial</button>
     <div id="msgStatus"></div>
-    <div id="logBox"></div>
   </form>
 </div>
 
@@ -226,52 +224,45 @@
 </div>
 
 <script>
-  const URL_PDF_BASE = 'AIH_FORM.pdf?nocache=' + Date.now();
-  
-  // COLE SUA URL /exec AQUI:
+  const URL_PDF_BASE = 'AIH%20JOT.pdf?v=' + Date.now();
   const URL_APPS_SCRIPT = 'COLE_AQUI_SUA_URL_EXEC';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
 
-  function addLog(txt) {
-    const box = document.getElementById('logBox');
-    box.style.display = 'block';
-    box.innerHTML += txt + '<br>';
-  }
-
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
-    document.getElementById('logBox').innerHTML = '';
     msg.style.color = '#0284c7';
-    msg.innerText = 'Processando documento e salvando dados...';
+    msg.innerText = 'Preenchendo documento e salvando dados...';
 
     try {
-      await gerarAihFormPdf();
+      await gerarAihPdfDireto();
       msg.innerText = 'Concluído com sucesso!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
       msg.innerText = 'Erro: ' + err.message;
-      addLog('ERRO: ' + err.message);
     }
   });
 
-  async function gerarAihFormPdf() {
-    const { PDFDocument, StandardFonts } = PDFLib;
+  async function gerarAihPdfDireto() {
+    const { PDFDocument, rgb, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não encontrou o arquivo AIH_FORM.pdf no repositório.');
+    if (!res.ok) throw new Error('Não foi possível carregar o arquivo base AIH JOT.pdf.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
-    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    const form = pdfDoc.getForm();
-    const fields = form.getFields();
-
-    addLog(`Total de campos encontrados: ${fields.length}`);
+    const pages = pdfDoc.getPages();
+    const pag1 = pages[0]; // Folha 1: Autorização
+    const pag2 = pages[1]; // Folha 2: Laudo SUS
+    const pag3 = pages[2]; // Folha 3: Prontuário
+    const pag4 = pages[3]; // Folha 4: Ficha Anestesia
+    const pag5 = pages[4]; // Folha 5: Boletim Operatório
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
@@ -307,88 +298,170 @@
       exames: document.getElementById('exames') ? document.getElementById('exames').value : ''
     };
 
-    let count = 0;
+    const draw = (page, text, x, y, size = 8, isBold = false) => {
+      if (!text || !page) return;
+      page.drawText(String(text).toUpperCase(), {
+        x: x,
+        y: y,
+        size: size,
+        font: isBold ? fontBold : fontRegular,
+        color: rgb(0, 0, 0)
+      });
+    };
 
-    fields.forEach(f => {
-      const name = f.getName();
-      const n = name.toLowerCase().trim();
+    /* =========================================================
+       FOLHA 1: AUTORIZAÇÃO DE INTERNAÇÃO (Layout Fixo e Visível)
+       ========================================================= */
+    draw(pag1, d.dtInternacao, 130, 715, 8);
+    draw(pag1, d.prontuario, 335, 715, 8.5, true);
+    draw(pag1, "X", 328, 700, 8, true); // (X) Continuidade
+    draw(pag1, d.dtSaida, 480, 700, 8);
 
-      try {
-        const tf = form.getTextField(name);
-        if (tf) {
-          let val = null;
-          let fontSize = 8; // Tamanho compacto para não truncar
+    draw(pag1, d.nome, 120, 672, 8, true);
+    draw(pag1, d.sexo, 45, 658, 7.5);
+    draw(pag1, d.nasc, 220, 658, 7.5);
+    draw(pag1, d.raca, 355, 658, 7.5);
+    draw(pag1, d.cns, 415, 658, 8);
 
-          if (n.includes('prontuario') || n.includes('prontuário')) { val = d.prontuario; fontSize = 8.5; }
-          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg')) { val = d.nome; fontSize = 8; }
-          else if (n.includes('sus')) { val = d.cns; fontSize = 8; }
-          else if (n.includes('dn') || n.includes('nasc')) { val = d.nasc; fontSize = 8; }
-          else if (n.includes('sexo')) { val = d.sexo; fontSize = 8; }
-          else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8; }
-          else if (n.includes('mae')) { val = d.mae; fontSize = 8; }
-          else if (n.includes('pai')) { val = d.pai; fontSize = 8; }
-          else if (n.includes('profiss')) { val = d.profissao; fontSize = 8; }
-          else if (n.includes('endereço') || n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 7.5; }
-          else if (n === 'n°' || n.startsWith('n°#') || n.includes('numero')) { val = d.num; fontSize = 8; }
-          else if (n.includes('bairro')) { val = d.bairro; fontSize = 8; }
-          else if (n.includes('municipio') || n.includes('município') || n.includes('naturalidade')) { val = d.municipio; fontSize = 8; }
-          else if (n.includes('estado') || n === 'uf' || n.includes('15. uf')) { val = d.estado; fontSize = 8; }
-          else if (n.includes('cep')) { val = d.cep; fontSize = 8; }
-          else if (n.includes('telefone')) { val = d.tel; fontSize = 8; }
-          else if (n.includes('n° doc') || n === 'rg') { val = d.rg; fontSize = 8; }
-          else if (n.includes('cpf pac') || n === 'cpf') { val = d.cpfPac; fontSize = 8; }
-          else if (n.includes('dt intern') || n.includes('admissão')) { val = d.dtInternacao; fontSize = 8; }
-          else if (n.includes('dt saida') || n.includes('alta')) { val = d.dtSaida; fontSize = 8; }
-          else if (n.includes('proced solic') || n.includes('proced realiz') || n.includes('código do procedimento')) { val = d.codProced; fontSize = 8; }
-          else if (n.includes('desc proced') || n.includes('descrição do procedimento')) { val = d.procedimento; fontSize = 7; }
-          else if (n.includes('mud proc')) { val = 'N'; fontSize = 8; }
-          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('serviço')) { val = d.especialidade; fontSize = 7.5; }
-          else if (n.includes('cid princ') || n.includes('cid 10 principal')) { val = d.cid; fontSize = 8.5; }
-          else if (n.includes('enferm')) { val = 'M'; fontSize = 8; }
-          else if (n.includes('leito')) { val = '1'; fontSize = 8; }
-          else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8; }
-          else if (n.includes('cpf sol') || n.includes('cpf med sol')) { val = d.cpfMed; fontSize = 8; }
-          else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8; }
-          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol')) { val = d.dtSol; fontSize = 8; }
-          else if (n.includes('diagn pre') || n.includes('diagnóstico inicial') || n.includes('diagnostico')) { val = d.diag; fontSize = 7.5; }
-          else if (n.includes('sinais')) { val = d.sinais; fontSize = 6.8; }
-          else if (n.includes('justificativa')) { val = d.justificativa; fontSize = 6.8; }
-          else if (n.includes('exames')) { val = d.exames; fontSize = 6.8; }
+    draw(pag1, d.mae, 100, 642, 7.5);
+    draw(pag1, d.endereco, 80, 626, 7.5);
+    draw(pag1, d.num, 260, 626, 7.5);
+    draw(pag1, d.bairro, 340, 626, 7.5);
 
-          if (val) {
-            try { tf.setFontSize(fontSize); } catch(e) {}
-            tf.setText(String(val).toUpperCase());
-            count++;
-          }
-        }
-      } catch (e) {}
+    draw(pag1, d.municipio, 85, 610, 7.5);
+    draw(pag1, d.estado, 260, 610, 7.5);
+    draw(pag1, d.cep, 340, 610, 7.5);
+    draw(pag1, d.tel, 450, 610, 7.5);
 
-      try {
-        const cb = form.getCheckBox(name);
-        if (cb) {
-          if (n.includes('check box2') || n.includes('check box3') || n === 'rg' || n.includes('fem')) {
-            cb.check();
-            count++;
-          }
-        }
-      } catch (e) {}
-    });
+    draw(pag1, "X", 137, 595, 8, true); // (X) Identidade
+    draw(pag1, d.rg, 140, 580, 8);
 
-    addLog(`Campos preenchidos: ${count}`);
-    form.updateFieldAppearances(helvetica);
+    draw(pag1, d.codProced, 145, 550, 8);
+    draw(pag1, "N", 460, 550, 8);
+    draw(pag1, d.codProced, 140, 535, 8);
+    draw(pag1, d.especialidade, 100, 520, 7.5);
+    draw(pag1, "M", 475, 520, 8);
 
-    // ENVIO PARA O GOOGLE SHEETS COM MÉTODO À PROVA DE BLOQUEIOS
+    draw(pag1, d.cid, 90, 492, 8.5, true);
+    draw(pag1, "1", 460, 492, 8);
+    draw(pag1, "ALTA", 155, 462, 7.5);
+    draw(pag1, d.cpfMed, 115, 448, 8);
+    draw(pag1, "185.901.284-15", 420, 448, 7.5);
+    draw(pag1, d.dtInternacao, 420, 432, 7.5);
+
+    draw(pag1, d.codProced, 85, 385, 8);
+    draw(pag1, "01", 195, 385, 8);
+    draw(pag1, d.cpfMed, 245, 385, 7.5);
+
+    /* =========================================================
+       FOLHA 2: LAUDO PARA SOLICITAÇÃO (SUS)
+       ========================================================= */
+    draw(pag2, d.nome, 45, 622, 8, true);
+    draw(pag2, d.prontuario, 305, 622, 8, true);
+    draw(pag2, d.cns, 420, 622, 8);
+
+    draw(pag2, d.nasc, 45, 592, 7.5);
+    if (d.sexo === 'M') {
+      draw(pag2, "X", 137, 592, 8.5, true);
+    } else {
+      draw(pag2, "X", 175, 592, 8.5, true);
+    }
+    draw(pag2, d.raca, 230, 592, 7.5);
+    draw(pag2, d.mae, 45, 564, 7.5);
+    draw(pag2, d.tel, 420, 564, 7.5);
+
+    draw(pag2, `${d.endereco}, ${d.num} - ${d.bairro}`, 45, 536, 7.5);
+    draw(pag2, d.municipio, 45, 508, 7.5);
+    draw(pag2, "2404002", 305, 508, 7.5);
+    draw(pag2, d.estado, 450, 508, 7.5);
+    draw(pag2, d.cep, 495, 508, 7.5);
+
+    draw(pag2, d.sinais.substring(0, 115), 45, 470, 7);
+    if (d.sinais.length > 115) draw(pag2, d.sinais.substring(115, 230), 45, 460, 7);
+
+    draw(pag2, d.justificativa.substring(0, 115), 45, 432, 7);
+    if (d.justificativa.length > 115) draw(pag2, d.justificativa.substring(115, 230), 45, 422, 7);
+
+    draw(pag2, d.exames.substring(0, 115), 45, 394, 7);
+
+    draw(pag2, d.diag, 45, 362, 7.5);
+    draw(pag2, d.cid, 345, 362, 8.5, true);
+
+    draw(pag2, d.procedimento, 45, 326, 7);
+    draw(pag2, d.codProced, 435, 326, 8, true);
+
+    draw(pag2, d.especialidade, 45, 295, 7.5);
+    draw(pag2, "02", 185, 295, 7.5);
+    draw(pag2, d.cpfMed, 380, 295, 7.5);
+    draw(pag2, d.medico, 45, 268, 7.5, true);
+    draw(pag2, d.dtSol, 350, 268, 7.5);
+
+    /* =========================================================
+       FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO
+       ========================================================= */
+    if (pag3) {
+      draw(pag3, d.nome, 105, 742, 8, true);
+      draw(pag3, d.prontuario, 480, 742, 8.5, true);
+
+      draw(pag3, `${d.endereco}, ${d.num}`, 80, 722, 7.5);
+      draw(pag3, d.municipio, 270, 722, 7.5);
+      draw(pag3, d.estado, 450, 722, 7.5);
+
+      draw(pag3, d.nasc, 110, 702, 7.5);
+      draw(pag3, d.municipio, 270, 702, 7.5);
+      draw(pag3, d.raca, 450, 702, 7.5);
+
+      draw(pag3, d.sexo, 55, 682, 7.5);
+      draw(pag3, d.profissao, 270, 682, 7.5);
+
+      draw(pag3, d.rg, 55, 662, 7.5);
+      draw(pag3, d.cep, 270, 662, 7.5);
+      draw(pag3, d.cpfPac, 450, 662, 7.5);
+
+      draw(pag3, d.pai, 80, 622, 7.5);
+      draw(pag3, d.mae, 80, 604, 7.5);
+
+      draw(pag3, d.especialidade, 70, 584, 7.5);
+      draw(pag3, "M", 340, 584, 7.5);
+      draw(pag3, "1", 450, 584, 7.5);
+
+      draw(pag3, d.dtInternacao, 110, 560, 7.5);
+      draw(pag3, "X", 32, 542, 8, true); // [X] Alta
+      draw(pag3, d.dtSaida, 55, 542, 7.5);
+      draw(pag3, "05 DIAS", 130, 524, 7.5);
+
+      draw(pag3, d.diag, 110, 502, 7.5, true);
+      draw(pag3, d.diag, 110, 482, 7.5, true);
+
+      draw(pag3, `${d.sinais} ${d.justificativa}`, 45, 420, 7.5);
+    }
+
+    /* =========================================================
+       FOLHAS 4 E 5: ANESTESIA E BOLETIM OPERATÓRIO
+       ========================================================= */
+    if (pag4) {
+      draw(pag4, d.nome, 65, 755, 8, true);
+      draw(pag4, d.prontuario, 480, 755, 8.5, true);
+      draw(pag4, d.dtInternacao, 480, 715, 7.5);
+    }
+
+    if (pag5) {
+      draw(pag5, d.nome, 65, 755, 8, true);
+      draw(pag5, d.prontuario, 480, 755, 8.5, true);
+      draw(pag5, d.diag, 160, 735, 7.5);
+      draw(pag5, d.procedimento, 160, 715, 7.5);
+      draw(pag5, d.medico, 120, 668, 7.5);
+      draw(pag5, d.dtInternacao, 480, 508, 7.5);
+    }
+
+    // ENVIO PARA O GOOGLE SHEETS
     if (URL_APPS_SCRIPT && URL_APPS_SCRIPT.startsWith('http')) {
       fetch(URL_APPS_SCRIPT, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(d)
-      }).then(() => {
-        addLog('Dados enviados para a planilha Google!');
-      }).catch(err => {
-        addLog('Falha ao enviar ao Sheets: ' + err.message);
-      });
+      }).catch(err => console.warn('Erro Sheets:', err));
     }
 
     pdfBytesGerado = await pdfDoc.save();
