@@ -8,7 +8,7 @@
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f1f5f9; margin: 0; padding: 12px; color: #1e293b; }
-    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+    .container { max-width: 980px; margin: 0 auto; background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
     h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
     .btn-reload { background: #64748b; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
     fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fafafa; }
@@ -20,6 +20,7 @@
     label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 3px; color: #475569; }
     input, select, textarea { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 12px; background: #fff; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
+    .destaque-select { background: #e0f2fe; border-color: #0284c7; font-weight: 600; }
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
@@ -41,8 +42,8 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial (Adobe Form Real)</span>
-    <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Forçar Atualização</button>
+    <span>Emissão AIH Oficial</span>
+    <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
 
   <form id="formAih">
@@ -133,7 +134,7 @@
           <input type="text" id="cpfPac" value="000.000.000-00">
         </div>
       </div>
-      <div class="grid-4">
+      <div class="grid-2">
         <div class="form-group">
           <label>Data Internação:</label>
           <input type="text" id="dataInternacao" value="14/07/2026">
@@ -142,58 +143,306 @@
           <label>Data Saída (Alta):</label>
           <input type="text" id="dataSaida" value="14/07/2026">
         </div>
+      </div>
+    </fieldset>
+
+    <!-- BANCO DE DADOS CLINICOS: PATOLOGIAS E SIGTAP -->
+    <fieldset>
+      <legend>Dados Clínicos e SIGTAP</legend>
+      
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Patologia / Diretor CID:</label>
+          <select id="selCid" class="destaque-select" onchange="aoSelecionarCid(this.value)">
+            <option value="">-- Selecione uma Patologia --</option>
+            <option value="CALCULOSE DA VB S/ COLECISTITE|K 80.2">CALCULOSE DA VB S/ COLECISTITE (K 80.2)</option>
+            <option value="CALCULOSE DO RIM / CÓLICA NEFRÉTICA|N 23">CALCULOSE DO RIM / CÓLICA NEFRÉTICA (N 23)</option>
+            <option value="CRISE HIPERTENSIVA|I 10">CRISE HIPERTENSIVA (I 10)</option>
+            <option value="DOENÇA PULMONAR OBSTRUTIVA CRÔNICA|J 44.9">DOENÇA PULMONAR OBSTRUTIVA CRÔNICA (J 44.9)</option>
+            <option value="ENTERO-INFECÇÃO|A 09">ENTERO-INFECÇÃO (A 09)</option>
+            <option value="ERISIPELA|A 46">ERISIPELA (A 46)</option>
+            <option value="HÉRNIA INGUINAL|K 40.9">HÉRNIA INGUINAL (K 40.9)</option>
+            <option value="HÉRNIA UMBILICAL|K 42">HÉRNIA UMBILICAL (K 42)</option>
+            <option value="PIELONEFRITE|N 39.0">PIELONEFRITE (N 39.0)</option>
+            <option value="Pe diabetico DM Insulinodependente c complic circulatorias|E 10.5">Pe diabetico DM Insulinodependente c complic circulatorias (E 10.5)</option>
+            <option value="PNEUMONIA BACTERIANA N ESPECIFICADA|J 15.9">PNEUMONIA BACTERIANA N ESPECIFICADA (J 15.9)</option>
+            <option value="CRISE ASMÁTICA|J 46">CRISE ASMÁTICA (J 46)</option>
+            <option value="LESÕES SUPERFICIAIS INFECTADAS|L 08.0">LESÕES SUPERFICIAIS INFECTADAS (L 08.0)</option>
+            <option value="ABORTAMENTO INCOMPLETO|O 03.4">ABORTAMENTO INCOMPLETO (O 03.4)</option>
+            <option value="MIOMA UTERINO|D 25.9">MIOMA UTERINO (D 25.9)</option>
+            <option value="DESPROPORÇÃO CÉFALO-PÉLVICA|O 65.4">DESPROPORÇÃO CÉFALO-PÉLVICA (O 65.4)</option>
+            <option value="PARTO NORMAL|O 80">PARTO NORMAL (O 80)</option>
+            <option value="PROLAPSO UTEROVAGINAL INCOMPLETO|N 81.2">PROLAPSO UTEROVAGINAL INCOMPLETO (N 81.2)</option>
+            <option value="PROLAPSO UTEROVAGINAL COMPLETO|N 81.3">PROLAPSO UTEROVAGINAL COMPLETO (N 81.3)</option>
+            <option value="Hipertrofia do prepúcio, fimose e parafimose|N 47">Hipertrofia do prepúcio, fimose e parafimose (N 47)</option>
+            <option value="Cisto pilonidal sem abscesso|L 05.9">Cisto pilonidal sem abscesso (L 05.9)</option>
+            <option value="Hemorróidas internas sem complicações|I 84.2">Hemorróidas internas sem complicações (I 84.2)</option>
+            <option value="Fissura anal, não especificada|K 60.2">Fissura anal, não especificada (K 60.2)</option>
+            <option value="Hérnia Epigástrica|K 43.9">Hérnia Epigástrica (K 43.9)</option>
+            <option value="Fistula anal|K 60.2">Fistula anal (K 60.2)</option>
+            <option value="Hidrocele n especificada|N 43.3">Hidrocele n especificada (N 43.3)</option>
+            <option value="APRESENTAÇAO PÉLVICA|O 64.1">APRESENTAÇAO PÉLVICA (O 64.1)</option>
+            <option value="SOFRIMENTO FETAL|O 68.9">SOFRIMENTO FETAL (O 68.9)</option>
+            <option value="GRAVIDEZ PROLONGADA|O 48">GRAVIDEZ PROLONGADA (O 48)</option>
+            <option value="RETOCOLITE ULCERATIVA N ESPECIF|K 51.9">RETOCOLITE ULCERATIVA N ESPECIF (K 51.9)</option>
+            <option value="CALCULOSE DE VB COM COLECISTITE|K 80.4">CALCULOSE DE VB COM COLECISTITE (K 80.4)</option>
+            <option value="ESTERILIZAÇÃO|Z 30.2">ESTERILIZAÇÃO (Z 30.2)</option>
+            <option value="HIPERPLASIA ADENOMATOSA ENDOMETRIAL|N 85.1">HIPERPLASIA ADENOMATOSA ENDOMETRIAL (N 85.1)</option>
+            <option value="COVID 19|U 07.2">COVID 19 (U 07.2)</option>
+            <option value="Influenza com pneumonia devida a COVID 19|J 10.0">Influenza com pneumonia devida a COVID 19 (J 10.0)</option>
+            <option value="HEPATITE ALCOOLICA|K 70.1">HEPATITE ALCOOLICA (K 70.1)</option>
+            <option value="NEOPLASIA SECUNDÁRIA (DOENÇA METASTÁTICA)|C 79.8">NEOPLASIA SECUNDÁRIA (DOENÇA METASTÁTICA) (C 79.8)</option>
+            <option value="DISPLASIA DE COLO UTERINO N ESPECIFICADA|N 87.9">DISPLASIA DE COLO UTERINO N ESPECIFICADA (N 87.9)</option>
+            <option value="HEMATÊMESE|K 92.0">HEMATÊMESE (K 92.0)</option>
+            <option value="INSUFICIENCIA CARDIACA|I 50.0">INSUFICIENCIA CARDIACA (I 50.0)</option>
+            <option value="ENCEFALOPATIA ALCOOLICA|G 93.4">ENCEFALOPATIA ALCOOLICA (G 93.4)</option>
+            <option value="Doença inflamatória N Especificada da pelve feminina|N 73.9">Doença inflamatória N Especificada da pelve feminina (N 73.9)</option>
+            <option value="DM nao especificado c complic circul perifericas|E 14.5">DM nao especificado c complic circul perifericas (E 14.5)</option>
+            <option value="Outras formas de doença isquêmica aguda|I 24.8">Outras formas de doença isquêmica aguda (I 24.8)</option>
+            <option value="Traumatismos superf múltiplos N Especif|T 00.9">Traumatismos superf múltiplos N Especif (T 00.9)</option>
+            <option value="Ameaça de abortamento|O 20.0">Ameaça de abortamento (O 20.0)</option>
+            <option value="Ameaça de parto prematuro|O 60.0">Ameaça de parto prematuro (O 60.0)</option>
+            <option value="AVC N especif|I 64">AVC N especif (I 64)</option>
+            <option value="Cirrose Hepatica|K 74">Cirrose Hepatica (K 74)</option>
+            <option value="Ulcera de decubito|L 89">Ulcera de decubito (L 89)</option>
+            <option value="Desnutrição proteico-calórica|E 46">Desnutrição proteico-calórica (E 46)</option>
+            <option value="DM N insulinodepend s complic|E 11.8">DM N insulinodepend s complic (E 11.8)</option>
+            <option value="Edema agudo de pulmão|J 81">Edema agudo de pulmão (J 81)</option>
+            <option value="Queimaduras de 1º grau|T 31.0">Queimaduras de 1º grau (T 31.0)</option>
+            <option value="Queimaduras de 2° grau|T 31.1">Queimaduras de 2° grau (T 31.1)</option>
+            <option value="TCE leve|S 06.8">TCE leve (S 06.8)</option>
+            <option value="Politraumatizado|T 06.8">Politraumatizado (T 06.8)</option>
+            <option value="Piodermite|L 08.0">Piodermite (L 08.0)</option>
+            <option value="Infecção bacteriana de local N especif|A 49.9">Infecção bacteriana de local N especif (A 49.9)</option>
+            <option value="Inf por coronavirus de local n especif|B 34.2">Inf por coronavirus de local n especif (B 34.2)</option>
+            <option value="Absc de gland de Bartholin/Bartholinite|N 75.1">Absc de gland de Bartholin/Bartholinite (N 75.1)</option>
+            <option value="Outras pneumonias virais|J 12.8">Outras pneumonias virais (J 12.8)</option>
+            <option value="NEOPLASIA BENIGNA DA MAMA|D 24">NEOPLASIA BENIGNA DA MAMA (D 24)</option>
+            <option value="OTITE MEDIA AGUDA SUPURATIVA|H 66.0">OTITE MEDIA AGUDA SUPURATIVA (H 66.0)</option>
+            <option value="CELULITE DE OUTRA PARTE DO MEMBRO|L 03.1">CELULITE DE OUTRA PARTE DO MEMBRO (L 03.1)</option>
+            <option value="DISTURBIOS METABÓLICO DO DIABETES|E 14.6">DISTURBIOS METABÓLICO DO DIABETES (E 14.6)</option>
+            <option value="Complicação não especificada de cuidados médicos e cirúrgico|T 88.9">Complicação não especificada de cuidados médicos e cirúrgico (T 88.9)</option>
+            <option value="Orquite, epididimite e epidídimo-orquite com abscesso|N 45.0">Orquite, epididimite e epidídimo-orquite com abscesso (N 45.0)</option>
+            <option value="Contusão dos órgãos genitais externo|S 30.2">Contusão dos órgãos genitais externo (S 30.2)</option>
+            <option value="DIABETES MELLITUS INSULINO-DEPENDENTE COM CETOACIDOSE|E 10.1">DIABETES MELLITUS INSULINO-DEPENDENTE COM CETOACIDOSE (E 10.1)</option>
+            <option value="CALCULOSE NA BEXIGA|N 21.0">CALCULOSE NA BEXIGA (N 21.0)</option>
+            <option value="Hérnia abdominal não especificada, sem obstrução ou gangrena|K 46.9">Hérnia abdominal não especificada, sem obstrução ou gangrena (K 46.9)</option>
+            <option value="ABSCESSO CUTÂNEO, FURÚNCULO E ANTRAZ DO(S) MEMBRO(S)|L 02.4">ABSCESSO CUTÂNEO, FURÚNCULO E ANTRAZ DO(S) MEMBRO(S) (L 02.4)</option>
+            <option value="OUTRAS SEPTICEMIAS ESPECIFICADAS|A 41.8">OUTRAS SEPTICEMIAS ESPECIFICADAS (A 41.8)</option>
+            <option value="CELULITE E ABSCESSO DA BOCA|K 12.2">CELULITE E ABSCESSO DA BOCA (K 12.2)</option>
+            <option value="INFECÇÃO SUBSEQUENTE A PROCEDIMENTO NÃO CLASSIFICADA EM OUTRA PARTE|T 81.4">INFECÇÃO SUBSEQUENTE A PROCEDIMENTO (T 81.4)</option>
+            <option value="Outras complicações de procedimentos n class outra parte|T 81.8">Outras complicações de procedimentos (T 81.8)</option>
+            <option value="HIDROSSALPINGE|N 83.8">HIDROSSALPINGE (N 83.8)</option>
+            <option value="CISTO DA GLÂNDULA DE BARTHOLIN|N 75.0">CISTO DA GLÂNDULA DE BARTHOLIN (N 75.0)</option>
+            <option value="OUTRO">-- OUTRO (DIGITAR MANUALMENTE) --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Procedimento Solicitado / SIGTAP:</label>
+          <select id="selProced" class="destaque-select" onchange="aoSelecionarProced(this.value)">
+            <option value="">-- Selecione o Procedimento --</option>
+            <option value="Colecistectomia|04070300206|CLINICA CIRURGICA">Colecistectomia (04070300206)</option>
+            <option value="Tratamento de Calculose renal|0303150017|CLINICA MEDICA">Tratamento de Calculose renal (0303150017)</option>
+            <option value="Tratamento da Crise Hipertensiva|0303060107|CLINICA MEDICA">Tratamento da Crise Hipertensiva (0303060107)</option>
+            <option value="TTO das doenças cron das VVAA Infer|0303140046|CLINICA MEDICA">TTO das doenças cron das VVAA Infer (0303140046)</option>
+            <option value="Tratamento de doenças infecciosas e intestinais|0303010061|CLINICA MEDICA">Tratamento de doenças infecciosas e intestinais (0303010061)</option>
+            <option value="Tratamento de outras doenças bacterianas|0303010037|CLINICA MEDICA">Tratamento de outras doenças bacterianas (0303010037)</option>
+            <option value="Hernioplastia inguinal unilateral|0407040102|CLINICA CIRURGICA">Hernioplastia inguinal unilateral (0407040102)</option>
+            <option value="Hernioplastia umbilical|0407040129|CLINICA CIRURGICA">Hernioplastia umbilical (0407040129)</option>
+            <option value="Tratamento da Pielonefrite|0305020013|CLINICA MEDICA">Tratamento da Pielonefrite (0305020013)</option>
+            <option value="Curativo grau II c ou s debridamento|0401010015|CLINICA CIRURGICA">Curativo grau II c ou s debridamento (0401010015)</option>
+            <option value="Tratamento de Pneumonias ou Influenza|0303140151|CLINICA MEDICA">Tratamento de Pneumonias ou Influenza (0303140151)</option>
+            <option value="TTO de Estreptococcias|0303080078|CLINICA MEDICA">TTO de Estreptococcias (0303080078)</option>
+            <option value="Curetagem uterina|0411020021|CLINICA OBSTETRICA">Curetagem uterina (0411020021)</option>
+            <option value="Histerectomia total abdominal|0409060127|CLINICA CIRURGICA">Histerectomia total abdominal (0409060127)</option>
+            <option value="CESARIANA|0411010034|CLINICA OBSTETRICA">CESARIANA (0411010034)</option>
+            <option value="Parto normal|0310010039|CLINICA OBSTETRICA">Parto normal (0310010039)</option>
+            <option value="Colpoperineoplastia anterior e posterior|0409070050|CLINICA CIRURGICA">Colpoperineoplastia anterior e posterior (0409070050)</option>
+            <option value="POSTECTOMIA|0409050083|CLINICA CIRURGICA">POSTECTOMIA (0409050083)</option>
+            <option value="EXERESE DE CISTO SACRO-COCCIGEO|0401020088|CLINICA CIRURGICA">EXERESE DE CISTO SACRO-COCCIGEO (0401020088)</option>
+            <option value="HEMORROIDECTOMIA|0407020284|CLINICA CIRURGICA">HEMORROIDECTOMIA (0407020284)</option>
+            <option value="ESFINCTEROTOMIA INTERNA E TRATAMENTO DE FISSURA ANAL|0407020217|CLINICA CIRURGICA">ESFINCTEROTOMIA INTERNA E TRATAMENTO DE FISSURA ANAL (0407020217)</option>
+            <option value="HERNIOPLASTIA EPIGÁSTRICA|0407040064|CLINICA CIRURGICA">HERNIOPLASTIA EPIGÁSTRICA (0407040064)</option>
+            <option value="FISTULECTOMIA/FISTULOTOMIA ANAL|0407020276|CLINICA CIRURGICA">FISTULECTOMIA/FISTULOTOMIA ANAL (0407020276)</option>
+            <option value="TRATAMENTO CIRURGICO DE HIDROCELE|0409040215|CLINICA CIRURGICA">TRATAMENTO CIRURGICO DE HIDROCELE (0409040215)</option>
+            <option value="Tratamento de colites n infecciosas|0303070099|CLINICA MEDICA">Tratamento de colites n infecciosas (0303070099)</option>
+            <option value="TRATAMENTO DE TRANSTORNOS DAS VIAS BILIARES E PANCREAS|0303070129|CLINICA MEDICA">TRATAMENTO DE TRANSTORNOS DAS VIAS BILIARES E PANCREAS (0303070129)</option>
+            <option value="VASECTOMIA|0409040240|CLINICA CIRURGICA">VASECTOMIA (0409040240)</option>
+            <option value="CURETAGEM SEMIOTICA C/ OU S/ DILATACAO DO COLO DO UTERO|0409060046|CLINICA CIRURGICA">CURETAGEM SEMIOTICA (0409060046)</option>
+            <option value="TTO DE DOENÇAS DO FIGADO|0303070072|CLINICA MEDICA">TTO DE DOENÇAS DO FIGADO (0303070072)</option>
+            <option value="TTO de intercorrências clinicas de pac oncológico|0304100013|CLINICA MEDICA">TTO de intercorrências clinicas de pac oncológico (0304100013)</option>
+            <option value="Excisão tipo 3 do colo uterino|0409060038|CLINICA CIRURGICA">Excisão tipo 3 do colo uterino (0409060038)</option>
+            <option value="Tto de outras doenças do aparelho digestivo|0303070102|CLINICA MEDICA">Tto de outras doenças do aparelho digestivo (0303070102)</option>
+            <option value="TTO de Insuficiencia Cardiaca|0303060212|CLINICA MEDICA">TTO de Insuficiencia Cardiaca (0303060212)</option>
+            <option value="TTO de intercorrencias clinicas da gravidez|0303100044|CLINICA OBSTETRICA">TTO de intercorrencias clinicas da gravidez (0303100044)</option>
+            <option value="TTO de AVC isquêmico|0303040149|CLINICA MEDICA">TTO de AVC isquêmico (0303040149)</option>
+            <option value="Debridamento de úlcera ou tecido desvitalizado|0415040035|CLINICA CIRURGICA">Debridamento de úlcera ou tecido desvitalizado (0415040035)</option>
+            <option value="TTO de desnutrição|0303030020|CLINICA MEDICA">TTO de desnutrição (0303030020)</option>
+            <option value="TTO de diabetes mellitus|0303030038|CLINICA MEDICA">TTO de diabetes mellitus (0303030038)</option>
+            <option value="TTO de Edema agudo de pulmão|0303060131|CLINICA MEDICA">TTO de Edema agudo de pulmão (0303060131)</option>
+            <option value="Atendimento de urgencia em pequeno queimado|0413010023|CLINICA CIRURGICA">Atendimento de urgencia em pequeno queimado (0413010023)</option>
+            <option value="Atendimento de urgencia em médio e grande queimado|0413010015|CLINICA CIRURGICA">Atendimento de urgencia em médio e grande queimado (0413010015)</option>
+            <option value="TTO conservador de TCE leve|0303040084|CLINICA MEDICA">TTO conservador de TCE leve (0303040084)</option>
+            <option value="Excisão e enxerto de pele (hemangioma, nevus ou tumor)|0401020045|CLINICA CIRURGICA">Excisão e enxerto de pele (0401020045)</option>
+            <option value="TTO cirurgico de lesões extensas com perda de tecido|0413040240|CLINICA CIRURGICA">TTO cirurgico de lesões extensas com perda de tecido (0413040240)</option>
+            <option value="TTO de traumatismos de localização especificada/NE|0308010019|CLINICA MEDICA">TTO de traumatismos de localização especificada/NE (0308010019)</option>
+            <option value="TTO de outras doenças do aparelho urinário|0303150050|CLINICA MEDICA">TTO de outras doenças do aparelho urinário (0303150050)</option>
+            <option value="TTO de doenças inflamatórias dos órgãos pélvicos femininos|0303150033|CLINICA MEDICA">TTO de doenças inflamatórias dos órgãos pélvicos femininos (0303150033)</option>
+            <option value="TTO de pé diabético complicado|0303060263|CLINICA MEDICA">TTO de pé diabético complicado (0303060263)</option>
+            <option value="TTO de síndrome coronariana aguda|0303060280|CLINICA MEDICA">TTO de síndrome coronariana aguda (0303060280)</option>
+            <option value="Histerectomia via vaginal|0409060100|CLINICA CIRURGICA">Histerectomia via vaginal (0409060100)</option>
+            <option value="Tratamento de estafilococcias|0303080060|CLINICA MEDICA">Tratamento de estafilococcias (0303080060)</option>
+            <option value="TTO DE INF PELO NOVO CORONAVIRUS - COVID 19|0303010223|CLINICA MEDICA">TTO DE INF PELO NOVO CORONAVIRUS (0303010223)</option>
+            <option value="EXERESE DE NODULO DE MAMA|0201010569|CLINICA CIRURGICA">EXERESE DE NODULO DE MAMA (0201010569)</option>
+            <option value="TRATAMENTO DE COMPLICACOES DE PROCEDIMENTOS CIRURGICOS OU CLINICOS|0308040015|CLINICA MEDICA">TRATAMENTO DE COMPLICACOES DE PROCEDIMENTOS (0308040015)</option>
+            <option value="EXPLORACAO CIRURGICA DA BOLSA ESCROTAL|0409040096|CLINICA CIRURGICA">EXPLORACAO CIRURGICA DA BOLSA ESCROTAL (0409040096)</option>
+            <option value="CISTOLITOTOMIA E/OU RETIRADA DE CORPO ESTRANHO DA BEXIGA|0409010065|CLINICA CIRURGICA">CISTOLITOTOMIA DA BEXIGA (0409010065)</option>
+            <option value="HERNIOPLASTIA INCISIONAL|0407040080|CLINICA CIRURGICA">HERNIOPLASTIA INCISIONAL (0407040080)</option>
+            <option value="SALPINGECTOMIA UNI / BILATERAL|0409060232|CLINICA CIRURGICA">SALPINGECTOMIA UNI / BILATERAL (0409060232)</option>
+            <option value="EXERESE DE GLANDULA DE BARTHOLIN / SKENE|0409070157|CLINICA CIRURGICA">EXERESE DE GLANDULA DE BARTHOLIN / SKENE (0409070157)</option>
+            <option value="OUTRO">-- OUTRO (DIGITAR MANUALMENTE) --</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-3">
         <div class="form-group">
           <label>Diagnóstico Inicial:</label>
-          <input type="text" id="diagInicial" value="NEVO MELANOCÍTICO, NÃO ESPECIFICADO">
+          <input type="text" id="diagInicial" value="CRISE HIPERTENSIVA">
         </div>
         <div class="form-group">
           <label>CID-10 Principal:</label>
-          <input type="text" id="cidPrincipal" value="D22.9">
-        </div>
-      </div>
-      <div class="grid-3">
-        <div class="form-group">
-          <label>Procedimento Solicitado:</label>
-          <input type="text" id="procedimento" value="EXCISAO E SUTURA DE LESAO DE PELE">
-        </div>
-        <div class="form-group">
-          <label>Código SIGTAP:</label>
-          <input type="text" id="codProcedimento" value="0401020045">
+          <input type="text" id="cidPrincipal" value="I 10">
         </div>
         <div class="form-group">
           <label>Especialidade / Clínica:</label>
-          <input type="text" id="especialidade" value="CIRURGIA AMBULATORIAL">
+          <select id="especialidade">
+            <option value="CLINICA MEDICA" selected>CLINICA MEDICA</option>
+            <option value="CLINICA CIRURGICA">CLINICA CIRURGICA</option>
+            <option value="CLINICA OBSTETRICA">CLINICA OBSTETRICA</option>
+            <option value="CLINICA PEDIATRICA">CLINICA PEDIATRICA</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Descrição do Procedimento:</label>
+          <input type="text" id="procedimento" value="Tratamento da Crise Hipertensiva">
+        </div>
+        <div class="form-group">
+          <label>Código SIGTAP:</label>
+          <input type="text" id="codProcedimento" value="0303060107">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>17. Principais Sinais e Sintomas Clínicos:</label>
+        <textarea id="sinaisSintomas" rows="2">CEFALEIA, TONTURA, NÁUSEAS, TAQUICARDIA E NÍVEIS PRESSÓRICOS ELEVADOS.</textarea>
+      </div>
+      <div class="form-group">
+        <label>18. Condições que Justificam a Internação:</label>
+        <textarea id="justificativa" rows="2">NECESSIDADE DE ESTABILIZAÇÃO PRESSÓRICA VENOSA, MONITORIZAÇÃO HEMODINÂMICA E PREVENÇÃO DE LESÃO DE ÓRGÃO-ALVO.</textarea>
+      </div>
+      <div class="form-group">
+        <label>19. Principais Resultados de Exames:</label>
+        <textarea id="exames" rows="2">ECG, HEMOGRAMA, UREIA, CREATININA E SUMÁRIO DE URINA.</textarea>
+      </div>
+    </fieldset>
+
+    <!-- BLOCO CIRÚRGICO / ANESTESIA -->
+    <fieldset>
+      <legend>Folhas 4 e 5: Anestesia e Boletim Operatório</legend>
+      
+      <div class="grid-3">
+        <div class="form-group">
+          <label>Técnica de Anestesia:</label>
+          <select id="selTecnicaAnestesia" class="destaque-select">
+            <option value="Bloqueio">Bloqueio</option>
+            <option value="Geral">Geral</option>
+            <option value="Sedação">Sedação</option>
+            <option value="Local" selected>Local</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Drogas Usadas (Template Anestésico):</label>
+          <select id="selAnestesia" class="destaque-select" onchange="aoSelecionarAnestesia(this.value)">
+            <option value="">-- Selecione o Protocolo --</option>
+            <option value="SF 1500 ml Neocaina pes - 2,0 ml Dimorf 1 mg/ml - 0,5 ml Oxitocina - 02 amp Efortil">Cesariana</option>
+            <option value="SF 1500 ml Neocaina pes 2,0 ml Dimorf 1 mg/ml - 0,5 ml Efortil 1 amp - Cefalotina 2 g FA">Não Cesariana</option>
+            <option value="SF 1500 ml Neocaina pes 4 ml Dimorf 1 mg/ml - 0,5 ml Cefalotina 2 g FA">Vesícula / Histerectomia</option>
+            <option value="Lidocaina a 2% - 20 ml SF - 500 ml EV" selected>Local</option>
+            <option value="OUTRO">Outro (Em Branco)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Boletim Operatório (Template Cirúrgico):</label>
+          <select id="selCirurgia" class="destaque-select" onchange="aoSelecionarCirurgia(this.value)">
+            <option value="">-- Selecione a Cirurgia --</option>
+            <option value="CESARIANA">Cesariana</option>
+            <option value="COLECISTECTOMIA">Colecistectomia</option>
+            <option value="POSTECTOMIA">Postectomia</option>
+            <option value="HEMORROIDECTOMIA">Hemorroidectomia</option>
+            <option value="FISTULOTOMIA">Fistulotomia anal</option>
+            <option value="HERNIOPLASTIA_EPIGASTRICA">Hernioplastia Epigástrica</option>
+            <option value="HERNIOPLASTIA_INGUINAL">Hernioplastia Inguinal</option>
+            <option value="HERNIOPLASTIA_UMBILICAL">Hernioplastia Umbilical</option>
+            <option value="HIDROCELE">Correção de Hidrocele</option>
+            <option value="COLPOPERINEOPLASTIA">Colpoperineoplastia anterior e posterior</option>
+            <option value="HISTERECTOMIA">Histerectomia total abdominal</option>
+            <option value="CISTO_PILONIDAL">Ressecção de Cisto Pilonidal</option>
+            <option value="VASECTOMIA">Vasectomia</option>
+            <option value="CURETAGEM">Curetagem Semiótica / Uterina</option>
+            <option value="HISTERECTOMIA_VAGINAL">Histerectomia vaginal</option>
+            <option value="HERNIOPLASTIA_INCISIONAL">Hernioplastia Incisional</option>
+            <option value="EXERESE_BARTHOLIN">Exérese de Glândula de Bartholin</option>
+            <option value="OUTRO">Outro (Em Branco)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Drogas Usadas / Prescrição Anestésica (Folha 4):</label>
+          <textarea id="txtAnestesia" rows="3">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
+        </div>
+        <div class="form-group">
+          <label>Descrição do Boletim Operatório (Folha 5):</label>
+          <textarea id="txtCirurgia" rows="3">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
         </div>
       </div>
     </fieldset>
 
+    <!-- SOLICITANTE -->
     <fieldset>
-      <legend>Dados Clínicos / Justificativa</legend>
-      <div class="form-group">
-        <label>17. Principais Sinais e Sintomas Clínicos:</label>
-        <textarea id="sinaisSintomas" rows="2">LESÃO HIPERCRÔMICA EM REGIÃO DORSAL, COM PRURIDO E ALTERAÇÃO DE BORDOS.</textarea>
-      </div>
-      <div class="form-group">
-        <label>18. Condições que Justificam a Internação:</label>
-        <textarea id="justificativa" rows="2">NECESSIDADE DE RESSECÇÃO CIRÚRGICA COM MARGEM DE SEGURANÇA E ESTUDO HISTOPATOLÓGICO.</textarea>
-      </div>
-      <div class="form-group">
-        <label>19. Principais Resultados de Exames:</label>
-        <textarea id="exames" rows="2">EXAME CLÍNICO DERMATOLÓGICO COMPATÍVEL.</textarea>
-      </div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Identificação do Médico</legend>
+      <legend>Profissional Solicitante</legend>
       <div class="grid-3">
         <div class="form-group">
-          <label>Médico Solicitante:</label>
-          <input type="text" id="medicoSolicitante" value="DR LUCIDIO JACOME FERREIRA">
+          <label>Selecionar Médico:</label>
+          <select id="selMedico" class="destaque-select" onchange="aoSelecionarMedico(this.value)">
+            <option value="LUCIDIO JÁCOME FERREIRA|175.499.574-87" selected>LUCIDIO JÁCOME FERREIRA</option>
+            <option value="FRANCISCO DAS CHAGAS DIASSIS J VALENTIM|106.967.184-30">FRANCISCO DAS CHAGAS DIASSIS J VALENTIM</option>
+            <option value="HIAGO FRANCIMAR JACOME DE SOUZA|099.311.824-07">HIAGO FRANCIMAR JACOME DE SOUZA</option>
+            <option value="FRENDSON CÂMARA DE OLIVEIRA|050.980.494-23">FRENDSON CÂMARA DE OLIVEIRA</option>
+            <option value="NALYGIA PAULO PAIVA|012.045.714-81">NALYGIA PAULO PAIVA</option>
+            <option value="SABRINA IDAYANY M LOURENÇO QUEIROZ|105.372.434-56">SABRINA IDAYANY M LOURENÇO QUEIROZ</option>
+            <option value="CARLOS ALEXANDRE DA SILVA|055.249.504-28">CARLOS ALEXANDRE DA SILVA</option>
+            <option value="KAREN GIZELLY PAULO SILVA|097.120.314-89">KAREN GIZELLY PAULO SILVA</option>
+            <option value="OUTRO">-- OUTRO (DIGITAR MANUALMENTE) --</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nome do Solicitante:</label>
+          <input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA">
         </div>
         <div class="form-group">
           <label>CPF do Solicitante:</label>
           <input type="text" id="cpfSolicitante" value="175.499.574-87">
         </div>
+      </div>
+      <div class="grid-3">
         <div class="form-group">
           <label>Data Solicitação:</label>
           <input type="text" id="dataSolicitacao" value="14/07/2026">
@@ -201,7 +450,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH e Salvar no Sheets</button>
+    <button type="submit" class="btn-submit">Gerar AIH e Salvar na Planilha</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -224,22 +473,101 @@
 </div>
 
 <script>
-  // Anti-cache forçado para SEMPRE carregar o arquivo novo do Adobe
-  const URL_PDF_BASE = 'AIH_FORM.pdf?anticache=' + new Date().getTime();
+  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
   const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
 
+  /* Banco de Boletins Operatórios */
+  const boletins = {
+    CESARIANA: 'Incisão Pfannenstiel transversa, ligeiramente semi circular, atingindo pele, subcutâneo e aponeurose, músculos são afastados, peritônio aberto no sentido vertical. Aberta a cavidade, colocar válvula de Doyen no ângulo inferior da incisão. Exposto o segmento inferior do útero, incisão transversa do peritônio visceral, pequena secção transversa no miométrio, afastando e abrindo o miométrio com ajuda de pinça kocher e com os dedos, completando a abertura. Retirada do feto, deslocar e extrair a placenta. Limpeza da cavidade uterina usando compressas, observar se o canal cervical está permeável. Fechamento do miométrio com CG Cromado "1" contínuo ancorado, não incluindo a mucosa. Fechamento do peritônio visceral com CG Simples "2-0" contínuo ancorado. Limpeza da cavidade abdominal com compressas, reposição do útero à cavidade. Fechamento do peritônio parietal com CG Simples "2-0" contínuo. Aproximar músculos com CG Simples "2-0" pontos separados. Sutura da aponeurose com CG Cromado "1" contínua ancorada. Fechamento do subcutâneo com CG Simples "2-0" separados e da pele com mononylon "4-0" contínuo. Curativo Simples.',
+    COLECISTECTOMIA: 'Incisão paramediana supraumbilical. Incisão do subcutâneo e aponeurose. Afastar músculo reto abdominal, abertura da aponeurose posterior e peritônio. Aplicação de afastador abdominal, afastar alças com compressas e a borda hepática com valva maleável. Pinçamento da vesícula visualizando o pedículo vascular com identificacao e reparo do canal cistico. Ligadura com duas pinças Mixter da artéria cística com Algodão 0" e secção. Separar a vesícula da loja hepática até o seu pedículo, com bisturi elétrico, até ficar somente o canal cístico. A seguir, com 2 pinças Mixter, clampear o canal cístico, fazendo duas ligaduras com Algodão "0". Revisão da hemostasia do pedículo e do leito hepático. Fechamento da cavidade plano por plano.',
+    POSTECTOMIA: 'Reparo da pele com 2 pinças hemostáticas. Exposição do freio, secção do mesmo e ligadura. Com a pele em tensão, delimitamos com bisturi o retalho da mucosa a 1 cm do sulco balanoprepucial ao redor do pênis. Revertemos o prepúcio, fazer a ressecção circular do excesso de pele com tesoura. Realizamos 4 pontos cardeais entre o retalho junto a glande e a pele do pênis com CG Simples "3-0". Completamos a sutura com 3-4 pontos nos quatro segmentos delimitados pelos reparos. Curativo com Xilocaina pomada, elevando o pênis ao nível do abdome.',
+    HEMORROIDECTOMIA: 'Mamilos situam-se às 3-7 e 11 horas. Pinças com Allis o ponto mais saliente do mamilo. Incisão da pele e subcutâneo como base de um triângulo cuja base é o pedículo hemorroidário. Prosseguir com a incisão até a linha, deixando aderida à pele a ser retirada, as dilatações venosas. Iniciar sutura contínua ancorada com CG Cromado "2-0" desde o coto do mamilo até a pele, deixando a base do triângulo aberta. Repetir procedimento nos outros dois mamilos. Hemostasia. Cuidado em deixar mucosa entre os mamilos ressecados.',
+    FISTULOTOMIA: 'Paciente em decúbito ventral, expomos a região perineal e sacrococcígea com esparadrapos fixados à mesa cirúrgica. Aplicar azul de metileno no orifício externo. Incisão arredondada circundando o inicio da fistula, encampando a área tinginda pelo azul de metileno. até a cavidade anal, retirando todo o trajeto fistuloso. Hemostasia com eletrocautério. Gaze com Lidocaina e aplicar curativo.',
+    HERNIOPLASTIA_EPIGASTRICA: 'Incisão transversa no local abaulado interessando pele, subcutâneo, fáscia subcutânea. Abertura da fáscia, apresentação da aponeurose e pelotão gorduroso (aspecto de cogumelo). Na maioria não existe saco herniário, apenas ligamos o pelotão gorduroso com ponto transfixante de CG Cromado "0" no seu colo, e ressecamos o excesso. Reduzimos o tecido gorduroso laqueado para baixo da aponeurose, pinçamos as extremidades da aponeurose e realizamos o seu fechamento com mononylon "2-0" pontos separados. Sutura do subcutâneo com CG Simples "3-0" e pele com sutura contínua Mononylon "4-0". Curativo compressivo.',
+    HERNIOPLASTIA_INGUINAL: 'Incisão na região inguinal paralela a uma linha entre espinha ilíaca e sínfise púbica. Dissecar subcutâneo e expor aponeurose do obliquo externo, incisão na direção de suas fibras. Soltar o saco herniário e o cordão espermático por dissecção sem cortar, fixando a massa com gaze. Separe o saco do cordão até o colo do saco no anel interno. Abrir o saco, confirme seu conteudo, transfixar seu colo com algodão "2-0". Cortar o excesso. Reforço da parede posterior: Sutura continua ligando o ligamento inguinal ao tendão conjunto, testando o anel interno para que este deixe no máximo inserir a ponta do dedo mínimo. Repor o cordão inguinal no seu leito normal. Reforço da parede anterior: Fechar a aponeurose do obliquo externo com CG Cromado "0" contínuo. Fechamento subcutaneo e pele.',
+    HERNIOPLASTIA_UMBILICAL: 'Incisão semicircular infra-umbilical, atingindo pele e subcutâneo. Com o uso de uma tesoura de Metzembauer contornar o umbigo pelo subcutâneo, bem próximo ao anel herniário, e com uso de bisturi, realizamos secção transversal cuidadosa dos tecidos em direção à tesoura até o encontro do saco herniário. Abrir, identificar, reduzir seu conteúdo e liberação do umbigo, retirando a face caudal do saco herniário. Fechamento do saco herniário e aponeurose adjacente pode ser feito lábio a lábio ou em jaquetão, usando mononylon "0" pontos separados. Fixação do umbigo à aponeurose em sua posição anatômica com ponto de CG Simples "3-0". Fechamento de subcutaneo e pele.',
+    HIDROCELE: 'Incisão em sentido longitudinal da bolsa escrotal, atingindo pele, músculo darto e subcutâneo. Divulsão das túnicas até a túnica vaginal, fazendo a devida hemostasia. Realizar o deslocamento com dedo de toda a túnica vaginal. Abrir a túnica vaginal no mesmo sentido da bolsa escrotal e aspirar todo o líquido. Após, amplia-se a incisão, expondo o testículo. Realiza-se a inversão da túnica vaginal, fazendo-se a ressecção do excesso de túnica. Reparo nos ângulos da túnica invertida, iniciando-se sutura da mesma com CG Simples "3-0" contínua ancorada, tendo-se o cuidado de não angustiar os elementos do funículo. Colocar cordão e testículo bem acomodados. Fechamento do subcutâneo e pele com CG Simples "3-0" pontos separados. Curativo local e suspensório escrotal.',
+    COLPOPERINEOPLASTIA: 'Colpoperineoplastia anterior: Assepsia com PVPI; incisão mediana na mucosa vaginal a 1 cm do meato urinário. Dissecção romba da mucosa vésico-vaginal; suspensão do músculo vesical e cerclagem com CG Cromado "0". Ressecção do excesso de mucosa e fechamento com CG Cromado "2-0" ancorado na parte longitudinal. Colpoperineoplastia posterior: Reparo com Allis da transição pele-mucosa de cada lado da fúrcula vaginal. Incisão na mucosa vaginal com dissecção romba separando a mucosa vaginal da fáscia retal, expondo os feixes puborretais dos elevadores do ânus. Aproximação destes com pontos em U com CG Cromado "0". Ressecção do excesso de mucosa dos retalhos vaginais. Sutura ancorada com CG Simples "3-0" desde a Allis no reparo superior até a fúrcula vaginal. Sutura da pele com pontos separados de CG Simples "3-0". PVPI e tampão vaginal.',
+    HISTERECTOMIA: 'Incisão Pfannenstiel atingindo pele, subcutâneo e aponeurose. Abertura da cavidade abdominal; afastamento de alças com compressas; apresentação do útero com aplicação de saca-fibroma; pinçamento, secção e ligadura de: ligamento tubo-ovárico, ligamento redondo, vasos redondos, ligamento útero-sacro. Mesmo procedimento contralateralmente. Abertura da cúpula vaginal; retirada da peça uterina. Fechamento da cúpula vaginal com CG Cromado "1" agulhado; fechamento do peritônio desde o infundíbulo de um lado até o contralateral com Simples "2-0" contínuo. Revisão da hemostasia. Retirada das compressas. Fechamento da cavidade abdominal: Peritônio: CG Simples "2-0" ancorado; músculos: Simples "2-0" separados; aponeurose: Cromado "1" contínuo. Subcutâneo: Simples "2-0" separados. Pele: Mononylon "4-0" contínuo. Curativo simples.',
+    CISTO_PILONIDAL: 'Paciente em decúbito ventral, expomos a região perineal e sacrococcígea com esparadrapos fixados à mesa cirúrgica. Aplicar azul de metileno no orifício externo. Incisão obliqua circundando o cisto, tendo como limite inferior a aponeurose pré-sacra, encampando a área tinginda pelo azul de metileno. Hemostasia com eletrocautério. Aproximar sem fechar, com pontos separados de Mononylon 3-0 retirados 5 dias após. Gaze com Nebacetin e aplicar curativo.',
+    VASECTOMIA: 'Posicionar o pênis para cima - Incisão pequena à esquerda depois à direita, com acesso ao canal deferente, isolamento, secção e ligadura com algodão 2-0 de ambos os condutos, interrompendo a passagem dos espermatozoides do saco escrotal ao liquido espermático - Fechamento de ambas as incisões com 1-2 pontos catgut simples 3-0. Curativo simples.',
+    CURETAGEM: 'Curetagem uterina: Paciente em posição ginecológica, cuidados de assepsia e anti-sepsia. Colocação dos campos operatórios; toque bimanual para comprovar o tamanho do útero, sua forma, consistência e posição; cateterismo vesical se a bexiga estiver cheia. Técnica: Colocação do espéculo, a seguir, pinça-se o lábio anterior do colo (ou posterior, se útero for retrovertido), com pinça de Pozzi; histerometria; colo impermeável, dilata-se com velas de Hegar. Introduz-se a cureta e inicia-se o procedimento em sentido horário. Material do raspado uterino enviado para anatomopatológico.',
+    HISTERECTOMIA_VAGINAL: 'Paciente em posição de litotomia. Feito apreensão e tração do colo uterino nos seus lábios anterior e posterior. Incisão circular com bisturi elétrico na transição entre as mucosas vaginal e cervical. Dissecção romba dos pilares vesicais, elevando da bexiga. Pinçamento, secção e ligadura com reparos bilaterais dos ligamentos uterossacros. Pinçamento, secção e ligadura das artérias uterinas bilaterais. Exteriorização do útero através da abertura do peritônio posterior. Identificação do peritônio anterior e secção do mesmo com tesoura. Pinçamento, secção, ligadura e reparo bilateral dos ligamentos redondo e útero-ováricos. Retirada da peça operatória (útero). Fechamento de cúpula com Catgut.',
+    HERNIOPLASTIA_INCISIONAL: 'Incisão fusiforme alargada englobando a cicatriz anterior. Abertura de pele e subcutâneo. Dissecamos o saco herniário desfazendo aderências com a aponeurose até identificar o anel herniário. Abertura do saco, redução do conteúdo, ressecção do excesso de saco herniário. Aproximação da aponeurose com algodão 2-0. Aplicação de tela de polipropileno. Fechamento de subcutâneo e pele.',
+    EXERESE_BARTHOLIN: 'Incisão da mucosa dos pequenos lábios, com dissecção progressiva até a cápsula do cisto. Dissecção do cisto, tentando isolá-lo dos tecidos vizinhos, até o seu pedículo. Ligar o pedículo com CG Cromado "2-0". Hemostasia. Aproximar subcutâneo com CG Simples "3-0", deixando dreno de Penrose. Sutura da mucosa em "U" com CG Simples "3-0".'
+  };
+
+  /* Disparadores dos Seletores Inteligentes */
+  function aoSelecionarCid(val) {
+    if (!val) return;
+    if (val === 'OUTRO') {
+      document.getElementById('diagInicial').value = '';
+      document.getElementById('cidPrincipal').value = '';
+      document.getElementById('diagInicial').focus();
+      return;
+    }
+    const partes = val.split('|');
+    document.getElementById('diagInicial').value = partes[0];
+    document.getElementById('cidPrincipal').value = partes[1];
+  }
+
+  function aoSelecionarProced(val) {
+    if (!val) return;
+    if (val === 'OUTRO') {
+      document.getElementById('procedimento').value = '';
+      document.getElementById('codProcedimento').value = '';
+      document.getElementById('procedimento').focus();
+      return;
+    }
+    const partes = val.split('|');
+    document.getElementById('procedimento').value = partes[0];
+    document.getElementById('codProcedimento').value = partes[1];
+    if (partes[2]) {
+      document.getElementById('especialidade').value = partes[2];
+    }
+  }
+
+  function aoSelecionarMedico(val) {
+    if (!val) return;
+    if (val === 'OUTRO') {
+      document.getElementById('medicoSolicitante').value = '';
+      document.getElementById('cpfSolicitante').value = '';
+      document.getElementById('medicoSolicitante').focus();
+      return;
+    }
+    const partes = val.split('|');
+    document.getElementById('medicoSolicitante').value = partes[0];
+    document.getElementById('cpfSolicitante').value = partes[1];
+  }
+
+  function aoSelecionarAnestesia(val) {
+    if (!val) return;
+    document.getElementById('txtAnestesia').value = (val === 'OUTRO') ? '' : val;
+    if (val === 'OUTRO') document.getElementById('txtAnestesia').focus();
+  }
+
+  function aoSelecionarCirurgia(chave) {
+    if (!chave) return;
+    if (chave === 'OUTRO') {
+      document.getElementById('txtCirurgia').value = '';
+      document.getElementById('txtCirurgia').focus();
+    } else if (boletins[chave]) {
+      document.getElementById('txtCirurgia').value = boletins[chave];
+    }
+  }
+
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo campos no formulário oficial do Adobe...';
+    msg.innerText = 'Preenchendo documento e registrando na planilha...';
 
     try {
       await gerarAihAdobeForm();
-      msg.innerText = 'AIH preenchida e salva na planilha!';
+      msg.innerText = 'Concluído com sucesso!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
@@ -251,7 +579,7 @@
     const { PDFDocument, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não encontrou AIH_FORM.pdf. Certifique-se de que o nome está correto no GitHub.');
+    if (!res.ok) throw new Error('Não encontrou o arquivo AIH_FORM.pdf no repositório.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
@@ -285,13 +613,16 @@
       cid: document.getElementById('cidPrincipal').value || '',
       procedimento: document.getElementById('procedimento').value || '',
       codProced: document.getElementById('codProcedimento').value || '',
-      especialidade: document.getElementById('especialidade').value || 'CIRURGIA AMBULATORIAL',
-      medico: document.getElementById('medicoSolicitante').value || 'DR LUCIDIO JACOME FERREIRA',
+      especialidade: document.getElementById('especialidade').value || 'CLINICA MEDICA',
+      medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA',
       cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
       dtSol: document.getElementById('dataSolicitacao').value || '',
-      sinais: document.getElementById('sinaisSintomas') ? document.getElementById('sinaisSintomas').value : '',
-      justificativa: document.getElementById('justificativa') ? document.getElementById('justificativa').value : '',
-      exames: document.getElementById('exames') ? document.getElementById('exames').value : ''
+      sinais: document.getElementById('sinaisSintomas').value || '',
+      justificativa: document.getElementById('justificativa').value || '',
+      exames: document.getElementById('exames').value || '',
+      tecnicaAnest: document.getElementById('selTecnicaAnestesia').value || 'Local',
+      anestesia: document.getElementById('txtAnestesia').value || '',
+      cirurgia: document.getElementById('txtCirurgia').value || ''
     };
 
     fields.forEach(f => {
@@ -339,6 +670,9 @@
           else if (n.includes('sinais')) { val = d.sinais; fontSize = 6.8; }
           else if (n.includes('justificativa')) { val = d.justificativa; fontSize = 6.8; }
           else if (n.includes('exames')) { val = d.exames; fontSize = 6.8; }
+          else if (n.includes('tecnica') || n.includes('tipo anest')) { val = d.tecnicaAnest; fontSize = 7.5; }
+          else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 6.8; }
+          else if (n.includes('boletim') || n.includes('relatório de internação')) { val = d.cirurgia; fontSize = 6.8; }
 
           if (val) {
             try { tf.setFontSize(fontSize); } catch(e) {}
@@ -359,7 +693,7 @@
 
     form.updateFieldAppearances(helvetica);
 
-    // Envio para o Google Sheets (já confirmado funcional)
+    // Envio direto para o Google Apps Script
     fetch(URL_APPS_SCRIPT, {
       method: 'POST',
       mode: 'no-cors',
