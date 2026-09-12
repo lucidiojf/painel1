@@ -346,7 +346,7 @@
         <textarea id="justificativa" rows="2">NECESSIDADE DE ESTABILIZAÇÃO PRESSÓRICA VENOSA, MONITORIZAÇÃO HEMODINÂMICA E PREVENÇÃO DE LESÃO DE ÓRGÃO-ALVO.</textarea>
       </div>
       <div class="form-group">
-        <label>19. Principais Resultados de Exames:</label>
+        <label>19. Principais Resultados de Provas Diagnósticas (Exames):</label>
         <textarea id="exames" rows="2">ECG, HEMOGRAMA, UREIA, CREATININA E SUMÁRIO DE URINA.</textarea>
       </div>
     </fieldset>
@@ -635,17 +635,45 @@
           let val = null;
           let fontSize = 7.5;
 
-          if (n.includes('prontuario') || n.includes('prontuário')) { val = d.prontuario; fontSize = 8.5; }
-          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg')) { val = d.nome; fontSize = 7.5; }
-          else if (n.includes('sus')) { val = d.cns; fontSize = 8; }
+          // ==========================================
+          // 1. CAMPOS NUMERADOS DA FOLHA 2 (LAUDO SUS)
+          // ==========================================
+          if (n.startsWith('17') || n.includes('sinais e sintomas') || n.includes('sinais')) {
+            val = d.sinais; fontSize = 6.8;
+          }
+          else if (n.startsWith('18') || n.includes('justificam') || n.includes('justificativa') || n.includes('condicoes que')) {
+            val = d.justificativa; fontSize = 6.8;
+          }
+          else if (n.startsWith('19') || n.includes('provas') || n.includes('resultados de provas') || n.includes('resultado de exames')) {
+            val = d.exames; fontSize = 6.8;
+          }
+          else if (n.startsWith('20') || n.includes('diagnostico inicial') || n.includes('diagnóstico inicial') || n.includes('diagn pre') || n.includes('diagnóstico')) {
+            val = d.diag; fontSize = 7.5;
+          }
+          else if (n.startsWith('21') || n.includes('cid 10 principal') || n.includes('cid princ') || n === 'cid principal' || n === 'cid') {
+            val = d.cid; fontSize = 8.5;
+          }
+          else if (n.startsWith('24') || n.includes('descrição do procedimento') || n.includes('descricao do procedimento') || n.includes('desc proced')) {
+            val = d.procedimento; fontSize = 6.8;
+          }
+          else if (n.startsWith('25') || n.includes('código do procedimento') || n.includes('codigo do procedimento') || n.includes('cod proced') || n.includes('proced solic') || n.includes('proced realiz')) {
+            val = d.codProced; fontSize = 8;
+          }
+
+          // ==========================================
+          // 2. DEMAIS CAMPOS DO DOCUMENTO
+          // ==========================================
+          else if (n.includes('prontuario') || n.includes('prontuário')) { val = d.prontuario; fontSize = 8.5; }
+          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 7.5; }
+          else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 8; }
           else if (n.includes('dn') || n.includes('nasc')) { val = d.nasc; fontSize = 7.5; }
           else if (n.includes('sexo')) { val = d.sexo; fontSize = 8; }
-          else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 7.5; }
-          else if (n.includes('mae')) { val = d.mae; fontSize = 7.5; }
+          else if (n.includes('cor') || n.includes('raca') || n.includes('raça')) { val = d.raca; fontSize = 7.5; }
+          else if (n.includes('mae') || n.includes('mãe')) { val = d.mae; fontSize = 7.5; }
           else if (n.includes('pai')) { val = d.pai; fontSize = 7.5; }
           else if (n.includes('profiss')) { val = d.profissao; fontSize = 7.5; }
           else if (n.includes('endereço') || n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 7; }
-          else if (n === 'n°' || n.startsWith('n°#') || n.includes('numero')) { val = d.num; fontSize = 8; }
+          else if (n === 'n°' || n.startsWith('n°#') || n.includes('numero') || n.includes('número')) { val = d.num; fontSize = 8; }
           else if (n.includes('bairro')) { val = d.bairro; fontSize = 7.5; }
           else if (n.includes('municipio') || n.includes('município') || n.includes('naturalidade')) { val = d.municipio; fontSize = 7.5; }
           else if (n.includes('estado') || n === 'uf' || n.includes('15. uf')) { val = d.estado; fontSize = 8; }
@@ -653,26 +681,19 @@
           else if (n.includes('telefone')) { val = d.tel; fontSize = 7.5; }
           else if (n.includes('n° doc') || n === 'rg') { val = d.rg; fontSize = 8; }
           else if (n.includes('cpf pac') || n === 'cpf') { val = d.cpfPac; fontSize = 8; }
-          else if (n.includes('dt intern') || n.includes('admissão')) { val = d.dtInternacao; fontSize = 7.5; }
+          else if (n.includes('dt intern') || n.includes('admissão') || n.includes('admissao')) { val = d.dtInternacao; fontSize = 7.5; }
           else if (n.includes('dt saida') || n.includes('alta')) { val = d.dtSaida; fontSize = 7.5; }
-          else if (n.includes('proced solic') || n.includes('proced realiz') || n.includes('código do procedimento')) { val = d.codProced; fontSize = 8; }
-          else if (n.includes('desc proced') || n.includes('descrição do procedimento')) { val = d.procedimento; fontSize = 6.8; }
           else if (n.includes('mud proc')) { val = 'N'; fontSize = 8; }
           else if (n.includes('especialidade') || n.includes('clinica') || n.includes('serviço')) { val = d.especialidade; fontSize = 7; }
-          else if (n.includes('cid princ') || n.includes('cid 10 principal')) { val = d.cid; fontSize = 8.5; }
           else if (n.includes('enferm')) { val = 'M'; fontSize = 8; }
           else if (n.includes('leito')) { val = '1'; fontSize = 8; }
           else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 7.5; }
-          else if (n.includes('cpf sol') || n.includes('cpf med sol')) { val = d.cpfMed; fontSize = 8; }
+          else if (n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento (cns/cpf) do profissional')) { val = d.cpfMed; fontSize = 8; }
           else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 7.5; }
-          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol')) { val = d.dtSol; fontSize = 7.5; }
-          else if (n.includes('diagn pre') || n.includes('diagnóstico inicial') || n.includes('diagnostico')) { val = d.diag; fontSize = 7.5; }
-          else if (n.includes('sinais')) { val = d.sinais; fontSize = 6.8; }
-          else if (n.includes('justificativa')) { val = d.justificativa; fontSize = 6.8; }
-          else if (n.includes('exames')) { val = d.exames; fontSize = 6.8; }
+          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitação')) { val = d.dtSol; fontSize = 7.5; }
           else if (n.includes('tecnica') || n.includes('tipo anest')) { val = d.tecnicaAnest; fontSize = 7.5; }
           else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 6.8; }
-          else if (n.includes('boletim') || n.includes('relatório de internação')) { val = d.cirurgia; fontSize = 6.8; }
+          else if (n.includes('boletim') || n.includes('relatório de internação') || n.includes('relatorio de internacao')) { val = d.cirurgia; fontSize = 6.8; }
 
           if (val) {
             try { tf.setFontSize(fontSize); } catch(e) {}
