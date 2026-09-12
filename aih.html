@@ -41,8 +41,8 @@
 
 <div class="container">
   <h2>
-    <span>Emissão AIH Oficial (Adobe Form)</span>
-    <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
+    <span>Emissão AIH Oficial (Adobe Form Real)</span>
+    <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Forçar Atualização</button>
   </h2>
 
   <form id="formAih">
@@ -201,7 +201,7 @@
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH e Salvar na Planilha</button>
+    <button type="submit" class="btn-submit">Gerar AIH e Salvar no Sheets</button>
     <div id="msgStatus"></div>
   </form>
 </div>
@@ -224,8 +224,8 @@
 </div>
 
 <script>
-  // Aponta de forma inequívoca para o PDF interativo gerado no Adobe
-  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
+  // Anti-cache forçado para SEMPRE carregar o arquivo novo do Adobe
+  const URL_PDF_BASE = 'AIH_FORM.pdf?anticache=' + new Date().getTime();
   const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
 
   let pdfBytesGerado = null;
@@ -235,11 +235,11 @@
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo formulário Adobe e registrando na planilha...';
+    msg.innerText = 'Preenchendo campos no formulário oficial do Adobe...';
 
     try {
       await gerarAihAdobeForm();
-      msg.innerText = 'Concluído com sucesso!';
+      msg.innerText = 'AIH preenchida e salva na planilha!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
@@ -251,7 +251,7 @@
     const { PDFDocument, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não encontrou o arquivo AIH_FORM.pdf no GitHub. Verifique o nome do arquivo.');
+    if (!res.ok) throw new Error('Não encontrou AIH_FORM.pdf. Certifique-se de que o nome está correto no GitHub.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
@@ -302,7 +302,7 @@
         const tf = form.getTextField(name);
         if (tf) {
           let val = null;
-          let fontSize = 7.5; // Tamanho compacto ideal para não cortar
+          let fontSize = 7.5;
 
           if (n.includes('prontuario') || n.includes('prontuário')) { val = d.prontuario; fontSize = 8.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg')) { val = d.nome; fontSize = 7.5; }
@@ -359,7 +359,7 @@
 
     form.updateFieldAppearances(helvetica);
 
-    // Envio para o Google Sheets em segundo plano
+    // Envio para o Google Sheets (já confirmado funcional)
     fetch(URL_APPS_SCRIPT, {
       method: 'POST',
       mode: 'no-cors',
