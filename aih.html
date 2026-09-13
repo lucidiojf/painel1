@@ -573,8 +573,7 @@
       msg.innerText = 'Erro ao buscar: ' + e.message;
     }
   }
-
-  function atualizarControlesNav(p) {
+function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
@@ -586,31 +585,43 @@
     document.getElementById('dataNasc').value = p.nasc || '';
     document.getElementById('sexo').value = (p.sexo && p.sexo.startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
-    document.getElementById('telefone').value = p.tel || '';
     document.getElementById('nomeMae').value = p.mae || '';
-    document.getElementById('nomePai').value = p.pai || '';
-    document.getElementById('profissao').value = p.profissao || 'AGRICULTORA';
+    document.getElementById('nomePai').value = '';
+    document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // Endereço e Documentos
+    // Endereço e Localidade
     document.getElementById('endereco').value = p.endereco || '';
-    document.getElementById('numEndereco').value = p.num || 'SN';
-    document.getElementById('bairro').value = p.bairro || 'ZONA RURAL';
+    document.getElementById('numEndereco').value = 'SN';
+    document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
     document.getElementById('estado').value = p.estado || 'RN';
-    document.getElementById('cep').value = p.cep || '59890-000';
-    document.getElementById('rg').value = p.rg || '';
-    document.getElementById('cpfPac').value = p.cpfPac || '';
+    document.getElementById('cep').value = '59890-000';
+    document.getElementById('rg').value = '';
+    document.getElementById('cpfPac').value = '';
+
+    // Datas de Atendimento
     document.getElementById('dataInternacao').value = p.dtInternacao || '';
     document.getElementById('dataSaida').value = p.dtSaida || '';
+    document.getElementById('dataSolicitacao').value = p.dtInternacao || '';
 
     // Dados Clínicos e Procedimento
     document.getElementById('diagInicial').value = p.diag || '';
     document.getElementById('cidPrincipal').value = p.cid || '';
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
-    if (p.especialidade) {
-      document.getElementById('especialidade').value = p.especialidade;
-    }
+
+    // Solicitante
+    document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
+    document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
+
+    // Laudo Clínico e Blocos Cirúrgicos
+    document.getElementById('sinaisSintomas').value = p.sinais || '';
+    document.getElementById('justificativa').value = p.justificativa || '';
+    document.getElementById('exames').value = p.exames || '';
+    document.getElementById('txtAnestesia').value = p.anestesia || '';
+    document.getElementById('txtCirurgia').value = p.cirurgia || '';
+  }
+  
 
     // Solicitante e Laudo
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
