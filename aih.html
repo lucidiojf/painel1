@@ -582,7 +582,7 @@
     }
   }
 
- function atualizarControlesNav(p) {
+function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
@@ -594,12 +594,13 @@
     document.getElementById('dataNasc').value = p.nasc || '';
     document.getElementById('sexo').value = (p.sexo && p.sexo.startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
+    document.getElementById('telefone').value = p.tel || '84 99980 5728';
     document.getElementById('nomeMae').value = p.mae || '';
     document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // Endereço e Localidade
-    document.getElementById('endereco').value = p.endereco || 'SITIO ARROJADO';
+    // Endereço e Documentos
+    document.getElementById('endereco').value = p.endereco || '';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
@@ -608,28 +609,32 @@
     document.getElementById('rg').value = '';
     document.getElementById('cpfPac').value = '';
 
-    // Datas de Atendimento
-    document.getElementById('dataInternacao').value = p.dtInternacao || '';
-    document.getElementById('dataSaida').value = p.dtSaida || '';
-    document.getElementById('dataSolicitacao').value = p.dtInternacao || '';
+    // Datas (Garante que se vier texto em vez de data, limpa ou usa data atual)
+    function validarData(d) {
+      if (!d) return '';
+      return (d.includes('/') || d.includes('-')) ? d : '';
+    }
 
-    // Diagnóstico e Procedimento
+    document.getElementById('dataInternacao').value = validarData(p.dtInternacao);
+    document.getElementById('dataSaida').value = validarData(p.dtSaida);
+    document.getElementById('dataSolicitacao').value = validarData(p.dtSol) || validarData(p.dtInternacao);
+
+    // Dados Clínicos e Procedimento
     document.getElementById('diagInicial').value = p.diag || '';
     document.getElementById('cidPrincipal').value = p.cid || '';
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
+    if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
     // Solicitante
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
     document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
 
-    // Textos Clínicos Padrão caso não existam no registro
+    // Laudos Clínicos
     document.getElementById('sinaisSintomas').value = p.sinais || 
       'QUADRO CLÍNICO COMPATÍVEL COM A PATOLOGIA DE ADMISSÃO, NECESSITANDO DE CUIDADOS HOSPITALARES.';
-      
     document.getElementById('justificativa').value = p.justificativa || 
-      'NECESSIDADE DE INTERNAÇÃO PARA PROPEDÊUTICA, ESTABILIZAÇÃO CLÍNICA E/OU TRATAMENTO.';
-      
+      'NECESSIDADE DE INTERNAÇÃO PARA PROPEDÊUTICA, ESTABILIZAÇÃO CLÍNICA E/OU TRATAMENTO CIRÚRGICO.';
     document.getElementById('exames').value = p.exames || 
       'HEMOGRAMA, BIOQUÍMICA BÁSICA E AVALIAÇÃO CLÍNICA.';
 
@@ -835,7 +840,10 @@
           else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 9.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 8.8; }
           else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 9.0; }
-          else if (n.includes('dn') || n.includes('nasc')) { val = d.nasc; fontSize = 8.5; }
+          else if (n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
+            val = (d.nasc && (d.nasc.includes('/') || d.nasc.includes('-'))) ? d.nasc : '';
+            fontSize = 8.5;
+          }
           else if (n.includes('sexo')) { val = d.sexo; fontSize = 9.0; }
           else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8.5; }
           else if (n.includes('mae')) { val = d.mae; fontSize = 8.5; }
@@ -850,8 +858,14 @@
           else if (n.includes('telefone')) { val = d.tel; fontSize = 8.5; }
           else if (n.includes('doc') || n === 'rg') { val = d.rg; fontSize = 9.0; }
           else if (n.includes('cpf pac') || (n.includes('cpf') && !n.includes('med') && !n.includes('sol'))) { val = d.cpfPac; fontSize = 9.0; }
-          else if (n.includes('dt intern') || n.includes('admissao')) { val = d.dtInternacao; fontSize = 8.5; }
-          else if (n.includes('dt saida') || n.includes('alta')) { val = d.dtSaida; fontSize = 8.5; }
+          else if (n.includes('dt intern') || n.includes('admissao') || n === 'data da internacao') {
+            val = (d.dtInternacao && (d.dtInternacao.includes('/') || d.dtInternacao.includes('-'))) ? d.dtInternacao : '';
+            fontSize = 8.5;
+          }
+          else if (n.includes('dt saida') || n.includes('alta') || n === 'data da saida') {
+            val = (d.dtSaida && (d.dtSaida.includes('/') || d.dtSaida.includes('-'))) ? d.dtSaida : '';
+            fontSize = 8.5;
+          }
           else if (n.includes('mud proc')) { val = 'N'; fontSize = 9.0; }
           else if (n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 8.2; }
           else if (n.includes('enferm')) { val = 'M'; fontSize = 9.0; }
@@ -859,7 +873,10 @@
           else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8.5; }
           else if (n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 9.0; }
           else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.5; }
-          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) { val = d.dtSol; fontSize = 8.5; }
+         else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
+            val = (d.dtSol && (d.dtSol.includes('/') || d.dtSol.includes('-'))) ? d.dtSol : (d.dtInternacao || '');
+            fontSize = 8.5;
+          }
           else if (n.includes('tecnica') || n.includes('tipo anest')) { val = d.tecnicaAnest; fontSize = 8.5; }
           else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 7.5; isMulti = true; }
           else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 7.5; isMulti = true; }
