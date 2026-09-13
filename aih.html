@@ -586,7 +586,7 @@ function atualizarControlesNav(p) {
     document.getElementById('sexo').value = (p.sexo && p.sexo.startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
     document.getElementById('nomeMae').value = p.mae || '';
-    document.getElementById('nomePai').value = '';
+    document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
     // Endereço e Localidade
@@ -594,21 +594,22 @@ function atualizarControlesNav(p) {
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
-    document.getElementById('estado').value = p.estado || 'RN';
+    document.getElementById('estado').value = (p.estado && p.estado.length <= 3) ? p.estado : 'RN';
     document.getElementById('cep').value = '59890-000';
-    document.getElementById('rg').value = '';
-    document.getElementById('cpfPac').value = '';
+    document.getElementById('rg').value = p.rg || '';
+    document.getElementById('cpfPac').value = p.cpfPac || '';
 
     // Datas de Atendimento
     document.getElementById('dataInternacao').value = p.dtInternacao || '';
     document.getElementById('dataSaida').value = p.dtSaida || '';
-    document.getElementById('dataSolicitacao').value = p.dtInternacao || '';
+    document.getElementById('dataSolicitacao').value = p.dtSol || p.dtInternacao || '';
 
     // Dados Clínicos e Procedimento
     document.getElementById('diagInicial').value = p.diag || '';
     document.getElementById('cidPrincipal').value = p.cid || '';
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
+    if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
     // Solicitante
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
@@ -622,7 +623,6 @@ function atualizarControlesNav(p) {
     document.getElementById('txtCirurgia').value = p.cirurgia || '';
   }
   
-
     // Solicitante e Laudo
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
     document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
