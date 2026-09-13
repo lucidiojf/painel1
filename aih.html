@@ -596,11 +596,11 @@ function atualizarControlesNav(p) {
     document.getElementById('racaCor').value = p.raca || 'PARDA';
     document.getElementById('telefone').value = '84 99980 5728';
     document.getElementById('nomeMae').value = p.mae || '';
-    document.getElementById('nomePai').value = p.pai || '';
+    document.getElementById('nomePai').value = '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
     // 2. Endereço
-    document.getElementById('endereco').value = p.endereco || 'SITIO CANDEIA';
+    document.getElementById('endereco').value = p.endereco || 'SITIO ARROJADO';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
@@ -610,7 +610,7 @@ function atualizarControlesNav(p) {
     document.getElementById('cpfPac').value = '';
 
     // 3. Datas de Internação
-    document.getElementById('dataInternacao').value = p.dtInternacao || '14/07/2026';
+    document.getElementById('dataInternacao').value = p.dtInternacao || '08/07/2026';
     document.getElementById('dataSaida').value = p.dtSaida || document.getElementById('dataInternacao').value;
     document.getElementById('dataSolicitacao').value = document.getElementById('dataInternacao').value;
 
@@ -627,7 +627,7 @@ function atualizarControlesNav(p) {
 
     // 6. Laudos Clínicos
     document.getElementById('sinaisSintomas').value = p.sinais || 
-      'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA.';
+      'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA. EVOLUIU SEM ANORMALIDADES.';
     document.getElementById('justificativa').value = p.justificativa || 
       'NECESSIDADE DE REALIZAR BIOPSIA / EXERESE.';
     document.getElementById('exames').value = p.exames || 
