@@ -504,11 +504,16 @@
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
 
-  /* =========================================================================
+/* =========================================================================
      SISTEMA DE NAVEGAÇÃO ENTRE PACIENTES (ESTILO ZOHO DOCS)
   ========================================================================= */
-  let indiceAtual = 0;
-  let totalRegistros = 0;
+  let indiceAtual = 1;
+  let totalRegistros = 1;
+
+  // Carrega automaticamente o último registro salvo ao abrir
+  window.addEventListener('DOMContentLoaded', () => {
+    carregarUltimoRegistro();
+  });
 
   async function carregarRegistroPorIndice(idx) {
     const msg = document.getElementById('msgStatus');
@@ -524,20 +529,20 @@
         totalRegistros = data.total;
         atualizarControlesNav(data.paciente);
         msg.style.color = '#16a34a';
-        msg.innerText = `Registro ${indiceAtual} de ${totalRegistros} carregado com sucesso.`;
+        msg.innerText = `Registro ${indiceAtual} de ${totalRegistros} carregado.`;
       } else {
         msg.style.color = '#dc2626';
         msg.innerText = 'Nenhum registro encontrado.';
       }
     } catch (e) {
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao consultar Sheets: ' + e.message;
+      msg.innerText = 'Erro ao consultar: ' + e.message;
     }
   }
 
   function navegarRegistro(delta) {
     const novoIdx = indiceAtual + delta;
-    if (novoIdx >= 1 && (totalRegistros === 0 || novoIdx <= totalRegistros)) {
+    if (novoIdx >= 1 && novoIdx <= totalRegistros) {
       carregarRegistroPorIndice(novoIdx);
     }
   }
@@ -548,7 +553,10 @@
 
   async function buscarPorTermo() {
     const termo = document.getElementById('campoBusca').value.trim();
-    if (!termo) return;
+    if (!termo) {
+      alert('Digite o nome ou prontuário para buscar.');
+      return;
+    }
 
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
@@ -566,14 +574,15 @@
         msg.innerText = `Encontrado: Registro ${indiceAtual} de ${totalRegistros}.`;
       } else {
         msg.style.color = '#dc2626';
-        msg.innerText = 'Nenhum paciente encontrado com esse termo.';
+        msg.innerText = 'Nenhum paciente encontrado com: ' + termo;
       }
     } catch (e) {
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao buscar: ' + e.message;
+      msg.innerText = 'Erro na busca: ' + e.message;
     }
   }
-function atualizarControlesNav(p) {
+
+  function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
@@ -622,17 +631,6 @@ function atualizarControlesNav(p) {
     document.getElementById('txtAnestesia').value = p.anestesia || '';
     document.getElementById('txtCirurgia').value = p.cirurgia || '';
   }
-  
-    // Solicitante e Laudo
-    document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
-    document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
-    document.getElementById('dataSolicitacao').value = p.dtSol || p.dtInternacao || '';
-    document.getElementById('sinaisSintomas').value = p.sinais || '';
-    document.getElementById('justificativa').value = p.justificativa || '';
-    document.getElementById('exames').value = p.exames || '';
-    document.getElementById('txtAnestesia').value = p.anestesia || '';
-    document.getElementById('txtCirurgia').value = p.cirurgia || '';
-  }
 
   document.getElementById('campoBusca').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
@@ -641,86 +639,9 @@ function atualizarControlesNav(p) {
     }
   });
 
-  /* Banco de Boletins Operatórios */
-  const boletins = {
-    CESARIANA: 'Incisão Pfannenstiel transversa, ligeiramente semi circular, atingindo pele, subcutâneo e aponeurose, músculos são afastados, peritônio aberto no sentido vertical. Aberta a cavidade, colocar válvula de Doyen no ângulo inferior da incisão. Exposto o segmento inferior do útero, incisão transversa do peritônio visceral, pequena secção transversa no miométrio, afastando e abrindo o miométrio com ajuda de pinça kocher e com os dedos, completando a abertura. Retirada do feto, deslocar e extrair a placenta. Limpeza da cavidade uterina usando compressas, observar se o canal cervical está permeável. Fechamento do miométrio com CG Cromado "1" contínuo ancorado, não incluindo a mucosa. Fechamento do peritônio visceral com CG Simples "2-0" contínuo ancorado. Limpeza da cavidade abdominal com compressas, reposição do útero à cavidade. Fechamento do peritônio parietal com CG Simples "2-0" contínuo. Aproximar músculos com CG Simples "2-0" pontos separados. Sutura da aponeurose com CG Cromado "1" contínua ancorada. Fechamento do subcutâneo com CG Simples "2-0" separados e da pele com mononylon "4-0" contínuo. Curativo Simples.',
-    COLECISTECTOMIA: 'Incisão paramediana supraumbilical. Incisão do subcutâneo e aponeurose. Afastar músculo reto abdominal, abertura da aponeurose posterior e peritônio. Aplicação de afastador abdominal, afastar alças com compressas e a borda hepática com valva maleável. Pinçamento da vesícula visualizando o pedículo vascular com identificacao e reparo do canal cistico. Ligadura com duas pinças Mixter da artéria cística com Algodão 0" e secção. Separar a vesícula da loja hepática até o seu pedículo, com bisturi elétrico, até ficar somente o canal cístico. A seguir, com 2 pinças Mixter, clampear o canal cístico, fazendo duas ligaduras com Algodão "0". Revisão da hemostasia do pedículo e do leito hepático. Fechamento da cavidade plano por plano.',
-    POSTECTOMIA: 'Reparo da pele com 2 pinças hemostáticas. Exposição do freio, secção do mesmo e ligadura. Com a pele em tensão, delimitamos com bisturi o retalho da mucosa a 1 cm do sulco balanoprepucial ao redor do pênis. Revertemos o prepúcio, fazer a ressecção circular do excesso de pele com tesoura. Realizamos 4 pontos cardeais entre o retalho junto a glande e a pele do pênis com CG Simples "3-0". Completamos a sutura com 3-4 pontos nos quatro segmentos delimitados pelos reparos. Curativo com Xilocaina pomada, elevando o pênis ao nível do abdome.',
-    HEMORROIDECTOMIA: 'Mamilos situam-se às 3-7 e 11 horas. Pinças com Allis o ponto mais saliente do mamilo. Incisão da pele e subcutâneo como base de um triângulo cuja base é o pedículo hemorroidário. Prosseguir com a incisão até a linha, deixando aderida à pele a ser retirada, as dilatações venosas. Iniciar sutura contínua ancorada com CG Cromado "2-0" desde o coto do mamilo até a pele, deixando a base do triângulo aberta. Repetir procedimento nos outros dois mamilos. Hemostasia. Cuidado em deixar mucosa entre os mamilos ressecados.',
-    FISTULOTOMIA: 'Paciente em decúbito ventral, expomos a região perineal e sacrococcígea com esparadrapos fixados à mesa cirúrgica. Aplicar azul de metileno no orifício externo. Incisão arredondada circundando o inicio da fistula, encampando a área tinginda pelo azul de metileno. até a cavidade anal, retirando todo o trajeto fistuloso. Hemostasia com eletrocautério. Gaze com Lidocaina e aplicar curativo.',
-    HERNIOPLASTIA_EPIGASTRICA: 'Incisão transversa no local abaulado interessando pele, subcutâneo, fáscia subcutânea. Abertura da fáscia, apresentação da aponeurose e pelotão gorduroso (aspecto de cogumelo). Na maioria não existe saco herniário, apenas ligamos o pelotão gorduroso com ponto transfixante de CG Cromado "0" no seu colo, e ressecamos o excesso. Reduzimos o tecido gorduroso laqueado para baixo da aponeurose, pinçamos as extremidades da aponeurose e realizamos o seu fechamento com mononylon "2-0" pontos separados. Sutura do subcutâneo com CG Simples "3-0" e pele com sutura contínua Mononylon "4-0". Curativo compressivo.',
-    HERNIOPLASTIA_INGUINAL: 'Incisão na região inguinal paralela a uma linha entre espinha ilíaca e sínfise púbica. Dissecar subcutâneo e expor aponeurose do obliquo externo, incisão na direção de suas fibras. Soltar o saco herniário e o cordão espermático por dissecção sem cortar, fixando a massa com gaze. Separe o saco do cordão até o colo do saco no anel interno. Abrir o saco, confirme seu conteudo, transfixar seu colo com algodão "2-0". Cortar o excesso. Reforço da parede posterior: Sutura continua ligando o ligamento inguinal ao tendão conjunto, testando o anel interno para que este deixe no máximo inserir a ponta do dedo mínimo. Repor o cordão inguinal no seu leito normal. Reforço da parede anterior: Fechar a aponeurose do obliquo externo com CG Cromado "0" contínuo. Fechamento subcutaneo e pele.',
-    HERNIOPLASTIA_UMBILICAL: 'Incisão semicircular infra-umbilical, atingindo pele e subcutâneo. Com o uso de uma tesoura de Metzembauer contornar o umbigo pelo subcutâneo, bem próximo ao anel herniário, e com uso de bisturi, realizamos secção transversal cuidadosa dos tecidos em direção à tesoura até o encontro do saco herniário. Abrir, identificar, reduzir seu conteúdo e liberação do umbigo, retirando a face caudal do saco herniário. Fechamento do saco herniário e aponeurose adjacente pode ser feito lábio a lábio ou em jaquetão, usando mononylon "0" pontos separados. Fixação do umbigo à aponeurose em sua posição anatômica com ponto de CG Simples "3-0". Fechamento de subcutaneo e pele.',
-    HIDROCELE: 'Incisão em sentido longitudinal da bolsa escrotal, atingindo pele, músculo darto e subcutâneo. Divulsão das túnicas até a túnica vaginal, fazendo a devida hemostasia. Realizar o deslocamento com dedo de toda a túnica vaginal. Abrir a túnica vaginal no mesmo sentido da bolsa escrotal e aspirar todo o líquido. Após, amplia-se a incisão, expondo o testículo. Realiza-se a inversão da túnica vaginal, fazendo-se a ressecção do excesso de túnica. Reparo nos ângulos da túnica invertida, iniciando-se sutura da mesma com CG Simples "3-0" contínua ancorada, tendo-se o cuidado de não angustiar os elementos do funículo. Colocar cordão e testículo bem acomodados. Fechamento do subcutâneo e pele com CG Simples "3-0" pontos separados. Curativo local e suspensório escrotal.',
-    COLPOPERINEOPLASTIA: 'Colpoperineoplastia anterior: Assepsia com PVPI; incisão mediana na mucosa vaginal a 1 cm do meato urinário. Dissecção romba da mucosa vésico-vaginal; suspensão do músculo vesical e cerclagem com CG Cromado "0". Ressecção do excesso de mucosa e fechamento com CG Cromado "2-0" ancorado na parte longitudinal. Colpoperineoplastia posterior: Reparo com Allis da transição pele-mucosa de cada lado da fúrcula vaginal. Incisão na mucosa vaginal com dissecção romba separando a mucosa vaginal da fáscia retal, expondo os feixes puborretais dos elevadores do ânus. Aproximação destes com pontos em U com CG Cromado "0". Ressecção do excesso de mucosa dos retalhos vaginais. Sutura ancorada com CG Simples "3-0" desde a Allis no reparo superior até a fúrcula vaginal. Sutura da pele com pontos separados de CG Simples "3-0". PVPI e tampão vaginal.',
-    HISTERECTOMIA: 'Incisão Pfannenstiel atingindo pele, subcutâneo e aponeurose. Abertura da cavidade abdominal; afastamento de alças com compressas; apresentação do útero com aplicação de saca-fibroma; pinçamento, secção e ligadura de: ligamento tubo-ovárico, ligamento redondo, vasos redondos, ligamento útero-sacro. Mesmo procedimento contralateralmente. Abertura da cúpula vaginal; retirada da peça uterina. Fechamento da cúpula vaginal com CG Cromado "1" agulhado; fechamento do peritônio desde o infundíbulo de um lado até o contralateral com Simples "2-0" contínuo. Revisão da hemostasia. Retirada das compressas. Fechamento da cavidade abdominal: Peritônio: CG Simples "2-0" ancorado; músculos: Simples "2-0" separados; aponeurose: Cromado "1" contínuo. Subcutâneo: Simples "2-0" separados. Pele: Mononylon "4-0" contínuo. Curativo simples.',
-    CISTO_PILONIDAL: 'Paciente em decúbito ventral, expomos a região perineal e sacrococcígea com esparadrapos fixados à mesa cirúrgica. Aplicar azul de metileno no orifício externo. Incisão obliqua circundando o cisto, tendo como limite inferior a aponeurose pré-sacra, encampando a área tinginda pelo azul de metileno. Hemostasia com eletrocautério. Aproximar sem fechar, com pontos separados de Mononylon 3-0 retirados 5 dias após. Gaze com Nebacetin e aplicar curativo.',
-    VASECTOMIA: 'Posicionar o pênis para cima - Incisão pequena à esquerda depois à direita, com acesso ao canal deferente, isolamento, secção e ligadura com algodão 2-0 de ambos os condutos, interrompendo a passagem dos espermatozoides do saco escrotal ao liquido espermático - Fechamento de ambas as incisões com 1-2 pontos catgut simples 3-0. Curativo simples.',
-    CURETAGEM: 'Curetagem uterina: Paciente em posição ginecológica, cuidados de assepsia e anti-sepsia. Colocação dos campos operatórios; toque bimanual para comprovar o tamanho do útero, sua forma, consistência e posição; cateterismo vesical se a bexiga estiver cheia. Técnica: Colocação do espéculo, a seguir, pinça-se o lábio anterior do colo (ou posterior, se útero for retrovertido), com pinça de Pozzi; histerometria; colo impermeável, dilata-se com velas de Hegar. Introduz-se a cureta e inicia-se o procedimento em sentido horário. Material do raspado uterino enviado para anatomopatológico.',
-    HISTERECTOMIA_VAGINAL: 'Paciente em posição de litotomia. Feito apreensão e tração do colo uterino nos seus lábios anterior e posterior. Incisão circular com bisturi elétrico na transição entre as mucosas vaginal e cervical. Dissecção romba dos pilares vesicais, elevando da bexiga. Pinçamento, secção e ligadura com reparos bilaterais dos ligamentos uterossacros. Pinçamento, secção e ligadura das artérias uterinas bilaterais. Exteriorização do útero através da abertura do peritônio posterior. Identificação do peritônio anterior e secção do mesmo com tesoura. Pinçamento, secção, ligadura e reparo bilateral dos ligamentos redondo e útero-ováricos. Retirada da peça operatória (útero). Fechamento de cúpula com Catgut.',
-    HERNIOPLASTIA_INCISIONAL: 'Incisão fusiforme alargada englobando a cicatriz anterior. Abertura de pele e subcutâneo. Dissecamos o saco herniário desfazendo aderências com a aponeurose até identificar o anel herniário. Abertura do saco, redução do conteúdo, ressecção do excesso de saco herniário. Aproximação da aponeurose com algodão 2-0. Aplicação de tela de polipropileno. Fechamento de subcutâneo e pele.',
-    EXERESE_BARTHOLIN: 'Incisão da mucosa dos pequenos lábios, com dissecção progressiva até a cápsula do cisto. Dissecção do cisto, tentando isolá-lo dos tecidos vizinhos, até o seu pedículo. Ligar o pedículo com CG Cromado "2-0". Hemostasia. Aproximar subcutâneo com CG Simples "3-0", deixando dreno de Penrose. Sutura da mucosa em "U" com CG Simples "3-0".'
-  };
-
-  /* Disparadores dos Seletores Inteligentes */
-  function aoSelecionarCid(val) {
-    if (!val) return;
-    if (val === 'OUTRO') {
-      document.getElementById('diagInicial').value = '';
-      document.getElementById('cidPrincipal').value = '';
-      document.getElementById('diagInicial').focus();
-      return;
-    }
-    const partes = val.split('|');
-    document.getElementById('diagInicial').value = partes[0];
-    document.getElementById('cidPrincipal').value = partes[1];
-  }
-
-  function aoSelecionarProced(val) {
-    if (!val) return;
-    if (val === 'OUTRO') {
-      document.getElementById('procedimento').value = '';
-      document.getElementById('codProcedimento').value = '';
-      document.getElementById('procedimento').focus();
-      return;
-    }
-    const partes = val.split('|');
-    document.getElementById('procedimento').value = partes[0];
-    document.getElementById('codProcedimento').value = partes[1];
-    if (partes[2]) {
-      document.getElementById('especialidade').value = partes[2];
-    }
-  }
-
-  function aoSelecionarMedico(val) {
-    if (!val) return;
-    if (val === 'OUTRO') {
-      document.getElementById('medicoSolicitante').value = '';
-      document.getElementById('cpfSolicitante').value = '';
-      document.getElementById('medicoSolicitante').focus();
-      return;
-    }
-    const partes = val.split('|');
-    document.getElementById('medicoSolicitante').value = partes[0];
-    document.getElementById('cpfSolicitante').value = partes[1];
-  }
-
-  function aoSelecionarAnestesia(val) {
-    if (!val) return;
-    document.getElementById('txtAnestesia').value = (val === 'OUTRO') ? '' : val;
-    if (val === 'OUTRO') document.getElementById('txtAnestesia').focus();
-  }
-
-  function aoSelecionarCirurgia(chave) {
-    if (!chave) return;
-    if (chave === 'OUTRO') {
-      document.getElementById('txtCirurgia').value = '';
-      document.getElementById('txtCirurgia').focus();
-    } else if (boletins[chave]) {
-      document.getElementById('txtCirurgia').value = boletins[chave];
-    }
-  }
-
+  /* =========================================================================
+     ENVIO DO FORMULÁRIO E MONTAGEM DO PDF
+  ========================================================================= */
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
@@ -816,9 +737,7 @@ function atualizarControlesNav(p) {
           let fontSize = 8.5;
           let isMulti = false;
 
-          // ==========================================================
-          // 24. DESCRIÇÃO DO PROCEDIMENTO
-          // ==========================================================
+          // 24. Descrição do Procedimento
           if (
             n.startsWith('24') ||
             n.includes('24 descricao') ||
@@ -835,10 +754,7 @@ function atualizarControlesNav(p) {
             fontSize = 7.8;
             isMulti = true;
           }
-
-          // ==========================================================
-          // 25. CÓDIGO DO PROCEDIMENTO
-          // ==========================================================
+          // 25. Código SIGTAP
           else if (
             n.startsWith('25') ||
             n.includes('codigo do procedimento') ||
@@ -850,10 +766,7 @@ function atualizarControlesNav(p) {
             val = d.codProced;
             fontSize = 9.0;
           }
-
-          // ==========================================================
-          // 18. JUSTIFICATIVA DA INTERNAÇÃO
-          // ==========================================================
+          // 18. Justificativa
           else if (
             n.startsWith('18') || 
             n.includes('justificam') || 
@@ -867,10 +780,7 @@ function atualizarControlesNav(p) {
             fontSize = 7.8; 
             isMulti = true;
           }
-
-          // ==========================================================
-          // 19. PROVAS DIAGNÓSTICAS / EXAMES
-          // ==========================================================
+          // 19. Provas Diagnósticas / Exames
           else if (
             n.startsWith('19') || 
             n.includes('provas') || 
@@ -885,10 +795,7 @@ function atualizarControlesNav(p) {
             fontSize = 7.8; 
             isMulti = true;
           }
-
-          // ==========================================================
-          // 20. DIAGNÓSTICO INICIAL
-          // ==========================================================
+          // 20. Diagnóstico Inicial
           else if (
             n.startsWith('20') || 
             n.includes('20 diagnostico') || 
@@ -901,10 +808,7 @@ function atualizarControlesNav(p) {
             val = d.diag; 
             fontSize = 8.5;
           }
-
-          // ==========================================================
-          // 21. CID 10 PRINCIPAL
-          // ==========================================================
+          // 21. CID Principal
           else if (
             n.startsWith('21') || 
             n.includes('cid 10 principal') || 
@@ -916,19 +820,13 @@ function atualizarControlesNav(p) {
             val = d.cid; 
             fontSize = 9.5;
           }
-
-          // ==========================================================
-          // 17. SINAIS E SINTOMAS
-          // ==========================================================
+          // 17. Sinais e Sintomas
           else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
             val = d.sinais; 
             fontSize = 7.8; 
             isMulti = true;
           }
-
-          // ==========================================================
-          // DEMAIS CAMPOS DO DOCUMENTO (FONTES CONFORTÁVEIS)
-          // ==========================================================
+          // Identificação Geral
           else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 9.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 8.8; }
           else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 9.0; }
@@ -986,7 +884,7 @@ function atualizarControlesNav(p) {
 
     form.updateFieldAppearances(helvetica);
 
-    // Envia para a planilha
+    // Gravação na Planilha
     fetch(URL_APPS_SCRIPT, {
       method: 'POST',
       mode: 'no-cors',
