@@ -13,13 +13,16 @@ function atualizarControlesNav(p) {
     document.getElementById('telefone').value = p.tel || '';
     document.getElementById('nomeMae').value = p.mae || '';
     document.getElementById('nomePai').value = p.pai || '';
-    document.getElementById('profissao').value = p.profissao || '';
-    document.getElementById('endereco').value = p.endereco || '';
-    document.getElementById('numEndereco').value = p.num || '';
-    document.getElementById('bairro').value = p.bairro || '';
-    document.getElementById('municipio').value = p.municipio || '';
+    document.getElementById('profissao').value = p.profissao || 'AGRICULTORA';
+    
+    // Tratamento de endereço caso venha completo em um único campo
+    let end = p.endereco || '';
+    document.getElementById('endereco').value = end;
+    document.getElementById('numEndereco').value = p.num || 'SN';
+    document.getElementById('bairro').value = p.bairro || 'ZONA RURAL';
+    document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
     document.getElementById('estado').value = p.estado || 'RN';
-    document.getElementById('cep').value = p.cep || '';
+    document.getElementById('cep').value = p.cep || '59890-000';
     document.getElementById('rg').value = p.rg || '';
     document.getElementById('cpfPac').value = p.cpfPac || '';
     document.getElementById('dataInternacao').value = p.dtInternacao || '';
@@ -31,9 +34,9 @@ function atualizarControlesNav(p) {
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
-    document.getElementById('medicoSolicitante').value = p.medico || '';
-    document.getElementById('cpfSolicitante').value = p.cpfMed || '';
-    document.getElementById('dataSolicitacao').value = p.dtSol || '';
+    document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
+    document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
+    document.getElementById('dataSolicitacao').value = p.dtSol || p.dtInternacao || '';
     document.getElementById('sinaisSintomas').value = p.sinais || '';
     document.getElementById('justificativa').value = p.justificativa || '';
     document.getElementById('exames').value = p.exames || '';
