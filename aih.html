@@ -582,7 +582,7 @@
     }
   }
 
-  function atualizarControlesNav(p) {
+ function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
@@ -598,38 +598,48 @@
     document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // Endereço e Localidade
+    // Endereço
     document.getElementById('endereco').value = p.endereco || '';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
     document.getElementById('estado').value = (p.estado && p.estado.length <= 3) ? p.estado : 'RN';
     document.getElementById('cep').value = '59890-000';
-    document.getElementById('rg').value = p.rg || '';
-    document.getElementById('cpfPac').value = p.cpfPac || '';
+    document.getElementById('rg').value = '';
+    document.getElementById('cpfPac').value = '';
 
-    // Datas de Atendimento
+    // Datas
     document.getElementById('dataInternacao').value = p.dtInternacao || '';
     document.getElementById('dataSaida').value = p.dtSaida || '';
     document.getElementById('dataSolicitacao').value = p.dtSol || p.dtInternacao || '';
 
-    // Dados Clínicos e Procedimento
+    // Diagnóstico e Procedimento
     document.getElementById('diagInicial').value = p.diag || '';
     document.getElementById('cidPrincipal').value = p.cid || '';
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
-    if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
     // Solicitante
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
     document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
 
-    // Laudo Clínico e Blocos Cirúrgicos
-    document.getElementById('sinaisSintomas').value = p.sinais || '';
-    document.getElementById('justificativa').value = p.justificativa || '';
-    document.getElementById('exames').value = p.exames || '';
-    document.getElementById('txtAnestesia').value = p.anestesia || '';
-    document.getElementById('txtCirurgia').value = p.cirurgia || '';
+    // Campos Descritivos Clínicos (Lê da planilha se existir; se estiver em branco, atribui padrão)
+    document.getElementById('sinaisSintomas').value = p.sinais || 
+      'QUADRO CLÍNICO COMPATÍVEL COM A PATOLOGIA DE ADMISSÃO, NECESSITANDO DE CUIDADOS HOSPITALARES.';
+      
+    document.getElementById('justificativa').value = p.justificativa || 
+      'NECESSIDADE DE INTERNAÇÃO PARA PROPEDÊUTICA, ESTABILIZAÇÃO CLÍNICA E/OU TRATAMENTO CIRÚRGICO.';
+      
+    document.getElementById('exames').value = p.exames || 
+      'HEMOGRAMA, BIOQUÍMICA BÁSICA E AVALIAÇÃO CLÍNICA.';
+
+    // Anestesia e Cirurgia
+    if (p.anestesia) {
+      document.getElementById('txtAnestesia').value = p.anestesia;
+    }
+    if (p.cirurgia) {
+      document.getElementById('txtCirurgia').value = p.cirurgia;
+    }
   }
 
   document.getElementById('campoBusca').addEventListener('keypress', function(e) {
