@@ -587,54 +587,89 @@ function atualizarControlesNav(p) {
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
 
-    // 1. Identificação
+    // Identifica se os dados vieram deslocados pela coluna Mãe
+    // Se no endereço vier nome de pessoa (CREUZA, MARIA, etc.) e o município for SITIO/RUA
+    const endStr = (p.endereco || '').toString().toUpperCase();
+    const munStr = (p.municipio || '').toString().toUpperCase();
+    const deslocado = endStr.includes('SILVA') || endStr.includes('SOARES') || endStr.includes('BATISTA') || munStr.includes('SITIO') || munStr.includes('RUA') || munStr.includes('SN');
+
+    let mae = p.mae || '';
+    let endereco = p.endereco || '';
+    let municipio = p.municipio || 'FRUTUOSO GOMES';
+    let estado = p.estado || 'RN';
+    let dtInternacao = p.dtInternacao || '';
+    let dtSaida = p.dtSaida || '';
+    let diag = p.diag || '';
+    let cid = p.cid || '';
+    let procedimento = p.procedimento || '';
+    let codProced = p.codProced || '';
+    let medico = p.medico || 'LUCIDIO JÁCOME FERREIRA';
+    let cpfMed = p.cpfMed || '175.499.574-87';
+
+    if (deslocado) {
+      // Reorganiza a sequência
+      mae = p.endereco; // CREUZA SOARES DA SILVA
+      endereco = p.municipio; // SITIO MUMBAÇA, SN - ZONA RURAL
+      municipio = (p.estado && p.estado.length > 3) ? p.estado : 'FRUTUOSO GOMES';
+      estado = 'RN';
+      dtInternacao = p.dtSaida || '08/07/2026';
+      dtSaida = p.dtSaida || dtInternacao;
+      diag = p.cid; // outras neoplasias benignas da pele
+      cid = p.procedimento; // D 23
+      procedimento = p.codProced; // BIOPSIA DE TUMOR SUPERFICIAL DA PELE
+      codProced = p.medico; // 201010020
+      medico = p.cpfMed || 'LUCIDIO JÁCOME FERREIRA';
+      cpfMed = '175.499.574-87';
+    }
+
+    // 1. Identificação do Paciente
     document.getElementById('prontuario').value = p.prontuario || '';
     document.getElementById('nomePaciente').value = p.nome || '';
     document.getElementById('cns').value = p.cns || '';
     document.getElementById('dataNasc').value = p.nasc || '';
-    document.getElementById('sexo').value = (p.sexo && p.sexo.startsWith('M')) ? 'M' : 'F';
+    document.getElementById('sexo').value = (p.sexo && p.sexo.toString().toUpperCase().startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
     document.getElementById('telefone').value = '84 99980 5728';
-    document.getElementById('nomeMae').value = p.mae || '';
-    document.getElementById('nomePai').value = '';
+    document.getElementById('nomeMae').value = mae;
+    document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // 2. Endereço
-    document.getElementById('endereco').value = p.endereco || 'SITIO ARROJADO';
+    // 2. Endereço e Localidade
+    document.getElementById('endereco').value = endereco;
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
-    document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
-    document.getElementById('estado').value = (p.estado && p.estado.length <= 3) ? p.estado : 'RN';
+    document.getElementById('municipio').value = municipio;
+    document.getElementById('estado').value = estado;
     document.getElementById('cep').value = '59890-000';
     document.getElementById('rg').value = '';
     document.getElementById('cpfPac').value = '';
 
-    // 3. Datas de Internação
-    document.getElementById('dataInternacao').value = p.dtInternacao || '08/07/2026';
-    document.getElementById('dataSaida').value = p.dtSaida || document.getElementById('dataInternacao').value;
-    document.getElementById('dataSolicitacao').value = document.getElementById('dataInternacao').value;
+    // 3. Datas
+    document.getElementById('dataInternacao').value = dtInternacao;
+    document.getElementById('dataSaida').value = dtSaida;
+    document.getElementById('dataSolicitacao').value = dtInternacao;
 
     // 4. Clínicos e Procedimento
-    document.getElementById('diagInicial').value = p.diag || '';
-    document.getElementById('cidPrincipal').value = p.cid || '';
-    document.getElementById('procedimento').value = p.procedimento || '';
-    document.getElementById('codProcedimento').value = p.codProced || '';
+    document.getElementById('diagInicial').value = diag;
+    document.getElementById('cidPrincipal').value = cid;
+    document.getElementById('procedimento').value = procedimento;
+    document.getElementById('codProcedimento').value = codProced;
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
-    // 5. Solicitante
-    document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
-    document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
+    // 5. Profissional Solicitante
+    document.getElementById('medicoSolicitante').value = medico;
+    document.getElementById('cpfSolicitante').value = cpfMed;
 
     // 6. Laudos Clínicos
-    document.getElementById('sinaisSintomas').value = p.sinais || 
+    document.getElementById('sinaisSintomas').value = (p.sinais && !p.sinais.includes('175.')) ? p.sinais : 
       'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA. EVOLUIU SEM ANORMALIDADES.';
     document.getElementById('justificativa').value = p.justificativa || 
       'NECESSIDADE DE REALIZAR BIOPSIA / EXERESE.';
     document.getElementById('exames').value = p.exames || 
       'EXS SEM ANORMALIDADES';
 
-    if (p.anestesia) document.getElementById('txtAnestesia').value = p.anestesia;
-    if (p.cirurgia) document.getElementById('txtCirurgia').value = p.cirurgia;
+    document.getElementById('txtAnestesia').value = 'Lidocaina a 2% - 20 ml SF - 500 ml EV';
+    document.getElementById('txtCirurgia').value = 'SEM INTERCORRÊNCIAS OPERATÓRIAS.';
   }
 
   document.getElementById('campoBusca').addEventListener('keypress', function(e) {
