@@ -587,33 +587,20 @@ function atualizarControlesNav(p) {
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
 
-    // Validador estrito de data: só aceita se tiver barra ou hífen e NÃO contiver letras
-    function validarData(val, fallback) {
-      if (!val) return fallback || '';
-      let s = val.toString().trim();
-      if (/[a-zA-Z]/.test(s)) return fallback || ''; // Se tiver letras (ex: SITIO, RUA), descarta
-      if (s.includes('/') || s.includes('-')) return s;
-      return fallback || '';
-    }
-
-    // 1. Identificação do Paciente
+    // 1. Identificação
     document.getElementById('prontuario').value = p.prontuario || '';
     document.getElementById('nomePaciente').value = p.nome || '';
     document.getElementById('cns').value = p.cns || '';
-    document.getElementById('dataNasc').value = validarData(p.nasc, '');
-    document.getElementById('sexo').value = (p.sexo && p.sexo.toString().toUpperCase().startsWith('M')) ? 'M' : 'F';
+    document.getElementById('dataNasc').value = p.nasc || '';
+    document.getElementById('sexo').value = (p.sexo && p.sexo.startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
     document.getElementById('telefone').value = '84 99980 5728';
     document.getElementById('nomeMae').value = p.mae || '';
     document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // 2. Endereço Completo (Se vier endereço em p.endereco ou se tiver caído em p.dtSaida por engano)
-    let endEncontrado = p.endereco;
-    if (!endEncontrado && p.dtSaida && /[a-zA-Z]/.test(p.dtSaida)) {
-      endEncontrado = p.dtSaida;
-    }
-    document.getElementById('endereco').value = endEncontrado || 'SITIO ARROJADO';
+    // 2. Endereço
+    document.getElementById('endereco').value = p.endereco || 'SITIO CANDEIA';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
@@ -622,31 +609,29 @@ function atualizarControlesNav(p) {
     document.getElementById('rg').value = '';
     document.getElementById('cpfPac').value = '';
 
-    // 3. Datas de Atendimento (Blindadas: nunca recebem endereço)
-    let dtAdm = validarData(p.dtInternacao, '08/07/2026');
-    let dtAlta = validarData(p.dtSaida, dtAdm);
-    document.getElementById('dataInternacao').value = dtAdm;
-    document.getElementById('dataSaida').value = dtAlta;
-    document.getElementById('dataSolicitacao').value = dtAdm;
+    // 3. Datas de Internação
+    document.getElementById('dataInternacao').value = p.dtInternacao || '14/07/2026';
+    document.getElementById('dataSaida').value = p.dtSaida || document.getElementById('dataInternacao').value;
+    document.getElementById('dataSolicitacao').value = document.getElementById('dataInternacao').value;
 
-    // 4. Diagnóstico e Procedimento
+    // 4. Clínicos e Procedimento
     document.getElementById('diagInicial').value = p.diag || '';
     document.getElementById('cidPrincipal').value = p.cid || '';
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
-    // 5. Profissional Solicitante
+    // 5. Solicitante
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
     document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
 
-    // 6. Laudos e Relatórios
+    // 6. Laudos Clínicos
     document.getElementById('sinaisSintomas').value = p.sinais || 
-      'QUADRO CLÍNICO COMPATÍVEL COM A PATOLOGIA DE ADMISSÃO, NECESSITANDO DE CUIDADOS HOSPITALARES.';
+      'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA.';
     document.getElementById('justificativa').value = p.justificativa || 
-      'NECESSIDADE DE INTERNAÇÃO PARA PROPEDÊUTICA, ESTABILIZAÇÃO CLÍNICA E/OU TRATAMENTO CIRÚRGICO.';
+      'NECESSIDADE DE REALIZAR BIOPSIA / EXERESE.';
     document.getElementById('exames').value = p.exames || 
-      'HEMOGRAMA, BIOQUÍMICA BÁSICA E AVALIAÇÃO CLÍNICA.';
+      'EXS SEM ANORMALIDADES';
 
     if (p.anestesia) document.getElementById('txtAnestesia').value = p.anestesia;
     if (p.cirurgia) document.getElementById('txtCirurgia').value = p.cirurgia;
