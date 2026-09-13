@@ -594,43 +594,37 @@ function atualizarControlesNav(p) {
     document.getElementById('dataNasc').value = p.nasc || '';
     document.getElementById('sexo').value = (p.sexo && p.sexo.startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
-    document.getElementById('telefone').value = p.tel || '84 99980 5728';
+    document.getElementById('telefone').value = '84 99980 5728';
     document.getElementById('nomeMae').value = p.mae || '';
     document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // Endereço e Documentos
-    document.getElementById('endereco').value = p.endereco || '';
+    // Endereço
+    document.getElementById('endereco').value = p.endereco || 'SITIO ARROJADO';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = p.municipio || 'FRUTUOSO GOMES';
-    document.getElementById('estado').value = (p.estado && p.estado.length <= 3) ? p.estado : 'RN';
+    document.getElementById('estado').value = p.estado || 'RN';
     document.getElementById('cep').value = '59890-000';
     document.getElementById('rg').value = '';
     document.getElementById('cpfPac').value = '';
 
-    // Datas (Garante que se vier texto em vez de data, limpa ou usa data atual)
-    function validarData(d) {
-      if (!d) return '';
-      return (d.includes('/') || d.includes('-')) ? d : '';
-    }
+    // Datas (Nascimento nunca substitui Admissão)
+    document.getElementById('dataInternacao').value = p.dtInternacao || '14/07/2026';
+    document.getElementById('dataSaida').value = p.dtSaida || document.getElementById('dataInternacao').value;
+    document.getElementById('dataSolicitacao').value = document.getElementById('dataInternacao').value;
 
-    document.getElementById('dataInternacao').value = validarData(p.dtInternacao);
-    document.getElementById('dataSaida').value = validarData(p.dtSaida);
-    document.getElementById('dataSolicitacao').value = validarData(p.dtSol) || validarData(p.dtInternacao);
-
-    // Dados Clínicos e Procedimento
+    // Diagnóstico e Procedimento
     document.getElementById('diagInicial').value = p.diag || '';
     document.getElementById('cidPrincipal').value = p.cid || '';
     document.getElementById('procedimento').value = p.procedimento || '';
     document.getElementById('codProcedimento').value = p.codProced || '';
-    if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
     // Solicitante
     document.getElementById('medicoSolicitante').value = p.medico || 'LUCIDIO JÁCOME FERREIRA';
     document.getElementById('cpfSolicitante').value = p.cpfMed || '175.499.574-87';
 
-    // Laudos Clínicos
+    // Textos Descritivos Clínicos
     document.getElementById('sinaisSintomas').value = p.sinais || 
       'QUADRO CLÍNICO COMPATÍVEL COM A PATOLOGIA DE ADMISSÃO, NECESSITANDO DE CUIDADOS HOSPITALARES.';
     document.getElementById('justificativa').value = p.justificativa || 
