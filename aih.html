@@ -3,496 +3,309 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - AIH Oficial</title>
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <title>Emissão AIH Oficial</title>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
   <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #f1f5f9; margin: 0; padding: 12px; color: #1e293b; }
-    .container { max-width: 980px; margin: 0 auto; background: #fff; padding: 18px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-    h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
-    .btn-reload { background: #64748b; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --success: #16a34a;
+      --success-hover: #15803d;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.5; }
+    .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 24px; }
     
-    /* Barra de Navegação estilo Zoho Docs */
-    .box-navegacao { background: #e0f2fe; border: 1px solid #7dd3fc; border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-    .nav-botoes { display: flex; gap: 6px; align-items: center; }
-    .btn-nav { background: #0284c7; color: #fff; border: none; padding: 6px 12px; border-radius: 5px; font-size: 14px; font-weight: bold; cursor: pointer; }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; }
+    h1 { font-size: 1.5rem; color: #0f172a; }
+    
+    /* Barra de Navegação */
+    .nav-bar { display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+    .nav-group { display: flex; align-items: center; gap: 8px; }
+    .btn-nav { background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem; }
+    .btn-nav:hover:not(:disabled) { background: var(--primary-hover); }
     .btn-nav:disabled { background: #94a3b8; cursor: not-allowed; }
-    .info-registro { font-size: 12px; font-weight: bold; color: #0369a1; }
-    .busca-rapida { display: flex; gap: 6px; align-items: center; }
-    .busca-rapida input { padding: 6px; border: 1px solid #94a3b8; border-radius: 5px; font-size: 12px; width: 160px; }
-    .btn-busca { background: #0369a1; color: #fff; border: none; padding: 6px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; }
+    .btn-ultimo { background: var(--success); }
+    .btn-ultimo:hover { background: var(--success-hover); }
+    .lbl-registro { font-weight: 600; color: #0369a1; min-width: 80px; text-align: center; }
+    
+    .busca-box { display: flex; gap: 6px; }
+    .busca-box input { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; min-width: 200px; }
+    
+    /* Estrutura do Formulário */
+    fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fff; }
+    legend { font-weight: 600; color: var(--primary); padding: 0 8px; font-size: 1.05rem; }
+    .grid { display: grid; gap: 12px; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
+    input, select, textarea { border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 0.9rem; color: #0f172a; width: 100%; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px #bae6fd; }
+    textarea { resize: vertical; }
 
-    fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #fafafa; }
-    legend { font-weight: 700; color: #0284c7; padding: 0 6px; font-size: 13px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
-    .form-group { margin-bottom: 6px; }
-    label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 3px; color: #475569; }
-    input, select, textarea { width: 100%; padding: 7px; border: 1px solid #cbd5e1; border-radius: 5px; font-size: 12px; background: #fff; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
-    .destaque-select { background: #e0f2fe; border-color: #0284c7; font-weight: 600; }
-    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
-    .btn-submit:hover { background: #0369a1; }
-    #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
+    /* Barra de Ações */
+    .actions-bar { display: flex; gap: 12px; margin-top: 24px; align-items: center; flex-wrap: wrap; }
+    .btn-action { padding: 12px 20px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; color: white; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+    .btn-save { background: var(--primary); }
+    .btn-save:hover { background: var(--primary-hover); }
+    .btn-print { background: var(--success); }
+    .btn-print:hover { background: var(--success-hover); }
+    
+    #msgStatus { font-size: 0.9rem; font-weight: 600; }
 
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
-    .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
-    .modal-header { background: #0284c7; color: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
-    .modal-header h3 { margin: 0; font-size: 15px; }
-    .modal-body { flex: 1; background: #525659; }
+    /* Modal de Impressão */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 9999; justify-content: center; align-items: center; }
+    .modal-content { background: white; width: 90%; height: 90%; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid var(--border); }
+    .modal-body { flex: 1; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
-    .modal-footer { padding: 8px 14px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 8px; }
-    .btn-modal { padding: 7px 14px; border-radius: 5px; font-weight: 600; font-size: 12px; cursor: pointer; border: none; }
-    .btn-close { background: #e2e8f0; color: #334155; }
-    .btn-print { background: #16a34a; color: #fff; }
-    .btn-download { background: #0284c7; color: #fff; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>
-    <span>Emissão AIH Oficial</span>
-    <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
-  </h2>
+  <header>
+    <h1>Emissão AIH Oficial</h1>
+    <button type="button" class="btn-nav" onclick="location.reload()">↻ Recarregar</button>
+  </header>
 
-  <!-- NAVEGAÇÃO DE REGISTROS (ANTERIOR / PRÓXIMO / BUSCA) -->
-  <div class="box-navegacao">
-    <div class="nav-botoes">
-      <button type="button" class="btn-nav" id="btnAnt" onclick="navegarRegistro(-1)" title="Registro Anterior">◀</button>
-      <span class="info-registro" id="lblRegistro">Nenhum carregado</span>
-      <button type="button" class="btn-nav" id="btnProx" onclick="navegarRegistro(1)" title="Próximo Registro">▶</button>
-      <button type="button" class="btn-nav" style="background:#059669;" onclick="carregarUltimoRegistro()" title="Ir para o último salvo">Último</button>
+  <!-- Barra de Navegação -->
+  <div class="nav-bar">
+    <div class="nav-group">
+      <button type="button" id="btnAnt" class="btn-nav" onclick="navegarRegistro(-1)">◀</button>
+      <span id="lblRegistro" class="lbl-registro">1 / 1</span>
+      <button type="button" id="btnProx" class="btn-nav" onclick="navegarRegistro(1)">▶</button>
+      <button type="button" class="btn-nav btn-ultimo" onclick="carregarUltimoRegistro()">Último</button>
     </div>
-    <div class="busca-rapida">
-      <input type="text" id="campoBusca" placeholder="Prontuário ou Nome...">
-      <button type="button" class="btn-busca" onclick="buscarPorTermo()">Buscar</button>
+    <div class="busca-box">
+      <input type="text" id="campoBusca" placeholder="Buscar por Nome ou Prontuário...">
+      <button type="button" class="btn-nav" onclick="buscarPorTermo()">Buscar</button>
     </div>
   </div>
 
   <form id="formAih">
+    <!-- Identificação do Paciente -->
     <fieldset>
       <legend>Identificação do Paciente</legend>
-      <div class="grid-3">
+      <div class="grid grid-3">
         <div class="form-group">
-          <label>Nº Prontuário:</label>
-          <input type="text" id="prontuario" value="7521" required>
+          <label for="prontuario">Nº Prontuário:</label>
+          <input type="text" id="prontuario" required>
         </div>
         <div class="form-group">
-          <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="MARIA IRIS PEREIRA DA SILVA" required>
+          <label for="nomePaciente">Nome Completo:</label>
+          <input type="text" id="nomePaciente" required>
         </div>
         <div class="form-group">
-          <label>Cartão SUS (CNS):</label>
-          <input type="text" id="cns" value="704006647751551">
+          <label for="cns">Cartão SUS (CNS):</label>
+          <input type="text" id="cns">
         </div>
       </div>
-      <div class="grid-4">
+
+      <div class="grid grid-4" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1960">
+          <label for="dataNasc">Data de Nascimento:</label>
+          <input type="text" id="dataNasc" placeholder="DD/MM/AAAA">
         </div>
         <div class="form-group">
-          <label>Sexo:</label>
+          <label for="sexo">Sexo:</label>
           <select id="sexo">
-            <option value="F" selected>Feminino</option>
+            <option value="F">Feminino</option>
             <option value="M">Masculino</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Raça / Cor:</label>
+          <label for="racaCor">Raça / Cor:</label>
           <input type="text" id="racaCor" value="PARDA">
         </div>
         <div class="form-group">
-          <label>Telefone:</label>
+          <label for="telefone">Telefone:</label>
           <input type="text" id="telefone" value="84 99980 5728">
         </div>
       </div>
-      <div class="grid-3">
+
+      <div class="grid grid-3" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
+          <label for="nomeMae">Nome da Mãe:</label>
+          <input type="text" id="nomeMae">
         </div>
         <div class="form-group">
-          <label>Nome do Pai:</label>
-          <input type="text" id="nomePai" value="FRANCISCO PEREIRA">
+          <label for="nomePai">Nome do Pai:</label>
+          <input type="text" id="nomePai">
         </div>
         <div class="form-group">
-          <label>Profissão:</label>
+          <label for="profissao">Profissão:</label>
           <input type="text" id="profissao" value="AGRICULTORA">
         </div>
       </div>
-      <div class="grid-4">
-        <div class="form-group">
-          <label>Endereço Completo:</label>
-          <input type="text" id="endereco" value="SITIO ARROJADO">
+
+      <div class="grid grid-4" style="margin-top: 10px;">
+        <div class="form-group" style="grid-column: span 2;">
+          <label for="endereco">Endereço Completo:</label>
+          <input type="text" id="endereco" value="SITIO MUMBAÇA, SN - ZONA RURAL">
         </div>
         <div class="form-group">
-          <label>Nº:</label>
+          <label for="numEndereco">Nº:</label>
           <input type="text" id="numEndereco" value="SN">
         </div>
         <div class="form-group">
-          <label>Bairro:</label>
+          <label for="bairro">Bairro:</label>
           <input type="text" id="bairro" value="ZONA RURAL">
         </div>
+      </div>
+
+      <div class="grid grid-4" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Município:</label>
+          <label for="municipio">Município:</label>
           <input type="text" id="municipio" value="FRUTUOSO GOMES">
         </div>
-      </div>
-      <div class="grid-4">
         <div class="form-group">
-          <label>Estado / UF:</label>
+          <label for="estado">Estado / UF:</label>
           <input type="text" id="estado" value="RN">
         </div>
         <div class="form-group">
-          <label>CEP:</label>
+          <label for="cep">CEP:</label>
           <input type="text" id="cep" value="59890-000">
         </div>
         <div class="form-group">
-          <label>RG / Documento:</label>
-          <input type="text" id="rg" value="1234567">
-        </div>
-        <div class="form-group">
-          <label>CPF do Paciente:</label>
-          <input type="text" id="cpfPac" value="000.000.000-00">
-        </div>
-      </div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Data Internação:</label>
-          <input type="text" id="dataInternacao" value="14/07/2026">
-        </div>
-        <div class="form-group">
-          <label>Data Saída (Alta):</label>
-          <input type="text" id="dataSaida" value="14/07/2026">
+          <label for="rg">RG / Documento:</label>
+          <input type="text" id="rg">
         </div>
       </div>
     </fieldset>
 
-    <!-- BANCO DE DADOS CLINICOS: PATOLOGIAS E SIGTAP -->
+    <!-- Dados da Internação e Procedimento -->
     <fieldset>
-      <legend>Dados Clínicos e SIGTAP</legend>
-      
-      <div class="grid-2">
+      <legend>Dados Clínicos e Internação</legend>
+      <div class="grid grid-3">
         <div class="form-group">
-          <label>Patologia / Diretor CID:</label>
-          <select id="selCid" class="destaque-select" onchange="aoSelecionarCid(this.value)">
-            <option value="">-- Selecione uma Patologia --</option>
-            <option value="CALCULOSE DA VB S/ COLECISTITE|K 80.2">CALCULOSE DA VB S/ COLECISTITE (K 80.2)</option>
-            <option value="CALCULOSE DO RIM / CÓLICA NEFRÉTICA|N 23">CALCULOSE DO RIM / CÓLICA NEFRÉTICA (N 23)</option>
-            <option value="CRISE HIPERTENSIVA|I 10">CRISE HIPERTENSIVA (I 10)</option>
-            <option value="DOENÇA PULMONAR OBSTRUTIVA CRÔNICA|J 44.9">DOENÇA PULMONAR OBSTRUTIVA CRÔNICA (J 44.9)</option>
-            <option value="ENTERO-INFECÇÃO|A 09">ENTERO-INFECÇÃO (A 09)</option>
-            <option value="ERISIPELA|A 46">ERISIPELA (A 46)</option>
-            <option value="HÉRNIA INGUINAL|K 40.9">HÉRNIA INGUINAL (K 40.9)</option>
-            <option value="HÉRNIA UMBILICAL|K 42">HÉRNIA UMBILICAL (K 42)</option>
-            <option value="PIELONEFRITE|N 39.0">PIELONEFRITE (N 39.0)</option>
-            <option value="Pe diabetico DM Insulinodependente c complic circulatorias|E 10.5">Pe diabetico DM Insulinodependente c complic circulatorias (E 10.5)</option>
-            <option value="PNEUMONIA BACTERIANA N ESPECIFICADA|J 15.9">PNEUMONIA BACTERIANA N ESPECIFICADA (J 15.9)</option>
-            <option value="CRISE ASMÁTICA|J 46">CRISE ASMÁTICA (J 46)</option>
-            <option value="LESÕES SUPERFICIAIS INFECTADAS|L 08.0">LESÕES SUPERFICIAIS INFECTADAS (L 08.0)</option>
-            <option value="ABORTAMENTO INCOMPLETO|O 03.4">ABORTAMENTO INCOMPLETO (O 03.4)</option>
-            <option value="MIOMA UTERINO|D 25.9">MIOMA UTERINO (D 25.9)</option>
-            <option value="DESPROPORÇÃO CÉFALO-PÉLVICA|O 65.4">DESPROPORÇÃO CÉFALO-PÉLVICA (O 65.4)</option>
-            <option value="PARTO NORMAL|O 80">PARTO NORMAL (O 80)</option>
-            <option value="PROLAPSO UTEROVAGINAL INCOMPLETO|N 81.2">PROLAPSO UTEROVAGINAL INCOMPLETO (N 81.2)</option>
-            <option value="PROLAPSO UTEROVAGINAL COMPLETO|N 81.3">PROLAPSO UTEROVAGINAL COMPLETO (N 81.3)</option>
-            <option value="Hipertrofia do prepúcio, fimose e parafimose|N 47">Hipertrofia do prepúcio, fimose e parafimose (N 47)</option>
-            <option value="Cisto pilonidal sem abscesso|L 05.9">Cisto pilonidal sem abscesso (L 05.9)</option>
-            <option value="Hemorróidas internas sem complicações|I 84.2">Hemorróidas internas sem complicações (I 84.2)</option>
-            <option value="Fissura anal, não especificada|K 60.2">Fissura anal, não especificada (K 60.2)</option>
-            <option value="Hérnia Epigástrica|K 43.9">Hérnia Epigástrica (K 43.9)</option>
-            <option value="Fistula anal|K 60.2">Fistula anal (K 60.2)</option>
-            <option value="Hidrocele n especificada|N 43.3">Hidrocele n especificada (N 43.3)</option>
-            <option value="APRESENTAÇAO PÉLVICA|O 64.1">APRESENTAÇAO PÉLVICA (O 64.1)</option>
-            <option value="SOFRIMENTO FETAL|O 68.9">SOFRIMENTO FETAL (O 68.9)</option>
-            <option value="GRAVIDEZ PROLONGADA|O 48">GRAVIDEZ PROLONGADA (O 48)</option>
-            <option value="RETOCOLITE ULCERATIVA N ESPECIF|K 51.9">RETOCOLITE ULCERATIVA N ESPECIF (K 51.9)</option>
-            <option value="CALCULOSE DE VB COM COLECISTITE|K 80.4">CALCULOSE DE VB COM COLECISTITE (K 80.4)</option>
-            <option value="ESTERILIZAÇÃO|Z 30.2">ESTERILIZAÇÃO (Z 30.2)</option>
-            <option value="HIPERPLASIA ADENOMATOSA ENDOMETRIAL|N 85.1">HIPERPLASIA ADENOMATOSA ENDOMETRIAL (N 85.1)</option>
-            <option value="COVID 19|U 07.2">COVID 19 (U 07.2)</option>
-            <option value="Influenza com pneumonia devida a COVID 19|J 10.0">Influenza com pneumonia devida a COVID 19 (J 10.0)</option>
-            <option value="HEPATITE ALCOOLICA|K 70.1">HEPATITE ALCOOLICA (K 70.1)</option>
-            <option value="NEOPLASIA SECUNDÁRIA (DOENÇA METASTÁTICA)|C 79.8">NEOPLASIA SECUNDÁRIA (DOENÇA METASTÁTICA) (C 79.8)</option>
-            <option value="DISPLASIA DE COLO UTERINO N ESPECIFICADA|N 87.9">DISPLASIA DE COLO UTERINO N ESPECIFICADA (N 87.9)</option>
-            <option value="HEMATÊMESE|K 92.0">HEMATÊMESE (K 92.0)</option>
-            <option value="INSUFICIENCIA CARDIACA|I 50.0">INSUFICIENCIA CARDIACA (I 50.0)</option>
-            <option value="ENCEFALOPATIA ALCOOLICA|G 93.4">ENCEFALOPATIA ALCOOLICA (G 93.4)</option>
-            <option value="Doença inflamatória N Especificada da pelve feminina|N 73.9">Doença inflamatória N Especificada da pelve feminina (N 73.9)</option>
-            <option value="DM nao especificado c complic circul perifericas|E 14.5">DM nao especificado c complic circul perifericas (E 14.5)</option>
-            <option value="Outras formas de doença isquêmica aguda|I 24.8">Outras formas de doença isquêmica aguda (I 24.8)</option>
-            <option value="Traumatismos superf múltiplos N Especif|T 00.9">Traumatismos superf múltiplos N Especif (T 00.9)</option>
-            <option value="Ameaça de abortamento|O 20.0">Ameaça de abortamento (O 20.0)</option>
-            <option value="Ameaça de parto prematuro|O 60.0">Ameaça de parto prematuro (O 60.0)</option>
-            <option value="AVC N especif|I 64">AVC N especif (I 64)</option>
-            <option value="Cirrose Hepatica|K 74">Cirrose Hepatica (K 74)</option>
-            <option value="Ulcera de decubito|L 89">Ulcera de decubito (L 89)</option>
-            <option value="Desnutrição proteico-calórica|E 46">Desnutrição proteico-calórica (E 46)</option>
-            <option value="DM N insulinodepend s complic|E 11.8">DM N insulinodepend s complic (E 11.8)</option>
-            <option value="Edema agudo de pulmão|J 81">Edema agudo de pulmão (J 81)</option>
-            <option value="Queimaduras de 1º grau|T 31.0">Queimaduras de 1º grau (T 31.0)</option>
-            <option value="Queimaduras de 2° grau|T 31.1">Queimaduras de 2° grau (T 31.1)</option>
-            <option value="TCE leve|S 06.8">TCE leve (S 06.8)</option>
-            <option value="Politraumatizado|T 06.8">Politraumatizado (T 06.8)</option>
-            <option value="Piodermite|L 08.0">Piodermite (L 08.0)</option>
-            <option value="Infecção bacteriana de local N especif|A 49.9">Infecção bacteriana de local N especif (A 49.9)</option>
-            <option value="Inf por coronavirus de local n especif|B 34.2">Inf por coronavirus de local n especif (B 34.2)</option>
-            <option value="Absc de gland de Bartholin/Bartholinite|N 75.1">Absc de gland de Bartholin/Bartholinite (N 75.1)</option>
-            <option value="Outras pneumonias virais|J 12.8">Outras pneumonias virais (J 12.8)</option>
-            <option value="NEOPLASIA BENIGNA DA MAMA|D 24">NEOPLASIA BENIGNA DA MAMA (D 24)</option>
-            <option value="OTITE MEDIA AGUDA SUPURATIVA|H 66.0">OTITE MEDIA AGUDA SUPURATIVA (H 66.0)</option>
-            <option value="CELULITE DE OUTRA PARTE DO MEMBRO|L 03.1">CELULITE DE OUTRA PARTE DO MEMBRO (L 03.1)</option>
-            <option value="DISTURBIOS METABÓLICO DO DIABETES|E 14.6">DISTURBIOS METABÓLICO DO DIABETES (E 14.6)</option>
-            <option value="Complicação não especificada de cuidados médicos e cirúrgico|T 88.9">Complicação não especificada de cuidados médicos e cirúrgico (T 88.9)</option>
-            <option value="Orquite, epididimite e epidídimo-orquite com abscesso|N 45.0">Orquite, epididimite e epidídimo-orquite com abscesso (N 45.0)</option>
-            <option value="Contusão dos órgãos genitais externo|S 30.2">Contusão dos órgãos genitais externo (S 30.2)</option>
-            <option value="DIABETES MELLITUS INSULINO-DEPENDENTE COM CETOACIDOSE|E 10.1">DIABETES MELLITUS INSULINO-DEPENDENTE COM CETOACIDOSE (E 10.1)</option>
-            <option value="CALCULOSE NA BEXIGA|N 21.0">CALCULOSE NA BEXIGA (N 21.0)</option>
-            <option value="Hérnia abdominal não especificada, sem obstrução ou gangrena|K 46.9">Hérnia abdominal não especificada, sem obstrução ou gangrena (K 46.9)</option>
-            <option value="ABSCESSO CUTÂNEO, FURÚNCULO E ANTRAZ DO(S) MEMBRO(S)|L 02.4">ABSCESSO CUTÂNEO, FURÚNCULO E ANTRAZ DO(S) MEMBRO(S) (L 02.4)</option>
-            <option value="OUTRAS SEPTICEMIAS ESPECIFICADAS|A 41.8">OUTRAS SEPTICEMIAS ESPECIFICADAS (A 41.8)</option>
-            <option value="CELULITE E ABSCESSO DA BOCA|K 12.2">CELULITE E ABSCESSO DA BOCA (K 12.2)</option>
-            <option value="INFECÇÃO SUBSEQUENTE A PROCEDIMENTO NÃO CLASSIFICADA EM OUTRA PARTE|T 81.4">INFECÇÃO SUBSEQUENTE A PROCEDIMENTO (T 81.4)</option>
-            <option value="Outras complicações de procedimentos n class outra parte|T 81.8">Outras complicações de procedimentos (T 81.8)</option>
-            <option value="HIDROSSALPINGE|N 83.8">HIDROSSALPINGE (N 83.8)</option>
-            <option value="CISTO DA GLÂNDULA DE BARTHOLIN|N 75.0">CISTO DA GLÂNDULA DE BARTHOLIN (N 75.0)</option>
-            <option value="OUTRO">-- OUTRO (DIGITAR MANUALMENTE) --</option>
-          </select>
+          <label for="dataInternacao">Data Internação:</label>
+          <input type="text" id="dataInternacao" placeholder="DD/MM/AAAA">
         </div>
-
         <div class="form-group">
-          <label>Procedimento Solicitado / SIGTAP:</label>
-          <select id="selProced" class="destaque-select" onchange="aoSelecionarProced(this.value)">
-            <option value="">-- Selecione o Procedimento --</option>
-            <option value="Colecistectomia|04070300206|CLINICA CIRURGICA">Colecistectomia (04070300206)</option>
-            <option value="Tratamento de Calculose renal|0303150017|CLINICA MEDICA">Tratamento de Calculose renal (0303150017)</option>
-            <option value="Tratamento da Crise Hipertensiva|0303060107|CLINICA MEDICA">Tratamento da Crise Hipertensiva (0303060107)</option>
-            <option value="TTO das doenças cron das VVAA Infer|0303140046|CLINICA MEDICA">TTO das doenças cron das VVAA Infer (0303140046)</option>
-            <option value="Tratamento de doenças infecciosas e intestinais|0303010061|CLINICA MEDICA">Tratamento de doenças infecciosas e intestinais (0303010061)</option>
-            <option value="Tratamento de outras doenças bacterianas|0303010037|CLINICA MEDICA">Tratamento de outras doenças bacterianas (0303010037)</option>
-            <option value="Hernioplastia inguinal unilateral|0407040102|CLINICA CIRURGICA">Hernioplastia inguinal unilateral (0407040102)</option>
-            <option value="Hernioplastia umbilical|0407040129|CLINICA CIRURGICA">Hernioplastia umbilical (0407040129)</option>
-            <option value="Tratamento da Pielonefrite|0305020013|CLINICA MEDICA">Tratamento da Pielonefrite (0305020013)</option>
-            <option value="Curativo grau II c ou s debridamento|0401010015|CLINICA CIRURGICA">Curativo grau II c ou s debridamento (0401010015)</option>
-            <option value="Tratamento de Pneumonias ou Influenza|0303140151|CLINICA MEDICA">Tratamento de Pneumonias ou Influenza (0303140151)</option>
-            <option value="TTO de Estreptococcias|0303080078|CLINICA MEDICA">TTO de Estreptococcias (0303080078)</option>
-            <option value="Curetagem uterina|0411020021|CLINICA OBSTETRICA">Curetagem uterina (0411020021)</option>
-            <option value="Histerectomia total abdominal|0409060127|CLINICA CIRURGICA">Histerectomia total abdominal (0409060127)</option>
-            <option value="CESARIANA|0411010034|CLINICA OBSTETRICA">CESARIANA (0411010034)</option>
-            <option value="Parto normal|0310010039|CLINICA OBSTETRICA">Parto normal (0310010039)</option>
-            <option value="Colpoperineoplastia anterior e posterior|0409070050|CLINICA CIRURGICA">Colpoperineoplastia anterior e posterior (0409070050)</option>
-            <option value="POSTECTOMIA|0409050083|CLINICA CIRURGICA">POSTECTOMIA (0409050083)</option>
-            <option value="EXERESE DE CISTO SACRO-COCCIGEO|0401020088|CLINICA CIRURGICA">EXERESE DE CISTO SACRO-COCCIGEO (0401020088)</option>
-            <option value="HEMORROIDECTOMIA|0407020284|CLINICA CIRURGICA">HEMORROIDECTOMIA (0407020284)</option>
-            <option value="ESFINCTEROTOMIA INTERNA E TRATAMENTO DE FISSURA ANAL|0407020217|CLINICA CIRURGICA">ESFINCTEROTOMIA INTERNA E TRATAMENTO DE FISSURA ANAL (0407020217)</option>
-            <option value="HERNIOPLASTIA EPIGÁSTRICA|0407040064|CLINICA CIRURGICA">HERNIOPLASTIA EPIGÁSTRICA (0407040064)</option>
-            <option value="FISTULECTOMIA/FISTULOTOMIA ANAL|0407020276|CLINICA CIRURGICA">FISTULECTOMIA/FISTULOTOMIA ANAL (0407020276)</option>
-            <option value="TRATAMENTO CIRURGICO DE HIDROCELE|0409040215|CLINICA CIRURGICA">TRATAMENTO CIRURGICO DE HIDROCELE (0409040215)</option>
-            <option value="Tratamento de colites n infecciosas|0303070099|CLINICA MEDICA">Tratamento de colites n infecciosas (0303070099)</option>
-            <option value="TRATAMENTO DE TRANSTORNOS DAS VIAS BILIARES E PANCREAS|0303070129|CLINICA MEDICA">TRATAMENTO DE TRANSTORNOS DAS VIAS BILIARES E PANCREAS (0303070129)</option>
-            <option value="VASECTOMIA|0409040240|CLINICA CIRURGICA">VASECTOMIA (0409040240)</option>
-            <option value="CURETAGEM SEMIOTICA C/ OU S/ DILATACAO DO COLO DO UTERO|0409060046|CLINICA CIRURGICA">CURETAGEM SEMIOTICA (0409060046)</option>
-            <option value="TTO DE DOENÇAS DO FIGADO|0303070072|CLINICA MEDICA">TTO DE DOENÇAS DO FIGADO (0303070072)</option>
-            <option value="TTO de intercorrências clinicas de pac oncológico|0304100013|CLINICA MEDICA">TTO de intercorrências clinicas de pac oncológico (0304100013)</option>
-            <option value="Excisão tipo 3 do colo uterino|0409060038|CLINICA CIRURGICA">Excisão tipo 3 do colo uterino (0409060038)</option>
-            <option value="Tto de outras doenças do aparelho digestivo|0303070102|CLINICA MEDICA">Tto de outras doenças do aparelho digestivo (0303070102)</option>
-            <option value="TTO de Insuficiencia Cardiaca|0303060212|CLINICA MEDICA">TTO de Insuficiencia Cardiaca (0303060212)</option>
-            <option value="TTO de intercorrencias clinicas da gravidez|0303100044|CLINICA OBSTETRICA">TTO de intercorrencias clinicas da gravidez (0303100044)</option>
-            <option value="TTO de AVC isquêmico|0303040149|CLINICA MEDICA">TTO de AVC isquêmico (0303040149)</option>
-            <option value="Debridamento de úlcera ou tecido desvitalizado|0415040035|CLINICA CIRURGICA">Debridamento de úlcera ou tecido desvitalizado (0415040035)</option>
-            <option value="TTO de desnutrição|0303030020|CLINICA MEDICA">TTO de desnutrição (0303030020)</option>
-            <option value="TTO de diabetes mellitus|0303030038|CLINICA MEDICA">TTO de diabetes mellitus (0303030038)</option>
-            <option value="TTO de Edema agudo de pulmão|0303060131|CLINICA MEDICA">TTO de Edema agudo de pulmão (0303060131)</option>
-            <option value="Atendimento de urgencia em pequeno queimado|0413010023|CLINICA CIRURGICA">Atendimento de urgencia em pequeno queimado (0413010023)</option>
-            <option value="Atendimento de urgencia em médio e grande queimado|0413010015|CLINICA CIRURGICA">Atendimento de urgencia em médio e grande queimado (0413010015)</option>
-            <option value="TTO conservador de TCE leve|0303040084|CLINICA MEDICA">TTO conservador de TCE leve (0303040084)</option>
-            <option value="Excisão e enxerto de pele (hemangioma, nevus ou tumor)|0401020045|CLINICA CIRURGICA">Excisão e enxerto de pele (0401020045)</option>
-            <option value="TTO cirurgico de lesões extensas com perda de tecido|0413040240|CLINICA CIRURGICA">TTO cirurgico de lesões extensas com perda de tecido (0413040240)</option>
-            <option value="TTO de traumatismos de localização especificada/NE|0308010019|CLINICA MEDICA">TTO de traumatismos de localização especificada/NE (0308010019)</option>
-            <option value="TTO de outras doenças do aparelho urinário|0303150050|CLINICA MEDICA">TTO de outras doenças do aparelho urinário (0303150050)</option>
-            <option value="TTO de doenças inflamatórias dos órgãos pélvicos femininos|0303150033|CLINICA MEDICA">TTO de doenças inflamatórias dos órgãos pélvicos femininos (0303150033)</option>
-            <option value="TTO de pé diabético complicado|0303060263|CLINICA MEDICA">TTO de pé diabético complicado (0303060263)</option>
-            <option value="TTO de síndrome coronariana aguda|0303060280|CLINICA MEDICA">TTO de síndrome coronariana aguda (0303060280)</option>
-            <option value="Histerectomia via vaginal|0409060100|CLINICA CIRURGICA">Histerectomia via vaginal (0409060100)</option>
-            <option value="Tratamento de estafilococcias|0303080060|CLINICA MEDICA">Tratamento de estafilococcias (0303080060)</option>
-            <option value="TTO DE INF PELO NOVO CORONAVIRUS - COVID 19|0303010223|CLINICA MEDICA">TTO DE INF PELO NOVO CORONAVIRUS (0303010223)</option>
-            <option value="EXERESE DE NODULO DE MAMA|0201010569|CLINICA CIRURGICA">EXERESE DE NODULO DE MAMA (0201010569)</option>
-            <option value="TRATAMENTO DE COMPLICACOES DE PROCEDIMENTOS CIRURGICOS OU CLINICOS|0308040015|CLINICA MEDICA">TRATAMENTO DE COMPLICACOES DE PROCEDIMENTOS (0308040015)</option>
-            <option value="EXPLORACAO CIRURGICA DA BOLSA ESCROTAL|0409040096|CLINICA CIRURGICA">EXPLORACAO CIRURGICA DA BOLSA ESCROTAL (0409040096)</option>
-            <option value="CISTOLITOTOMIA E/OU RETIRADA DE CORPO ESTRANHO DA BEXIGA|0409010065|CLINICA CIRURGICA">CISTOLITOTOMIA DA BEXIGA (0409010065)</option>
-            <option value="HERNIOPLASTIA INCISIONAL|0407040080|CLINICA CIRURGICA">HERNIOPLASTIA INCISIONAL (0407040080)</option>
-            <option value="SALPINGECTOMIA UNI / BILATERAL|0409060232|CLINICA CIRURGICA">SALPINGECTOMIA UNI / BILATERAL (0409060232)</option>
-            <option value="EXERESE DE GLANDULA DE BARTHOLIN / SKENE|0409070157|CLINICA CIRURGICA">EXERESE DE GLANDULA DE BARTHOLIN / SKENE (0409070157)</option>
-            <option value="OUTRO">-- OUTRO (DIGITAR MANUALMENTE) --</option>
-          </select>
+          <label for="dataSaida">Data Saída (Alta):</label>
+          <input type="text" id="dataSaida" placeholder="DD/MM/AAAA">
+        </div>
+        <div class="form-group">
+          <label for="dataSolicitacao">Data Solicitação:</label>
+          <input type="text" id="dataSolicitacao" placeholder="DD/MM/AAAA">
         </div>
       </div>
 
-      <div class="grid-3">
+      <div class="grid grid-3" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Diagnóstico Inicial:</label>
-          <input type="text" id="diagInicial" value="CRISE HIPERTENSIVA">
+          <label for="diagInicial">Diagnóstico Inicial:</label>
+          <input type="text" id="diagInicial">
         </div>
         <div class="form-group">
-          <label>CID-10 Principal:</label>
-          <input type="text" id="cidPrincipal" value="I 10">
+          <label for="cidPrincipal">CID-10 Principal:</label>
+          <input type="text" id="cidPrincipal">
         </div>
         <div class="form-group">
-          <label>Especialidade / Clínica:</label>
+          <label for="especialidade">Especialidade / Clínica:</label>
           <select id="especialidade">
-            <option value="CLINICA MEDICA" selected>CLINICA MEDICA</option>
             <option value="CLINICA CIRURGICA">CLINICA CIRURGICA</option>
-            <option value="CLINICA OBSTETRICA">CLINICA OBSTETRICA</option>
-            <option value="CLINICA PEDIATRICA">CLINICA PEDIATRICA</option>
+            <option value="CLINICA MEDICA">CLINICA MEDICA</option>
+            <option value="OBSTETRICIA">OBSTETRICIA</option>
+            <option value="PEDIATRIA">PEDIATRIA</option>
           </select>
         </div>
       </div>
 
-      <div class="grid-2">
+      <div class="grid grid-2" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Descrição do Procedimento:</label>
-          <input type="text" id="procedimento" value="Tratamento da Crise Hipertensiva">
+          <label for="procedimento">Descrição do Procedimento:</label>
+          <input type="text" id="procedimento">
         </div>
         <div class="form-group">
-          <label>Código SIGTAP:</label>
-          <input type="text" id="codProcedimento" value="0303060107">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>17. Principais Sinais e Sintomas Clínicos:</label>
-        <textarea id="sinaisSintomas" rows="2">CEFALEIA, TONTURA, NÁUSEAS, TAQUICARDIA E NÍVEIS PRESSÓRICOS ELEVADOS.</textarea>
-      </div>
-      <div class="form-group">
-        <label>18. Condições que Justificam a Internação:</label>
-        <textarea id="justificativa" rows="2">NECESSIDADE DE ESTABILIZAÇÃO PRESSÓRICA VENOSA, MONITORIZAÇÃO HEMODINÂMICA E PREVENÇÃO DE LESÃO DE ÓRGÃO-ALVO.</textarea>
-      </div>
-      <div class="form-group">
-        <label>19. Principais Resultados de Provas Diagnósticas (Exames):</label>
-        <textarea id="exames" rows="2">ECG, HEMOGRAMA, UREIA, CREATININA E SUMÁRIO DE URINA.</textarea>
-      </div>
-    </fieldset>
-
-    <!-- BLOCO CIRÚRGICO / ANESTESIA -->
-    <fieldset>
-      <legend>Folhas 4 e 5: Anestesia e Boletim Operatório</legend>
-      
-      <div class="grid-3">
-        <div class="form-group">
-          <label>Técnica de Anestesia:</label>
-          <select id="selTecnicaAnestesia" class="destaque-select">
-            <option value="Bloqueio">Bloqueio</option>
-            <option value="Geral">Geral</option>
-            <option value="Sedação">Sedação</option>
-            <option value="Local" selected>Local</option>
-            <option value="Outro">Outro</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Drogas Usadas (Template Anestésico):</label>
-          <select id="selAnestesia" class="destaque-select" onchange="aoSelecionarAnestesia(this.value)">
-            <option value="">-- Selecione o Protocolo --</option>
-            <option value="SF 1500 ml Neocaina pes - 2,0 ml Dimorf 1 mg/ml - 0,5 ml Oxitocina - 02 amp Efortil">Cesariana</option>
-            <option value="SF 1500 ml Neocaina pes 2,0 ml Dimorf 1 mg/ml - 0,5 ml Efortil 1 amp - Cefalotina 2 g FA">Não Cesariana</option>
-            <option value="SF 1500 ml Neocaina pes 4 ml Dimorf 1 mg/ml - 0,5 ml Cefalotina 2 g FA">Vesícula / Histerectomia</option>
-            <option value="Lidocaina a 2% - 20 ml SF - 500 ml EV" selected>Local</option>
-            <option value="OUTRO">Outro (Em Branco)</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Boletim Operatório (Template Cirúrgico):</label>
-          <select id="selCirurgia" class="destaque-select" onchange="aoSelecionarCirurgia(this.value)">
-            <option value="">-- Selecione a Cirurgia --</option>
-            <option value="CESARIANA">Cesariana</option>
-            <option value="COLECISTECTOMIA">Colecistectomia</option>
-            <option value="POSTECTOMIA">Postectomia</option>
-            <option value="HEMORROIDECTOMIA">Hemorroidectomia</option>
-            <option value="FISTULOTOMIA">Fistulotomia anal</option>
-            <option value="HERNIOPLASTIA_EPIGASTRICA">Hernioplastia Epigástrica</option>
-            <option value="HERNIOPLASTIA_INGUINAL">Hernioplastia Inguinal</option>
-            <option value="HERNIOPLASTIA_UMBILICAL">Hernioplastia Umbilical</option>
-            <option value="HIDROCELE">Correção de Hidrocele</option>
-            <option value="COLPOPERINEOPLASTIA">Colpoperineoplastia anterior e posterior</option>
-            <option value="HISTERECTOMIA">Histerectomia total abdominal</option>
-            <option value="CISTO_PILONIDAL">Ressecção de Cisto Pilonidal</option>
-            <option value="VASECTOMIA">Vasectomia</option>
-            <option value="CURETAGEM">Curetagem Semiótica / Uterina</option>
-            <option value="HISTERECTOMIA_VAGINAL">Histerectomia vaginal</option>
-            <option value="HERNIOPLASTIA_INCISIONAL">Hernioplastia Incisional</option>
-            <option value="EXERESE_BARTHOLIN">Exérese de Glândula de Bartholin</option>
-            <option value="OUTRO">Outro (Em Branco)</option>
-          </select>
+          <label for="codProcedimento">Código SIGTAP:</label>
+          <input type="text" id="codProcedimento">
         </div>
       </div>
 
-      <div class="grid-2">
+      <div class="grid grid-2" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Drogas Usadas / Prescrição Anestésica (Folha 4):</label>
-          <textarea id="txtAnestesia" rows="3">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
-        </div>
-        <div class="form-group">
-          <label>Descrição do Boletim Operatório (Folha 5):</label>
-          <textarea id="txtCirurgia" rows="3">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
-        </div>
-      </div>
-    </fieldset>
-
-    <!-- SOLICITANTE -->
-    <fieldset>
-      <legend>Profissional Solicitante</legend>
-      <div class="grid-3">
-        <div class="form-group">
-          <label>Selecionar Médico:</label>
-          <select id="selMedico" class="destaque-select" onchange="aoSelecionarMedico(this.value)">
-            <option value="LUCIDIO JÁCOME FERREIRA|175.499.574-87" selected>LUCIDIO JÁCOME FERREIRA</option>
-            <option value="FRANCISCO DAS CHAGAS DIASSIS J VALENTIM|106.967.184-30">FRANCISCO DAS CHAGAS DIASSIS J VALENTIM</option>
-            <option value="HIAGO FRANCIMAR JACOME DE SOUZA|099.311.824-07">HIAGO FRANCIMAR JACOME DE SOUZA</option>
-            <option value="FRENDSON CÂMARA DE OLIVEIRA|050.980.494-23">FRENDSON CÂMARA DE OLIVEIRA</option>
-            <option value="NALYGIA PAULO PAIVA|012.045.714-81">NALYGIA PAULO PAIVA</option>
-            <option value="SABRINA IDAYANY M LOURENÇO QUEIROZ|105.372.434-56">SABRINA IDAYANY M LOURENÇO QUEIROZ</option>
-            <option value="CARLOS ALEXANDRE DA SILVA|055.249.504-28">CARLOS ALEXANDRE DA SILVA</option>
-            <option value="KAREN GIZELLY PAULO SILVA|097.120.314-89">KAREN GIZELLY PAULO SILVA</option>
-            <option value="OUTRO">-- OUTRO (DIGITAR MANUALMENTE) --</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Nome do Solicitante:</label>
+          <label for="medicoSolicitante">Nome do Solicitante:</label>
           <input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA">
         </div>
         <div class="form-group">
-          <label>CPF do Solicitante:</label>
+          <label for="cpfSolicitante">CPF do Solicitante:</label>
           <input type="text" id="cpfSolicitante" value="175.499.574-87">
-        </div>
-      </div>
-      <div class="grid-3">
-        <div class="form-group">
-          <label>Data Solicitação:</label>
-          <input type="text" id="dataSolicitacao" value="14/07/2026">
         </div>
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar AIH e Salvar na Planilha</button>
-    <div id="msgStatus"></div>
+    <!-- Laudo Justificativo -->
+    <fieldset>
+      <legend>Laudo e Justificativa de Internação</legend>
+      <div class="form-group">
+        <label for="sinaisSintomas">17. Principais Sinais e Sintomas Clínicos:</label>
+        <textarea id="sinaisSintomas" rows="2"></textarea>
+      </div>
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="justificativa">18. Condições que Justificam a Internação:</label>
+        <textarea id="justificativa" rows="2"></textarea>
+      </div>
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="exames">19. Principais Resultados de Provas Diagnósticas (Exames):</label>
+        <textarea id="exames" rows="2"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Bloco Operatório -->
+    <fieldset>
+      <legend>Anestesia e Relatório de Internação</legend>
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label for="txtAnestesia">Drogas Usadas / Prescrição Anestésica (Folha 4):</label>
+          <textarea id="txtAnestesia" rows="2">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
+        </div>
+        <div class="form-group">
+          <label for="txtCirurgia">Descrição do Boletim / Relatório (Folha 5):</label>
+          <textarea id="txtCirurgia" rows="2">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Barra de Ações Dividida -->
+    <div class="actions-bar">
+      <!-- Salva na Planilha + Gera PDF (Novos Cadastros) -->
+      <button type="submit" id="btnSalvarEGerar" class="btn-action btn-save">
+        💾 Salvar na Planilha e Gerar AIH
+      </button>
+
+      <!-- Apenas Gera PDF / Imprime (Para a fila do Sheets) -->
+      <button type="button" id="btnApenasGerarPdf" class="btn-action btn-print">
+        🖨️ Apenas Gerar PDF / Imprimir (Sem Salvar)
+      </button>
+
+      <span id="msgStatus"></span>
+    </div>
   </form>
 </div>
 
-<div id="modalVisualizacao" class="modal-overlay">
+<!-- Modal de Visualização do PDF -->
+<div id="modalVisualizacao" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualização da AIH Gerada</h3>
-      <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
+      <h3 style="color: #0f172a;">Visualização da AIH Gerada</h3>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-nav btn-ultimo" onclick="imprimirPdf()">Imprimir</button>
+        <button type="button" class="btn-nav" id="btnDownload">Baixar PDF</button>
+        <button type="button" class="btn-nav" style="background:#ef4444;" onclick="fecharModal()">Fechar</button>
+      </div>
     </div>
     <div class="modal-body">
       <iframe id="pdfFrame"></iframe>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-modal btn-close" onclick="fecharModal()">Fechar</button>
-      <button class="btn-modal btn-print" onclick="imprimirPdf()">Imprimir</button>
-      <button class="btn-download" id="btnDownload">Baixar PDF</button>
     </div>
   </div>
 </div>
@@ -503,18 +316,16 @@
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
-
-/* =========================================================================
-     SISTEMA DE NAVEGAÇÃO ENTRE PACIENTES (ESTILO ZOHO DOCS)
-  ========================================================================= */
   let indiceAtual = 1;
   let totalRegistros = 1;
 
-  // Carrega automaticamente o último registro salvo ao abrir
   window.addEventListener('DOMContentLoaded', () => {
     carregarUltimoRegistro();
   });
 
+  /* =========================================================================
+     CONSULTA E NAVEGAÇÃO
+  ========================================================================= */
   async function carregarRegistroPorIndice(idx) {
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
@@ -582,15 +393,18 @@
     }
   }
 
-function atualizarControlesNav(p) {
+  /* =========================================================================
+     PREENCHIMENTO INTELIGENTE E ANTI-DESALINHAMENTO
+  ========================================================================= */
+  function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
     document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
 
-    // Identifica se os dados vieram deslocados pela coluna Mãe
-    // Se no endereço vier nome de pessoa (CREUZA, MARIA, etc.) e o município for SITIO/RUA
     const endStr = (p.endereco || '').toString().toUpperCase();
     const munStr = (p.municipio || '').toString().toUpperCase();
+    
+    // Detecta se a coluna da mãe deslocou o endereço para a direita
     const deslocado = endStr.includes('SILVA') || endStr.includes('SOARES') || endStr.includes('BATISTA') || munStr.includes('SITIO') || munStr.includes('RUA') || munStr.includes('SN');
 
     let mae = p.mae || '';
@@ -607,22 +421,21 @@ function atualizarControlesNav(p) {
     let cpfMed = p.cpfMed || '175.499.574-87';
 
     if (deslocado) {
-      // Reorganiza a sequência
-      mae = p.endereco; // CREUZA SOARES DA SILVA
-      endereco = p.municipio; // SITIO MUMBAÇA, SN - ZONA RURAL
+      mae = p.endereco;
+      endereco = p.municipio;
       municipio = (p.estado && p.estado.length > 3) ? p.estado : 'FRUTUOSO GOMES';
       estado = 'RN';
       dtInternacao = p.dtSaida || '08/07/2026';
       dtSaida = p.dtSaida || dtInternacao;
-      diag = p.cid; // outras neoplasias benignas da pele
-      cid = p.procedimento; // D 23
-      procedimento = p.codProced; // BIOPSIA DE TUMOR SUPERFICIAL DA PELE
-      codProced = p.medico; // 201010020
+      diag = p.cid;
+      cid = p.procedimento;
+      procedimento = p.codProced;
+      codProced = p.medico;
       medico = p.cpfMed || 'LUCIDIO JÁCOME FERREIRA';
       cpfMed = '175.499.574-87';
     }
 
-    // 1. Identificação do Paciente
+    // 1. Identificação
     document.getElementById('prontuario').value = p.prontuario || '';
     document.getElementById('nomePaciente').value = p.nome || '';
     document.getElementById('cns').value = p.cns || '';
@@ -634,33 +447,32 @@ function atualizarControlesNav(p) {
     document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // 2. Endereço e Localidade
-    document.getElementById('endereco').value = endereco;
+    // 2. Endereço
+    document.getElementById('endereco').value = endereco || 'SITIO ARROJADO';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = municipio;
     document.getElementById('estado').value = estado;
     document.getElementById('cep').value = '59890-000';
     document.getElementById('rg').value = '';
-    document.getElementById('cpfPac').value = '';
 
     // 3. Datas
     document.getElementById('dataInternacao').value = dtInternacao;
     document.getElementById('dataSaida').value = dtSaida;
     document.getElementById('dataSolicitacao').value = dtInternacao;
 
-    // 4. Clínicos e Procedimento
+    // 4. Clínicos
     document.getElementById('diagInicial').value = diag;
     document.getElementById('cidPrincipal').value = cid;
     document.getElementById('procedimento').value = procedimento;
     document.getElementById('codProcedimento').value = codProced;
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
-    // 5. Profissional Solicitante
+    // 5. Solicitante
     document.getElementById('medicoSolicitante').value = medico;
     document.getElementById('cpfSolicitante').value = cpfMed;
 
-    // 6. Laudos Clínicos
+    // 6. Laudos
     document.getElementById('sinaisSintomas').value = (p.sinais && !p.sinais.includes('175.')) ? p.sinais : 
       'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA. EVOLUIU SEM ANORMALIDADES.';
     document.getElementById('justificativa').value = p.justificativa || 
@@ -680,17 +492,19 @@ function atualizarControlesNav(p) {
   });
 
   /* =========================================================================
-     ENVIO DO FORMULÁRIO E MONTAGEM DO PDF
+     BOTÕES DE AÇÃO: SALVAR VS APENAS IMPRIMIR
   ========================================================================= */
+  // Botão 1: Salva no Sheets + Gera PDF
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo documento e registrando na planilha...';
+    msg.innerText = 'Salvando na planilha e gerando AIH...';
 
     try {
-      await gerarAihAdobeForm();
-      msg.innerText = 'Concluído com sucesso!';
+      await gerarAihAdobeForm(true); // true = SALVA
+      msg.style.color = '#16a34a';
+      msg.innerText = 'Salvo na planilha e AIH gerada!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
@@ -698,7 +512,27 @@ function atualizarControlesNav(p) {
     }
   });
 
-  async function gerarAihAdobeForm() {
+  // Botão 2: Apenas Gera PDF / Imprime (Fila do Sheets)
+  document.getElementById('btnApenasGerarPdf').addEventListener('click', async function() {
+    const msg = document.getElementById('msgStatus');
+    msg.style.color = '#0284c7';
+    msg.innerText = 'Montando documento para impressão...';
+
+    try {
+      await gerarAihAdobeForm(false); // false = NÃO SALVA
+      msg.style.color = '#16a34a';
+      msg.innerText = 'Pronto para impressão!';
+    } catch (err) {
+      console.error(err);
+      msg.style.color = '#dc2626';
+      msg.innerText = 'Erro ao gerar PDF: ' + err.message;
+    }
+  });
+
+  /* =========================================================================
+     MONTAGEM DEFINITIVA DO PDF (PDF-LIB)
+  ========================================================================= */
+  async function gerarAihAdobeForm(salvarNaPlanilha = false) {
     const { PDFDocument, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
@@ -736,7 +570,6 @@ function atualizarControlesNav(p) {
       estado: document.getElementById('estado').value || 'RN',
       cep: document.getElementById('cep').value || '59890-000',
       rg: document.getElementById('rg').value || '',
-      cpfPac: document.getElementById('cpfPac').value || '',
       dtInternacao: document.getElementById('dataInternacao').value || '',
       dtSaida: document.getElementById('dataSaida').value || '',
       diag: document.getElementById('diagInicial').value || '',
@@ -751,7 +584,6 @@ function atualizarControlesNav(p) {
       sinais: document.getElementById('sinaisSintomas').value || '',
       justificativa: document.getElementById('justificativa').value || '',
       exames: document.getElementById('exames').value || '',
-      tecnicaAnest: document.getElementById('selTecnicaAnestesia').value || 'Local',
       anestesia: document.getElementById('txtAnestesia').value || '',
       cirurgia: document.getElementById('txtCirurgia').value || ''
     };
@@ -866,14 +698,27 @@ function atualizarControlesNav(p) {
             fontSize = 7.8; 
             isMulti = true;
           }
+          // DATAS BLINDADAS (Rejeitam qualquer texto)
+          else if (n.includes('dt intern') || n.includes('admissao') || n === 'data da internacao') {
+            val = (d.dtInternacao && !/[a-zA-Z]/.test(d.dtInternacao)) ? d.dtInternacao : '';
+            fontSize = 8.5;
+          }
+          else if (n.includes('dt saida') || n.includes('alta') || n === 'data da saida') {
+            val = (d.dtSaida && !/[a-zA-Z]/.test(d.dtSaida)) ? d.dtSaida : '';
+            fontSize = 8.5;
+          }
+          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
+            val = (d.dtSol && !/[a-zA-Z]/.test(d.dtSol)) ? d.dtSol : (d.dtInternacao || '');
+            fontSize = 8.5;
+          }
+          else if (n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
+            val = (d.nasc && !/[a-zA-Z]/.test(d.nasc)) ? d.nasc : '';
+            fontSize = 8.5;
+          }
           // Identificação Geral
           else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 9.5; }
           else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 8.8; }
           else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 9.0; }
-          else if (n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
-            val = (d.nasc && (d.nasc.includes('/') || d.nasc.includes('-'))) ? d.nasc : '';
-            fontSize = 8.5;
-          }
           else if (n.includes('sexo')) { val = d.sexo; fontSize = 9.0; }
           else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8.5; }
           else if (n.includes('mae')) { val = d.mae; fontSize = 8.5; }
@@ -887,15 +732,6 @@ function atualizarControlesNav(p) {
           else if (n.includes('cep')) { val = d.cep; fontSize = 8.5; }
           else if (n.includes('telefone')) { val = d.tel; fontSize = 8.5; }
           else if (n.includes('doc') || n === 'rg') { val = d.rg; fontSize = 9.0; }
-          else if (n.includes('cpf pac') || (n.includes('cpf') && !n.includes('med') && !n.includes('sol'))) { val = d.cpfPac; fontSize = 9.0; }
-          else if (n.includes('dt intern') || n.includes('admissao') || n === 'data da internacao') {
-            val = (d.dtInternacao && (d.dtInternacao.includes('/') || d.dtInternacao.includes('-'))) ? d.dtInternacao : '';
-            fontSize = 8.5;
-          }
-          else if (n.includes('dt saida') || n.includes('alta') || n === 'data da saida') {
-            val = (d.dtSaida && (d.dtSaida.includes('/') || d.dtSaida.includes('-'))) ? d.dtSaida : '';
-            fontSize = 8.5;
-          }
           else if (n.includes('mud proc')) { val = 'N'; fontSize = 9.0; }
           else if (n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 8.2; }
           else if (n.includes('enferm')) { val = 'M'; fontSize = 9.0; }
@@ -903,11 +739,7 @@ function atualizarControlesNav(p) {
           else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8.5; }
           else if (n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 9.0; }
           else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.5; }
-         else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
-            val = (d.dtSol && (d.dtSol.includes('/') || d.dtSol.includes('-'))) ? d.dtSol : (d.dtInternacao || '');
-            fontSize = 8.5;
-          }
-          else if (n.includes('tecnica') || n.includes('tipo anest')) { val = d.tecnicaAnest; fontSize = 8.5; }
+          else if (n.includes('tecnica') || n.includes('tipo anest')) { val = 'LOCAL'; fontSize = 8.5; }
           else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 7.5; isMulti = true; }
           else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 7.5; isMulti = true; }
 
@@ -936,13 +768,15 @@ function atualizarControlesNav(p) {
 
     form.updateFieldAppearances(helvetica);
 
-    // Gravação na Planilha
-    fetch(URL_APPS_SCRIPT, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(d)
-    }).catch(err => console.warn('Erro Sheets:', err));
+    // Gravação condicional na Planilha
+    if (salvarNaPlanilha) {
+      fetch(URL_APPS_SCRIPT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(d)
+      }).catch(err => console.warn('Erro Sheets:', err));
+    }
 
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
