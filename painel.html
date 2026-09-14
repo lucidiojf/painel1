@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Painel de Prescrições - Farmácia Básica & Controle Especial</title>
+  <title>Painel de Prescrições - Impressão Oficial</title>
   <style>
     :root {
       --primary: #1565c0;
@@ -11,75 +11,150 @@
       --bg: #f8fafc;
       --border: #cbd5e1;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); padding: 20px; color: #1e293b; }
-    .container { max-width: 1150px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-    h1 { margin-bottom: 20px; font-size: 1.5rem; color: var(--primary); }
+    .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    h1 { margin-bottom: 20px; font-size: 1.4rem; color: var(--primary); }
     
     .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
-    input, select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; }
-    .search-input { flex-grow: 1; }
-    button { padding: 9px 16px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; }
+    .search-input { flex-grow: 1; font-size: 0.95rem; }
+    button { padding: 9px 16px; background: var(--primary); color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
     button:hover { opacity: 0.9; }
     .btn-sync { background: #059669; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-    th, td { padding: 10px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; text-align: left; }
     th { background: #f1f5f9; font-weight: 600; }
     
     .action-group { display: flex; gap: 6px; }
-    .action-btn-esp { padding: 5px 9px; font-size: 0.78rem; background: var(--primary); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
-    .action-btn-com { padding: 5px 9px; font-size: 0.78rem; background: var(--success); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
+    .action-btn-esp { padding: 6px 10px; font-size: 0.8rem; background: var(--primary); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
+    .action-btn-com { padding: 6px 10px; font-size: 0.8rem; background: var(--success); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
 
-    /* LAYOUT IMPRESSÃO (Folha A4 dividida em 2 vias) */
+    /* ==========================================================================
+       ESTILOS DE IMPRESSÃO (Folha A4 Paisagem - 2 Vias Proporcionais Lado a Lado)
+       ========================================================================== */
     #print-sheet { display: none; }
 
     @media print {
-      @page { size: A4 portrait; margin: 5mm; }
+      @page {
+        size: A4 landscape; /* Paisagem: cada via fica com proporção 148mm x 210mm (Meio A4) */
+        margin: 8mm 6mm;
+      }
+
+      body { background: #fff !important; padding: 0 !important; }
       body * { visibility: hidden; }
       #print-sheet, #print-sheet * { visibility: visible; }
+
       #print-sheet {
         display: grid !important;
         grid-template-columns: 1fr 1fr;
-        gap: 8mm;
+        gap: 10mm;
         position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
       }
+
       .rx-via {
-        border: 1.5px solid #000; padding: 6mm;
-        display: flex; flex-direction: column; justify-content: space-between;
-        font-size: 8pt; font-family: Arial, sans-serif; line-height: 1.25;
+        border: 1.5px solid #000;
+        padding: 5mm 6mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 9pt;
+        line-height: 1.3;
+        box-sizing: border-box;
       }
-      .rx-header { text-align: center; border-bottom: 1px solid #000; padding-bottom: 3mm; margin-bottom: 3mm; }
-      .rx-header h2 { font-size: 9.5pt; font-weight: bold; margin: 0; }
-      .rx-header p { margin: 1px 0; font-size: 7.2pt; }
-      .rx-via-title { font-weight: bold; font-size: 8pt; margin-top: 2mm; text-transform: uppercase; }
-      .rx-prescricao { flex-grow: 1; border: 1px solid #000; padding: 3mm; margin: 3mm 0; min-height: 55mm; }
-      .med-item { margin-bottom: 3.5mm; }
-      .med-name { font-weight: bold; }
-      
+
+      .rx-header {
+        text-align: center;
+        border-bottom: 1.2px solid #000;
+        padding-bottom: 2mm;
+        margin-bottom: 3mm;
+      }
+      .rx-header h2 { font-size: 10pt; font-weight: bold; margin: 0; letter-spacing: 0.5px; }
+      .rx-header p { margin: 1px 0; font-size: 7.5pt; }
+      .rx-via-title {
+        font-weight: bold;
+        font-size: 8.5pt;
+        margin-top: 1.5mm;
+        text-transform: uppercase;
+      }
+
+      .rx-patient-info {
+        margin-bottom: 2.5mm;
+        font-size: 9pt;
+      }
+      .rx-patient-info div { margin-bottom: 1mm; }
+
+      .rx-prescricao {
+        flex-grow: 1;
+        border: 1.2px solid #000;
+        padding: 4mm 5mm;
+        margin-bottom: 3mm;
+        min-height: 58mm;
+      }
+      .prescricao-titulo {
+        font-weight: bold;
+        font-size: 9.5pt;
+        text-decoration: underline;
+        margin-bottom: 3mm;
+      }
+      .med-item {
+        margin-bottom: 3.5mm;
+      }
+      .med-name {
+        font-weight: bold;
+        font-size: 9pt;
+      }
+      .med-uso {
+        font-size: 8.5pt;
+        margin-left: 4mm;
+        color: #111;
+      }
+
+      .rx-data-local {
+        text-align: right;
+        font-size: 8pt;
+        margin-bottom: 2mm;
+      }
+
       /* Rodapé Controle Especial */
-      .rx-footer-esp { border: 1px solid #000; font-size: 7pt; }
-      .box-title { background: #eee; font-weight: bold; padding: 1mm 2mm; border-bottom: 1px solid #000; }
-      .box-content { padding: 2mm; }
-      .line-field { display: flex; margin-bottom: 1.5mm; }
+      .rx-footer-esp {
+        border: 1.2px solid #000;
+        font-size: 7.5pt;
+      }
+      .box-title {
+        background: #eee;
+        font-weight: bold;
+        padding: 1mm 2mm;
+        border-bottom: 1px solid #000;
+        text-transform: uppercase;
+        font-size: 7pt;
+      }
+      .box-content { padding: 2mm 3mm; }
+      .line-field { display: flex; margin-bottom: 1.2mm; }
       .line-field span { border-bottom: 1px dotted #000; flex-grow: 1; margin-left: 2px; }
 
       /* Rodapé Receita Comum */
       .rx-footer-comum {
-        border: 1px solid #000;
-        padding: 4mm 3mm;
+        border: 1.2px solid #000;
+        padding: 3mm 4mm;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 25mm;
+        height: 28mm;
       }
       .assinatura-box {
         text-align: center;
-        margin-top: 10mm;
         border-top: 1px dotted #000;
         padding-top: 1.5mm;
-        font-size: 7.5pt;
+        font-size: 8pt;
+        margin-top: 10mm;
       }
     }
   </style>
@@ -90,8 +165,8 @@
     <h1>Painel de Emissão de Receitas</h1>
 
     <div class="toolbar">
-      <input type="text" id="busca" class="search-input" placeholder="Buscar por paciente ou medicação..." oninput="filtrarTabela()">
-      <button class="btn-sync" onclick="carregarDadosPlanilha()">🔄 Atualizar Dados</button>
+      <input type="text" id="busca" class="search-input" placeholder="Buscar por paciente ou remédio..." oninput="filtrarTabela()">
+      <button class="btn-sync" onclick="carregarDadosPlanilha()">🔄 Atualizar Planilha</button>
     </div>
 
     <table>
@@ -100,12 +175,12 @@
           <th>Data</th>
           <th>Paciente</th>
           <th>Endereço</th>
-          <th>Medicamentos Solicitados</th>
-          <th>Opções de Impressão</th>
+          <th>Prescrição Solicitada</th>
+          <th>Ação</th>
         </tr>
       </thead>
       <tbody id="tabelaDados">
-        <tr><td colspan="5" style="text-align: center; color: #64748b;">Carregando registros da planilha...</td></tr>
+        <tr><td colspan="5" style="text-align: center; color: #64748b;">Carregando dados da planilha...</td></tr>
       </tbody>
     </table>
   </div>
@@ -116,47 +191,79 @@
   </div>
 
   <script>
-    // =========================================================================
-    // COLE AQUI O LINK DO CSV PÚBLICO DA SUA PLANILHA:
-    // =========================================================================
-   const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
+
     let dadosGerais = [];
 
-    async function carregarDadosPlanilha() {
-      if (!CSV_URL || CSV_URL.includes("COLE_AQUI")) {
-        alert("Insira a URL pública do CSV da sua planilha na linha configurada do script!");
-        return;
+    // Leitor de CSV compatível com aspas e vírgulas internas
+    function parseCSVLine(str) {
+      let arr = [];
+      let quote = false;
+      let col = '';
+      for (let c of str) {
+        if (c === '"') { quote = !quote; }
+        else if (c === ',' && !quote) { arr.push(col.trim()); col = ''; }
+        else { col += c; }
       }
+      arr.push(col.trim());
+      return arr.map(v => v.replace(/^"|"$/g, '').trim());
+    }
+
+    async function carregarDadosPlanilha() {
       try {
         const resp = await fetch(CSV_URL + '&t=' + Date.now());
         const texto = await resp.text();
         processarCSV(texto);
       } catch (err) {
-        alert("Falha ao carregar a planilha. Verifique se o compartilhamento em CSV está ativo.");
+        alert("Erro ao carregar dados da planilha. Verifique a conexão.");
         console.error(err);
       }
     }
 
     function processarCSV(texto) {
-      const linhas = texto.split('\n').map(l => l.trim()).filter(Boolean);
+      const linhas = texto.split(/\r?\n/).filter(l => l.trim().length > 0);
       if (linhas.length <= 1) {
-        document.getElementById('tabelaDados').innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhuma solicitação encontrada.</td></tr>';
+        document.getElementById('tabelaDados').innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum registro encontrado.</td></tr>';
         return;
       }
 
+      // Mapeamento dinâmico pelo cabeçalho
+      const headers = parseCSVLine(linhas[0]).map(h => h.toLowerCase());
+      
+      const getIdx = (termos) => headers.findIndex(h => termos.some(t => h.includes(t)));
+
+      const iData = getIdx(['data da receita', 'data']);
+      const iPac = getIdx(['paciente', 'nome']);
+      const iEnd = getIdx(['endereco', 'endereço']);
+      const iR1 = getIdx(['remedio 1', 'rem 1', 'medicamento 1']);
+      const iQ1 = getIdx(['quantidade 1', 'qtde 1']);
+      const iU1 = getIdx(['uso 1']);
+      const iR2 = getIdx(['remedio 2', 'rem 2']);
+      const iQ2 = getIdx(['quantidade 2', 'qtde 2']);
+      const iU2 = getIdx(['uso 2']);
+      const iR3 = getIdx(['remedio 3', 'rem 3']);
+      const iQ3 = getIdx(['quantidade 3', 'qtde 3']);
+      const iU3 = getIdx(['uso 3']);
+
       dadosGerais = [];
       for (let i = 1; i < linhas.length; i++) {
-        const cols = linhas[i].split(',').map(c => c.replace(/^"|"$/g, '').trim());
-        if (!cols[2]) continue;
+        const cols = parseCSVLine(linhas[i]);
+        const pac = cols[iPac !== -1 ? iPac : 2];
+        if (!pac) continue;
 
         dadosGerais.push({
-          carimbo: cols[0],
-          data: cols[1],
-          paciente: cols[2],
-          endereco: cols[3],
-          rem1: cols[4], qtde1: cols[5], uso1: cols[6],
-          rem2: cols[7], qtde2: cols[8], uso2: cols[9],
-          rem3: cols[10], qtde3: cols[11], uso3: cols[12],
+          data: cols[iData !== -1 ? iData : 1] || '',
+          paciente: pac,
+          endereco: cols[iEnd !== -1 ? iEnd : 3] || '',
+          rem1: cols[iR1 !== -1 ? iR1 : 4] || '',
+          qtde1: cols[iQ1 !== -1 ? iQ1 : 5] || '',
+          uso1: cols[iU1 !== -1 ? iU1 : 6] || '',
+          rem2: cols[iR2 !== -1 ? iR2 : 7] || '',
+          qtde2: cols[iQ2 !== -1 ? iQ2 : 8] || '',
+          uso2: cols[iU2 !== -1 ? iU2 : 9] || '',
+          rem3: cols[iR3 !== -1 ? iR3 : 10] || '',
+          qtde3: cols[iQ3 !== -1 ? iQ3 : 11] || '',
+          uso3: cols[iU3 !== -1 ? iU3 : 12] || '',
         });
       }
       filtrarTabela();
@@ -200,13 +307,12 @@
 
     function gerarMedsHtml(dados) {
       let html = '';
-      if (dados.rem1) html += `<div class="med-item"><div class="med-name">1) ${dados.rem1} ${dados.qtde1 ? '--- ' + dados.qtde1 : ''}</div><div>Uso: ${dados.uso1 || ''}</div></div>`;
-      if (dados.rem2) html += `<div class="med-item"><div class="med-name">2) ${dados.rem2} ${dados.qtde2 ? '--- ' + dados.qtde2 : ''}</div><div>Uso: ${dados.uso2 || ''}</div></div>`;
-      if (dados.rem3) html += `<div class="med-item"><div class="med-name">3) ${dados.rem3} ${dados.qtde3 ? '--- ' + dados.qtde3 : ''}</div><div>Uso: ${dados.uso3 || ''}</div></div>`;
+      if (dados.rem1) html += `<div class="med-item"><div class="med-name">1) ${dados.rem1} ${dados.qtde1 ? '------- ' + dados.qtde1 : ''}</div><div class="med-uso">Uso: ${dados.uso1 || ''}</div></div>`;
+      if (dados.rem2) html += `<div class="med-item"><div class="med-name">2) ${dados.rem2} ${dados.qtde2 ? '------- ' + dados.qtde2 : ''}</div><div class="med-uso">Uso: ${dados.uso2 || ''}</div></div>`;
+      if (dados.rem3) html += `<div class="med-item"><div class="med-name">3) ${dados.rem3} ${dados.qtde3 ? '------- ' + dados.qtde3 : ''}</div><div class="med-uso">Uso: ${dados.uso3 || ''}</div></div>`;
       return html;
     }
 
-    // 1. Layout Controle Especial (Portaria 344)
     function montarViaEspecial(dados, via) {
       return `
         <div>
@@ -219,26 +325,33 @@
             <p>Rua José Carlos, 58 - Centro - Frutuoso Gomes/RN</p>
             <div class="rx-via-title">${via}</div>
           </div>
-          <div style="margin-bottom: 2mm;"><strong>Paciente:</strong> ${dados.paciente}</div>
-          <div style="margin-bottom: 2mm;"><strong>Endereço:</strong> ${dados.endereco || ''}</div>
+
+          <div class="rx-patient-info">
+            <div><strong>Paciente:</strong> ${dados.paciente}</div>
+            <div><strong>Endereço:</strong> ${dados.endereco || ''}</div>
+          </div>
+
           <div class="rx-prescricao">
-            <div style="font-weight:bold; margin-bottom:2mm;">Prescrição:</div>
+            <div class="prescricao-titulo">Prescrição:</div>
             ${gerarMedsHtml(dados)}
           </div>
-          <div style="text-align: right; font-size: 7.5pt; margin-bottom: 2mm;">Data: ${dados.data || '__/__/____'}</div>
+          
+          <div class="rx-data-local">
+            Frutuoso Gomes/RN, ${dados.data || '___/___/______'}
+          </div>
         </div>
 
         <div class="rx-footer-esp">
           <div class="box-title">IDENTIFICAÇÃO DO COMPRADOR</div>
           <div class="box-content" style="border-bottom: 1px solid #000;">
             <div class="line-field">Nome: <span></span></div>
-            <div style="display:flex; gap:4px;"><div class="line-field" style="flex:2;">Ident: <span></span></div><div class="line-field" style="flex:1;">Órg: <span></span></div></div>
+            <div style="display:flex; gap:6px;"><div class="line-field" style="flex:2;">Ident: <span></span></div><div class="line-field" style="flex:1;">Órg: <span></span></div></div>
             <div class="line-field">End: <span></span></div>
-            <div style="display:flex; gap:4px;"><div class="line-field" style="flex:2;">Cidade: <span></span></div><div class="line-field" style="flex:1;">UF: <span></span></div></div>
-            <div class="line-field">Tel: <span></span></div>
+            <div style="display:flex; gap:6px;"><div class="line-field" style="flex:2;">Cidade: <span></span></div><div class="line-field" style="flex:1;">UF: <span></span></div></div>
+            <div class="line-field">Telefone: <span></span></div>
           </div>
           <div class="box-title">IDENTIFICAÇÃO DO FORNECEDOR</div>
-          <div class="box-content" style="height: 10mm; display:flex; align-items:flex-end; justify-content:space-between;">
+          <div class="box-content" style="height: 9mm; display:flex; align-items:flex-end; justify-content:space-between;">
             <span>Assinatura do Farmacêutico</span>
             <span>Data: ___/___/______</span>
           </div>
@@ -246,7 +359,6 @@
       `;
     }
 
-    // 2. Layout Receita Comum / Farmácia Básica (Sem caixas de retenção)
     function montarViaComum(dados, via) {
       return `
         <div>
@@ -258,18 +370,22 @@
             <p>Frutuoso Gomes - Rio Grande do Norte</p>
             <div class="rx-via-title">${via}</div>
           </div>
-          <div style="margin-bottom: 2mm;"><strong>Paciente:</strong> ${dados.paciente}</div>
-          <div style="margin-bottom: 2mm;"><strong>Endereço:</strong> ${dados.endereco || ''}</div>
+
+          <div class="rx-patient-info">
+            <div><strong>Paciente:</strong> ${dados.paciente}</div>
+            <div><strong>Endereço:</strong> ${dados.endereco || ''}</div>
+          </div>
+
           <div class="rx-prescricao">
-            <div style="font-weight:bold; margin-bottom:2mm;">Prescrição:</div>
+            <div class="prescricao-titulo">Prescrição:</div>
             ${gerarMedsHtml(dados)}
           </div>
         </div>
 
         <div class="rx-footer-comum">
-          <div style="display:flex; justify-content:space-between; font-size: 7.5pt;">
+          <div style="display:flex; justify-content:space-between; font-size: 8pt;">
             <span>Frutuoso Gomes/RN</span>
-            <span>Data: ${dados.data || '__/__/____'}</span>
+            <span>Data: ${dados.data || '___/___/______'}</span>
           </div>
           <div class="assinatura-box">
             Assinatura e Carimbo do Médico
