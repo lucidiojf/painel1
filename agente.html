@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Envio de Receitas - Agente de Saúde</title>
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #0f172a;
+      --border: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      padding: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--card);
+      width: 100%;
+      max-width: 520px;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+
+    .header h1 {
+      font-size: 1.25rem;
+      color: var(--primary-dark);
+    }
+
+    .header p {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      color: #334155;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .med-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .med-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      color: white;
+      background: var(--primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+
+    button:active {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    .status-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="header">
+      <h1>Envio de Prescrição</h1>
+      <p>Coleta de dados da área para receitas de controle especial</p>
+    </div>
+
+    <form id="agenteForm">
+      <div class="field">
+        <label for="paciente">Nome do Paciente *</label>
+        <input type="text" id="paciente" required placeholder="Nome completo">
+      </div>
+
+      <div class="field">
+        <label for="endereco">Endereço</label>
+        <input type="text" id="endereco" placeholder="Rua, número, comunidade/bairro">
+      </div>
+
+      <div class="field">
+        <label for="data">Data da Solicitação</label>
+        <input type="date" id="data" required>
+      </div>
+
+      <!-- Remédio 1 -->
+      <div class="med-group">
+        <div class="med-title">Medicamento 1 *</div>
+        <div class="grid-2">
+          <input type="text" id="rem1" placeholder="Nome / Dosagem" required>
+          <input type="text" id="qtde1" placeholder="Qtde / Caixas" required>
+        </div>
+        <input type="text" id="uso1" placeholder="Como tomar (Ex: 1 comp à noite)" required>
+      </div>
+
+      <!-- Remédio 2 -->
+      <div class="med-group">
+        <div class="med-title">Medicamento 2 (Opcional)</div>
+        <div class="grid-2">
+          <input type="text" id="rem2" placeholder="Nome / Dosagem">
+          <input type="text" id="qtde2" placeholder="Qtde">
+        </div>
+        <input type="text" id="uso2" placeholder="Como tomar">
+      </div>
+
+      <!-- Remédio 3 -->
+      <div class="med-group">
+        <div class="med-title">Medicamento 3 (Opcional)</div>
+        <div class="grid-2">
+          <input type="text" id="rem3" placeholder="Nome / Dosagem">
+          <input type="text" id="qtde3" placeholder="Qtde">
+        </div>
+        <input type="text" id="uso3" placeholder="Como tomar">
+      </div>
+
+      <button type="submit" id="btnSalvar">Salvar Solicitação</button>
+      <div id="statusMsg" class="status-msg"></div>
+    </form>
+  </div>
+
+  <script>
+    // =========================================================================
+    // COLE AQUI A SUA URL GERADA NO SHEETDB:
+    // =========================================================================
+    const SHEETDB_URL = "COLE_SUA_API_DO_SHEETDB_AQUI";
+
+    // Define a data de hoje por padrão
+    document.getElementById('data').value = new Date().toISOString().split('T')[0];
+
+    const form = document.getElementById('agenteForm');
+    const btn = document.getElementById('btnSalvar');
+    const msg = document.getElementById('statusMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!SHEETDB_URL || SHEETDB_URL.includes("COLE_SUA_API")) {
+        alert("Configure a URL do SheetDB no script!");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Gravando na planilha...";
+      msg.style.display = "none";
+
+      // Formata a data atual em DD/MM/YYYY para a planilha
+      const d = document.getElementById('data').value.split('-').reverse().join('/');
+
+      // Mapeamento idêntico aos cabeçalhos da primeira linha da sua planilha
+      const payload = {
+        data: [{
+          "Data e Hora": new Date().toLocaleString('pt-BR'),
+          "Data da Receita": d,
+          "Paciente": document.getElementById('paciente').value.trim(),
+          "Endereco": document.getElementById('endereco').value.trim(),
+          "Remedio 1": document.getElementById('rem1').value.trim(),
+          "Quantidade 1": document.getElementById('qtde1').value.trim(),
+          "Uso 1": document.getElementById('uso1').value.trim(),
+          "Remedio 2": document.getElementById('rem2').value.trim(),
+          "Quantidade 2": document.getElementById('qtde2').value.trim(),
+          "Uso 2": document.getElementById('uso2').value.trim(),
+          "Remedio 3": document.getElementById('rem3').value.trim(),
+          "Quantidade 3": document.getElementById('qtde3').value.trim(),
+          "Uso 3": document.getElementById('uso3').value.trim()
+        }]
+      };
+
+      try {
+        const response = await fetch(SHEETDB_URL, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          msg.className = "status-msg status-success";
+          msg.innerText = "Receita gravada com sucesso!";
+          msg.style.display = "block";
+
+          // Limpa o formulário mantendo a data
+          form.reset();
+          document.getElementById('data').value = new Date().toISOString().split('T')[0];
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          throw new Error("Erro na gravação");
+        }
+      } catch (err) {
+        msg.className = "status-msg status-error";
+        msg.innerText = "Falha ao enviar. Verifique sua conexão e tente novamente.";
+        msg.style.display = "block";
+      } finally {
+        btn.disabled = false;
+        btn.innerText = "Salvar Solicitação";
+      }
+    });
+  </script>
+</body>
+</html>
