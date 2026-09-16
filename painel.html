@@ -33,149 +33,19 @@
     .btn-esp { padding: 7px 12px; font-size: 0.82rem; background: #0284c7; color: #fff; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; }
     .btn-com { padding: 7px 12px; font-size: 0.82rem; background: #16a34a; color: #fff; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; }
 
-    /* =========================================================
-       BOTÃO VOLTAR APÓS IMPRESSÃO NO CELULAR
-       ========================================================= */
-    #btnVoltarMobile {
-      display: none;
+    /* Frame oculto isolado para impressão direta sem conflito de tela */
+    #printFrame {
       position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #1e293b;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 25px;
-      font-weight: bold;
-      z-index: 99999;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      border: 2px solid #fff;
-    }
-
-    /* =========================================================
-       CONTAINER DA RECEITA
-       ========================================================= */
-    #areaImpressao {
-      display: none;
-    }
-
-    body.imprimindo-ativo .container {
-      display: none !important;
-    }
-
-    body.imprimindo-ativo #btnVoltarMobile {
-      display: block !important;
-    }
-
-    body.imprimindo-ativo #areaImpressao {
-      display: grid !important;
-      grid-template-columns: 1fr 1fr;
-      gap: 8mm;
-      width: 100%;
-      box-sizing: border-box;
-      background: #fff;
-    }
-
-    /* 1. MODELO CONTROLE ESPECIAL */
-    .box-especial {
-      border: 2px solid #cc0000;
-      border-radius: 12px;
-      padding: 5mm 6mm;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 8pt;
-      line-height: 1.25;
-      box-sizing: border-box;
-      background: #fff;
-    }
-    .esp-topo-grid {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 3.5mm;
-      border-bottom: 1.5px solid #cc0000;
-      padding-bottom: 2mm;
-      margin-bottom: 2.5mm;
-    }
-    .esp-logo-img {
-      width: 16mm;
-      height: auto;
-    }
-    .esp-topo-txt h2 { font-size: 9.5pt; font-weight: 800; margin: 0; color: #cc0000; }
-    .esp-topo-txt p { margin: 0.5px 0; font-size: 7.2pt; color: #111; }
-    .esp-vias { text-align: right; font-size: 7.8pt; font-weight: 800; color: #cc0000; line-height: 1.3; }
-    
-    .esp-paciente { margin-bottom: 2mm; font-size: 8.5pt; }
-    .esp-receita {
-      flex-grow: 1;
-      border: 1px solid #cc0000;
-      padding: 3mm;
-      margin-bottom: 2mm;
-      min-height: 58mm;
-    }
-    .med-item { margin-bottom: 3.5mm; }
-    .med-linha { display: flex; justify-content: space-between; font-weight: 800; font-size: 9pt; }
-    .med-posologia { font-size: 8.5pt; margin-left: 3mm; color: #111; }
-    
-    .esp-rodape-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      border: 1px solid #cc0000;
-      font-size: 6.8pt;
-    }
-    .esp-col-comprador { border-right: 1px solid #cc0000; }
-    .esp-titulo-box { font-weight: 800; padding: 1mm 2mm; border-bottom: 1px solid #cc0000; background: #fdf2f2; color: #cc0000; }
-    .esp-box-corpo { padding: 1.5mm 2mm; }
-    .line-f { display: flex; margin-bottom: 1.2mm; }
-    .line-f span { border-bottom: 1px dotted #000; flex-grow: 1; margin-left: 2px; }
-
-    /* 2. MODELO PSF COMUM */
-    .box-psf {
-      border: 2.2px solid #cc0000;
-      border-radius: 12px;
-      padding: 5mm 6mm;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      box-sizing: border-box;
-      background: #fff;
-    }
-    .psf-topo { display: flex; align-items: center; gap: 4mm; margin-bottom: 2mm; }
-    .psf-logo-img { width: 19mm; height: auto; flex-shrink: 0; }
-    .psf-topo-txt { flex-grow: 1; text-align: center; color: #cc0000; }
-    .psf-topo-txt h2 { font-size: 11pt; font-weight: 800; margin: 0; }
-    .psf-topo-txt h3 { font-size: 10pt; font-weight: 700; margin: 1px 0; }
-    .psf-topo-txt .sub-unidade { font-size: 7.8pt; font-weight: 800; margin: 1px 0; }
-    .psf-topo-txt .endereco { font-size: 7pt; margin: 1px 0; font-weight: 600; }
-    .psf-titulo { text-align: center; font-size: 14pt; font-weight: 900; color: #cc0000; letter-spacing: 2px; margin: 3mm 0 2mm 0; }
-    .psf-paciente { margin-bottom: 2mm; font-size: 9pt; border-bottom: 1px dotted #ccc; padding-bottom: 1.5mm; }
-    .psf-receita { flex-grow: 1; padding: 2mm 0; min-height: 70mm; }
-    .psf-rodape { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 2mm; font-size: 8.5pt; color: #cc0000; font-weight: 700; }
-    .psf-assinatura { width: 55%; text-align: center; }
-    .psf-assinatura .traco { border-bottom: 1.5px solid #cc0000; margin-bottom: 1.5mm; }
-
-    @media print {
-      @page {
-        size: A4 landscape;
-        margin: 5mm 6mm;
-      }
-      #btnVoltarMobile { display: none !important; }
-      body { padding: 0 !important; background: #fff !important; }
-      .container { display: none !important; }
-      #areaImpressao {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 8mm;
-        width: 100% !important;
-        height: 100% !important;
-      }
+      right: 0;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border: 0;
+      visibility: hidden;
     }
   </style>
 </head>
 <body>
-
-  <button id="btnVoltarMobile" onclick="restaurarPainel()">⬅ Voltar ao Painel</button>
 
   <div class="container">
     <h1>Painel de Emissão de Receitas</h1>
@@ -203,7 +73,7 @@
     </div>
   </div>
 
-  <div id="areaImpressao"></div>
+  <iframe id="printFrame"></iframe>
 
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
@@ -308,8 +178,8 @@
           <td>${meds}</td>
           <td>
             <div class="action-group">
-              <button class="btn-esp" onclick="dispararImpressao(${idx}, 'especial')">🖨️ Especial</button>
-              <button class="btn-com" onclick="dispararImpressao(${idx}, 'comum')">📄 Comum</button>
+              <button class="btn-esp" onclick="imprimir(${idx}, 'especial')">🖨️ Especial</button>
+              <button class="btn-com" onclick="imprimir(${idx}, 'comum')">📄 Comum</button>
             </div>
           </td>
         `;
@@ -326,7 +196,6 @@
       return html;
     }
 
-    // 1. VIA DE CONTROLE ESPECIAL COM BRASÃO
     function criarViaEspecial(dados, viaNome) {
       return `
         <div class="box-especial">
@@ -382,7 +251,6 @@
       `;
     }
 
-    // 2. VIA DO PSF COMUM
     function criarViaComum(dados) {
       return `
         <div class="box-psf">
@@ -420,34 +288,129 @@
       `;
     }
 
-    function restaurarPainel() {
-      document.body.classList.remove('imprimindo-ativo');
-      document.getElementById('areaImpressao').innerHTML = '';
-    }
-
-    function dispararImpressao(index, modelo) {
+    function imprimir(index, modelo) {
       const item = listaPacientes[index];
       if (!item) return;
 
-      const area = document.getElementById('areaImpressao');
-      
+      const iframe = document.getElementById('printFrame');
+      const doc = iframe.contentWindow.document;
+
+      let htmlVias = '';
       if (modelo === 'especial') {
-        area.innerHTML = criarViaEspecial(item, '1ª Via (Branca) - Farmácia') + criarViaEspecial(item, '2ª Via (Azul) - Paciente');
+        htmlVias = criarViaEspecial(item, '1ª Via (Branca) - Farmácia') + criarViaEspecial(item, '2ª Via (Azul) - Paciente');
       } else {
-        area.innerHTML = criarViaComum(item) + criarViaComum(item);
+        htmlVias = criarViaComum(item) + criarViaComum(item);
       }
 
-      // Ativa o layout de impressão visível na tela (essencial para mobile)
-      document.body.classList.add('imprimindo-ativo');
+      const conteudoCompleto = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <style>
+            @page {
+              size: A4 landscape;
+              margin: 4mm 5mm;
+            }
+            * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; }
+            body { background: #fff; width: 100%; height: 100%; }
+            .grid-duplo {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 8mm;
+              width: 100%;
+              height: 100vh;
+              box-sizing: border-box;
+            }
+            .box-especial {
+              border: 2px solid #cc0000;
+              border-radius: 12px;
+              padding: 4mm 5mm;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              font-size: 8pt;
+              line-height: 1.2;
+              height: 100%;
+            }
+            .esp-topo-grid {
+              display: grid;
+              grid-template-columns: auto 1fr auto;
+              align-items: center;
+              gap: 3mm;
+              border-bottom: 1.5px solid #cc0000;
+              padding-bottom: 1.5mm;
+              margin-bottom: 2mm;
+            }
+            .esp-logo-img { width: 15mm; height: auto; }
+            .esp-topo-txt h2 { font-size: 9pt; font-weight: 800; margin: 0; color: #cc0000; }
+            .esp-topo-txt p { margin: 0.5px 0; font-size: 6.8pt; color: #111; }
+            .esp-vias { text-align: right; font-size: 7.5pt; font-weight: 800; color: #cc0000; line-height: 1.2; }
+            .esp-paciente { margin-bottom: 1.5mm; font-size: 8pt; }
+            .esp-receita {
+              flex-grow: 1;
+              border: 1px solid #cc0000;
+              padding: 2.5mm;
+              margin-bottom: 1.5mm;
+              min-height: 52mm;
+            }
+            .med-item { margin-bottom: 3mm; }
+            .med-linha { display: flex; justify-content: space-between; font-weight: 800; font-size: 8.5pt; }
+            .med-posologia { font-size: 8pt; margin-left: 2mm; color: #111; }
+            .esp-rodape-grid {
+              display: grid;
+              grid-template-columns: 1.15fr 0.85fr;
+              border: 1px solid #cc0000;
+              font-size: 6.5pt;
+            }
+            .esp-col-comprador { border-right: 1px solid #cc0000; }
+            .esp-titulo-box { font-weight: 800; padding: 1mm 2mm; border-bottom: 1px solid #cc0000; background: #fdf2f2; color: #cc0000; }
+            .esp-box-corpo { padding: 1.5mm 2mm; }
+            .line-f { display: flex; margin-bottom: 1mm; }
+            .line-f span { border-bottom: 1px dotted #000; flex-grow: 1; margin-left: 2px; }
 
-      // Tempo de espera para o motor gráfico do celular carregar a imagem do brasão
+            .box-psf {
+              border: 2.2px solid #cc0000;
+              border-radius: 12px;
+              padding: 4mm 5mm;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              height: 100%;
+            }
+            .psf-topo { display: flex; align-items: center; gap: 3mm; margin-bottom: 1.5mm; }
+            .psf-logo-img { width: 17mm; height: auto; }
+            .psf-topo-txt { flex-grow: 1; text-align: center; color: #cc0000; }
+            .psf-topo-txt h2 { font-size: 10.5pt; font-weight: 800; margin: 0; }
+            .psf-topo-txt h3 { font-size: 9.5pt; font-weight: 700; margin: 1px 0; }
+            .psf-topo-txt .sub-unidade { font-size: 7.5pt; font-weight: 800; margin: 1px 0; }
+            .psf-topo-txt .endereco { font-size: 6.8pt; margin: 1px 0; font-weight: 600; }
+            .psf-titulo { text-align: center; font-size: 13pt; font-weight: 900; color: #cc0000; letter-spacing: 2px; margin: 2mm 0; }
+            .psf-paciente { margin-bottom: 2mm; font-size: 8.5pt; border-bottom: 1px dotted #ccc; padding-bottom: 1mm; }
+            .psf-receita { flex-grow: 1; padding: 1.5mm 0; min-height: 60mm; }
+            .psf-rodape { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 1.5mm; font-size: 8pt; color: #cc0000; font-weight: 700; }
+            .psf-assinatura { width: 55%; text-align: center; }
+            .psf-assinatura .traco { border-bottom: 1.5px solid #cc0000; margin-bottom: 1mm; }
+          </style>
+        </head>
+        <body>
+          <div class="grid-duplo">
+            ${htmlVias}
+          </div>
+        </body>
+        </html>
+      `;
+
+      doc.open();
+      doc.write(conteudoCompleto);
+      doc.close();
+
+      // Aguarda o carregamento das imagens antes de acionar a impressão
       setTimeout(() => {
-        window.print();
-      }, 250);
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      }, 400);
     }
-
-    // Quando fechar o diálogo de impressão no computador ou celular, restaura automaticamente
-    window.onafterprint = restaurarPainel;
 
     window.onload = carregarDadosPlanilha;
   </script>
