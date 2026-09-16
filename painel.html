@@ -29,10 +29,12 @@
     th { background: #f1f5f9; font-weight: 600; }
     
     .action-group { display: flex; gap: 6px; }
-    .action-btn-esp { padding: 6px 10px; font-size: 0.8rem; background: var(--primary); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
-    .action-btn-com { padding: 6px 10px; font-size: 0.8rem; background: var(--success); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
+    .action-btn-esp { padding: 7px 12px; font-size: 0.82rem; background: #0284c7; color: #fff; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+    .action-btn-com { padding: 7px 12px; font-size: 0.82rem; background: #16a34a; color: #fff; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
 
-    /* LAYOUT DE IMPRESSÃO (Folha A4 Paisagem - 2 Vias Proporcionais) */
+    /* =========================================================
+       ESTILOS DE IMPRESSÃO (Folha A4 Paisagem - 2 Vias Lado a Lado)
+       ========================================================= */
     #print-sheet { display: none; }
 
     @media print {
@@ -42,8 +44,8 @@
       }
 
       body { background: #fff !important; padding: 0 !important; }
-      body * { visibility: hidden; }
-      #print-sheet, #print-sheet * { visibility: visible; }
+      body * { visibility: hidden !important; }
+      #print-sheet, #print-sheet * { visibility: visible !important; }
 
       #print-sheet {
         display: grid !important;
@@ -57,7 +59,7 @@
         box-sizing: border-box;
       }
 
-      /* 1. MODELO RECEITUÁRIO COMUM (PSF COM O NOVO BRASÃO) */
+      /* 1. MODELO RECEITUÁRIO COMUM (PSF COM BRASÃO) */
       .via-psf {
         border: 2.2px solid var(--cor-psf);
         border-radius: 12px;
@@ -200,7 +202,7 @@
     <h1>Painel de Emissão de Receitas</h1>
 
     <div class="toolbar">
-      <input type="text" id="busca" class="search-input" placeholder="Buscar por paciente ou medicação..." oninput="filtrarTabela()">
+      <input type="text" id="busca" class="search-input" placeholder="Buscar por paciente ou remédio..." oninput="renderizarTabela()">
       <button class="btn-sync" onclick="carregarDadosPlanilha()">🔄 Atualizar Planilha</button>
     </div>
 
@@ -228,7 +230,7 @@
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
 
-    let dadosGerais = [];
+    let listaPacientes = [];
 
     function parseCSVLine(str) {
       let arr = [];
@@ -276,14 +278,13 @@
       const iQ3 = getIdx(['quantidade 3', 'qtde 3']);
       const iU3 = getIdx(['uso 3']);
 
-      dadosGerais = [];
+      listaPacientes = [];
       for (let i = 1; i < linhas.length; i++) {
         const cols = parseCSVLine(linhas[i]);
         const pac = cols[iPac !== -1 ? iPac : 2];
         if (!pac) continue;
 
-        dadosGerais.push({
-          idOriginal: dadosGerais.length,
+        listaPacientes.push({
           data: cols[iData !== -1 ? iData : 1] || '',
           paciente: pac,
           endereco: cols[iEnd !== -1 ? iEnd : 3] || '',
@@ -298,15 +299,15 @@
           uso3: cols[iU3 !== -1 ? iU3 : 12] || '',
         });
       }
-      filtrarTabela();
+      renderizarTabela();
     }
 
-    function filtrarTabela() {
+    function renderizarTabela() {
       const termo = document.getElementById('busca').value.toLowerCase();
       const tbody = document.getElementById('tabelaDados');
       tbody.innerHTML = '';
 
-      const filtrados = dadosGerais.filter(d => 
+      const filtrados = listaPacientes.filter(d => 
         d.paciente.toLowerCase().includes(termo) ||
         (d.rem1 && d.rem1.toLowerCase().includes(termo)) ||
         (d.rem2 && d.rem2.toLowerCase().includes(termo)) ||
@@ -321,6 +322,7 @@
       filtrados.forEach((item) => {
         const meds = [item.rem1, item.rem2, item.rem3].filter(Boolean).join(' | ');
         const tr = document.createElement('tr');
+        
         tr.innerHTML = `
           <td>${item.data || '-'}</td>
           <td><strong>${item.paciente}</strong></td>
@@ -328,11 +330,21 @@
           <td>${meds}</td>
           <td>
             <div class="action-group">
-              <button class="action-btn-esp" onclick="imprimirPorId(${item.idOriginal}, 'especial')">🖨️ Especial</button>
-              <button class="action-btn-com" onclick="imprimirPorId(${item.idOriginal}, 'comum')">📄 Comum (PSF)</button>
+              <button class="action-btn-esp" type="button">🖨️ Especial</button>
+              <button class="action-btn-com" type="button">📄 Comum (PSF)</button>
             </div>
           </td>
         `;
+
+        // Vinculação direta aos botões (elimina erros de índice)
+        tr.querySelector('.action-btn-esp').addEventListener('click', () => {
+          imprimirDireto(item, 'especial');
+        });
+
+        tr.querySelector('.action-btn-com').addEventListener('click', () => {
+          imprimirDireto(item, 'comum');
+        });
+
         tbody.appendChild(tr);
       });
     }
@@ -351,7 +363,7 @@
       return html;
     }
 
-    // 1. MODELO CONTROLE ESPECIAL
+    // 1. MODELO CONTROLE ESPECIAL (PORTARIA 344)
     function montarViaEspecial(dados, viaTexto) {
       return `
         <div class="via-esp">
@@ -406,13 +418,13 @@
       `;
     }
 
-    // 2. MODELO RECEITUÁRIO COMUM (PSF COM O BRASÃO COLORIDO NOVO)
+    // 2. MODELO RECEITUÁRIO COMUM PSF
     function montarViaComum(dados) {
       return `
         <div class="via-psf">
           <div>
             <div class="psf-header-row">
-              <img class="psf-logo-img" src="brasao.png" alt="Brasão de Frutuoso Gomes">
+              <img class="psf-logo-img" src="brasao.png" alt="Brasão">
               <div class="psf-header-text">
                 <h2>Prefeitura Municipal de Frutuoso Gomes</h2>
                 <h3>Secretaria Municipal de Saúde</h3>
@@ -444,10 +456,7 @@
       `;
     }
 
-    function imprimirPorId(id, tipo) {
-      const item = dadosGerais.find(d => d.idOriginal === id);
-      if (!item) return;
-
+    function imprimirDireto(item, tipo) {
       const v1 = document.getElementById('via1');
       const v2 = document.getElementById('via2');
       
@@ -459,9 +468,7 @@
         v2.innerHTML = montarViaComum(item);
       }
       
-      setTimeout(() => {
-        window.print();
-      }, 100);
+      window.print();
     }
 
     window.onload = carregarDadosPlanilha;
