@@ -32,9 +32,7 @@
     .action-btn-esp { padding: 6px 10px; font-size: 0.8rem; background: var(--primary); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
     .action-btn-com { padding: 6px 10px; font-size: 0.8rem; background: var(--success); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
 
-    /* ==========================================================================
-       ESTILOS DE IMPRESSÃO (Folha A4 Paisagem - 2 Vias Proporcionais Lado a Lado)
-       ========================================================================== */
+    /* LAYOUT IMPRESSÃO (Folha A4 Paisagem - 2 Vias Proporcionais) */
     #print-sheet { display: none; }
 
     @media print {
@@ -59,9 +57,7 @@
         box-sizing: border-box;
       }
 
-      /* --------------------------------------------------
-         1. MODELO RECEITUÁRIO COMUM (PSF COM BRASÃO E BORDA)
-         -------------------------------------------------- */
+      /* 1. MODELO RECEITUÁRIO COMUM (PSF) */
       .via-psf {
         border: 2.2px solid var(--cor-psf);
         border-radius: 12px;
@@ -71,7 +67,6 @@
         justify-content: space-between;
         font-family: Arial, Helvetica, sans-serif;
         box-sizing: border-box;
-        position: relative;
       }
 
       .psf-header-row {
@@ -81,10 +76,11 @@
         margin-bottom: 2mm;
       }
 
-      .psf-logo-img {
-        width: 16mm;
-        height: auto;
+      .psf-logo-box {
+        width: 18mm;
         flex-shrink: 0;
+        display: flex;
+        justify-content: center;
       }
 
       .psf-header-text {
@@ -93,30 +89,10 @@
         color: var(--cor-psf);
       }
 
-      .psf-header-text h2 {
-        font-size: 11pt;
-        font-weight: 800;
-        margin: 0;
-        letter-spacing: -0.2px;
-      }
-
-      .psf-header-text h3 {
-        font-size: 10pt;
-        font-weight: 700;
-        margin: 1px 0;
-      }
-
-      .psf-header-text .sub-unidade {
-        font-size: 7.8pt;
-        font-weight: 800;
-        margin: 1px 0;
-      }
-
-      .psf-header-text .endereco {
-        font-size: 7pt;
-        margin: 1px 0;
-        font-weight: 600;
-      }
+      .psf-header-text h2 { font-size: 11pt; font-weight: 800; margin: 0; }
+      .psf-header-text h3 { font-size: 10pt; font-weight: 700; margin: 1px 0; }
+      .psf-header-text .sub-unidade { font-size: 7.8pt; font-weight: 800; margin: 1px 0; }
+      .psf-header-text .endereco { font-size: 7pt; margin: 1px 0; font-weight: 600; }
 
       .psf-titulo-central {
         text-align: center;
@@ -153,10 +129,6 @@
         font-weight: 700;
       }
 
-      .psf-campo-data {
-        font-size: 9pt;
-      }
-
       .psf-linha-assinatura {
         width: 55%;
         text-align: center;
@@ -167,31 +139,30 @@
         margin-bottom: 1.5mm;
       }
 
-      /* --------------------------------------------------
-         2. MODELO CONTROLE ESPECIAL (2 VIAS PORTARIA 344)
-         -------------------------------------------------- */
+      /* 2. MODELO CONTROLE ESPECIAL (BORDA VERMELHA E 2 VIAS IDÊNTICAS AO PDF) */
       .via-esp {
-        border: 1.5px solid #000;
-        padding: 4mm 5mm;
+        border: 2px solid var(--cor-psf);
+        border-radius: 12px;
+        padding: 5mm 6mm;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 8pt;
-        line-height: 1.2;
+        line-height: 1.25;
         box-sizing: border-box;
       }
 
       .esp-header-grid {
         display: grid;
         grid-template-columns: 2fr 1fr;
-        border-bottom: 1.5px solid #000;
+        border-bottom: 1.5px solid var(--cor-psf);
         padding-bottom: 2mm;
         margin-bottom: 2.5mm;
       }
-      .esp-header-title h2 { font-size: 9.5pt; font-weight: 800; margin: 0; }
-      .esp-header-title p { margin: 0.5px 0; font-size: 7.2pt; }
-      .esp-vias-txt { text-align: right; font-size: 7.8pt; font-weight: 800; line-height: 1.25; }
+      .esp-header-title h2 { font-size: 10pt; font-weight: 800; margin: 0; color: var(--cor-psf); }
+      .esp-header-title p { margin: 0.5px 0; font-size: 7.2pt; color: #111; }
+      .esp-vias-txt { text-align: right; font-size: 7.8pt; font-weight: 800; color: var(--cor-psf); line-height: 1.3; }
 
       .esp-paciente-box {
         margin-bottom: 2mm;
@@ -200,7 +171,7 @@
 
       .esp-prescricao {
         flex-grow: 1;
-        border: 1px solid #000;
+        border: 1px solid var(--cor-psf);
         padding: 3mm;
         margin-bottom: 2mm;
         min-height: 58mm;
@@ -213,11 +184,11 @@
       .esp-footer-grid {
         display: grid;
         grid-template-columns: 1.15fr 0.85fr;
-        border: 1px solid #000;
+        border: 1px solid var(--cor-psf);
         font-size: 6.8pt;
       }
-      .box-col-comprador { border-right: 1px solid #000; }
-      .box-title { font-weight: 800; padding: 1mm 2mm; border-bottom: 1px solid #000; background: #f0f0f0; }
+      .box-col-comprador { border-right: 1px solid var(--cor-psf); }
+      .box-title { font-weight: 800; padding: 1mm 2mm; border-bottom: 1px solid var(--cor-psf); background: #fdf2f2; color: var(--cor-psf); }
       .box-content { padding: 1.5mm 2mm; }
       .line-f { display: flex; margin-bottom: 1.2mm; }
       .line-f span { border-bottom: 1px dotted #000; flex-grow: 1; margin-left: 2px; }
@@ -230,7 +201,7 @@
     <h1>Painel de Emissão de Receitas</h1>
 
     <div class="toolbar">
-      <input type="text" id="busca" class="search-input" placeholder="Buscar por paciente ou remédio..." oninput="filtrarTabela()">
+      <input type="text" id="busca" class="search-input" placeholder="Buscar por paciente ou medicação..." oninput="filtrarTabela()">
       <button class="btn-sync" onclick="carregarDadosPlanilha()">🔄 Atualizar Planilha</button>
     </div>
 
@@ -250,19 +221,33 @@
     </table>
   </div>
 
-  <!-- Estrutura de Impressão (2 Vias na Folha A4 Paisagem) -->
   <div id="print-sheet">
     <div id="via1"></div>
     <div id="via2"></div>
   </div>
 
   <script>
-    // =========================================================================
-    // BRASÃO OFICIAL DA PREFEITURA DE FRUTUOSO GOMES EM BASE64 (100% OFFLINE)
-    // =========================================================================
-    const BRASAO_BASE64 = "data:image/png;base64,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";
-
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
+
+    const BRASAO_SVG = `
+      <svg width="65" height="75" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 15 H85 V65 C85 90 50 110 50 110 C50 110 15 90 15 65 Z" fill="#fff" stroke="#cc0000" stroke-width="4"/>
+        <path d="M22 22 H78 V62 C78 82 50 98 50 98 C50 98 22 82 22 62 Z" fill="#ffebee" stroke="#cc0000" stroke-width="2"/>
+        <rect x="25" y="26" width="50" height="12" fill="#cc0000" rx="2"/>
+        <text x="50" y="35" fill="#fff" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="Arial">FRUTUOSO GOMES</text>
+        <circle cx="50" cy="58" r="12" fill="#ffcdd2"/>
+        <path d="M50 50 V75 M44 58 H56 M44 58 V52 M56 58 V54" stroke="#cc0000" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M28 78 Q50 68 72 78" stroke="#cc0000" stroke-width="2" fill="none"/>
+        <g fill="#cc0000" text-anchor="middle" font-size="6" font-family="Arial" font-weight="bold">
+          <polygon points="20,102 29,95 38,102 35,112 23,112"/>
+          <polygon points="41,104 50,97 59,104 56,114 44,114"/>
+          <polygon points="62,102 71,95 80,102 77,112 65,112"/>
+          <text x="29" y="108" fill="#fff">20</text>
+          <text x="50" y="110" fill="#fff">12</text>
+          <text x="71" y="108" fill="#fff">63</text>
+        </g>
+      </svg>
+    `;
 
     let dadosGerais = [];
 
@@ -285,14 +270,14 @@
         const texto = await resp.text();
         processarCSV(texto);
       } catch (err) {
-        console.error("Erro ao carregar dados:", err);
+        console.error("Erro ao carregar planilha:", err);
       }
     }
 
     function processarCSV(texto) {
       const linhas = texto.split(/\r?\n/).filter(l => l.trim().length > 0);
       if (linhas.length <= 1) {
-        document.getElementById('tabelaDados').innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum registro encontrado.</td></tr>';
+        document.getElementById('tabelaDados').innerHTML = '<tr><td colspan="5" style="text-align:center;">Nenhum registro localizado.</td></tr>';
         return;
       }
 
@@ -386,7 +371,7 @@
       return html;
     }
 
-    // 1. MODELO CONTROLE ESPECIAL FIEL AO PDF
+    // 1. MODELO CONTROLE ESPECIAL (2 VIAS PORTARIA 344)
     function montarViaEspecial(dados, viaTexto) {
       return `
         <div class="via-esp">
@@ -400,9 +385,7 @@
                 <p>CNPJ (MF) 08.349.052/0001-80</p>
                 <p>Rua José Carlos, 58 - Centro - Frutuoso Gomes/RN</p>
               </div>
-              <div class="esp-vias-txt">
-                ${viaTexto}
-              </div>
+              <div class="esp-vias-txt">${viaTexto}</div>
             </div>
 
             <div class="esp-paciente-box">
@@ -415,9 +398,7 @@
               ${gerarMedsHtml(dados)}
             </div>
 
-            <div style="text-align: right; font-size: 7.5pt; margin-bottom: 2mm;">
-              Data: ${dados.data || '___/___/______'}
-            </div>
+            <div style="text-align: right; font-size: 7.5pt; margin-bottom: 2mm;">Data: ${dados.data || '___/___/______'}</div>
           </div>
 
           <div class="esp-footer-grid">
@@ -445,16 +426,15 @@
       `;
     }
 
-    // 2. MODELO RECEITUÁRIO PSF COM BRASÃO E BORDA VERMELHA (FIEL AO RN FG.pdf)
-     function montarViaComum(dados) {
+    // 2. MODELO RECEITUÁRIO PSF COM BRASÃO E BORDA VERMELHA
+    function montarViaComum(dados) {
       return `
         <div class="via-psf">
           <div>
             <div class="psf-header-row">
-              
-              <!-- AQUI ENTRA O IMG SRC: -->
-              <img class="psf-logo-img" src="brasao.png" alt="Brasão de Frutuoso Gomes">
-
+              <div class="psf-logo-box">
+                ${BRASAO_SVG}
+              </div>
               <div class="psf-header-text">
                 <h2>Prefeitura Municipal de Frutuoso Gomes</h2>
                 <h3>Secretaria Municipal de Saúde</h3>
@@ -476,9 +456,7 @@
           </div>
 
           <div class="psf-footer-row">
-            <div class="psf-campo-data">
-              Data: ${dados.data || '____/____/________'}
-            </div>
+            <div>Data: ${dados.data || '____/____/________'}</div>
             <div class="psf-linha-assinatura">
               <div class="traco"></div>
               <div>Assinatura</div>
@@ -487,18 +465,26 @@
         </div>
       `;
     }
+
     function imprimirReceita(index, tipo) {
       const item = dadosGerais[index];
+      if (!item) return;
+
+      const v1 = document.getElementById('via1');
+      const v2 = document.getElementById('via2');
       
       if (tipo === 'especial') {
-        document.getElementById('via1').innerHTML = montarViaEspecial(item, '1ª Via (Branca) - Farmácia<br>2ª Via (Azul) - Paciente');
-        document.getElementById('via2').innerHTML = montarViaEspecial(item, '1ª Via (Branca) - Farmácia<br>2ª Via (Azul) - Paciente');
+        v1.innerHTML = montarViaEspecial(item, '1ª Via (Branca) - Farmácia');
+        v2.innerHTML = montarViaEspecial(item, '2ª Via (Azul) - Paciente');
       } else {
-        document.getElementById('via1').innerHTML = montarViaComum(item);
-        document.getElementById('via2').innerHTML = montarViaComum(item);
+        v1.innerHTML = montarViaComum(item);
+        v2.innerHTML = montarViaComum(item);
       }
       
-      window.print();
+      // Executa o disparo da impressão após renderizar o HTML
+      setTimeout(() => {
+        window.print();
+      }, 50);
     }
 
     window.onload = carregarDadosPlanilha;
