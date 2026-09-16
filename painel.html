@@ -446,12 +446,15 @@
     }
 
     // 2. MODELO RECEITUÁRIO PSF COM BRASÃO E BORDA VERMELHA (FIEL AO RN FG.pdf)
-    function montarViaComum(dados) {
+     function montarViaComum(dados) {
       return `
         <div class="via-psf">
           <div>
             <div class="psf-header-row">
-              <img class="psf-logo-img" src="${BRASAO_BASE64}" alt="Brasão de Frutuoso Gomes">
+              
+              <!-- AQUI ENTRA O IMG SRC: -->
+              <img class="psf-logo-img" src="brasao.png" alt="Brasão de Frutuoso Gomes">
+
               <div class="psf-header-text">
                 <h2>Prefeitura Municipal de Frutuoso Gomes</h2>
                 <h3>Secretaria Municipal de Saúde</h3>
@@ -484,7 +487,6 @@
         </div>
       `;
     }
-
     function imprimirReceita(index, tipo) {
       const item = dadosGerais[index];
       
