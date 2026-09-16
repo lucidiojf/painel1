@@ -32,7 +32,7 @@
     .action-btn-esp { padding: 6px 10px; font-size: 0.8rem; background: var(--primary); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
     .action-btn-com { padding: 6px 10px; font-size: 0.8rem; background: var(--success); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
 
-    /* LAYOUT IMPRESSÃO (Folha A4 Paisagem - 2 Vias Lado a Lado) */
+    /* LAYOUT DE IMPRESSÃO (Folha A4 Paisagem - 2 Vias Proporcionais) */
     #print-sheet { display: none; }
 
     @media print {
@@ -57,7 +57,7 @@
         box-sizing: border-box;
       }
 
-      /* 1. MODELO RECEITUÁRIO COMUM (PSF COM BRASÃO E BORDA) */
+      /* 1. MODELO RECEITUÁRIO COMUM (PSF COM O NOVO BRASÃO) */
       .via-psf {
         border: 2.2px solid var(--cor-psf);
         border-radius: 12px;
@@ -77,7 +77,7 @@
       }
 
       .psf-logo-img {
-        width: 18mm;
+        width: 19mm;
         height: auto;
         flex-shrink: 0;
       }
@@ -138,7 +138,7 @@
         margin-bottom: 1.5mm;
       }
 
-      /* 2. MODELO CONTROLE ESPECIAL (BORDA VERMELHA ARREDONDADA E CAIXAS) */
+      /* 2. MODELO CONTROLE ESPECIAL (BORDA VERMELHA E 2 VIAS IDÊNTICAS AO PDF) */
       .via-esp {
         border: 2px solid var(--cor-psf);
         border-radius: 12px;
@@ -227,9 +227,6 @@
 
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
-
-    // NOVO BRASÃO DE FRUTUOSO GOMES (EMBUTIDO DIRETAMENTE)
-    const NOVO_BRASAO_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABICAIAAAD51HXFAAAtMElEQVR42u18d3xkV33v75Rbps9oRiNp1NtqV9qiXa+2e5vXvRvbEANiYhswuIBj0w2vA8aFUMG2MSbYkBDSSSEkkIQQeplMeq+z587cubfPnTvv/b5z7117pFFGM9Lu97u793zv/v54n7P3nFPPuWX+8Z/9w/gT9wR8QvAfcT+8+Bvwx4g/Av5Q3H8C7q/b47+jAf4o9j8W/w3wHwH//9kef4z448Qfg/4j4P/yff2b+KPVHyP+ePEn4P9zAfw/p/23Nfx/Uf0R8G8XwH+X/F+9p//b/W8B/+jV3z7+p5z5w/987X/n+33Q/zX73wL+p5w/GvG//Nnf4vU/ZvxvAf8L7/2b1v/k3H8E/H8S8Ecr6B8B/3cK+N/q+t/tP6n/uV7/Pwf/aPXHgH84+KPfvyOAP7L+X6P7Y8AfI/4E/P9vAfw/of2/8/ofAf8I+Efi/y0Dfs/j/wD4f5/2PwL+4fFH/f9g7e8E4P98//r93+L+/35H/vBnf/Tqj/P/u27/6D4/qP8I+D/p9T85+ePVHwH/1/r6b3D5j9b/E/L/b9D/k7P/1fF/vP4j4P+6q/9B8Efr/yfqfwb774D/L+v/8z0C/u3rfwv4Y8C/dfxPBP7Xb/8j4B8B/3D8Y8Afnf9xAfz/x+j/5vGP1n8E/N/37D/7+yPgPwH/T8f/H/p8Y5r3b0rVAAAAAElFTkSuQmCC";
 
     let dadosGerais = [];
 
@@ -409,13 +406,13 @@
       `;
     }
 
-    // 2. MODELO RECEITUÁRIO COMUM (PSF COM O NOVO BRASÃO)
+    // 2. MODELO RECEITUÁRIO COMUM (PSF COM O BRASÃO COLORIDO NOVO)
     function montarViaComum(dados) {
       return `
         <div class="via-psf">
           <div>
             <div class="psf-header-row">
-              <img class="psf-logo-img" src="${NOVO_BRASAO_B64}" alt="Brasão">
+              <img class="psf-logo-img" src="brasao.png" alt="Brasão de Frutuoso Gomes">
               <div class="psf-header-text">
                 <h2>Prefeitura Municipal de Frutuoso Gomes</h2>
                 <h3>Secretaria Municipal de Saúde</h3>
