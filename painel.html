@@ -32,7 +32,7 @@
     .action-btn-esp { padding: 6px 10px; font-size: 0.8rem; background: var(--primary); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
     .action-btn-com { padding: 6px 10px; font-size: 0.8rem; background: var(--success); color: #fff; border-radius: 4px; border: none; cursor: pointer; }
 
-    /* LAYOUT IMPRESSÃO (Folha A4 Paisagem - 2 Vias Proporcionais) */
+    /* LAYOUT IMPRESSÃO (Folha A4 Paisagem - 2 Vias Lado a Lado) */
     #print-sheet { display: none; }
 
     @media print {
@@ -57,7 +57,7 @@
         box-sizing: border-box;
       }
 
-      /* 1. MODELO RECEITUÁRIO COMUM (PSF) */
+      /* 1. MODELO RECEITUÁRIO COMUM (PSF COM BRASÃO E BORDA) */
       .via-psf {
         border: 2.2px solid var(--cor-psf);
         border-radius: 12px;
@@ -76,11 +76,10 @@
         margin-bottom: 2mm;
       }
 
-      .psf-logo-box {
+      .psf-logo-img {
         width: 18mm;
+        height: auto;
         flex-shrink: 0;
-        display: flex;
-        justify-content: center;
       }
 
       .psf-header-text {
@@ -89,7 +88,7 @@
         color: var(--cor-psf);
       }
 
-      .psf-header-text h2 { font-size: 11pt; font-weight: 800; margin: 0; }
+      .psf-header-text h2 { font-size: 11pt; font-weight: 800; margin: 0; letter-spacing: -0.2px; }
       .psf-header-text h3 { font-size: 10pt; font-weight: 700; margin: 1px 0; }
       .psf-header-text .sub-unidade { font-size: 7.8pt; font-weight: 800; margin: 1px 0; }
       .psf-header-text .endereco { font-size: 7pt; margin: 1px 0; font-weight: 600; }
@@ -139,7 +138,7 @@
         margin-bottom: 1.5mm;
       }
 
-      /* 2. MODELO CONTROLE ESPECIAL (BORDA VERMELHA E 2 VIAS IDÊNTICAS AO PDF) */
+      /* 2. MODELO CONTROLE ESPECIAL (BORDA VERMELHA ARREDONDADA E CAIXAS) */
       .via-esp {
         border: 2px solid var(--cor-psf);
         border-radius: 12px;
@@ -229,25 +228,8 @@
   <script>
     const CSV_URL = "https://docs.google.com/spreadsheets/d/1CR6oQoCXjjDPgBqkLdK92kxBIP2SVhZd2QUFYf_U3tM/export?format=csv&gid=1134082617";
 
-    const BRASAO_SVG = `
-      <svg width="65" height="75" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-        <path d="M15 15 H85 V65 C85 90 50 110 50 110 C50 110 15 90 15 65 Z" fill="#fff" stroke="#cc0000" stroke-width="4"/>
-        <path d="M22 22 H78 V62 C78 82 50 98 50 98 C50 98 22 82 22 62 Z" fill="#ffebee" stroke="#cc0000" stroke-width="2"/>
-        <rect x="25" y="26" width="50" height="12" fill="#cc0000" rx="2"/>
-        <text x="50" y="35" fill="#fff" font-size="6.5" font-weight="bold" text-anchor="middle" font-family="Arial">FRUTUOSO GOMES</text>
-        <circle cx="50" cy="58" r="12" fill="#ffcdd2"/>
-        <path d="M50 50 V75 M44 58 H56 M44 58 V52 M56 58 V54" stroke="#cc0000" stroke-width="3" stroke-linecap="round" fill="none"/>
-        <path d="M28 78 Q50 68 72 78" stroke="#cc0000" stroke-width="2" fill="none"/>
-        <g fill="#cc0000" text-anchor="middle" font-size="6" font-family="Arial" font-weight="bold">
-          <polygon points="20,102 29,95 38,102 35,112 23,112"/>
-          <polygon points="41,104 50,97 59,104 56,114 44,114"/>
-          <polygon points="62,102 71,95 80,102 77,112 65,112"/>
-          <text x="29" y="108" fill="#fff">20</text>
-          <text x="50" y="110" fill="#fff">12</text>
-          <text x="71" y="108" fill="#fff">63</text>
-        </g>
-      </svg>
-    `;
+    // NOVO BRASÃO DE FRUTUOSO GOMES (EMBUTIDO DIRETAMENTE)
+    const NOVO_BRASAO_B64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABICAIAAAD51HXFAAAtMElEQVR42u18d3xkV33v75Rbps9oRiNp1NtqV9qiXa+2e5vXvRvbEANiYhswuIBj0w2vA8aFUMG2MSbYkBDSSSEkkIQQeplMeq+z587cubfPnTvv/b5z7117pFFGM9Lu97u793zv/v54n7P3nFPPuWX+8Z/9w/gT9wR8QvAfcT+8+Bvwx4g/Av5Q3H8C7q/b47+jAf4o9j8W/w3wHwH//9kef4z448Qfg/4j4P/yff2b+KPVHyP+ePEn4P9zAfw/p/23Nfx/Uf0R8G8XwH+X/F+9p//b/W8B/+jV3z7+p5z5w/987X/n+33Q/zX73wL+p5w/GvG//Nnf4vU/ZvxvAf8L7/2b1v/k3H8E/H8S8Ecr6B8B/3cK+N/q+t/tP6n/uV7/Pwf/aPXHgH84+KPfvyOAP7L+X6P7Y8AfI/4E/P9vAfw/of2/8/ofAf8I+Efi/y0Dfs/j/wD4f5/2PwL+4fFH/f9g7e8E4P98//r93+L+/35H/vBnf/Tqj/P/u27/6D4/qP8I+D/p9T85+ePVHwH/1/r6b3D5j9b/E/L/b9D/k7P/1fF/vP4j4P+6q/9B8Efr/yfqfwb774D/L+v/8z0C/u3rfwv4Y8C/dfxPBP7Xb/8j4B8B/3D8Y8Afnf9xAfz/x+j/5vGP1n8E/N/37D/7+yPgPwH/T8f/H/p8Y5r3b0rVAAAAAElFTkSuQmCC";
 
     let dadosGerais = [];
 
@@ -304,6 +286,7 @@
         if (!pac) continue;
 
         dadosGerais.push({
+          idOriginal: dadosGerais.length,
           data: cols[iData !== -1 ? iData : 1] || '',
           paciente: pac,
           endereco: cols[iEnd !== -1 ? iEnd : 3] || '',
@@ -338,7 +321,7 @@
         return;
       }
 
-      filtrados.forEach((item, idx) => {
+      filtrados.forEach((item) => {
         const meds = [item.rem1, item.rem2, item.rem3].filter(Boolean).join(' | ');
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -348,8 +331,8 @@
           <td>${meds}</td>
           <td>
             <div class="action-group">
-              <button class="action-btn-esp" onclick="imprimirReceita(${idx}, 'especial')">🖨️ Especial</button>
-              <button class="action-btn-com" onclick="imprimirReceita(${idx}, 'comum')">📄 Comum (PSF)</button>
+              <button class="action-btn-esp" onclick="imprimirPorId(${item.idOriginal}, 'especial')">🖨️ Especial</button>
+              <button class="action-btn-com" onclick="imprimirPorId(${item.idOriginal}, 'comum')">📄 Comum (PSF)</button>
             </div>
           </td>
         `;
@@ -371,7 +354,7 @@
       return html;
     }
 
-    // 1. MODELO CONTROLE ESPECIAL (2 VIAS PORTARIA 344)
+    // 1. MODELO CONTROLE ESPECIAL
     function montarViaEspecial(dados, viaTexto) {
       return `
         <div class="via-esp">
@@ -426,15 +409,13 @@
       `;
     }
 
-    // 2. MODELO RECEITUÁRIO PSF COM BRASÃO E BORDA VERMELHA
+    // 2. MODELO RECEITUÁRIO COMUM (PSF COM O NOVO BRASÃO)
     function montarViaComum(dados) {
       return `
         <div class="via-psf">
           <div>
             <div class="psf-header-row">
-              <div class="psf-logo-box">
-                ${BRASAO_SVG}
-              </div>
+              <img class="psf-logo-img" src="${NOVO_BRASAO_B64}" alt="Brasão">
               <div class="psf-header-text">
                 <h2>Prefeitura Municipal de Frutuoso Gomes</h2>
                 <h3>Secretaria Municipal de Saúde</h3>
@@ -466,8 +447,8 @@
       `;
     }
 
-    function imprimirReceita(index, tipo) {
-      const item = dadosGerais[index];
+    function imprimirPorId(id, tipo) {
+      const item = dadosGerais.find(d => d.idOriginal === id);
       if (!item) return;
 
       const v1 = document.getElementById('via1');
@@ -481,10 +462,9 @@
         v2.innerHTML = montarViaComum(item);
       }
       
-      // Executa o disparo da impressão após renderizar o HTML
       setTimeout(() => {
         window.print();
-      }, 50);
+      }, 100);
     }
 
     window.onload = carregarDadosPlanilha;
