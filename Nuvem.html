@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha Nuvem</title>
+  <!-- Script oficial do Telegram Mini Apps -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    /* Usa as cores do próprio tema do Telegram do usuário */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 16px;
+      background-color: var(--tg-theme-bg-color, #f4f4f5);
+      color: var(--tg-theme-text-color, #18181b);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.25rem;
+    }
+    .file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .file-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--tg-theme-secondary-bg-color, #ffffff);
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      cursor: pointer;
+    }
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .file-icon {
+      font-size: 1.5rem;
+    }
+    .file-name {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .file-size {
+      font-size: 0.8rem;
+      color: var(--tg-theme-hint-color, #71717a);
+    }
+  </style>
+</head>
+<body>
+
+  <h2 id="greeting">Arquivos na Nuvem</h2>
+  <div class="file-list" id="fileList"></div>
+
+  <script>
+    // Inicializa o SDK do Telegram
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand(); // Abre em tela cheia
+
+    // Pega o nome do usuário direto da sessão do Telegram
+    const user = tg.initDataUnsafe?.user;
+    if (user) {
+      document.getElementById('greeting').innerText = `Nuvem de ${user.first_name}`;
+    }
+
+    // Lista simulada de arquivos (você pode substituir pelo retorno de uma API ou banco)
+    const files = [
+      { id: "doc_101", name: "Contrato_Assinado.pdf", icon: "📄", size: "1.2 MB" },
+      { id: "img_202", name: "Foto_Viagem.png", icon: "🖼️", size: "4.5 MB" },
+      { id: "zip_303", name: "Backup_Projetos.zip", icon: "📦", size: "38.0 MB" }
+    ];
+
+    const listContainer = document.getElementById('fileList');
+
+    files.forEach(file => {
+      const card = document.createElement('div');
+      card.className = 'file-card';
+      card.innerHTML = `
+        <div class="file-info">
+          <span class="file-icon">${file.icon}</span>
+          <div>
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${file.size}</div>
+          </div>
+        </div>
+        <span>⬇️</span>
+      `;
+
+      card.addEventListener('click', () => {
+        // Envia de volta para o Bot qual arquivo o usuário clicou
+        tg.sendData(JSON.stringify({ action: "download", file_id: file.id, name: file.name }));
+        tg.close(); // Fecha o Mini App e volta para o chat
+      });
+
+      listContainer.appendChild(card);
+    });
+  </script>
+</body>
+</html>
