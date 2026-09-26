@@ -125,8 +125,11 @@
       emptyFiles.style.display = 'none';
 
       try {
-        const res = await fetch(`${SCRIPT_URL}?folder=${encodeURIComponent(folderName)}`);
-        const files = await res.json();
+        const res = await fetch(`${SCRIPT_URL}?folder=${encodeURIComponent(folderName)}`, {
+  method: 'GET',
+  redirect: 'follow'
+});
+const files = await res.json();
         filesContainer.innerHTML = '';
 
         if (!files || files.length === 0) {
