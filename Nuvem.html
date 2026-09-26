@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Nuvem Telegram</title>
+  <title>Minha Nuvem</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
@@ -12,215 +12,152 @@
       --text: var(--tg-theme-text-color, #ffffff);
       --hint: var(--tg-theme-hint-color, #708499);
       --btn: var(--tg-theme-button-color, #2ea6ff);
-      --btn-text: var(--tg-theme-button-text-color, #ffffff);
     }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0;
-      padding: 16px;
-      background-color: var(--bg);
-      color: var(--text);
+      margin: 0; padding: 16px; background-color: var(--bg); color: var(--text);
     }
-
-    header {
-      margin-bottom: 14px;
-    }
-
-    h1 {
-      font-size: 1.3rem;
-      margin: 0 0 4px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .subtitle {
-      font-size: 0.8rem;
-      color: var(--hint);
-      margin: 0;
-    }
-
-    .search-box {
-      margin: 14px 0;
-      position: relative;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 11px 14px 11px 36px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background-color: var(--card-bg);
-      color: var(--text);
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    .search-box input::placeholder {
-      color: var(--hint);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 0.9rem;
-      opacity: 0.6;
-    }
-
-    .folders-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
+    header { margin-bottom: 12px; }
+    h1 { font-size: 1.25rem; margin: 0; display: flex; align-items: center; gap: 8px; }
+    .subtitle { font-size: 0.8rem; color: var(--hint); margin-top: 4px; }
+    .folders-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .folder-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 14px 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 8px;
-      cursor: pointer;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: transform 0.1s ease;
+      background: var(--card-bg); border-radius: 12px; padding: 14px 12px;
+      display: flex; flex-direction: column; justify-content: space-between; gap: 8px;
+      cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.05);
     }
-
-    .folder-card:active {
-      transform: scale(0.97);
-      opacity: 0.85;
+    .folder-card:active { transform: scale(0.98); opacity: 0.9; }
+    .folder-top { display: flex; align-items: center; justify-content: space-between; font-size: 1.5rem; }
+    .folder-arrow { font-size: 0.8rem; color: var(--hint); }
+    .folder-name { font-size: 0.82rem; font-weight: 600; }
+    
+    /* Vista dos arquivos dentro da pasta */
+    .files-view { display: none; }
+    .back-btn {
+      background: none; border: none; color: var(--btn); font-size: 0.95rem;
+      cursor: pointer; padding: 0 0 14px 0; display: flex; align-items: center; gap: 6px; font-weight: 600;
     }
-
-    .folder-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .file-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card-bg); padding: 12px; border-radius: 10px; margin-bottom: 8px;
     }
-
-    .folder-icon {
-      font-size: 1.6rem;
+    .file-info { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .file-name { font-size: 0.9rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+    .file-size { font-size: 0.75rem; color: var(--hint); }
+    .dl-btn {
+      background: var(--btn); color: #fff; text-decoration: none; padding: 6px 12px;
+      border-radius: 6px; font-size: 0.8rem; font-weight: 600;
     }
-
-    .folder-arrow {
-      font-size: 0.8rem;
-      color: var(--hint);
-    }
-
-    .folder-name {
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-      line-height: 1.25;
-      word-break: break-word;
-    }
-
-    .empty-state {
-      display: none;
-      text-align: center;
-      padding: 30px 10px;
-      color: var(--hint);
-      font-size: 0.9rem;
-    }
+    .status { text-align: center; color: var(--hint); padding: 25px 10px; font-size: 0.9rem; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1 id="userTitle">📁 Minha Nuvem</h1>
-    <p class="subtitle">Toque na pasta para acessar ou enviar arquivos</p>
-  </header>
-
-  <div class="search-box">
-    <span class="search-icon">🔍</span>
-    <input type="text" id="searchInput" placeholder="Filtrar pastas...">
+  <!-- Vista 1: Pastas -->
+  <div id="foldersSection">
+    <header>
+      <h1 id="userTitle">📁 Minha Nuvem</h1>
+      <p class="subtitle">Toque na pasta para ver ou salvar arquivos</p>
+    </header>
+    <div class="folders-grid" id="foldersContainer"></div>
   </div>
 
-  <div class="folders-grid" id="foldersContainer"></div>
-  <div class="empty-state" id="emptyState">Nenhuma pasta encontrada.</div>
+  <!-- Vista 2: Arquivos da pasta selecionada -->
+  <div id="filesSection" class="files-view">
+    <button class="back-btn" onclick="voltarParaPastas()">‹ Voltar para Pastas</button>
+    <h2 id="currentFolderName" style="margin: 0 0 12px 0; font-size: 1.15rem;"></h2>
+    <div id="filesContainer"></div>
+    <div id="emptyFiles" class="status" style="display:none;">Nenhum arquivo nesta pasta.</div>
+  </div>
 
   <script>
+    // ⚠️ SUBSTITUA PELO SEU LINK DA IMPLANTAÇÃO DO GOOGLE APPS SCRIPT:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwG4sOyMpkhzsiYV2Z2_MXLRiW0x5sM6BfM85TRSyECv-fZEsZVKm4TbSV4Mc2-2MxP/exec";
+
     const tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.ready();
-      tg.expand();
+    if (tg) { 
+      tg.ready(); 
+      tg.expand(); 
       if (tg.initDataUnsafe?.user?.first_name) {
         document.getElementById('userTitle').innerText = `📁 Nuvem de ${tg.initDataUnsafe.user.first_name}`;
       }
     }
 
     const folders = [
-      { name: "ARQUIVOS GERAL", icon: "📁" },
-      { name: "DIVERSOS", icon: "📦" },
-      { name: "FINANCEIRO", icon: "💵" },
-      { name: "INFORMATICA", icon: "💻" },
-      { name: "MEDICINA", icon: "🩺" },
-      { name: "FAMILIA", icon: "👨‍👩‍👧‍👦" },
-      { name: "PESSOAL", icon: "👤" },
-      { name: "DOCUMENTOS", icon: "📄" },
-      { name: "MUSICAS", icon: "🎵" },
-      { name: "FOTOS", icon: "🖼️" },
-      { name: "VIDEOS", icon: "🎬" },
-      { name: "LIVROS MEDICINA", icon: "📚" },
-      { name: "LIVROS GERAL", icon: "📖" },
-      { name: "PROJETOS", icon: "🚀" },
+      { name: "ARQUIVOS GERAL", icon: "📁" }, { name: "DIVERSOS", icon: "📦" },
+      { name: "FINANCEIRO", icon: "💵" }, { name: "INFORMATICA", icon: "💻" },
+      { name: "MEDICINA", icon: "🩺" }, { name: "FAMILIA", icon: "👨‍👩‍👧‍👦" },
+      { name: "PESSOAL", icon: "👤" }, { name: "DOCUMENTOS", icon: "📄" },
+      { name: "MUSICAS", icon: "🎵" }, { name: "FOTOS", icon: "🖼️" },
+      { name: "VIDEOS", icon: "🎬" }, { name: "LIVROS MEDICINA", icon: "📚" },
+      { name: "LIVROS GERAL", icon: "📖" }, { name: "PROJETOS", icon: "🚀" },
       { name: "CONTRATOS", icon: "📝" }
     ];
 
-    const container = document.getElementById('foldersContainer');
-    const emptyState = document.getElementById('emptyState');
-    const searchInput = document.getElementById('searchInput');
+    const foldersContainer = document.getElementById('foldersContainer');
 
-    function renderFolders(filter = "") {
-      container.innerHTML = "";
-      const query = filter.trim().toUpperCase();
-      const filtered = folders.filter(f => f.name.includes(query));
-
-      if (filtered.length === 0) {
-        emptyState.style.display = "block";
-        return;
-      }
-      emptyState.style.display = "none";
-
-      filtered.forEach(folder => {
-        const card = document.createElement('div');
-        card.className = 'folder-card';
-        card.innerHTML = `
-          <div class="folder-top">
-            <span class="folder-icon">${folder.icon}</span>
-            <span class="folder-arrow">›</span>
-          </div>
-          <div class="folder-name">${folder.name}</div>
-        `;
-
-        card.addEventListener('click', () => {
-          if (tg && tg.sendData) {
-            tg.sendData(JSON.stringify({
-              action: "select_folder",
-              folder: folder.name
-            }));
-            tg.close();
-          } else {
-            alert(`Você selecionou a pasta: ${folder.name}`);
-          }
-        });
-
-        container.appendChild(card);
-      });
-    }
-
-    searchInput.addEventListener('input', (e) => {
-      renderFolders(e.target.value);
+    folders.forEach(folder => {
+      const card = document.createElement('div');
+      card.className = 'folder-card';
+      card.innerHTML = `
+        <div class="folder-top"><span>${folder.icon}</span><span class="folder-arrow">›</span></div>
+        <div class="folder-name">${folder.name}</div>
+      `;
+      card.onclick = () => abrirPasta(folder.name);
+      foldersContainer.appendChild(card);
     });
 
-    renderFolders();
+    async function abrirPasta(folderName) {
+      // Notifica o bot qual pasta está selecionada no momento (para próximos uploads)
+      if (tg && tg.sendData) {
+        tg.sendData(JSON.stringify({ action: "select_folder", folder: folderName }));
+      }
+
+      // Alterna a tela para mostrar os arquivos
+      document.getElementById('foldersSection').style.display = 'none';
+      document.getElementById('filesSection').style.display = 'block';
+      document.getElementById('currentFolderName').innerText = `📂 ${folderName}`;
+      
+      const filesContainer = document.getElementById('filesContainer');
+      const emptyFiles = document.getElementById('emptyFiles');
+      filesContainer.innerHTML = '<div class="status">Buscando arquivos na planilha...</div>';
+      emptyFiles.style.display = 'none';
+
+      try {
+        const res = await fetch(`${SCRIPT_URL}?folder=${encodeURIComponent(folderName)}`);
+        const files = await res.json();
+        filesContainer.innerHTML = '';
+
+        if (!files || files.length === 0) {
+          emptyFiles.style.display = 'block';
+          return;
+        }
+
+        files.forEach(f => {
+          const item = document.createElement('div');
+          item.className = 'file-item';
+          item.innerHTML = `
+            <div class="file-info">
+              <span>📄</span>
+              <div>
+                <div class="file-name" title="${f.name}">${f.name}</div>
+                <div class="file-size">${f.size} • ${f.date}</div>
+              </div>
+            </div>
+            ${f.downloadUrl ? `<a class="dl-btn" href="${f.downloadUrl}" target="_blank">Baixar</a>` : ''}
+          `;
+          filesContainer.appendChild(item);
+        });
+      } catch (e) {
+        filesContainer.innerHTML = '<div class="status">Erro ao conectar com a planilha. Verifique a URL do script.</div>';
+      }
+    }
+
+    function voltarParaPastas() {
+      document.getElementById('filesSection').style.display = 'none';
+      document.getElementById('foldersSection').style.display = 'block';
+    }
   </script>
 </body>
 </html>
