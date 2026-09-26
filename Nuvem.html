@@ -2,105 +2,225 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minha Nuvem</title>
-  <!-- Script oficial do Telegram Mini Apps -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nuvem Telegram</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    /* Usa as cores do próprio tema do Telegram do usuário */
+    :root {
+      --bg: var(--tg-theme-bg-color, #17212b);
+      --card-bg: var(--tg-theme-secondary-bg-color, #232e3c);
+      --text: var(--tg-theme-text-color, #ffffff);
+      --hint: var(--tg-theme-hint-color, #708499);
+      --btn: var(--tg-theme-button-color, #2ea6ff);
+      --btn-text: var(--tg-theme-button-text-color, #ffffff);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 0;
       padding: 16px;
-      background-color: var(--tg-theme-bg-color, #f4f4f5);
-      color: var(--tg-theme-text-color, #18181b);
+      background-color: var(--bg);
+      color: var(--text);
     }
-    h2 {
-      margin-top: 0;
-      font-size: 1.25rem;
+
+    header {
+      margin-bottom: 14px;
     }
-    .file-list {
+
+    h1 {
+      font-size: 1.3rem;
+      margin: 0 0 4px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      color: var(--hint);
+      margin: 0;
+    }
+
+    .search-box {
+      margin: 14px 0;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 11px 14px 11px 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background-color: var(--card-bg);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .search-box input::placeholder {
+      color: var(--hint);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      opacity: 0.6;
+    }
+
+    .folders-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .folder-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 15px;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.1s ease;
     }
-    .file-card {
+
+    .folder-card:active {
+      transform: scale(0.97);
+      opacity: 0.85;
+    }
+
+    .folder-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
-      background: var(--tg-theme-secondary-bg-color, #ffffff);
-      border-radius: 10px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      cursor: pointer;
     }
-    .file-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+
+    .folder-icon {
+      font-size: 1.6rem;
     }
-    .file-icon {
-      font-size: 1.5rem;
-    }
-    .file-name {
-      font-weight: 500;
-      font-size: 0.95rem;
-    }
-    .file-size {
+
+    .folder-arrow {
       font-size: 0.8rem;
-      color: var(--tg-theme-hint-color, #71717a);
+      color: var(--hint);
+    }
+
+    .folder-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 30px 10px;
+      color: var(--hint);
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
-  <h2 id="greeting">Arquivos na Nuvem</h2>
-  <div class="file-list" id="fileList"></div>
+  <header>
+    <h1 id="userTitle">📁 Minha Nuvem</h1>
+    <p class="subtitle">Toque na pasta para acessar ou enviar arquivos</p>
+  </header>
+
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Filtrar pastas...">
+  </div>
+
+  <div class="folders-grid" id="foldersContainer"></div>
+  <div class="empty-state" id="emptyState">Nenhuma pasta encontrada.</div>
 
   <script>
-    // Inicializa o SDK do Telegram
-    const tg = window.Telegram.WebApp;
-    tg.ready();
-    tg.expand(); // Abre em tela cheia
-
-    // Pega o nome do usuário direto da sessão do Telegram
-    const user = tg.initDataUnsafe?.user;
-    if (user) {
-      document.getElementById('greeting').innerText = `Nuvem de ${user.first_name}`;
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      if (tg.initDataUnsafe?.user?.first_name) {
+        document.getElementById('userTitle').innerText = `📁 Nuvem de ${tg.initDataUnsafe.user.first_name}`;
+      }
     }
 
-    // Lista simulada de arquivos (você pode substituir pelo retorno de uma API ou banco)
-    const files = [
-      { id: "doc_101", name: "Contrato_Assinado.pdf", icon: "📄", size: "1.2 MB" },
-      { id: "img_202", name: "Foto_Viagem.png", icon: "🖼️", size: "4.5 MB" },
-      { id: "zip_303", name: "Backup_Projetos.zip", icon: "📦", size: "38.0 MB" }
+    const folders = [
+      { name: "ARQUIVOS GERAL", icon: "📁" },
+      { name: "DIVERSOS", icon: "📦" },
+      { name: "FINANCEIRO", icon: "💵" },
+      { name: "INFORMATICA", icon: "💻" },
+      { name: "MEDICINA", icon: "🩺" },
+      { name: "FAMILIA", icon: "👨‍👩‍👧‍👦" },
+      { name: "PESSOAL", icon: "👤" },
+      { name: "DOCUMENTOS", icon: "📄" },
+      { name: "MUSICAS", icon: "🎵" },
+      { name: "FOTOS", icon: "🖼️" },
+      { name: "VIDEOS", icon: "🎬" },
+      { name: "LIVROS MEDICINA", icon: "📚" },
+      { name: "LIVROS GERAL", icon: "📖" },
+      { name: "PROJETOS", icon: "🚀" },
+      { name: "CONTRATOS", icon: "📝" }
     ];
 
-    const listContainer = document.getElementById('fileList');
+    const container = document.getElementById('foldersContainer');
+    const emptyState = document.getElementById('emptyState');
+    const searchInput = document.getElementById('searchInput');
 
-    files.forEach(file => {
-      const card = document.createElement('div');
-      card.className = 'file-card';
-      card.innerHTML = `
-        <div class="file-info">
-          <span class="file-icon">${file.icon}</span>
-          <div>
-            <div class="file-name">${file.name}</div>
-            <div class="file-size">${file.size}</div>
+    function renderFolders(filter = "") {
+      container.innerHTML = "";
+      const query = filter.trim().toUpperCase();
+      const filtered = folders.filter(f => f.name.includes(query));
+
+      if (filtered.length === 0) {
+        emptyState.style.display = "block";
+        return;
+      }
+      emptyState.style.display = "none";
+
+      filtered.forEach(folder => {
+        const card = document.createElement('div');
+        card.className = 'folder-card';
+        card.innerHTML = `
+          <div class="folder-top">
+            <span class="folder-icon">${folder.icon}</span>
+            <span class="folder-arrow">›</span>
           </div>
-        </div>
-        <span>⬇️</span>
-      `;
+          <div class="folder-name">${folder.name}</div>
+        `;
 
-      card.addEventListener('click', () => {
-        // Envia de volta para o Bot qual arquivo o usuário clicou
-        tg.sendData(JSON.stringify({ action: "download", file_id: file.id, name: file.name }));
-        tg.close(); // Fecha o Mini App e volta para o chat
+        card.addEventListener('click', () => {
+          if (tg && tg.sendData) {
+            tg.sendData(JSON.stringify({
+              action: "select_folder",
+              folder: folder.name
+            }));
+            tg.close();
+          } else {
+            alert(`Você selecionou a pasta: ${folder.name}`);
+          }
+        });
+
+        container.appendChild(card);
       });
+    }
 
-      listContainer.appendChild(card);
+    searchInput.addEventListener('input', (e) => {
+      renderFolders(e.target.value);
     });
+
+    renderFolders();
   </script>
 </body>
 </html>
