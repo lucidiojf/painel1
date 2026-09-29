@@ -208,13 +208,38 @@
     el.innerText = text;
   }
 
-  function download(blob, name) {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = name;
-    a.click();
-    URL.revokeObjectURL(a.href);
+function download(blob, filename) {
+  const fileUrl = URL.createObjectURL(blob);
+
+  // 1. Tenta usar o botão nativo de compartilhar do celular (Android/iOS)
+  // Permite salvar no WhatsApp, Drive, Arquivos, etc.
+  if (navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: blob.type })] })) {
+    const file = new File([blob], filename, { type: blob.type });
+    navigator.share({
+      files: [file],
+      title: filename,
+      text: 'Seu arquivo pronto:'
+    }).catch((err) => {
+      console.log('Compartilhamento cancelado ou não suportado', err);
+      fallbackDownload(fileUrl, filename);
+    });
+    return;
   }
+
+  // 2. Se não suportar Web Share API, usa o fallback com abertura direta
+  fallbackDownload(fileUrl, filename);
+}
+
+function fallbackDownload(fileUrl, filename) {
+  // Cria link direto
+  const link = document.createElement("a");
+  link.href = fileUrl;
+  link.download = filename;
+  link.target = "_blank"; // Garante que se o Telegram barrar o download direto, ele abre a tela de pré-visualização
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
 
   // --- UNLOCK CPF ---
   async function runUnlock() {
