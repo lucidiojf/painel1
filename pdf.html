@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PDF Tools Hub</title>
+  <title>PDF Tools Pro</title>
 
   <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- PDF-Lib (Manipulação de PDF) -->
+  <!-- PDF-Lib (Manipulação, Merge, Split) -->
   <script src="https://unpkg.com/pdf-lib@1.17.9/dist/pdf-lib.min.js"></script>
 
-  <!-- PDF.js (Conversão de PDF para Imagens) -->
+  <!-- PDF.js (Motor da Mozilla com suporte pleno a AES-128/256 e extração) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
   <style>
@@ -23,16 +23,16 @@
       display: flex; justify-content: center;
     }
     .container {
-      width: 100%; max-width: 500px;
+      width: 100%; max-width: 520px;
       background: var(--tg-theme-secondary-bg-color, #ffffff);
-      padding: 24px; border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      padding: 24px; border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
     }
     h2 { margin-top: 0; font-size: 1.3rem; text-align: center; }
-    .tabs { display: flex; gap: 6px; margin-bottom: 16px; overflow-x: auto; }
+    .tabs { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
     .tab-btn {
       flex: 1; padding: 10px 8px; font-size: 0.85rem; font-weight: 600;
-      border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 6px;
+      border: 1px solid #cbd5e1; background: #f8fafc; border-radius: 8px;
       cursor: pointer; white-space: nowrap;
     }
     .tab-btn.active {
@@ -44,8 +44,9 @@
     .panel.active { display: block; }
     .field { margin-bottom: 14px; }
     label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
-    input[type="file"], input[type="text"], input[type="password"] {
+    input[type="file"], input[type="text"], input[type="password"], select {
       width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem;
+      background: #fff;
     }
     button.action-btn {
       width: 100%; padding: 12px; margin-top: 6px;
@@ -55,7 +56,7 @@
     }
     button.action-btn:hover { opacity: 0.9; }
     #status {
-      margin-top: 14px; padding: 10px; border-radius: 6px; font-size: 0.85rem; display: none;
+      margin-top: 14px; padding: 10px; border-radius: 6px; font-size: 0.85rem; display: none; word-break: break-word;
     }
     .ok { background: #dcfce7; color: #166534; }
     .err { background: #fee2e2; color: #991b1b; }
@@ -74,49 +75,57 @@
     <button class="tab-btn" onclick="switchTab('tab-convert')">Converter</button>
   </div>
 
-  <!-- Aba 1: Unlock / Lock -->
+  <!-- Painel 1: Unlock / Lock -->
   <div id="tab-unlock" class="panel active">
     <div class="field">
-      <label>Arquivo PDF:</label>
+      <label>Ficheiro PDF Protegido:</label>
       <input type="file" id="crypto-file" accept="application/pdf">
     </div>
     <div class="field">
-      <label>Senha (caso o arquivo tenha):</label>
-      <input type="password" id="crypto-pass" placeholder="Digite a senha se houver...">
+      <label>Senha do Ficheiro:</label>
+      <input type="password" id="crypto-pass" placeholder="Insira a senha do PDF...">
     </div>
-    <button class="action-btn" onclick="handleUnlock()">🔓 Desbloquear PDF</button>
-    <button class="action-btn" style="background: #475569; margin-top: 8px;" onclick="handleLock()">🔒 Proteger com Senha</button>
+    <button class="action-btn" onclick="handleUnlock()">🔓 Desbloquear PDF (Remover Senha Definitivamente)</button>
+    <button class="action-btn" style="background: #475569; margin-top: 8px;" onclick="handleLock()">🔒 Proteger Ficheiro com Senha</button>
   </div>
 
-  <!-- Aba 2: Merge (Juntar) -->
+  <!-- Painel 2: Merge (Unir) -->
   <div id="tab-merge" class="panel">
     <div class="field">
-      <label>Selecione 2 ou mais PDFs:</label>
+      <label>Selecione 2 ou mais ficheiros PDF:</label>
       <input type="file" id="merge-files" accept="application/pdf" multiple>
     </div>
-    <button class="action-btn" onclick="handleMerge()">📑 Unir PDFs</button>
+    <button class="action-btn" onclick="handleMerge()">📑 Unir Todos os PDFs</button>
   </div>
 
-  <!-- Aba 3: Split (Dividir) -->
+  <!-- Painel 3: Split (Dividir) -->
   <div id="tab-split" class="panel">
     <div class="field">
-      <label>Arquivo PDF:</label>
+      <label>Ficheiro PDF:</label>
       <input type="file" id="split-file" accept="application/pdf">
     </div>
     <div class="field">
-      <label>Páginas (ex: 1-3 ou 1, 4, 5):</label>
+      <label>Páginas pretendidas (ex: 1-3 ou 1, 4, 5):</label>
       <input type="text" id="split-range" placeholder="ex: 1-3 ou 2,4">
     </div>
     <button class="action-btn" onclick="handleSplit()">✂️ Extrair Páginas</button>
   </div>
 
-  <!-- Aba 4: Converter para Imagens -->
+  <!-- Painel 4: Conversores -->
   <div id="tab-convert" class="panel">
     <div class="field">
-      <label>Arquivo PDF:</label>
+      <label>Ficheiro PDF para conversão:</label>
       <input type="file" id="convert-file" accept="application/pdf">
     </div>
-    <button class="action-btn" onclick="handleConvert()">🖼️ Converter Páginas para JPG</button>
+    <div class="field">
+      <label>Converter para:</label>
+      <select id="convert-format">
+        <option value="jpg">Imagens JPG (Página por página)</option>
+        <option value="png">Imagens PNG (Alta qualidade)</option>
+        <option value="txt">Documento de Texto (.txt)</option>
+      </select>
+    </div>
+    <button class="action-btn" onclick="handleConvert()">🔄 Iniciar Conversão</button>
   </div>
 
   <div id="status"></div>
@@ -130,7 +139,7 @@
     tg.ready();
   }
 
-  // Configuração do Worker PDF.js
+  // Worker oficial do PDF.js
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   function switchTab(id) {
@@ -150,7 +159,6 @@
     }
   }
 
-  // Função Universal de Download (PC e Celular)
   function download(blob, filename) {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -167,53 +175,79 @@
     }, 1500);
   }
 
-  // --- UNLOCK ---
+  // --- DESBLOQUEIO DE PDF COM SUPORTE A AES-128/256 ---
   async function handleUnlock() {
     const fileInput = document.getElementById("crypto-file");
     const passInput = document.getElementById("crypto-pass").value;
 
-    if (!fileInput.files.length) return notify("Selecione um arquivo PDF primeiro.", false);
+    if (!fileInput.files.length) return notify("Selecione um ficheiro PDF primeiro.", false);
 
     try {
-      notify("Desbloqueando documento...");
+      notify("A processar e a descriptografar o PDF...");
       const fileBytes = await fileInput.files[0].arrayBuffer();
 
-      let pdfDoc;
-      try {
-        pdfDoc = await PDFLib.PDFDocument.load(fileBytes, {
-          password: passInput || undefined,
-          ignoreEncryption: false
-        });
-      } catch (innerErr) {
-        pdfDoc = await PDFLib.PDFDocument.load(fileBytes, {
-          password: passInput || undefined,
-          ignoreEncryption: true
+      // Utiliza o motor PDF.js com suporte a senhas avançadas
+      const loadingTask = pdfjsLib.getDocument({
+        data: fileBytes,
+        password: passInput
+      });
+
+      const pdf = await loadingTask.promise;
+      const newPdf = await PDFLib.PDFDocument.create();
+
+      // Reconstrói as páginas num PDF limpo e totalmente sem senha
+      for (let i = 1; i <= pdf.numPages; i++) {
+        notify(`A recriar página ${i} de ${pdf.numPages}...`);
+        const page = await pdf.getPage(i);
+        const viewport = page.getViewport({ scale: 2.0 });
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        const imgDataUrl = canvas.toDataURL("image/jpeg", 0.95);
+        const imgBytes = await fetch(imgDataUrl).then(res => res.arrayBuffer());
+        const embeddedImg = await newPdf.embedJpg(imgBytes);
+
+        const newPage = newPdf.addPage([viewport.width / 2.0, viewport.height / 2.0]);
+        newPage.drawImage(embeddedImg, {
+          x: 0,
+          y: 0,
+          width: viewport.width / 2.0,
+          height: viewport.height / 2.0
         });
       }
 
-      const cleanBytes = await pdfDoc.save();
+      const unlockedBytes = await newPdf.save();
       const originalName = fileInput.files[0].name.replace(/\.pdf$/i, "");
-      const blob = new Blob([cleanBytes], { type: "application/pdf" });
+      const blob = new Blob([unlockedBytes], { type: "application/pdf" });
 
       download(blob, `desbloqueado_${originalName}.pdf`);
-      notify("PDF desbloqueado e baixado com sucesso!");
+      notify("PDF desbloqueado e descarregado com sucesso!");
     } catch (err) {
       console.error(err);
-      notify("Erro: senha incorreta ou criptografia incompatível.", false);
+      if (err.name === "PasswordException") {
+        notify("Senha incorreta. Verifique a senha digitada.", false);
+      } else {
+        notify("Erro ao processar ficheiro: " + (err.message || "Erro desconhecido"), false);
+      }
     }
   }
 
-  // --- LOCK ---
+  // --- PROTEGER COM SENHA ---
   async function handleLock() {
     const fileInput = document.getElementById("crypto-file");
     const passInput = document.getElementById("crypto-pass").value;
 
     if (!fileInput.files.length || !passInput) {
-      return notify("Arquivo e senha são obrigatórios.", false);
+      return notify("O ficheiro e a senha são obrigatórios.", false);
     }
 
     try {
-      notify("Protegendo documento...");
+      notify("A proteger ficheiro...");
       const fileBytes = await fileInput.files[0].arrayBuffer();
       const pdfDoc = await PDFLib.PDFDocument.load(fileBytes);
 
@@ -227,19 +261,19 @@
       const blob = new Blob([protectedBytes], { type: "application/pdf" });
 
       download(blob, `protegido_${originalName}.pdf`);
-      notify("PDF criptografado com sucesso!");
+      notify("Ficheiro protegido com sucesso!");
     } catch (err) {
-      notify("Erro ao criptografar: " + err.message, false);
+      notify("Erro ao proteger: " + err.message, false);
     }
   }
 
-  // --- MERGE ---
+  // --- UNIR PDFS (MERGE) ---
   async function handleMerge() {
     const files = document.getElementById("merge-files").files;
-    if (files.length < 2) return notify("Selecione pelo menos 2 arquivos PDF.", false);
+    if (files.length < 2) return notify("Selecione pelo menos 2 ficheiros PDF.", false);
 
     try {
-      notify("Unindo arquivos...");
+      notify("A unir ficheiros...");
       const mergedPdf = await PDFLib.PDFDocument.create();
 
       for (let file of files) {
@@ -253,23 +287,23 @@
       const blob = new Blob([mergedBytes], { type: "application/pdf" });
 
       download(blob, "documentos_unidos.pdf");
-      notify("PDFs unidos com sucesso!");
+      notify("Ficheiros unidos com sucesso!");
     } catch (err) {
-      notify("Erro ao unir PDFs: " + err.message, false);
+      notify("Erro ao unir ficheiros: " + err.message, false);
     }
   }
 
-  // --- SPLIT ---
+  // --- DIVIDIR PDFS (SPLIT) ---
   async function handleSplit() {
     const fileInput = document.getElementById("split-file");
     const rangeText = document.getElementById("split-range").value.trim();
 
     if (!fileInput.files.length || !rangeText) {
-      return notify("Selecione o arquivo e digite o intervalo de páginas.", false);
+      return notify("Selecione o ficheiro e defina as páginas.", false);
     }
 
     try {
-      notify("Separando páginas...");
+      notify("A extrair páginas...");
       const fileBytes = await fileInput.files[0].arrayBuffer();
       const srcPdf = await PDFLib.PDFDocument.load(fileBytes);
       const totalPages = srcPdf.getPageCount();
@@ -287,7 +321,7 @@
         }
       });
 
-      if (pageIndices.size === 0) return notify("Nenhuma página válida encontrada no intervalo.", false);
+      if (pageIndices.size === 0) return notify("Nenhuma página válida encontrada.", false);
 
       const splitPdf = await PDFLib.PDFDocument.create();
       const pagesToCopy = Array.from(pageIndices).sort((a, b) => a - b);
@@ -301,39 +335,60 @@
       download(blob, `extraido_${originalName}.pdf`);
       notify("Páginas extraídas com sucesso!");
     } catch (err) {
-      notify("Erro ao dividir: " + err.message, false);
+      notify("Erro ao extrair: " + err.message, false);
     }
   }
 
-  // --- CONVERTER PARA JPG ---
+  // --- CONVERSÕES (JPG, PNG, TXT) ---
   async function handleConvert() {
     const fileInput = document.getElementById("convert-file");
-    if (!fileInput.files.length) return notify("Selecione um PDF.", false);
+    const format = document.getElementById("convert-format").value;
+
+    if (!fileInput.files.length) return notify("Selecione um ficheiro PDF.", false);
 
     try {
-      notify("Convertendo páginas em JPG...");
+      notify("A processar conversão...");
       const fileBytes = await fileInput.files[0].arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: fileBytes }).promise;
+      const baseName = fileInput.files[0].name.replace(/\.pdf$/i, "");
 
+      if (format === "txt") {
+        let fullText = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageStr = textContent.items.map(item => item.str).join(" ");
+          fullText += `--- Página ${i} ---\n` + pageStr + "\n\n";
+        }
+        const blob = new Blob([fullText], { type: "text/plain;charset=utf-8" });
+        download(blob, `${baseName}.txt`);
+        notify("Texto extraído e descarregado com sucesso!");
+        return;
+      }
+
+      // Conversão para Imagens (JPG ou PNG)
+      const mime = format === "png" ? "image/png" : "image/jpeg";
       for (let i = 1; i <= pdf.numPages; i++) {
+        notify(`A exportar página ${i} de ${pdf.numPages}...`);
         const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 });
+        const viewport = page.getViewport({ scale: 2.0 });
 
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
         await page.render({ canvasContext: ctx, viewport }).promise;
 
         canvas.toBlob((blob) => {
-          download(blob, `pagina_${i}.jpg`);
-        }, 'image/jpeg', 0.9);
+          download(blob, `${baseName}_pagina_${i}.${format}`);
+        }, mime, 0.95);
       }
 
-      notify(`Conversão finalizada! ${pdf.numPages} imagem(ns) gerada(s).`);
+      notify(`Conversão concluída! ${pdf.numPages} ficheiro(s) exportado(s).`);
     } catch (err) {
-      notify("Erro ao converter: " + err.message, false);
+      console.error(err);
+      notify("Erro na conversão: " + err.message, false);
     }
   }
 </script>
