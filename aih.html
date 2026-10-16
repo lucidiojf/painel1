@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emissão AIH Oficial</title>
+  <title>Emissão AIH Oficial - HM Severina Carlos de Andrade</title>
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
       background-color: #f1f5f9;
-      padding: 12px;
       color: #0f172a;
+      padding: 14px;
     }
 
     .painel-formulario {
@@ -24,14 +24,14 @@
       background: #ffffff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .painel-formulario h2 {
       text-align: center;
       color: #0369a1;
       margin-bottom: 15px;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       text-transform: uppercase;
     }
 
@@ -99,8 +99,8 @@
     }
 
     .btn-visualizar { background: #0284c7; }
-    .btn-pdf { background: #dc2626; }
     .btn-word { background: #1e3a8a; }
+    .btn-pdf { background: #dc2626; }
 
     /* Área do Documento Oficial das 5 Páginas */
     #documentoImpressao {
@@ -165,6 +165,14 @@
       color: #000;
     }
 
+    .logo-sus-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
     .quebra-pagina-visual {
       page-break-before: always;
       margin-top: 25px;
@@ -172,7 +180,6 @@
       border-top: 2px dashed #94a3b8;
     }
 
-    /* Regras de Impressão Direta em PDF sem tela em branco */
     @media print {
       body {
         background: #fff;
@@ -199,7 +206,7 @@
 </head>
 <body>
 
-  <!-- FORMULÁRIO DE ENTRADA -->
+  <!-- FORMULÁRIO -->
   <div class="painel-formulario">
     <h2>Emissão AIH Oficial &bull; Frutuoso Gomes</h2>
     <form id="formDados" onsubmit="event.preventDefault(); atualizarVisualizacao();">
@@ -317,7 +324,7 @@
     </form>
   </div>
 
-  <!-- CONTAINER OFICIAL COM AS 5 PÁGINAS -->
+  <!-- RENDERIZAÇÃO OFICIAL DAS 5 PÁGINAS -->
   <div id="documentoImpressao"></div>
 
   <script>
@@ -354,14 +361,21 @@
     }
 
     function montarTodasAsPaginas(d) {
+      // Símbolo oficial da Cruz do SUS
+      const svgCruzSUS = `
+        <svg width="34" height="34" viewBox="0 0 100 100" style="vertical-align: middle;">
+          <path d="M35 5 H65 V35 H95 V65 H65 V95 H35 V65 H5 V35 H35 Z" fill="#005ca9"/>
+        </svg>
+      `;
+
       return `
         <!-- PÁGINA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR -->
         <div class="cabecalho-doc">
-          <h3>Prefeitura Municipal de Frutuoso Gomes</h3>
+          <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
           <h4>Hospital Maternidade Severina Carlos de Andrade</h4>
           <p>C.N.P.J 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
         </div>
-        <div class="titulo-bloco">Autorização para Internação Hospitalar</div>
+        <div class="titulo-bloco">AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</div>
         
         <table class="tab-oficial">
           <tr>
@@ -379,7 +393,7 @@
           </tr>
         </table>
 
-        <div class="titulo-bloco">Dados do Paciente</div>
+        <div class="titulo-bloco">DADOS DO PACIENTE</div>
         <table class="tab-oficial">
           <tr>
             <td colspan="2" style="width: 70%;"><span class="lb">Nome do Paciente:</span><span class="vl">${d.paciente}</span></td>
@@ -399,7 +413,7 @@
           </tr>
         </table>
 
-        <div class="titulo-bloco">Dados do Procedimento</div>
+        <div class="titulo-bloco">DADOS DO PROCEDIMENTO</div>
         <table class="tab-oficial">
           <tr>
             <td style="width: 70%;"><span class="lb">Procedimento Solicitado/Realizado:</span><span class="vl">${d.nomeProc}</span></td>
@@ -419,7 +433,7 @@
           </tr>
         </table>
 
-        <div class="titulo-bloco">Procedimentos Realizados</div>
+        <div class="titulo-bloco">PROCEDIMENTOS REALIZADOS</div>
         <table class="tab-oficial" style="text-align: center;">
           <tr style="background: #f1f5f9;">
             <th>Linha</th><th>Procedimento</th><th>Qtd.</th><th>CPF</th><th>CBO</th><th>CNES</th><th>CNPJ</th>
@@ -429,14 +443,19 @@
           </tr>
         </table>
 
-        <!-- PÁGINA 2: LAUDO PARA SOLICITAÇÃO (SUS) -->
+        <!-- PÁGINA 2: LAUDO SUS COM LOGOS ORIGINAIS -->
         <div class="quebra-pagina-visual"></div>
-        <div class="cabecalho-doc">
-          <h3>Sistema Único de Saúde - Ministério da Saúde</h3>
-          <h2 style="font-size: 12px; margin: 2px 0;">LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</h2>
+        <div class="logo-sus-box">
+          ${svgCruzSUS}
+          <div style="text-align: left; line-height: 1.1;">
+            <strong style="font-size: 13px; color: #005ca9;">SUS</strong><br>
+            <span style="font-size: 8.5px; text-transform: uppercase;">Sistema Único de Saúde</span><br>
+            <span style="font-size: 8.5px; text-transform: uppercase;">Ministério da Saúde</span>
+          </div>
         </div>
+
+        <div class="titulo-bloco">LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</div>
         
-        <div class="titulo-bloco">Identificação do Estabelecimento de Saúde</div>
         <table class="tab-oficial">
           <tr>
             <td style="width: 75%;"><span class="lb">1. Nome do Estabelecimento Solicitante / Executante:</span><span class="vl">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
@@ -444,7 +463,7 @@
           </tr>
         </table>
 
-        <div class="titulo-bloco">Justificativa da Internação</div>
+        <div class="titulo-bloco">JUSTIFICATIVA DA INTERNAÇÃO</div>
         <table class="tab-oficial">
           <tr>
             <td colspan="2"><span class="lb">17. Principais Sinais e Sintomas Clínicos:</span><div class="vl" style="min-height: 25px;">${d.sintomas}</div></td>
@@ -458,7 +477,7 @@
           </tr>
           <tr>
             <td><span class="lb">24. Descrição do Procedimento Solicitado:</span><span class="vl">${d.nomeProc}</span></td>
-            <td><span class="lb">25. Código:</span><span class="vl">${d.codProc}</span></td>
+            <td><span class="lb">25. Código do Procedimento:</span><span class="vl">${d.codProc}</span></td>
           </tr>
         </table>
 
@@ -480,7 +499,7 @@
         <!-- PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO -->
         <div class="quebra-pagina-visual"></div>
         <div class="cabecalho-doc">
-          <h3>Estado do Rio Grande do Norte &bull; SMS de Frutuoso Gomes</h3>
+          <h3>ESTADO DO RIO GRANDE DO NORTE &bull; SMS DE FRUTUOSO GOMES</h3>
           <h4>Hospital Maternidade Severina Carlos de Andrade</h4>
           <h2 style="font-size: 12px; margin: 4px 0; text-decoration: underline;">PRONTUÁRIO DE INTERNAÇÃO</h2>
         </div>
@@ -501,7 +520,7 @@
           </tr>
         </table>
 
-        <div class="titulo-bloco">Sumário de História Clínica, Exame Físico e Tratamento</div>
+        <div class="titulo-bloco">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
         <table class="tab-oficial">
           <tr>
             <td style="height: 100px; vertical-align: top;">
@@ -515,7 +534,7 @@
         <!-- PÁGINA 4: FICHA DE ANESTESIA -->
         <div class="quebra-pagina-visual"></div>
         <div class="cabecalho-doc">
-          <h3>Hospital Maternidade Severina Carlos de Andrade</h3>
+          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
           <h2 style="font-size: 12px; margin: 2px 0;">FICHA DE ANESTESIA</h2>
         </div>
 
@@ -546,7 +565,7 @@
         <!-- PÁGINA 5: BOLETIM OPERATÓRIO -->
         <div class="quebra-pagina-visual"></div>
         <div class="cabecalho-doc">
-          <h3>Hospital Maternidade Severina Carlos de Andrade</h3>
+          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
           <h2 style="font-size: 12px; margin: 2px 0;">BOLETIM OPERATÓRIO</h2>
         </div>
 
@@ -565,7 +584,7 @@
           </tr>
         </table>
 
-        <div class="titulo-bloco">Relatório do Procedimento</div>
+        <div class="titulo-bloco">RELATÓRIO DE PROCEDIMENTO</div>
         <table class="tab-oficial">
           <tr>
             <td style="height: 100px; vertical-align: top;">
@@ -592,13 +611,13 @@
       document.getElementById('documentoImpressao').innerHTML = montarTodasAsPaginas(d);
     }
 
-    // PDF oficial: aciona o motor de impressão do Chrome (Salvar como PDF) sem tela em branco
+    // PDF nativo via Chrome (Salvar como PDF) para não gerar página em branco
     function gerarPDFNativo() {
       atualizarVisualizacao();
       window.print();
     }
 
-    // Word oficial: constrói um .doc limpo sem juntar palavras
+    // Exportação limpa para Word (.doc) mantendo espaçamento de texto e tabelas
     function gerarWordDoc() {
       atualizarVisualizacao();
       const d = coletarDados();
@@ -630,7 +649,7 @@
             body {
               font-family: Arial, sans-serif;
               font-size: 10pt;
-              line-height: 1.2;
+              line-height: 1.25;
               color: #000000;
             }
             p {
@@ -694,7 +713,6 @@
       URL.revokeObjectURL(link.href);
     }
 
-    // Inicializa na abertura
     window.onload = function() {
       atualizarVisualizacao();
     };
