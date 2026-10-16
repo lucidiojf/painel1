@@ -34,8 +34,6 @@
     .btn-submit { background: #0284c7; color: #fff; border: none; padding: 12px; font-size: 15px; font-weight: bold; border-radius: 7px; cursor: pointer; width: 100%; margin-top: 8px; }
     .btn-submit:hover { background: #0369a1; }
     #msgStatus { margin-top: 10px; font-weight: bold; text-align: center; font-size: 13px; }
-    
-    /* MODAL */
     .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 8px; }
     .modal-content { background: #fff; width: 100%; max-width: 950px; height: 95vh; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
     .modal-header { background: #0284c7; color: #fff; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; }
@@ -56,7 +54,6 @@
     <span>Emissão AIH Oficial</span>
     <button type="button" class="btn-reload" onclick="location.reload(true)">↻ Recarregar</button>
   </h2>
-  
   <!-- NAVEGAÇÃO DE REGISTROS (ANTERIOR / PRÓXIMO / BUSCA) -->
   <div class="box-navegacao">
     <div class="nav-botoes">
@@ -70,7 +67,6 @@
       <button type="button" class="btn-busca" onclick="buscarPorTermo()">Buscar</button>
     </div>
   </div>
-
   <form id="formAih">
     <fieldset>
       <legend>Identificação do Paciente</legend>
@@ -170,10 +166,10 @@
         </div>
       </div>
     </fieldset>
-
-    <!-- DADOS CLÍNICOS E SIGTAP -->
+    <!-- BANCO DE DADOS CLINICOS: PATOLOGIAS E SIGTAP -->
     <fieldset>
       <legend>Dados Clínicos e SIGTAP</legend>
+      
       <div class="grid-2">
         <div class="form-group">
           <label>Patologia / Diretor CID:</label>
@@ -370,10 +366,10 @@
         <textarea id="exames" rows="2">ECG, HEMOGRAMA, UREIA, CREATININA E SUMÁRIO DE URINA.</textarea>
       </div>
     </fieldset>
-
     <!-- BLOCO CIRÚRGICO / ANESTESIA -->
     <fieldset>
       <legend>Folhas 4 e 5: Anestesia e Boletim Operatório</legend>
+      
       <div class="grid-3">
         <div class="form-group">
           <label>Técnica de Anestesia:</label>
@@ -432,7 +428,6 @@
         </div>
       </div>
     </fieldset>
-
     <!-- SOLICITANTE -->
     <fieldset>
       <legend>Profissional Solicitante</legend>
@@ -467,13 +462,12 @@
         </div>
       </div>
     </fieldset>
-
     <button type="submit" class="btn-submit">Gerar AIH e Salvar na Planilha</button>
     <div id="msgStatus"></div>
   </form>
 </div>
 
-<!-- MODAL COM O NOVO BOTÃO BAIXAR DOC INCLUÍDO -->
+<!-- MODAL COM O BOTÃO BAIXAR DOC INCLUÍDO -->
 <div id="modalVisualizacao" class="modal-overlay">
   <div class="modal-content">
     <div class="modal-header">
@@ -655,6 +649,66 @@
       buscarPorTermo();
     }
   });
+
+  /* Funções dos templates rápidos de seleção */
+  function aoSelecionarCid(val) {
+    if (!val || val === 'OUTRO') return;
+    const partes = val.split('|');
+    if (partes.length === 2) {
+      document.getElementById('diagInicial').value = partes[0];
+      document.getElementById('cidPrincipal').value = partes[1];
+    }
+  }
+
+  function aoSelecionarProced(val) {
+    if (!val || val === 'OUTRO') return;
+    const partes = val.split('|');
+    if (partes.length >= 2) {
+      document.getElementById('procedimento').value = partes[0];
+      document.getElementById('codProcedimento').value = partes[1];
+      if (partes[2]) document.getElementById('especialidade').value = partes[2];
+    }
+  }
+
+  function aoSelecionarMedico(val) {
+    if (!val || val === 'OUTRO') return;
+    const partes = val.split('|');
+    if (partes.length === 2) {
+      document.getElementById('medicoSolicitante').value = partes[0];
+      document.getElementById('cpfSolicitante').value = partes[1];
+    }
+  }
+
+  function aoSelecionarAnestesia(val) {
+    if (!val || val === 'OUTRO') return;
+    document.getElementById('txtAnestesia').value = val;
+  }
+
+  function aoSelecionarCirurgia(val) {
+    if (!val || val === 'OUTRO') return;
+    const protocolosCirurgicos = {
+      'CESARIANA': 'Incisão de Pfannenstiel. Histerotomia segmentar transversa. Extração fetal cefálica sem dificuldades. Dequitação completa manual. Histerorrafia em dois planos. Revisão da hemostasia. Fechamento por planos. Sem intercorrências.',
+      'COLECISTECTOMIA': 'Incisão subcostal direita (Kocher). Abertura por planos. Identificação e dissecção do triângulo de Calot. Ligadura dupla e secção do ducto e artéria císticos. Colecistectomia retrógrada. Hemostasia do leito hepático. Fechamento por planos. Sem intercorrências.',
+      'POSTECTOMIA': 'Incisão circular na pele prepucial. Ressecção do anel fimótico e mucosa excedente. Hemostasia rigorosa com eletrocautério. Sutura com fio Catgut simples 4-0 com pontos separados. Sem intercorrências.',
+      'HEMORROIDECTOMIA': 'Posição de canivete. Exposição do canal anal. Ressecção dos mamilos hemorroidários internos e externos às 3, 7 e 11 horas (técnica de Milligan-Morgan). Hemostasia rigorosa. Feridas mantidas abertas. Sem intercorrências.',
+      'FISTULOTOMIA': 'Exposição orificial anal. Cateterização do trajeto fistuloso com estilete rombo. Abertura do trajeto sobre a sonda condutora. Curetagem do leito fistuloso. Hemostasia. Sem intercorrências.',
+      'HERNIOPLASTIA_EPIGASTRICA': 'Incisão longitudinal mediana sobre a lesão. Dissecção do tecido subcutâneo até a aponeurose. Redução do tecido adiposo pré-peritoneal herniado. Reaproximação da linha alba com pontos invertidos de prolene 0. Fechamento por planos. Sem intercorrências.',
+      'HERNIOPLASTIA_INGUINAL': 'Incisão inguinal oblíqua. Abertura da aponeurose do oblíquo externo. Isolamento do funículo espermático. Identificação e dissecação do saco herniário. Reforço da parede posterior com fixação de tela de polipropileno (Lichtenstein). Fechamento por planos. Sem intercorrências.',
+      'HERNIOPLASTIA_UMBILICAL': 'Incisão semicircular infraumbilical. Dissecção do saco herniário e redução do conteúdo. Sutura do anel herniário com pontos em jaquetão (Mayo) utilizando fio inabsorvível. Fixação da cicatriz umbilical. Sem intercorrências.',
+      'HIDROCELE': 'Incisão escrotal transversa anterior. Dissecção da túnica vaginal. Esvaziamento do líquido límpido sob aspiração. Eversão da túnica vaginal parietal (técnica de Jaboulay) com sutura contínua de catgut. Hemostasia e síntese por planos. Sem intercorrências.',
+      'COLPOPERINEOPLASTIA': 'Incisão na parede vaginal anterior e posterior. Dissecção da fáscia vésico-vaginal e reto-vaginal. Plicatura dos músculos levantadores do ânus. Ressecção do excesso de mucosa vaginal e síntese com pontos absorvíveis. Sem intercorrências.',
+      'HISTERECTOMIA': 'Laparotomia infraumbilical mediana. Liberação dos ligamentos redondos, infundíbulo-pélvicos e útero-sacros. Ligadura dos vasos uterinos. Histerectomia total com preservação/retirada anexial. Peritonização da cúpula vaginal. Fechamento por planos. Sem intercorrências.',
+      'CISTO_PILONIDAL': 'Incisão elíptica na região sacrococcígea englobando os trajetos fistulosos. Exérese em bloco até a fáscia pré-sacra. Hemostasia cuidadosa. Ferida mantida para cicatrização por segunda intenção com curativo compressivo. Sem intercorrências.',
+      'VASECTOMIA': 'Incisões escrotais laterais mínimas sob anestesia local. Isolamento dos ductos deferentes bilateralmente. Secção de segmento de aproximadamente 1 cm de cada ducto. Ligadura das extremidades e interposição fascial. Fechamento da pele. Sem intercorrências.',
+      'CURETAGEM': 'Posição ginecológica. Assepsia e antissepsia. Passagem de espéculo vaginal e pinçamento do colo uterino com pinça Pozzi. Histerometria. Dilatação do colo se necessária. Curetagem uterina suave em todas as paredes retirando conteúdo. Cavidade uterina limpa. Sem intercorrências.',
+      'HISTERECTOMIA_VAGINAL': 'Posição de litotomia. Circuncisão do colo uterino. Descolamento da bexiga e reto. Abertura dos fundos de saco anterior e posterior. Ligadura e secção escalonada dos ligamentos e pedículos vasculares uterinos. Exérese do útero por via vaginal. Fechamento do peritônio e da cúpula vaginal. Sem intercorrências.',
+      'HERNIOPLASTIA_INCISIONAL': 'Incisão sobre a cicatriz prévia. Dissecção cuidadosa até identificação das bordas do defeito aponeurótico. Liberação de aderências do saco herniário. Colocação e fixação de tela de prolene pré ou retroaponeurótica com ampla margem de sobreposição. Drenagem sob sucção. Fechamento por planos.',
+      'EXERESE_BARTHOLIN': 'Incisão na mucosa vestibular sobre a tumefação da glândula de Bartholin. Dissecção romba e cortante cuidadosa de toda a cápsula glandular sem romper. Hemostasia do leito cirúrgico. Fechamento do leito com pontos separados absorvíveis. Sem intercorrências.'
+    };
+    if (protocolosCirurgicos[val]) {
+      document.getElementById('txtCirurgia').value = protocolosCirurgicos[val];
+    }
+  }
 
   /* =========================================================================
      ENVIO DO FORMULÁRIO E MONTAGEM DO PDF
@@ -936,10 +990,10 @@
   }
 
   /* =========================================================================
-     EXPORTAÇÃO DIRETA PARA WORD (.DOC) DAS 5 FOLHAS SEM LETRAS JUNTAS
+     EXPORTAÇÃO DIRETA PARA WORD (.DOC) DAS 5 FOLHAS COM TEXTO SEPARADO
   ========================================================================= */
   function baixarWordDocDireto() {
-    const prontuario = document.getElementById('prontuario').value || '4726';
+    const prontuario = document.getElementById('prontuario').value || '7521';
     const paciente = document.getElementById('nomePaciente').value || 'PACIENTE';
     const cns = document.getElementById('cns').value || '';
     const nasc = document.getElementById('dataNasc').value || '';
@@ -954,18 +1008,20 @@
     const municipio = document.getElementById('municipio').value || 'FRUTUOSO GOMES';
     const uf = document.getElementById('estado').value || 'RN';
     const cep = document.getElementById('cep').value || '59890-000';
-    const tel = document.getElementById('telefone').value || '84';
+    const tel = document.getElementById('telefone').value || '84 99980 5728';
     const dtInt = document.getElementById('dataInternacao').value || '';
     const dtSai = document.getElementById('dataSaida').value || '';
     const diag = document.getElementById('diagInicial').value || '';
     const cid = document.getElementById('cidPrincipal').value || '';
     const nomeProced = document.getElementById('procedimento').value || '';
     const codProced = document.getElementById('codProcedimento').value || '';
+    const especialidade = document.getElementById('especialidade').value || 'CLINICA MEDICA';
     const sinais = document.getElementById('sinaisSintomas').value || '';
     const just = document.getElementById('justificativa').value || '';
     const exames = document.getElementById('exames').value || '';
     const medico = document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA';
     const cpfMed = document.getElementById('cpfSolicitante').value || '175.499.574-87';
+    const tecnicaAnest = document.getElementById('selTecnicaAnestesia').value || 'Local';
     const drogasAnest = document.getElementById('txtAnestesia').value || 'Lidocaina a 2% - 20 ml SF - 500 ml EV';
     const boletimCir = document.getElementById('txtCirurgia').value || 'SEM INTERCORRÊNCIAS OPERATÓRIAS.';
 
@@ -1043,7 +1099,7 @@
       </head>
       <body>
 
-        <!-- FOLHA 1 -->
+        <!-- ==================== FOLHA 1: AUTORIZAÇÃO DE INTERNAÇÃO ==================== -->
         <div style="text-align: center; margin-bottom: 6pt;">
           <h2 style="font-size: 11pt; margin: 0; text-transform: uppercase;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h2>
           <h3 style="font-size: 10pt; margin: 1pt 0;">Hospital Maternidade Severina Carlos de Andrade</h3>
@@ -1059,8 +1115,8 @@
             <td style="width: 30%;"><span class="campo-lb">Tipo:</span><span class="campo-vl">[ ] 01 – Inicial &nbsp; [X] Continuidade</span></td>
           </tr>
           <tr>
-            <td colspan="2"><span class="campo-lb">Apresentação:</span><span class="campo-vl">&nbsp;</span></td>
-            <td><span class="campo-lb">Órgão Emissor:</span><span class="campo-vl">&nbsp;</span></td>
+            <td colspan="2"><span class="campo-lb">Apresentação:</span><span class="campo-vl">ESTADUAL</span></td>
+            <td><span class="campo-lb">Órgão Emissor:</span><span class="campo-vl">SESAP / RN</span></td>
           </tr>
           <tr>
             <td colspan="2"><span class="campo-lb">Data da internação:</span><span class="campo-vl">${dtInt}</span></td>
@@ -1113,8 +1169,8 @@
             <td colspan="2"><span class="campo-lb">Procedimento realizado:</span><span class="campo-vl">${codProced}</span></td>
           </tr>
           <tr>
-            <td><span class="campo-lb">Especialidade:</span><span class="campo-vl">CLINICA MEDICA</span></td>
-            <td><span class="campo-lb">Caráter de atendimento:</span><span class="campo-vl">&nbsp;</span></td>
+            <td><span class="campo-lb">Especialidade:</span><span class="campo-vl">${especialidade}</span></td>
+            <td><span class="campo-lb">Caráter de atendimento:</span><span class="campo-vl">Urgência / Emergência</span></td>
           </tr>
           <tr>
             <td><span class="campo-lb">Modalidade:</span><span class="campo-vl">[X] Hospitalar &nbsp; [ ] Hosp. Dia &nbsp; [ ] Int. Domiciliar</span></td>
@@ -1147,11 +1203,11 @@
             <th style="width: 18%;">CNPJ</th>
           </tr>
           <tr>
-            <td>&nbsp;</td>
+            <td>01</td>
             <td>${codProced}</td>
-            <td>&nbsp;</td>
+            <td>01</td>
             <td>${cpfMed}</td>
-            <td>&nbsp;</td>
+            <td>225125</td>
             <td>2380846</td>
             <td>08.349.052/0001-80</td>
           </tr>
@@ -1160,7 +1216,7 @@
           </tr>
         </table>
 
-        <!-- FOLHA 2 -->
+        <!-- ==================== FOLHA 2: LAUDO SUS ==================== -->
         <div class="quebra-folha"></div>
 
         <div class="faixa-titulo">LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</div>
@@ -1224,7 +1280,7 @@
             <td><span class="campo-lb">25. Código do Procedimento</span><span class="campo-vl">${codProced}</span></td>
           </tr>
           <tr>
-            <td><span class="campo-lb">26. Clínica</span><span class="campo-vl">CLINICA MEDICA</span></td>
+            <td><span class="campo-lb">26. Clínica</span><span class="campo-vl">${especialidade}</span></td>
             <td><span class="campo-lb">27. Caráter da Internação</span><span class="campo-vl">02</span></td>
             <td><span class="campo-lb">28. Documento</span><span class="campo-vl">CNS ( ) CPF (X)</span></td>
           </tr>
@@ -1238,7 +1294,7 @@
           </tr>
         </table>
 
-        <!-- FOLHA 3 -->
+        <!-- ==================== FOLHA 3: PRONTUÁRIO ==================== -->
         <div class="quebra-folha"></div>
 
         <div style="text-align: center; margin-bottom: 6pt;">
@@ -1273,7 +1329,7 @@
             <td colspan="2"><span class="campo-lb">Nome da Mãe:</span><span class="campo-vl">${mae}</span></td>
           </tr>
           <tr>
-            <td><span class="campo-lb">Serviço:</span><span class="campo-vl">CLINICA MEDICA</span></td>
+            <td><span class="campo-lb">Serviço:</span><span class="campo-vl">${especialidade}</span></td>
             <td><span class="campo-lb">Enfermaria:</span><span class="campo-vl">M</span></td>
             <td><span class="campo-lb">Leito:</span><span class="campo-vl">1</span></td>
           </tr>
@@ -1301,7 +1357,7 @@
           </tr>
         </table>
 
-        <!-- FOLHA 4 -->
+        <!-- ==================== FOLHA 4: FICHA DE ANESTESIA ==================== -->
         <div class="quebra-folha"></div>
 
         <div style="text-align: center; margin-bottom: 6pt;">
@@ -1325,12 +1381,12 @@
             <td colspan="2"><span class="campo-lb">Premedicação:</span><span class="campo-vl">&nbsp;</span></td>
           </tr>
           <tr>
-            <td><span class="campo-lb">Anestesia Tipo:</span><span class="campo-vl">LOCAL</span></td>
-            <td><span class="campo-lb">Técnica:</span><span class="campo-vl">LOCAL</span></td>
+            <td><span class="campo-lb">Anestesia Tipo:</span><span class="campo-vl">${tecnicaAnest.toUpperCase()}</span></td>
+            <td><span class="campo-lb">Técnica:</span><span class="campo-vl">${tecnicaAnest.toUpperCase()}</span></td>
           </tr>
           <tr>
-            <td><span class="campo-lb">Operação:</span><span class="campo-vl">&nbsp;</span></td>
-            <td><span class="campo-lb">Operador:</span><span class="campo-vl">&nbsp;</span></td>
+            <td><span class="campo-lb">Operação:</span><span class="campo-vl">${nomeProced}</span></td>
+            <td><span class="campo-lb">Operador:</span><span class="campo-vl">${medico}</span></td>
           </tr>
         </table>
 
@@ -1362,7 +1418,7 @@
           </tr>
         </table>
 
-        <!-- FOLHA 5 -->
+        <!-- ==================== FOLHA 5: BOLETIM OPERATÓRIO ==================== -->
         <div class="quebra-folha"></div>
 
         <div style="text-align: center; margin-bottom: 6pt;">
@@ -1379,8 +1435,8 @@
             <td style="width: 30%;"><span class="campo-lb">Prontuário:</span><span class="campo-vl">${prontuario}</span></td>
           </tr>
           <tr>
-            <td><span class="campo-lb">Diagnóstico Pré-Operatório:</span><span class="campo-vl">&nbsp;</span></td>
-            <td><span class="campo-lb">Indicação Terapêutica:</span><span class="campo-vl">&nbsp;</span></td>
+            <td><span class="campo-lb">Diagnóstico Pré-Operatório:</span><span class="campo-vl">${diag}</span></td>
+            <td><span class="campo-lb">Indicação Terapêutica:</span><span class="campo-vl">${nomeProced}</span></td>
           </tr>
           <tr>
             <td colspan="2">
@@ -1394,7 +1450,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2"><span class="campo-lb">Equipe Cirúrgica:</span><span class="campo-vl">Operador: Dr. Lucídio &bull; 1º Aux: _____ &bull; Anestesista: Dr. Hiago</span></td>
+            <td colspan="2"><span class="campo-lb">Equipe Cirúrgica:</span><span class="campo-vl">Operador: ${medico} &bull; 1º Aux: _____ &bull; Anestesista: Dr. Hiago</span></td>
           </tr>
         </table>
 
