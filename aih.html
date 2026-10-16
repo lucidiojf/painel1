@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emissão AIH Oficial</title>
+  <title>Emissão AIH Oficial - HM Severina Carlos de Andrade</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,642 +13,799 @@
     }
 
     body {
-      background-color: #cbd5e1;
-      padding: 16px;
+      background-color: #525659;
+      padding: 12px;
       color: #000;
     }
 
-    /* Painel do Formulário */
-    .painel-form {
-      max-width: 850px;
-      margin: 0 auto 20px auto;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.15);
-    }
-
-    .painel-form h2 {
-      text-align: center;
-      color: #0369a1;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-    }
-
-    fieldset {
-      border: 1px solid #94a3b8;
+    /* BARRA DE AÇÕES SUPERIOR */
+    .barra-topo {
+      max-width: 1240px;
+      margin: 0 auto 12px auto;
+      background: #0f172a;
+      padding: 10px 16px;
       border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    legend {
-      padding: 0 6px;
-      font-weight: bold;
-      color: #0284c7;
-      font-size: 0.85rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      flex-wrap: wrap;
       gap: 10px;
     }
 
-    .campo {
+    .barra-topo h1 {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .grupo-botoes {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-acao {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .btn-word { background: #2563eb; }
+    .btn-pdf { background: #dc2626; }
+    .btn-sync { background: #059669; }
+
+    /* LAYOUT DIVIDIDO: DOCUMENTO NA ESQUERDA E PLANILHA/FORMULÁRIO NA DIREITA */
+    .container-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 820px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    @media (max-width: 1200px) {
+      .container-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* PAINEL LATERAL (FORMULÁRIO E BUSCA DA PLANILHA) */
+    .painel-lateral {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      font-size: 11px;
+    }
+
+    .painel-lateral h3 {
+      font-size: 12px;
+      color: #0369a1;
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .campo-form {
+      margin-bottom: 8px;
       display: flex;
       flex-direction: column;
     }
 
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    label {
-      font-size: 0.75rem;
+    .campo-form label {
       font-weight: bold;
-      color: #334155;
-      margin-bottom: 3px;
-    }
-
-    input, select, textarea {
-      padding: 7px 9px;
-      border: 1px solid #94a3b8;
-      border-radius: 4px;
-      font-size: 0.85rem;
-    }
-
-    .botoes-topo {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      flex: 1;
-      min-width: 140px;
-      padding: 12px;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-      color: #ffffff;
-      text-align: center;
-    }
-
-    .btn-atualizar { background: #0284c7; }
-    .btn-word { background: #1e3a8a; }
-    .btn-pdf { background: #dc2626; }
-
-    /* Folha Visual idêntica ao blob.pdf */
-    #documentoImpressao {
-      max-width: 820px;
-      margin: 0 auto;
-      background: #ffffff;
-      padding: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 10.5px;
-      line-height: 1.25;
-      color: #000;
-    }
-
-    .cabecalho-principal {
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .cabecalho-principal h3 {
-      font-size: 12.5px;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin: 0;
-    }
-
-    .cabecalho-principal h4 {
-      font-size: 11px;
-      margin: 1px 0;
-      font-weight: normal;
-    }
-
-    .cabecalho-principal p {
+      margin-bottom: 2px;
       font-size: 9.5px;
-      margin: 0;
+      color: #334155;
     }
 
-    .titulo-secao {
-      font-size: 11px;
+    .campo-form input, .campo-form select, .campo-form textarea {
+      padding: 5px 7px;
+      border: 1px solid #94a3b8;
+      border-radius: 3px;
+      font-size: 10.5px;
+    }
+
+    /* ÁREA DO DOCUMENTO OFICIAL (5 FOLHAS IDÊNTICAS AO BLOB.PDF) */
+    #documentoAIH {
+      background: #ffffff;
+      padding: 30px 35px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .cabecalho-doc {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .cabecalho-doc h2 { font-size: 12px; font-weight: bold; text-transform: uppercase; margin: 0; }
+    .cabecalho-doc h3 { font-size: 11px; font-weight: bold; margin: 1px 0; }
+    .cabecalho-doc p { font-size: 9.5px; margin: 0; }
+
+    .faixa-secao {
+      font-size: 10px;
       font-weight: bold;
       text-align: center;
       text-transform: uppercase;
       border-top: 1px solid #000;
       border-bottom: 1px solid #000;
-      padding: 3px 0;
-      margin: 6px 0;
+      padding: 2px 0;
+      margin: 4px 0;
       background: #fff;
     }
 
     .tab-oficial {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       table-layout: fixed;
     }
 
     .tab-oficial td, .tab-oficial th {
       border: 1px solid #000;
-      padding: 3px 6px;
+      padding: 2.5px 4.5px;
       vertical-align: top;
       word-wrap: break-word;
     }
 
-    .rotulo {
-      font-size: 8px;
+    .lb {
+      font-size: 7.5px;
       font-weight: bold;
       text-transform: uppercase;
-      color: #222;
+      color: #000;
       display: block;
       margin-bottom: 1px;
     }
 
-    .conteudo {
-      font-size: 10.5px;
+    .vl {
+      font-size: 9.5px;
       font-weight: bold;
       color: #000;
     }
 
-    .quebra-pagina {
+    .caixa-box {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      border: 1px solid #000;
+      text-align: center;
+      line-height: 10px;
+      font-size: 9px;
+      font-weight: bold;
+      vertical-align: middle;
+      margin-right: 2px;
+    }
+
+    .quebra-folha {
       page-break-before: always;
       margin-top: 25px;
       padding-top: 20px;
       border-top: 2px dashed #94a3b8;
     }
 
-    /* Regras de Impressão (Gera PDF idêntico) */
+    /* IMPRESSÃO DIRETA: SÓ AS FOLHAS SÃO IMPRESSAS */
     @media print {
-      body {
-        background: #fff;
-        padding: 0;
-      }
-      .painel-form, .botoes-topo {
-        display: none !important;
-      }
-      #documentoImpressao {
-        width: 100%;
-        max-width: 100%;
-        padding: 0;
-        margin: 0;
-        box-shadow: none;
-      }
-      .quebra-pagina {
-        page-break-before: always;
-        border-top: none;
-        margin-top: 0;
-        padding-top: 0;
-      }
+      body { background: #fff; padding: 0; }
+      .barra-topo, .painel-lateral { display: none !important; }
+      .container-layout { display: block; }
+      #documentoAIH { width: 100%; max-width: 100%; padding: 0; margin: 0; box-shadow: none; }
+      .quebra-folha { page-break-before: always; border-top: none; margin-top: 0; padding-top: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 1. PAINEL DE ENTRADA DE DADOS -->
-  <div class="painel-form">
-    <h2>Emissão AIH Oficial &bull; Frutuoso Gomes</h2>
-    <form id="formularioAIH" onsubmit="event.preventDefault(); renderizarDocumento();">
-      
-      <fieldset>
-        <legend>Dados da AIH e Estabelecimento</legend>
-        <div class="grid">
-          <div class="campo">
-            <label>Nº Prontuário</label>
-            <input type="text" id="prontuario" value="4819" required>
-          </div>
-          <div class="campo">
-            <label>Nº da AIH</label>
-            <input type="text" id="num_aih" placeholder="Opcional">
-          </div>
-          <div class="campo">
-            <label>Tipo</label>
-            <select id="tipo_aih">
-              <option value="01 – Inicial">01 – Inicial</option>
-              <option value="02 – Continuidade" selected>02 – Continuidade</option>
-            </select>
-          </div>
-          <div class="campo">
-            <label>Data Admissão/Internação</label>
-            <input type="date" id="data_internacao" value="2026-09-04">
-          </div>
-          <div class="campo">
-            <label>Data de Saída / Alta</label>
-            <input type="date" id="data_saida" value="2026-09-06">
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Dados do Paciente</legend>
-        <div class="grid">
-          <div class="campo full">
-            <label>Nome Completo do Paciente</label>
-            <input type="text" id="paciente" value="JUCIENE ALVES CAMARA FERREIRA" required>
-          </div>
-          <div class="campo">
-            <label>Cartão SUS (CNS)</label>
-            <input type="text" id="cns" value="702 9095 5587 9470">
-          </div>
-          <div class="campo">
-            <label>Data de Nascimento</label>
-            <input type="date" id="nascimento" value="1980-05-12">
-          </div>
-          <div class="campo">
-            <label>Sexo</label>
-            <select id="sexo">
-              <option value="F" selected>Feminino</option>
-              <option value="M">Masculino</option>
-            </select>
-          </div>
-          <div class="campo">
-            <label>Raça / Cor</label>
-            <select id="raca">
-              <option value="PARDA" selected>Parda</option>
-              <option value="BRANCA">Branca</option>
-              <option value="PRETA">Preta</option>
-            </select>
-          </div>
-          <div class="campo full">
-            <label>Nome da Mãe</label>
-            <input type="text" id="mae" value="MARIA ALVES DA SILVA">
-          </div>
-          <div class="campo full">
-            <label>Endereço</label>
-            <input type="text" id="endereco" value="RUA ROLDÃO DANTAS, Nº 34 - CENTRO">
-          </div>
-          <div class="campo">
-            <label>Telefone</label>
-            <input type="text" id="telefone" value="(84) 99688-3488">
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Dados Clínicos e Procedimento</legend>
-        <div class="grid">
-          <div class="campo">
-            <label>CID-10 Principal</label>
-            <input type="text" id="cid" value="I10" required>
-          </div>
-          <div class="campo">
-            <label>Diagnóstico Inicial</label>
-            <input type="text" id="diagnostico" value="CRISE HIPERTENSIVA" required>
-          </div>
-          <div class="campo">
-            <label>Código do Procedimento</label>
-            <input type="text" id="cod_proc" value="0303060107">
-          </div>
-          <div class="campo full">
-            <label>Descrição do Procedimento</label>
-            <input type="text" id="nome_proc" value="TRATAMENTO DE CRISE HIPERTENSIVA">
-          </div>
-          <div class="campo full">
-            <label>Sinais e Sintomas Clínicos</label>
-            <textarea id="sintomas" rows="2">Cefaleia de forte intensidade, náuseas, tontura e níveis pressóricos elevados na admissão.</textarea>
-          </div>
-          <div class="campo full">
-            <label>Condições que Justificam a Internação</label>
-            <textarea id="justificativa" rows="2">Quadro clínico agudo com necessidade de monitorização intensiva e terapêutica parenteral.</textarea>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- BOTÕES SUPERIORES DIRETOS -->
-      <div class="botoes-topo">
-        <button type="submit" class="btn btn-atualizar">Atualizar Visualização</button>
-        <button type="button" onclick="baixarWordDoc()" class="btn btn-word">Baixar DOC (Word)</button>
-        <button type="button" onclick="baixarPDFOficial()" class="btn btn-pdf">Baixar PDF Oficial</button>
-      </div>
-
-    </form>
+  <!-- BARRA DE AÇÕES -->
+  <div class="barra-topo">
+    <h1>Emissão AIH Oficial &bull; HM Severina Carlos de Andrade</h1>
+    <div class="grupo-botoes">
+      <button type="button" onclick="gerarWordBlob()" class="btn-acao btn-word">Baixar DOC (Word)</button>
+      <button type="button" onclick="window.print()" class="btn-acao btn-pdf">Baixar PDF Oficial</button>
+    </div>
   </div>
 
-  <!-- 2. DOCUMENTO OFICIAL DAS 5 PÁGINAS (ESTRUTURA ORIGINAL DO BLOB.PDF) -->
-  <div id="documentoImpressao"></div>
+  <div class="container-layout">
+
+    <!-- DOCUMENTO OFICIAL DAS 5 PÁGINAS (PREENCHIDO CÉLULA A CÉLULA) -->
+    <div id="documentoAIH">
+
+      <!-- ==================== PÁGINA 1: AUTORIZAÇÃO DE INTERNAÇÃO ==================== -->
+      <div class="cabecalho-doc">
+        <h2>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h2>
+        <h3>Hospital Maternidade Severina Carlos de Andrade</h3>
+        <p>C.N.P.J 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
+      </div>
+
+      <div class="faixa-secao">AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="width: 45%;"><span class="lb">Número da AIH:</span><span class="vl" id="vw_aih">&nbsp;</span></td>
+          <td style="width: 25%;"><span class="lb">Prontuário:</span><span class="vl" id="vw_prontuario">4726</span></td>
+          <td style="width: 30%;">
+            <span class="lb">Tipo:</span>
+            <span class="vl"><span class="caixa-box"></span> 01 – Inicial &nbsp; <span class="caixa-box">&#10003;</span> Continuidade</span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">Apresentação:</span><span class="vl">&nbsp;</span></td>
+          <td><span class="lb">Órgão Emissor:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">Data da internação:</span><span class="vl" id="vw_dt_internacao">02/09/2026</span></td>
+          <td><span class="lb">Data da Saída:</span><span class="vl" id="vw_dt_saida">11/09/2026</span></td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">DADOS DO PACIENTE</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td colspan="3"><span class="lb">Nome do Paciente:</span><span class="vl" id="vw_paciente">IVONE VICENTE BEZERRA DA SILVA</span></td>
+        </tr>
+        <tr>
+          <td style="width: 25%;"><span class="lb">Sexo:</span><span class="vl" id="vw_sexo">F</span></td>
+          <td style="width: 45%;"><span class="lb">Data de Nascimento:</span><span class="vl" id="vw_nasc">16/09/1968</span></td>
+          <td style="width: 30%;"><span class="lb">Raça/Cor:</span><span class="vl" id="vw_raca">BRANCA</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">Cartão SUS:</span><span class="vl" id="vw_cns">704 6011 0457 5029</span></td>
+          <td><span class="lb">Nacionalidade:</span><span class="vl">Brasileira</span></td>
+        </tr>
+        <tr>
+          <td colspan="3"><span class="lb">Nome da Mãe:</span><span class="vl" id="vw_mae">MARLENE LINO DA SILVA</span></td>
+        </tr>
+        <tr>
+          <td style="width: 60%;"><span class="lb">Endereço:</span><span class="vl" id="vw_endereco">SÍTIO PESQUEIRO, SN - ZONA RURAL</span></td>
+          <td style="width: 15%;"><span class="lb">Nº:</span><span class="vl">SN</span></td>
+          <td style="width: 25%;"><span class="lb">Bairro:</span><span class="vl">ZONA RURAL</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Município:</span><span class="vl">FRUTUOSO GOMES</span></td>
+          <td><span class="lb">Estado:</span><span class="vl">RN</span></td>
+          <td><span class="lb">CEP:</span><span class="vl">59890-000</span></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lb">Tipo de Documento:</span>
+            <span class="vl"><span class="caixa-box">&#10003;</span> Identidade &nbsp; <span class="caixa-box"></span> CPF &nbsp; ( ) Reg. Nasc &nbsp; ( ) Reg. Casamento</span>
+          </td>
+          <td><span class="lb">Número do Documento:</span><span class="vl">SN</span></td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">DADOS DO PROCEDIMENTO</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="width: 70%;"><span class="lb">Procedimento solicitado:</span><span class="vl" id="vw_proc_solic">0303080060</span></td>
+          <td style="width: 30%;"><span class="lb">Mudança de Procedimento (S/N):</span><span class="vl">N</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">Procedimento realizado:</span><span class="vl" id="vw_proc_realiz">0303080060</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Especialidade:</span><span class="vl">CLINICA MEDICA</span></td>
+          <td><span class="lb">Caráter de atendimento:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span class="lb">Modalidade:</span>
+            <span class="vl"><span class="caixa-box">&#10003;</span> Hospitalar &nbsp; <span class="caixa-box"></span> Hosp. Dia &nbsp; <span class="caixa-box"></span> Int. Domiciliar</span>
+          </td>
+          <td><span class="lb">Enfermaria / Leito:</span><span class="vl">M / 1</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">CID Principal:</span><span class="vl" id="vw_cid">T 81.4</span></td>
+          <td><span class="lb">CID Secundário:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Motivo da Saída/Permanência:</span><span class="vl">ALTA</span></td>
+          <td><span class="lb">Data da Autorização:</span><span class="vl">02/09/2026</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">CPF Solicitante:</span><span class="vl" id="vw_cpf_medico">099.311.824-07</span></td>
+          <td><span class="lb">CPF Autorizador:</span><span class="vl">185.901.284-15</span></td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">PROCEDIMENTOS REALIZADOS</div>
+
+      <table class="tab-oficial" style="text-align: center;">
+        <tr style="background: #f8fafc;">
+          <th style="width: 8%;">Linha</th>
+          <th style="width: 25%;">PROCEDIMENTO</th>
+          <th style="width: 8%;">Qtd.</th>
+          <th style="width: 19%;">CPF</th>
+          <th style="width: 10%;">CBO</th>
+          <th style="width: 12%;">CNES</th>
+          <th style="width: 18%;">CNPJ</th>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td id="vw_linha1_proc">0303080060</td>
+          <td>&nbsp;</td>
+          <td id="vw_linha1_cpf">099.311.824-07</td>
+          <td>&nbsp;</td>
+          <td>2380846</td>
+          <td>08.349.052/0001-80</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>2380846</td><td>08.349.052/0001-80</td>
+        </tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      </table>
+
+
+      <!-- ==================== PÁGINA 2: LAUDO SUS ==================== -->
+      <div class="quebra-folha"></div>
+
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 4px;">
+        <tr>
+          <td style="width: 130px; border: 1px solid #000; padding: 4px; vertical-align: middle;">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="border: none; width: 38px;">
+                  <svg width="34" height="34" viewBox="0 0 100 100">
+                    <path d="M35 5 H65 V35 H95 V65 H65 V95 H35 V65 H5 V35 H35 Z" fill="#000"/>
+                  </svg>
+                </td>
+                <td style="border: none; font-size: 7.5px; font-weight: bold; line-height: 1.1;">
+                  SUS<br>Sistema Único de Saúde<br>Ministério da Saúde
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td style="border: 1px solid #000; padding: 6px; text-align: center; vertical-align: middle;">
+            <h2 style="font-size: 10.5px; margin: 0; font-weight: bold; text-transform: uppercase;">
+              LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
+            </h2>
+          </td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="width: 75%;"><span class="lb">1. Nome do Estabelecimento de Saúde solicitante</span><span class="vl">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
+          <td style="width: 25%;"><span class="lb">2. CNES</span><span class="vl">2380846</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">3. Nome do Estabelecimento Executante</span><span class="vl">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
+          <td><span class="lb">4. CNES</span><span class="vl">2380846</span></td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">IDENTIFICAÇÃO DO PACIENTE</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td colspan="2" style="width: 75%;"><span class="lb">5. Nome do Paciente</span><span class="vl" id="vw_l_paciente">IVONE VICENTE BEZERRA DA SILVA</span></td>
+          <td style="width: 25%;"><span class="lb">6. Número do Prontuário</span><span class="vl" id="vw_l_prontuario">4726</span></td>
+        </tr>
+        <tr>
+          <td style="width: 45%;"><span class="lb">7. Cartão Nacional de Saúde (CNS)</span><span class="vl" id="vw_l_cns">704 6011 0457 5029</span></td>
+          <td style="width: 30%;"><span class="lb">8. Data de Nascimento</span><span class="vl" id="vw_l_nasc">16/09/1968</span></td>
+          <td style="width: 25%;"><span class="lb">9. Sexo</span><span class="vl">Masc ( ) Fem (X)</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">10. Nome da Mãe ou Responsável</span><span class="vl" id="vw_l_mae">MARLENE LINO DA SILVA</span></td>
+          <td><span class="lb">11. Telefone de Contato</span><span class="vl">84</span></td>
+        </tr>
+        <tr>
+          <td colspan="3"><span class="lb">12. Endereço (Rua, Nº, Bairro)</span><span class="vl" id="vw_l_endereco">SÍTIO PESQUEIRO, SN - ZONA RURAL</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">13. Município de residência</span><span class="vl">FRUTUOSO GOMES</span></td>
+          <td><span class="lb">15. UF</span><span class="vl">RN</span></td>
+          <td><span class="lb">16. CEP</span><span class="vl">59890-000</span></td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">JUSTIFICATIVA DA INTERNAÇÃO</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td colspan="3"><span class="lb">17. Principais Sinais e Sintomas Clínicos</span><div class="vl" style="min-height: 25px;" id="vw_sintomas">PACIENTE EM POS OPERATÓRIO DE AMPUTAÇÃO DE HÁLUX ESQUERDO COM DOR LOCAL EDEMA E FEBRE. APRESENTA SECREÇÃO PURULENTA.</div></td>
+        </tr>
+        <tr>
+          <td colspan="3"><span class="lb">18. Condições que Justificam a Internação</span><div class="vl" style="min-height: 20px;" id="vw_justificativa">RISCO DE COMPLICAÇÕES</div></td>
+        </tr>
+        <tr>
+          <td colspan="3"><span class="lb">19. Principais Resultados de Provas Diagnósticas (Exames Realizados)</span><div class="vl" style="min-height: 20px;">LEUCÓCITOSE E PCR ELEVADO</div></td>
+        </tr>
+        <tr>
+          <td style="width: 50%;"><span class="lb">20. Diagnóstico Inicial</span><span class="vl" id="vw_l_diag">INFECÇÃO DE FERIDA OPERATÓRIA</span></td>
+          <td style="width: 25%;"><span class="lb">21. CID 10 Principal</span><span class="vl" id="vw_l_cid">T 81.4</span></td>
+          <td style="width: 25%;"><span class="lb">22. CID 10 Secundário</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">24. Descrição do Procedimento Solicitado</span><span class="vl" id="vw_l_nomeproc">TTO DE ESTAFILOCOCCIAS - 0303080060</span></td>
+          <td><span class="lb">25. Código do Procedimento</span><span class="vl" id="vw_l_codproc">0303080060</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">26. Clínica</span><span class="vl">CLINICA MEDICA</span></td>
+          <td><span class="lb">27. Caráter da Internação</span><span class="vl">02</span></td>
+          <td><span class="lb">28. Documento</span><span class="vl">CNS ( ) CPF (X)</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">30. Nome do Profissional Solicitante</span><span class="vl" id="vw_medico_solic">HIAGO FRANCIMAR JÁCOME DE SOUZA</span></td>
+          <td><span class="lb">29. Nº Documento Solicitante</span><span class="vl">099.311.824-07</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">31. Data da Solicitação</span><span class="vl">02/09/2026</span></td>
+          <td><span class="lb">32. Assinatura e Carimbo</span><span class="vl">&nbsp;</span></td>
+        </tr>
+      </table>
+
+
+      <!-- ==================== PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO ==================== -->
+      <div class="quebra-folha"></div>
+
+      <div class="cabecalho-doc">
+        <h2>ESTADO DO RIO GRANDE DO NORTE</h2>
+        <h3>Secretaria Municipal de Saúde de Frutuoso Gomes</h3>
+        <h3>Hospital Maternidade Severina Carlos de Andrade</h3>
+      </div>
+
+      <div class="faixa-secao">PRONTUÁRIO DE INTERNAÇÃO</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td colspan="3"><span class="lb">Nome do Paciente:</span><span class="vl" id="vw_p_paciente">IVONE VICENTE BEZERRA DA SILVA</span></td>
+        </tr>
+        <tr>
+          <td style="width: 60%;"><span class="lb">Endereço:</span><span class="vl" id="vw_p_endereco">SÍTIO PESQUEIRO, SN - ZONA RURAL</span></td>
+          <td style="width: 30%;"><span class="lb">Município:</span><span class="vl">FRUTUOSO GOMES</span></td>
+          <td style="width: 10%;"><span class="lb">UF:</span><span class="vl">RN</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Data de Nascimento:</span><span class="vl" id="vw_p_nasc">16/09/1968</span></td>
+          <td><span class="lb">Naturalidade:</span><span class="vl">FRUTUOSO GOMES</span></td>
+          <td><span class="lb">Cor:</span><span class="vl" id="vw_p_raca">BRANCA</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Sexo:</span><span class="vl" id="vw_p_sexo">F</span></td>
+          <td><span class="lb">Profissão:</span><span class="vl">APOSENTADA</span></td>
+          <td><span class="lb">Nº Prontuário:</span><span class="vl" id="vw_p_prontuario">4726</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Nome do Pai:</span><span class="vl">JOSÉ VICENTE FILHO</span></td>
+          <td colspan="2"><span class="lb">Nome da Mãe:</span><span class="vl" id="vw_p_mae">MARLENE LINO DA SILVA</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Serviço:</span><span class="vl">CLINICA MEDICA</span></td>
+          <td><span class="lb">Enfermaria:</span><span class="vl">M</span></td>
+          <td><span class="lb">Leito:</span><span class="vl">1</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Data de Admissão:</span><span class="vl" id="vw_p_dt_admissao">02/09/2026</span></td>
+          <td><span class="lb">Alta:</span><span class="vl"><span class="caixa-box"></span> 11/09/2026</span></td>
+          <td><span class="lb">Dias Permanência:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td colspan="3"><span class="lb">Diagnóstico Inicial:</span><span class="vl" id="vw_p_diag">INFECÇÃO DE FERIDA OPERATÓRIA</span></td>
+        </tr>
+        <tr>
+          <td colspan="3"><span class="lb">Diagnóstico Final:</span><span class="vl">INFECÇÃO DE FERIDA OPERATÓRIA</span></td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="height: 130px; vertical-align: top;">
+            <span class="lb">Paciente deu entrada com quadro de:</span>
+            <p style="margin-top: 5px; font-weight: bold;" id="vw_p_sintomas">
+              PACIENTE EM POS OPERATÓRIO DE AMPUTAÇÃO DE HÁLUX ESQUERDO COM DOR LOCAL EDEMA E FEBRE. APRESENTA SECREÇÃO PURULENTA.
+            </p>
+          </td>
+        </tr>
+      </table>
+
+
+      <!-- ==================== PÁGINA 4: FICHA DE ANESTESIA COMPLETA ==================== -->
+      <div class="quebra-folha"></div>
+
+      <div class="cabecalho-doc">
+        <h2>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h2>
+        <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
+        <p>Secretaria Municipal de Saúde</p>
+      </div>
+
+      <div class="faixa-secao">FICHA DE ANESTESIA</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="width: 70%;"><span class="lb">Nome:</span><span class="vl" id="vw_a_paciente">IVONE VICENTE BEZERRA DA SILVA</span></td>
+          <td style="width: 30%;"><span class="lb">Prontuário:</span><span class="vl" id="vw_a_prontuario">4726</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">GIH:</span><span class="vl">&nbsp;</span></td>
+          <td><span class="lb">Apto:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="lb">Premedicação:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Anestesia Tipo:</span><span class="vl">LOCAL</span></td>
+          <td><span class="lb">Técnica:</span><span class="vl">LOCAL</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Operação:</span><span class="vl">&nbsp;</span></td>
+          <td><span class="lb">Operador:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+      </table>
+
+      <!-- GRADE DE HORÁRIO E DROGAS (IDÊNTICA AO BLOB.PDF) -->
+      <table class="tab-oficial" style="margin-top: 6px;">
+        <tr style="background: #f8fafc;">
+          <th style="width: 15%;">Hora</th>
+          <th style="width: 50%;">Drogas Usadas</th>
+          <th style="width: 35%;">Tempos Cirúrgicos</th>
+        </tr>
+        <tr>
+          <td style="font-size: 8.5px; text-align: center; line-height: 1.5;">
+            20 &bull; 18 &bull; 16 &bull; 14 &bull; 12<br>
+            10 &bull; 08 &bull; 06 &bull; 04 &bull; 02 &bull; 00
+          </td>
+          <td style="vertical-align: top; font-weight: bold;">
+            LIDOCAINA A 2% - 20 ML<br>
+            SF - 500 ML EV
+          </td>
+          <td style="font-size: 8.5px; vertical-align: top;">
+            <strong>Início da Anestesia:</strong> _____<br>
+            <strong>Início da Operação:</strong> _____<br>
+            <strong>Fim da Operação:</strong> _____<br>
+            <strong>Fim da Anestesia:</strong> _____<br>
+            <strong>Duração da Anestesia:</strong> _____
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lb">Classificação:</span>
+            <span class="vl">( ) 1. Geral &nbsp; (X) 2. Local &nbsp; ( ) 3. Outros</span>
+          </td>
+          <td>
+            <span class="lb">Médico Anestesista:</span>
+            <span class="vl">DR HIAGO &bull; CRM: 8.830</span>
+          </td>
+        </tr>
+      </table>
+
+
+      <!-- ==================== PÁGINA 5: BOLETIM OPERATÓRIO COMPLETO ==================== -->
+      <div class="quebra-folha"></div>
+
+      <div class="cabecalho-doc">
+        <h2>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h2>
+        <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
+        <p>Secretaria Municipal de Saúde</p>
+      </div>
+
+      <div class="faixa-secao">BOLETIM OPERATÓRIO</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="width: 70%;"><span class="lb">Nome:</span><span class="vl" id="vw_b_paciente">IVONE VICENTE BEZERRA DA SILVA</span></td>
+          <td style="width: 30%;"><span class="lb">Prontuário:</span><span class="vl" id="vw_b_prontuario">4726</span></td>
+        </tr>
+        <tr>
+          <td><span class="lb">Diagnóstico Pré-Operatório:</span><span class="vl">&nbsp;</span></td>
+          <td><span class="lb">Indicação Terapêutica:</span><span class="vl">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="border: none; width: 33%;"><span class="lb">Início:</span><span class="vl">_____</span></td>
+                <td style="border: none; width: 33%;"><span class="lb">Fim:</span><span class="vl">_____</span></td>
+                <td style="border: none; width: 33%;"><span class="lb">Duração:</span><span class="vl">_____</span></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="lb">Equipe Cirúrgica:</span>
+            <span class="vl">Operador: Dr. Lucídio &bull; 1º Aux: _____ &bull; Anestesista: Dr. Hiago</span>
+          </td>
+        </tr>
+      </table>
+
+      <div class="faixa-secao">RELATÓRIO DE INTERNAÇÃO / ATO CIRÚRGICO</div>
+
+      <table class="tab-oficial">
+        <tr>
+          <td style="height: 110px; vertical-align: top;">
+            <span class="lb">Via de acesso, Incisão, Aspecto, Técnicas e Curativos:</span>
+            <p style="margin-top: 5px; font-weight: bold;">
+              SEM INTERCORRÊNCIAS OPERATÓRIAS.
+            </p>
+          </td>
+        </tr>
+      </table>
+
+      <table class="tab-oficial" style="margin-top: 25px;">
+        <tr>
+          <td style="width: 50%; height: 45px; text-align: center; vertical-align: bottom;">
+            <div style="border-top: 1px dotted #000; font-size: 9px; width: 80%; margin: 0 auto;">
+              Data: 02/09/2026<br>Médico Operador
+            </div>
+          </td>
+          <td style="width: 50%; height: 45px; text-align: center; vertical-align: bottom;">
+            <div style="border-top: 1px dotted #000; font-size: 9px; width: 80%; margin: 0 auto;">
+              Equipe de Enfermagem
+            </div>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+
+    <!-- PAINEL LATERAL DE ENTRADA E CONTROLO DE DADOS -->
+    <div class="painel-lateral">
+      <h3>Dados para Emissão</h3>
+
+      <div class="campo-form">
+        <label>Nº Prontuário</label>
+        <input type="text" id="in_prontuario" value="4726" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Nome Completo do Paciente</label>
+        <input type="text" id="in_paciente" value="IVONE VICENTE BEZERRA DA SILVA" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Cartão SUS (CNS)</label>
+        <input type="text" id="in_cns" value="704 6011 0457 5029" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Data de Nascimento</label>
+        <input type="text" id="in_nasc" value="16/09/1968" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Sexo / Cor</label>
+        <div style="display: flex; gap: 4px;">
+          <input type="text" id="in_sexo" value="F" style="width: 40px;" oninput="sincronizarCampos()">
+          <input type="text" id="in_raca" value="BRANCA" style="flex: 1;" oninput="sincronizarCampos()">
+        </div>
+      </div>
+
+      <div class="campo-form">
+        <label>Nome da Mãe</label>
+        <input type="text" id="in_mae" value="MARLENE LINO DA SILVA" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Endereço</label>
+        <input type="text" id="in_endereco" value="SÍTIO PESQUEIRO, SN - ZONA RURAL" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Datas (Internação / Saída)</label>
+        <div style="display: flex; gap: 4px;">
+          <input type="text" id="in_dt_internacao" value="02/09/2026" oninput="sincronizarCampos()">
+          <input type="text" id="in_dt_saida" value="11/09/2026" oninput="sincronizarCampos()">
+        </div>
+      </div>
+
+      <div class="campo-form">
+        <label>CID Principal / Diagnóstico</label>
+        <input type="text" id="in_cid" value="T 81.4" oninput="sincronizarCampos()">
+        <input type="text" id="in_diag" value="INFECÇÃO DE FERIDA OPERATÓRIA" style="margin-top: 3px;" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Código / Nome Procedimento</label>
+        <input type="text" id="in_codproc" value="0303080060" oninput="sincronizarCampos()">
+        <input type="text" id="in_nomeproc" value="TTO DE ESTAFILOCOCCIAS - 0303080060" style="margin-top: 3px;" oninput="sincronizarCampos()">
+      </div>
+
+      <div class="campo-form">
+        <label>Sinais e Sintomas Clínicos</label>
+        <textarea id="in_sintomas" rows="3" oninput="sincronizarCampos()">PACIENTE EM POS OPERATÓRIO DE AMPUTAÇÃO DE HÁLUX ESQUERDO COM DOR LOCAL EDEMA E FEBRE. APRESENTA SECREÇÃO PURULENTA.</textarea>
+      </div>
+
+      <div class="campo-form">
+        <label>Condições que Justificam a Internação</label>
+        <textarea id="in_justificativa" rows="2" oninput="sincronizarCampos()">RISCO DE COMPLICAÇÕES</textarea>
+      </div>
+
+    </div>
+
+  </div>
 
   <script>
-    function formatarData(str) {
-      if (!str) return '';
-      const p = str.split('-');
-      return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : str;
+    // SINCRONIZA AUTOMATICAMENTE O QUE DIGITAR NA BARRA LATERAL COM TODAS AS FOLHAS
+    function sincronizarCampos() {
+      const p = document.getElementById('in_paciente').value;
+      const pront = document.getElementById('in_prontuario').value;
+      const cns = document.getElementById('in_cns').value;
+      const nasc = document.getElementById('in_nasc').value;
+      const sexo = document.getElementById('in_sexo').value;
+      const raca = document.getElementById('in_raca').value;
+      const mae = document.getElementById('in_mae').value;
+      const end = document.getElementById('in_endereco').value;
+      const dtInt = document.getElementById('in_dt_internacao').value;
+      const dtSai = document.getElementById('in_dt_saida').value;
+      const cid = document.getElementById('in_cid').value;
+      const diag = document.getElementById('in_diag').value;
+      const codP = document.getElementById('in_codproc').value;
+      const nomeP = document.getElementById('in_nomeproc').value;
+      const sint = document.getElementById('in_sintomas').value;
+      const just = document.getElementById('in_justificativa').value;
+
+      // Folha 1
+      document.getElementById('vw_paciente').innerText = p;
+      document.getElementById('vw_prontuario').innerText = pront;
+      document.getElementById('vw_cns').innerText = cns;
+      document.getElementById('vw_nasc').innerText = nasc;
+      document.getElementById('vw_sexo').innerText = sexo;
+      document.getElementById('vw_raca').innerText = raca;
+      document.getElementById('vw_mae').innerText = mae;
+      document.getElementById('vw_endereco').innerText = end;
+      document.getElementById('vw_dt_internacao').innerText = dtInt;
+      document.getElementById('vw_dt_saida').innerText = dtSai;
+      document.getElementById('vw_cid').innerText = cid;
+      document.getElementById('vw_proc_solic').innerText = codP;
+      document.getElementById('vw_proc_realiz').innerText = codP;
+      document.getElementById('vw_linha1_proc').innerText = codP;
+
+      // Folha 2 (Laudo)
+      document.getElementById('vw_l_paciente').innerText = p;
+      document.getElementById('vw_l_prontuario').innerText = pront;
+      document.getElementById('vw_l_cns').innerText = cns;
+      document.getElementById('vw_l_nasc').innerText = nasc;
+      document.getElementById('vw_l_mae').innerText = mae;
+      document.getElementById('vw_l_endereco').innerText = end;
+      document.getElementById('vw_sintomas').innerText = sint;
+      document.getElementById('vw_justificativa').innerText = just;
+      document.getElementById('vw_l_diag').innerText = diag;
+      document.getElementById('vw_l_cid').innerText = cid;
+      document.getElementById('vw_l_nomeproc').innerText = nomeP;
+      document.getElementById('vw_l_codproc').innerText = codP;
+
+      // Folha 3 (Prontuário)
+      document.getElementById('vw_p_paciente').innerText = p;
+      document.getElementById('vw_p_prontuario').innerText = pront;
+      document.getElementById('vw_p_endereco').innerText = end;
+      document.getElementById('vw_p_nasc').innerText = nasc;
+      document.getElementById('vw_p_raca').innerText = raca;
+      document.getElementById('vw_p_sexo').innerText = sexo;
+      document.getElementById('vw_p_mae').innerText = mae;
+      document.getElementById('vw_p_dt_admissao').innerText = dtInt;
+      document.getElementById('vw_p_diag').innerText = diag;
+      document.getElementById('vw_p_sintomas').innerText = sint;
+
+      // Folha 4 e 5 (Anestesia e Boletim)
+      document.getElementById('vw_a_paciente').innerText = p;
+      document.getElementById('vw_a_prontuario').innerText = pront;
+      document.getElementById('vw_b_paciente').innerText = p;
+      document.getElementById('vw_b_prontuario').innerText = pront;
     }
 
-    function lerDados() {
-      return {
-        prontuario: document.getElementById('prontuario').value || '',
-        numAih: document.getElementById('num_aih').value || '',
-        tipoAih: document.getElementById('tipo_aih').value || '02 – Continuidade',
-        dataInternacao: formatarData(document.getElementById('data_internacao').value),
-        dataSaida: formatarData(document.getElementById('data_saida').value),
-        paciente: document.getElementById('paciente').value || '',
-        cns: document.getElementById('cns').value || '',
-        nascimento: formatarData(document.getElementById('nascimento').value),
-        sexo: document.getElementById('sexo').value || 'F',
-        raca: document.getElementById('raca').value || 'PARDA',
-        mae: document.getElementById('mae').value || '',
-        endereco: document.getElementById('endereco').value || '',
-        telefone: document.getElementById('telefone').value || '',
-        cid: document.getElementById('cid').value || '',
-        diagnostico: document.getElementById('diagnostico').value || '',
-        codProc: document.getElementById('cod_proc').value || '',
-        nomeProc: document.getElementById('nome_proc').value || '',
-        sintomas: document.getElementById('sintomas').value || '',
-        justificativa: document.getElementById('justificativa').value || '',
-        medico: 'LUCÍDIO JÁCOME FERREIRA',
-        cpfMedico: '175.499.574-87'
-      };
-    }
+    // GERAÇÃO DO WORD COM FORMATAÇÃO DIRETA NAS CÉLULAS (SEM PALAVRAS JUNTAS)
+    function gerarWordBlob() {
+      const conteudoHTML = document.getElementById('documentoAIH').innerHTML;
+      const pront = document.getElementById('in_prontuario').value || '4726';
+      const pac = document.getElementById('in_paciente').value.replace(/\s+/g, '_') || 'PACIENTE';
+      const nomeDoc = `AIH_${pront}_${pac}.doc`;
 
-    function montarHtmlBlob(d) {
-      // Cruz oficial do SUS em vetor SVG nítido
-      const svgCruz = `
-        <svg width="32" height="32" viewBox="0 0 100 100" style="vertical-align: middle;">
-          <path d="M35 5 H65 V35 H95 V65 H65 V95 H35 V65 H5 V35 H35 Z" fill="#005ca9"/>
-        </svg>
-      `;
-
-      return `
-        <!-- PÁGINA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR -->
-        <div class="cabecalho-principal">
-          <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
-          <h4>Hospital Maternidade Severina Carlos de Andrade</h4>
-          <p>C.N.P.J 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
-        </div>
-
-        <div class="titulo-secao">AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td style="width: 45%;"><span class="rotulo">Número da AIH:</span><span class="conteudo">${d.numAih || '&nbsp;'}</span></td>
-            <td style="width: 25%;"><span class="rotulo">Prontuário:</span><span class="conteudo">${d.prontuario}</span></td>
-            <td style="width: 30%;"><span class="rotulo">Tipo:</span><span class="conteudo">${d.tipoAih}</span></td>
-          </tr>
-          <tr>
-            <td colspan="2"><span class="rotulo">Apresentação:</span><span class="conteudo">ESTADUAL</span></td>
-            <td><span class="rotulo">Órgão Emissor:</span><span class="conteudo">SESAP / RN</span></td>
-          </tr>
-          <tr>
-            <td colspan="2"><span class="rotulo">Data da Internação:</span><span class="conteudo">${d.dataInternacao}</span></td>
-            <td><span class="rotulo">Data da Saída:</span><span class="conteudo">${d.dataSaida}</span></td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">DADOS DO PACIENTE</div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td colspan="2" style="width: 70%;"><span class="rotulo">Nome do Paciente:</span><span class="conteudo">${d.paciente}</span></td>
-            <td style="width: 30%;"><span class="rotulo">Cartão SUS:</span><span class="conteudo">${d.cns}</span></td>
-          </tr>
-          <tr>
-            <td style="width: 35%;"><span class="rotulo">Data de Nascimento:</span><span class="conteudo">${d.nascimento}</span></td>
-            <td style="width: 25%;"><span class="rotulo">Sexo:</span><span class="conteudo">${d.sexo}</span></td>
-            <td style="width: 40%;"><span class="rotulo">Raça/Cor:</span><span class="conteudo">${d.raca}</span></td>
-          </tr>
-          <tr>
-            <td colspan="2"><span class="rotulo">Nome da Mãe:</span><span class="conteudo">${d.mae}</span></td>
-            <td><span class="rotulo">Telefone:</span><span class="conteudo">${d.telefone}</span></td>
-          </tr>
-          <tr>
-            <td colspan="3"><span class="rotulo">Endereço:</span><span class="conteudo">${d.endereco} - FRUTUOSO GOMES/RN</span></td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">DADOS DO PROCEDIMENTO</div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td style="width: 70%;"><span class="rotulo">Procedimento Solicitado / Realizado:</span><span class="conteudo">${d.nomeProc}</span></td>
-            <td style="width: 30%;"><span class="rotulo">Código:</span><span class="conteudo">${d.codProc}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">Especialidade:</span><span class="conteudo">CLÍNICA MÉDICA</span></td>
-            <td><span class="rotulo">Enfermaria / Leito:</span><span class="conteudo">M / 01</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">Diagnóstico Inicial:</span><span class="conteudo">${d.diagnostico}</span></td>
-            <td><span class="rotulo">CID Principal:</span><span class="conteudo">${d.cid}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">CPF Solicitante:</span><span class="conteudo">${d.cpfMedico}</span></td>
-            <td><span class="rotulo">CPF Autorizador:</span><span class="conteudo">185.901.284-15</span></td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">PROCEDIMENTOS REALIZADOS</div>
-        <table class="tab-oficial" style="text-align: center;">
-          <tr style="background: #f8fafc;">
-            <th style="width: 10%;">Linha</th>
-            <th style="width: 25%;">Procedimento</th>
-            <th style="width: 10%;">Qtd.</th>
-            <th style="width: 20%;">CPF</th>
-            <th style="width: 15%;">CBO</th>
-            <th style="width: 10%;">CNES</th>
-            <th style="width: 10%;">CNPJ</th>
-          </tr>
-          <tr>
-            <td>01</td><td>${d.codProc}</td><td>01</td><td>${d.cpfMedico}</td><td>225125</td><td>2380846</td><td>08.349.052</td>
-          </tr>
-        </table>
-
-        <!-- PÁGINA 2: LAUDO SUS COM LOGO -->
-        <div class="quebra-pagina"></div>
-
-        <table style="width: 100%; margin-bottom: 8px;">
-          <tr>
-            <td style="width: 45px; vertical-align: middle;">${svgCruz}</td>
-            <td style="vertical-align: middle; padding-left: 8px;">
-              <span style="font-size: 13px; font-weight: bold; color: #005ca9;">SUS</span> &bull; 
-              <span style="font-size: 9.5px; font-weight: bold; text-transform: uppercase;">Sistema Único de Saúde / Ministério da Saúde</span>
-            </td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td style="width: 75%;"><span class="rotulo">1. Nome do Estabelecimento Solicitante / Executante:</span><span class="conteudo">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
-            <td style="width: 25%;"><span class="rotulo">2. CNES:</span><span class="conteudo">2380846</span></td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">JUSTIFICATIVA DA INTERNAÇÃO</div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td colspan="2"><span class="rotulo">17. Principais Sinais e Sintomas Clínicos:</span><div class="conteudo" style="min-height: 25px;">${d.sintomas}</div></td>
-          </tr>
-          <tr>
-            <td colspan="2"><span class="rotulo">18. Condições que Justificam a Internação:</span><div class="conteudo" style="min-height: 25px;">${d.justificativa}</div></td>
-          </tr>
-          <tr>
-            <td style="width: 70%;"><span class="rotulo">20. Diagnóstico Inicial:</span><span class="conteudo">${d.diagnostico}</span></td>
-            <td style="width: 30%;"><span class="rotulo">21. CID 10 Principal:</span><span class="conteudo">${d.cid}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">24. Descrição do Procedimento Solicitado:</span><span class="conteudo">${d.nomeProc}</span></td>
-            <td><span class="rotulo">25. Código:</span><span class="conteudo">${d.codProc}</span></td>
-          </tr>
-        </table>
-
-        <table class="tab-oficial" style="margin-top: 10px;">
-          <tr>
-            <td style="width: 50%; height: 50px; vertical-align: bottom; text-align: center;">
-              <div style="border-top: 1px dotted #000; font-size: 9px;">
-                ${d.medico}<br>CPF: ${d.cpfMedico} &bull; Médico Solicitante
-              </div>
-            </td>
-            <td style="width: 50%; height: 50px; vertical-align: bottom; text-align: center;">
-              <div style="border-top: 1px dotted #000; font-size: 9px;">
-                Profissional Autorizador<br>Data: ${d.dataInternacao}
-              </div>
-            </td>
-          </tr>
-        </table>
-
-        <!-- PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO -->
-        <div class="quebra-pagina"></div>
-
-        <div class="cabecalho-principal">
-          <h3>ESTADO DO RIO GRANDE DO NORTE &bull; SMS DE FRUTUOSO GOMES</h3>
-          <h4>Hospital Maternidade Severina Carlos de Andrade</h4>
-          <h2 style="font-size: 12px; margin: 4px 0; text-decoration: underline;">PRONTUÁRIO DE INTERNAÇÃO</h2>
-        </div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td colspan="2"><span class="rotulo">Nome do Paciente:</span><span class="conteudo">${d.paciente}</span></td>
-            <td><span class="rotulo">Nº do Prontuário:</span><span class="conteudo">${d.prontuario}</span></td>
-          </tr>
-          <tr>
-            <td colspan="2"><span class="rotulo">Endereço:</span><span class="conteudo">${d.endereco}</span></td>
-            <td><span class="rotulo">Data Admissão:</span><span class="conteudo">${d.dataInternacao}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">Diagnóstico Inicial:</span><span class="conteudo">${d.diagnostico}</span></td>
-            <td><span class="rotulo">Diagnóstico Final:</span><span class="conteudo">${d.diagnostico}</span></td>
-            <td><span class="rotulo">Alta:</span><span class="conteudo">${d.dataSaida}</span></td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
-        <table class="tab-oficial">
-          <tr>
-            <td style="height: 100px; vertical-align: top;">
-              <span class="rotulo">Histórico Clínico:</span>
-              <p style="margin-top: 3px;">Paciente deu entrada com quadro de <strong>${d.sintomas}</strong>.</p>
-              <p style="margin-top: 6px;">Instituída terapêutica medicamentosa e acompanhamento clínico contínuo conforme protocolo assistencial.</p>
-            </td>
-          </tr>
-        </table>
-
-        <!-- PÁGINA 4: FICHA DE ANESTESIA -->
-        <div class="quebra-pagina"></div>
-
-        <div class="cabecalho-principal">
-          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
-          <h2 style="font-size: 12px; margin: 2px 0;">FICHA DE ANESTESIA</h2>
-        </div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td style="width: 70%;"><span class="rotulo">Nome:</span><span class="conteudo">${d.paciente}</span></td>
-            <td style="width: 30%;"><span class="rotulo">Prontuário:</span><span class="conteudo">${d.prontuario}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">Anestesia Tipo:</span><span class="conteudo">LOCAL</span></td>
-            <td><span class="rotulo">Técnica:</span><span class="conteudo">INFILTRAÇÃO LOCAL</span></td>
-          </tr>
-          <tr>
-            <td colspan="2"><span class="rotulo">Drogas Usadas:</span><span class="conteudo">LIDOCAÍNA A 2% - 20 ML / SF 0,9% 500 ML EV</span></td>
-          </tr>
-        </table>
-
-        <table class="tab-oficial" style="margin-top: 20px;">
-          <tr>
-            <td style="height: 45px; vertical-align: bottom; text-align: center;">
-              <div style="border-top: 1px dotted #000; font-size: 9px; width: 60%; margin: 0 auto;">
-                Médico Anestesista / Cirurgião
-              </div>
-            </td>
-          </tr>
-        </table>
-
-        <!-- PÁGINA 5: BOLETIM OPERATÓRIO -->
-        <div class="quebra-pagina"></div>
-
-        <div class="cabecalho-principal">
-          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
-          <h2 style="font-size: 12px; margin: 2px 0;">BOLETIM OPERATÓRIO</h2>
-        </div>
-
-        <table class="tab-oficial">
-          <tr>
-            <td style="width: 70%;"><span class="rotulo">Nome:</span><span class="conteudo">${d.paciente}</span></td>
-            <td style="width: 30%;"><span class="rotulo">Prontuário:</span><span class="conteudo">${d.prontuario}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">Procedimento Realizado:</span><span class="conteudo">${d.nomeProc}</span></td>
-            <td><span class="rotulo">Código SSM:</span><span class="conteudo">${d.codProc}</span></td>
-          </tr>
-          <tr>
-            <td><span class="rotulo">Cirurgião Operador:</span><span class="conteudo">${d.medico}</span></td>
-            <td><span class="rotulo">Data:</span><span class="conteudo">${d.dataInternacao}</span></td>
-          </tr>
-        </table>
-
-        <div class="titulo-secao">RELATÓRIO DO PROCEDIMENTO</div>
-        <table class="tab-oficial">
-          <tr>
-            <td style="height: 100px; vertical-align: top;">
-              <span class="rotulo">Descrição Cirúrgica / Técnica:</span>
-              <p style="margin-top: 4px;">Procedimento realizado sob técnica asséptica habitual. Sem intercorrências operatórias ou imediatas pós-procedimento.</p>
-            </td>
-          </tr>
-        </table>
-
-        <table class="tab-oficial" style="margin-top: 20px;">
-          <tr>
-            <td style="height: 45px; vertical-align: bottom; text-align: center;">
-              <div style="border-top: 1px dotted #000; font-size: 9px; width: 60%; margin: 0 auto;">
-                ${d.medico}<br>Médico Operador
-              </div>
-            </td>
-          </tr>
-        </table>
-      `;
-    }
-
-    function renderizarDocumento() {
-      const dados = lerDados();
-      document.getElementById('documentoImpressao').innerHTML = montarHtmlBlob(dados);
-    }
-
-    // PDF Oficial: abre a janela nativa do Chrome configurada para A4 sem falhas de tela em branco
-    function baixarPDFOficial() {
-      renderizarDocumento();
-      window.print();
-    }
-
-    // Word Oficial: ficheiro .doc formatado com tabela fixa (sem juntar as palavras nem sobrepor campos)
-    function baixarWordDoc() {
-      renderizarDocumento();
-      const d = lerDados();
-      const corpoHTML = document.getElementById('documentoImpressao').innerHTML;
-      const nomeFicheiro = `AIH_${d.prontuario}_${d.paciente.replace(/\s+/g, '_')}.doc`;
-
-      const estruturaWord = `
+      const templateWord = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
               xmlns='http://www.w3.org/TR/REC-html40'>
@@ -666,80 +823,76 @@
           <![endif]-->
           <style>
             @page {
-              size: A4 portrait;
+              size: 21cm 29.7cm;
               margin: 1.2cm 1.2cm 1.2cm 1.2cm;
               mso-page-orientation: portrait;
             }
             body {
               font-family: Arial, sans-serif;
-              font-size: 10pt;
-              line-height: 1.25;
+              font-size: 9.5pt;
               color: #000000;
+              line-height: 1.2;
             }
-            p {
-              margin: 0 0 3pt 0;
-            }
+            p { margin: 0 0 3pt 0; }
             table {
               width: 100%;
               border-collapse: collapse;
-              margin-bottom: 6pt;
+              margin-bottom: 5pt;
               mso-table-lspace: 0pt;
               mso-table-rspace: 0pt;
             }
             td, th {
               border: 1pt solid #000000;
-              padding: 3.5pt 5pt;
+              padding: 3pt 4.5pt;
               vertical-align: top;
             }
-            .rotulo {
-              font-size: 7.5pt;
+            .lb {
+              font-size: 7pt;
               font-weight: bold;
               text-transform: uppercase;
-              color: #333333;
+              color: #000000;
               display: block;
               margin-bottom: 1pt;
             }
-            .conteudo {
-              font-size: 9.5pt;
+            .vl {
+              font-size: 9pt;
               font-weight: bold;
               color: #000000;
             }
-            .titulo-secao {
+            .faixa-secao {
               font-weight: bold;
               text-align: center;
               border-top: 1pt solid #000;
               border-bottom: 1pt solid #000;
-              padding: 2.5pt 0;
-              margin: 6pt 0;
-              font-size: 10pt;
+              padding: 2pt 0;
+              margin: 5pt 0;
+              font-size: 9.5pt;
               text-transform: uppercase;
-              background-color: #ffffff;
             }
-            .quebra-pagina {
+            .quebra-folha {
               page-break-before: always;
               mso-break-type: page-break;
             }
           </style>
         </head>
         <body>
-          ${corpoHTML}
+          ${conteudoHTML}
         </body>
         </html>
       `;
 
-      const blob = new Blob(['\ufeff' + estruturaWord], { type: 'application/msword;charset=utf-8' });
+      const blob = new Blob(['\ufeff' + templateWord], { type: 'application/msword;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = nomeFicheiro;
+      link.download = nomeDoc;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(link.href);
     }
 
-    // Inicializa a visualização na carga da página
     window.onload = function() {
-      renderizarDocumento();
+      sincronizarCampos();
     };
   </script>
 </body>
