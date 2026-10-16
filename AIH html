@@ -3,399 +3,921 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SISTEMA HM - 3 Guias AIH</title>
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <title>Emissão AIH Oficial</title>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
   <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #f1f5f9; margin: 0; padding: 12px; color: #1e293b; }
-    .container { max-width: 950px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-    h2 { margin-top: 0; color: #0369a1; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 19px; }
-    fieldset { border: 1px solid #cbd5e1; border-radius: 8px; padding: 14px; margin-bottom: 14px; background: #fafafa; }
-    legend { font-weight: 700; color: #0284c7; padding: 0 8px; font-size: 13.5px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; }
-    .form-group { margin-bottom: 8px; }
-    label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #475569; }
-    input, select, textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; background: #fff; }
-    input:focus, select:focus, textarea:focus { outline: none; border-color: #0284c7; }
-    .btn-template { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 6px 10px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: 600; margin: 2px; }
-    .btn-submit { background: #0284c7; color: #fff; border: none; padding: 14px 20px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 10px; }
-    .btn-submit:hover { background: #0369a1; }
-    #msgStatus { margin-top: 12px; font-weight: bold; text-align: center; font-size: 14px; }
+    :root {
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --success: #16a34a;
+      --success-hover: #15803d;
+      --word: #1d4ed8;
+      --word-hover: #1e40af;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #1e293b;
+      --text-muted: #64748b;
+    }
 
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; padding: 10px; }
-    .modal-content { background: #fff; width: 100%; max-width: 950px; height: 94vh; border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; }
-    .modal-header { background: #0284c7; color: #fff; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
-    .modal-header h3 { margin: 0; font-size: 16px; }
-    .modal-body { flex: 1; background: #525659; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.5; }
+    .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 24px; }
+    
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; }
+    h1 { font-size: 1.5rem; color: #0f172a; }
+    
+    /* Barra de Navegação */
+    .nav-bar { display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+    .nav-group { display: flex; align-items: center; gap: 8px; }
+    .btn-nav { background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem; }
+    .btn-nav:hover:not(:disabled) { background: var(--primary-hover); }
+    .btn-nav:disabled { background: #94a3b8; cursor: not-allowed; }
+    .btn-ultimo { background: var(--success); }
+    .btn-ultimo:hover { background: var(--success-hover); }
+    .lbl-registro { font-weight: 600; color: #0369a1; min-width: 80px; text-align: center; }
+    
+    .busca-box { display: flex; gap: 6px; }
+    .busca-box input { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; min-width: 200px; }
+    
+    /* Formulário */
+    fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fff; }
+    legend { font-weight: 600; color: var(--primary); padding: 0 8px; font-size: 1.05rem; }
+    .grid { display: grid; gap: 12px; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
+    input, select, textarea { border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 0.9rem; color: #0f172a; width: 100%; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px #bae6fd; }
+    textarea { resize: vertical; }
+
+    /* Barra de Ações */
+    .actions-bar { display: flex; gap: 12px; margin-top: 24px; align-items: center; flex-wrap: wrap; }
+    .btn-action { padding: 12px 18px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; color: white; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; }
+    .btn-save { background: var(--primary); }
+    .btn-save:hover { background: var(--primary-hover); }
+    .btn-print { background: var(--success); }
+    .btn-print:hover { background: var(--success-hover); }
+    .btn-word { background: var(--word); }
+    .btn-word:hover { background: var(--word-hover); }
+    
+    #msgStatus { font-size: 0.9rem; font-weight: 600; }
+
+    /* Modal */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 9999; justify-content: center; align-items: center; }
+    .modal-content { background: white; width: 90%; height: 90%; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid var(--border); }
+    .modal-body { flex: 1; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
-    .modal-footer { padding: 10px 16px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end; gap: 8px; }
-    .btn-modal { padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; border: none; }
-    .btn-close { background: #e2e8f0; color: #334155; }
-    .btn-print { background: #16a34a; color: #fff; }
-    .btn-download { background: #0284c7; color: #fff; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>Emissão de AIH Hospitalar - 3 Guias Alinhadas</h2>
+  <header>
+    <h1>Emissão AIH Oficial</h1>
+    <button type="button" class="btn-nav" onclick="location.reload()">↻ Recarregar</button>
+  </header>
+
+  <!-- Barra de Navegação -->
+  <div class="nav-bar">
+    <div class="nav-group">
+      <button type="button" id="btnAnt" class="btn-nav" onclick="navegarRegistro(-1)">◀</button>
+      <span id="lblRegistro" class="lbl-registro">1 / 1</span>
+      <button type="button" id="btnProx" class="btn-nav" onclick="navegarRegistro(1)">▶</button>
+      <button type="button" class="btn-nav btn-ultimo" onclick="carregarUltimoRegistro()">Último</button>
+    </div>
+    <div class="busca-box">
+      <input type="text" id="campoBusca" placeholder="Buscar por Nome ou Prontuário...">
+      <button type="button" class="btn-nav" onclick="buscarPorTermo()">Buscar</button>
+    </div>
+  </div>
 
   <form id="formAih">
+    <!-- Identificação do Paciente -->
     <fieldset>
-      <legend>Identificação do Paciente e Internação</legend>
-      <div class="grid-3">
+      <legend>Identificação do Paciente</legend>
+      <div class="grid grid-3">
         <div class="form-group">
-          <label>Nº Prontuário:</label>
-          <input type="text" id="prontuario" value="444" required>
+          <label for="prontuario">Nº Prontuário:</label>
+          <input type="text" id="prontuario" required>
         </div>
         <div class="form-group">
-          <label>Nome Completo:</label>
-          <input type="text" id="nomePaciente" value="MARIA DE LOURDES" required>
+          <label for="nomePaciente">Nome Completo:</label>
+          <input type="text" id="nomePaciente" required>
         </div>
         <div class="form-group">
-          <label>Cartão SUS (CNS):</label>
-          <input type="text" id="cns" value="704006647751551">
+          <label for="cns">Cartão SUS (CNS):</label>
+          <input type="text" id="cns">
         </div>
       </div>
-      <div class="grid-4">
+
+      <div class="grid grid-4" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Data de Nascimento:</label>
-          <input type="text" id="dataNasc" value="10/12/1960">
+          <label for="dataNasc">Data de Nascimento:</label>
+          <input type="text" id="dataNasc" placeholder="DD/MM/AAAA">
         </div>
         <div class="form-group">
-          <label>Sexo:</label>
+          <label for="sexo">Sexo:</label>
           <select id="sexo">
+            <option value="F">Feminino</option>
             <option value="M">Masculino</option>
-            <option value="F" selected>Feminino</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Raça / Cor:</label>
+          <label for="racaCor">Raça / Cor:</label>
           <input type="text" id="racaCor" value="PARDA">
         </div>
         <div class="form-group">
-          <label>Telefone:</label>
+          <label for="telefone">Telefone:</label>
           <input type="text" id="telefone" value="84 99980 5728">
         </div>
       </div>
-      <div class="grid-3">
+
+      <div class="grid grid-3" style="margin-top: 10px;">
         <div class="form-group">
-          <label>Nome da Mãe:</label>
-          <input type="text" id="nomeMae" value="OLIVIA BATISTA">
+          <label for="nomeMae">Nome da Mãe:</label>
+          <input type="text" id="nomeMae">
         </div>
         <div class="form-group">
-          <label>Endereço Completo:</label>
-          <input type="text" id="endereco" value="ST ARROJADO, SN - ZONA RURAL">
+          <label for="nomePai">Nome do Pai:</label>
+          <input type="text" id="nomePai">
         </div>
         <div class="form-group">
-          <label>Município:</label>
-          <input type="text" id="municipio" value="FRUTUOSO GOMES - RN">
-        </div>
-      </div>
-      <div class="grid-4">
-        <div class="form-group">
-          <label>Data Internação:</label>
-          <input type="text" id="dataInternacao" value="19/03/23">
-        </div>
-        <div class="form-group">
-          <label>Data Saída (Alta):</label>
-          <input type="text" id="dataSaida" value="02/04/23">
-        </div>
-        <div class="form-group">
-          <label>Diagnóstico Inicial:</label>
-          <input type="text" id="diagInicial" value="ERISIPELA">
-        </div>
-        <div class="form-group">
-          <label>CID-10 Principal:</label>
-          <input type="text" id="cidPrincipal" value="A46">
+          <label for="profissao">Profissão:</label>
+          <input type="text" id="profissao" value="AGRICULTORA">
         </div>
       </div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Procedimento Solicitado / Descrição:</label>
-          <input type="text" id="procedimento" value="TRATAMENTO DE OUTRAS DOENCAS INFECCIOSAS E PARASITARIAS">
+
+      <div class="grid grid-4" style="margin-top: 10px;">
+        <div class="form-group" style="grid-column: span 2;">
+          <label for="endereco">Endereço Completo:</label>
+          <input type="text" id="endereco" value="SITIO MUMBAÇA, SN - ZONA RURAL">
         </div>
         <div class="form-group">
-          <label>Código Procedimento (SIGTAP):</label>
-          <input type="text" id="codProcedimento" value="03.03.01.019-3">
+          <label for="numEndereco">Nº:</label>
+          <input type="text" id="numEndereco" value="SN">
+        </div>
+        <div class="form-group">
+          <label for="bairro">Bairro:</label>
+          <input type="text" id="bairro" value="ZONA RURAL">
+        </div>
+      </div>
+
+      <div class="grid grid-4" style="margin-top: 10px;">
+        <div class="form-group">
+          <label for="municipio">Município:</label>
+          <input type="text" id="municipio" value="FRUTUOSO GOMES">
+        </div>
+        <div class="form-group">
+          <label for="estado">Estado / UF:</label>
+          <input type="text" id="estado" value="RN">
+        </div>
+        <div class="form-group">
+          <label for="cep">CEP:</label>
+          <input type="text" id="cep" value="59890-000">
+        </div>
+        <div class="form-group">
+          <label for="rg">RG / Documento:</label>
+          <input type="text" id="rg">
         </div>
       </div>
     </fieldset>
 
+    <!-- Dados Clínicos e Procedimento -->
     <fieldset>
-      <legend>Dados Clínicos / Justificativa da Internação</legend>
-      <div class="form-group">
-        <button type="button" class="btn-template" onclick="preencherTemplate('erisipela')">Template Erisipela</button>
-        <button type="button" class="btn-template" onclick="preencherTemplate('pneumonia')">Template Pneumonia</button>
-        <button type="button" class="btn-template" onclick="preencherTemplate('itu')">Template ITU</button>
+      <legend>Dados Clínicos e Internação</legend>
+      <div class="grid grid-3">
+        <div class="form-group">
+          <label for="dataInternacao">Data Internação:</label>
+          <input type="text" id="dataInternacao" placeholder="DD/MM/AAAA">
+        </div>
+        <div class="form-group">
+          <label for="dataSaida">Data Saída (Alta):</label>
+          <input type="text" id="dataSaida" placeholder="DD/MM/AAAA">
+        </div>
+        <div class="form-group">
+          <label for="dataSolicitacao">Data Solicitação:</label>
+          <input type="text" id="dataSolicitacao" placeholder="DD/MM/AAAA">
+        </div>
       </div>
-      <div class="form-group">
-        <label>Sinais e Sintomas Clínicos:</label>
-        <textarea id="sinaisSintomas" rows="2">PACIENTE COM QUADRO DE HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.</textarea>
+
+      <div class="grid grid-3" style="margin-top: 10px;">
+        <div class="form-group">
+          <label for="diagInicial">Diagnóstico Inicial:</label>
+          <input type="text" id="diagInicial">
+        </div>
+        <div class="form-group">
+          <label for="cidPrincipal">CID-10 Principal:</label>
+          <input type="text" id="cidPrincipal">
+        </div>
+        <div class="form-group">
+          <label for="especialidade">Especialidade / Clínica:</label>
+          <select id="especialidade">
+            <option value="CLINICA CIRURGICA">CLINICA CIRURGICA</option>
+            <option value="CLINICA MEDICA">CLINICA MEDICA</option>
+            <option value="OBSTETRICIA">OBSTETRICIA</option>
+            <option value="PEDIATRIA">PEDIATRIA</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Condições que Justificam a Internação:</label>
-        <textarea id="justificativa" rows="2">NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.</textarea>
+
+      <div class="grid grid-2" style="margin-top: 10px;">
+        <div class="form-group">
+          <label for="procedimento">Descrição do Procedimento:</label>
+          <input type="text" id="procedimento">
+        </div>
+        <div class="form-group">
+          <label for="codProcedimento">Código SIGTAP:</label>
+          <input type="text" id="codProcedimento">
+        </div>
       </div>
-      <div class="form-group">
-        <label>Principais Resultados de Exames:</label>
-        <textarea id="exames" rows="2">LEUCOGRAMA COM LEUCOCITOSE E DESVIO À ESQUERDA; PCR ELEVADO.</textarea>
+
+      <div class="grid grid-2" style="margin-top: 10px;">
+        <div class="form-group">
+          <label for="medicoSolicitante">Nome do Solicitante:</label>
+          <input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA">
+        </div>
+        <div class="form-group">
+          <label for="cpfSolicitante">CPF do Solicitante:</label>
+          <input type="text" id="cpfSolicitante" value="175.499.574-87">
+        </div>
       </div>
     </fieldset>
 
+    <!-- Laudos -->
     <fieldset>
-      <legend>Identificação do Estabelecimento e Profissional Solicitante</legend>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Estabelecimento:</label>
-          <input type="text" id="nomeHospital" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE" readonly>
-        </div>
-        <div class="form-group">
-          <label>Código CNES:</label>
-          <input type="text" id="cnesHospital" value="2408371">
-        </div>
+      <legend>Laudo e Justificativa de Internação</legend>
+      <div class="form-group">
+        <label for="sinaisSintomas">17. Principais Sinais e Sintomas Clínicos:</label>
+        <textarea id="sinaisSintomas" rows="2"></textarea>
       </div>
-      <div class="grid-3">
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="justificativa">18. Condições que Justificam a Internação:</label>
+        <textarea id="justificativa" rows="2"></textarea>
+      </div>
+      <div class="form-group" style="margin-top: 10px;">
+        <label for="exames">19. Principais Resultados de Provas Diagnósticas (Exames):</label>
+        <textarea id="exames" rows="2"></textarea>
+      </div>
+    </fieldset>
+
+    <!-- Bloco Operatório -->
+    <fieldset>
+      <legend>Anestesia e Relatório de Internação</legend>
+      <div class="grid grid-2">
         <div class="form-group">
-          <label>Médico Solicitante:</label>
-          <input type="text" id="medicoSolicitante" value="LUCIDIO JACOME FERREIRA FILHO">
+          <label for="txtAnestesia">Drogas Usadas / Prescrição Anestésica (Folha 4):</label>
+          <textarea id="txtAnestesia" rows="2">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
         </div>
         <div class="form-group">
-          <label>CRM:</label>
-          <input type="text" id="crmSolicitante" value="1675-RN">
-        </div>
-        <div class="form-group">
-          <label>Data Solicitação:</label>
-          <input type="text" id="dataSolicitacao" value="19/03/23">
+          <label for="txtCirurgia">Descrição do Boletim / Relatório (Folha 5):</label>
+          <textarea id="txtCirurgia" rows="2">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
         </div>
       </div>
     </fieldset>
 
-    <button type="submit" class="btn-submit">Gerar as 3 Guias da AIH</button>
-    <div id="msgStatus"></div>
+    <!-- Barra de Ações com Três Funções -->
+    <div class="actions-bar">
+      <!-- 1. Grava novo no Sheets + Gera PDF -->
+      <button type="submit" id="btnSalvarEGerar" class="btn-action btn-save">
+        💾 Salvar na Planilha e Gerar AIH
+      </button>
+
+      <!-- 2. Apenas Gera PDF / Imprime (Fila sem duplicar) -->
+      <button type="button" id="btnApenasGerarPdf" class="btn-action btn-print">
+        🖨️ Apenas Gerar PDF / Imprimir (Sem Salvar)
+      </button>
+
+      <!-- 3. Exporta em Word (.doc) -->
+      <button type="button" id="btnGerarWord" class="btn-action btn-word">
+        📄 Baixar em Word (.doc)
+      </button>
+
+      <span id="msgStatus"></span>
+    </div>
   </form>
 </div>
 
-<div id="modalVisualizacao" class="modal-overlay">
+<!-- Modal de Impressão -->
+<div id="modalVisualizacao" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Visualização da AIH (3 Guias Oficiais)</h3>
-      <button class="btn-modal btn-close" onclick="fecharModal()">✕</button>
+      <h3 style="color: #0f172a;">Visualização da AIH Gerada</h3>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-nav btn-ultimo" onclick="imprimirPdf()">Imprimir</button>
+        <button type="button" class="btn-nav" id="btnDownload">Baixar PDF</button>
+        <button type="button" class="btn-nav" style="background:#ef4444;" onclick="fecharModal()">Fechar</button>
+      </div>
     </div>
     <div class="modal-body">
       <iframe id="pdfFrame"></iframe>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-modal btn-close" onclick="fecharModal()">Fechar</button>
-      <button class="btn-modal btn-print" onclick="imprimirPdf()">Imprimir</button>
-      <button class="btn-modal btn-download" id="btnDownload">Baixar PDF</button>
     </div>
   </div>
 </div>
 
 <script>
-  const URL_PDF_BASE = 'AIH%20COMPLETA.pdf';
+  const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
+  const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
+  let indiceAtual = 1;
+  let totalRegistros = 1;
 
-  function preencherTemplate(tipo) {
-    if (tipo === 'erisipela') {
-      document.getElementById('diagInicial').value = 'ERISIPELA';
-      document.getElementById('cidPrincipal').value = 'A46';
-      document.getElementById('procedimento').value = 'TRATAMENTO DE OUTRAS DOENCAS INFECCIOSAS E PARASITARIAS';
-      document.getElementById('codProcedimento').value = '03.03.01.019-3';
-      document.getElementById('sinaisSintomas').value = 'PACIENTE COM QUADRO DE HIPEREMIA, EDEMA INTENSO, CALOR LOCAL EM MEMBRO INFERIOR, DOR E FEBRE.';
-      document.getElementById('justificativa').value = 'NECESSIDADE DE ANTIBIOTICOTERAPIA PARENTERAL, VIGILÂNCIA CLÍNICA E REPOUSO EM ELEVAÇÃO.';
-      document.getElementById('exames').value = 'LEUCOGRAMA COM LEUCOCITOSE E DESVIO À ESQUERDA; PCR ELEVADO.';
-    } else if (tipo === 'pneumonia') {
-      document.getElementById('diagInicial').value = 'PNEUMONIA BACTERIANA';
-      document.getElementById('cidPrincipal').value = 'J18.9';
-      document.getElementById('procedimento').value = 'TRATAMENTO DE PNEUMONIAS OU INFLUENZA (GRIPE)';
-      document.getElementById('codProcedimento').value = '03.03.01.018-5';
-      document.getElementById('sinaisSintomas').value = 'TOSSE PRODUTIVA, FEBRE AFERIDA, DISPNEIA E CREPITANTES EM BASES PULMONARES.';
-      document.getElementById('justificativa').value = 'INDICAÇÃO DE ANTIBIOTICOTERAPIA PARENTERAL E SUPORTE DE OXIGENOTERAPIA.';
-      document.getElementById('exames').value = 'RX DE TÓRAX COM CONDENSAÇÃO PULMONAR; LEUCOCITOSE.';
-    } else if (tipo === 'itu') {
-      document.getElementById('diagInicial').value = 'INFECÇÃO DO TRATO URINÁRIO';
-      document.getElementById('cidPrincipal').value = 'N39.0';
-      document.getElementById('procedimento').value = 'TRATAMENTO DE OUTRAS DOENÇAS DO SISTEMA URINÁRIO';
-      document.getElementById('codProcedimento').value = '03.03.01.017-7';
-      document.getElementById('sinaisSintomas').value = 'DISÚRIA, POLACIÚRIA, DOR EM BAIXO VENTRE, URINA TURVA E FEBRE.';
-      document.getElementById('justificativa').value = 'SINTOMATOLOGIA REFRATÁRIA, HIDRATAÇÃO VENOSA E ANTIBIOTICOTERAPIA.';
-      document.getElementById('exames').value = 'EAS COM PIÚRIA MACIÇA E BACTERIÚRIA.';
+  window.addEventListener('DOMContentLoaded', () => {
+    carregarUltimoRegistro();
+  });
+
+  /* =========================================================================
+     NAVEGAÇÃO E CONSULTA
+  ========================================================================= */
+  async function carregarRegistroPorIndice(idx) {
+    const msg = document.getElementById('msgStatus');
+    msg.style.color = '#0284c7';
+    msg.innerText = 'Carregando registro da planilha...';
+
+    try {
+      const res = await fetch(`${URL_APPS_SCRIPT}?index=${idx}`);
+      const data = await res.json();
+
+      if (data && data.sucesso && data.paciente) {
+        indiceAtual = data.indiceAtual;
+        totalRegistros = data.total;
+        atualizarControlesNav(data.paciente);
+        msg.style.color = '#16a34a';
+        msg.innerText = `Registro ${indiceAtual} de ${totalRegistros} carregado.`;
+      } else {
+        msg.style.color = '#dc2626';
+        msg.innerText = 'Nenhum registro encontrado.';
+      }
+    } catch (e) {
+      msg.style.color = '#dc2626';
+      msg.innerText = 'Erro ao consultar: ' + e.message;
     }
   }
 
+  function navegarRegistro(delta) {
+    const novoIdx = indiceAtual + delta;
+    if (novoIdx >= 1 && novoIdx <= totalRegistros) {
+      carregarRegistroPorIndice(novoIdx);
+    }
+  }
+
+  function carregarUltimoRegistro() {
+    carregarRegistroPorIndice(999999);
+  }
+
+  async function buscarPorTermo() {
+    const termo = document.getElementById('campoBusca').value.trim();
+    if (!termo) {
+      alert('Digite o nome ou prontuário para buscar.');
+      return;
+    }
+
+    const msg = document.getElementById('msgStatus');
+    msg.style.color = '#0284c7';
+    msg.innerText = 'Buscando...';
+
+    try {
+      const res = await fetch(`${URL_APPS_SCRIPT}?busca=${encodeURIComponent(termo)}`);
+      const data = await res.json();
+
+      if (data && data.sucesso && data.paciente) {
+        indiceAtual = data.indiceAtual;
+        totalRegistros = data.total;
+        atualizarControlesNav(data.paciente);
+        msg.style.color = '#16a34a';
+        msg.innerText = `Encontrado: Registro ${indiceAtual} de ${totalRegistros}.`;
+      } else {
+        msg.style.color = '#dc2626';
+        msg.innerText = 'Nenhum paciente encontrado com: ' + termo;
+      }
+    } catch (e) {
+      msg.style.color = '#dc2626';
+      msg.innerText = 'Erro na busca: ' + e.message;
+    }
+  }
+
+  /* =========================================================================
+     ALINHAMENTO INTELIGENTE ANTI-DESLOCAMENTO
+  ========================================================================= */
+  function atualizarControlesNav(p) {
+    document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
+    document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
+    document.getElementById('btnProx').disabled = (indiceAtual >= totalRegistros);
+
+    const endStr = (p.endereco || '').toString().toUpperCase();
+    const munStr = (p.municipio || '').toString().toUpperCase();
+    
+    // Detecta se a coluna da mãe causou salto de 1 coluna
+    const deslocado = endStr.includes('SILVA') || endStr.includes('SOARES') || endStr.includes('BATISTA') || munStr.includes('SITIO') || munStr.includes('RUA') || munStr.includes('SN');
+
+    let mae = p.mae || '';
+    let endereco = p.endereco || '';
+    let municipio = p.municipio || 'FRUTUOSO GOMES';
+    let estado = p.estado || 'RN';
+    let dtInternacao = p.dtInternacao || '';
+    let dtSaida = p.dtSaida || '';
+    let diag = p.diag || '';
+    let cid = p.cid || '';
+    let procedimento = p.procedimento || '';
+    let codProced = p.codProced || '';
+    let medico = p.medico || 'LUCIDIO JÁCOME FERREIRA';
+    let cpfMed = p.cpfMed || '175.499.574-87';
+
+    if (deslocado) {
+      mae = p.endereco;
+      endereco = p.municipio;
+      municipio = (p.estado && p.estado.length > 3) ? p.estado : 'FRUTUOSO GOMES';
+      estado = 'RN';
+      dtInternacao = p.dtSaida || '08/07/2026';
+      dtSaida = p.dtSaida || dtInternacao;
+      diag = p.cid;
+      cid = p.procedimento;
+      procedimento = p.codProced;
+      codProced = p.medico;
+      medico = p.cpfMed || 'LUCIDIO JÁCOME FERREIRA';
+      cpfMed = '175.499.574-87';
+    }
+
+    // 1. Identificação
+    document.getElementById('prontuario').value = p.prontuario || '';
+    document.getElementById('nomePaciente').value = p.nome || '';
+    document.getElementById('cns').value = p.cns || '';
+    document.getElementById('dataNasc').value = p.nasc || '';
+    document.getElementById('sexo').value = (p.sexo && p.sexo.toString().toUpperCase().startsWith('M')) ? 'M' : 'F';
+    document.getElementById('racaCor').value = p.raca || 'PARDA';
+    document.getElementById('telefone').value = '84 99980 5728';
+    document.getElementById('nomeMae').value = mae;
+    document.getElementById('nomePai').value = p.pai || '';
+    document.getElementById('profissao').value = 'AGRICULTORA';
+
+    // 2. Endereço
+    document.getElementById('endereco').value = endereco || 'SITIO ARROJADO';
+    document.getElementById('numEndereco').value = 'SN';
+    document.getElementById('bairro').value = 'ZONA RURAL';
+    document.getElementById('municipio').value = municipio;
+    document.getElementById('estado').value = estado;
+    document.getElementById('cep').value = '59890-000';
+    document.getElementById('rg').value = '';
+
+    // 3. Datas
+    document.getElementById('dataInternacao').value = dtInternacao;
+    document.getElementById('dataSaida').value = dtSaida;
+    document.getElementById('dataSolicitacao').value = dtInternacao;
+
+    // 4. Clínicos
+    document.getElementById('diagInicial').value = diag;
+    document.getElementById('cidPrincipal').value = cid;
+    document.getElementById('procedimento').value = procedimento;
+    document.getElementById('codProcedimento').value = codProced;
+    if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
+
+    // 5. Solicitante
+    document.getElementById('medicoSolicitante').value = medico;
+    document.getElementById('cpfSolicitante').value = cpfMed;
+
+    // 6. Laudos
+    document.getElementById('sinaisSintomas').value = (p.sinais && !p.sinais.includes('175.')) ? p.sinais : 
+      'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA. EVOLUIU SEM ANORMALIDADES.';
+    document.getElementById('justificativa').value = p.justificativa || 
+      'NECESSIDADE DE REALIZAR BIOPSIA / EXERESE.';
+    document.getElementById('exames').value = p.exames || 
+      'EXS SEM ANORMALIDADES';
+
+    document.getElementById('txtAnestesia').value = 'Lidocaina a 2% - 20 ml SF - 500 ml EV';
+    document.getElementById('txtCirurgia').value = 'SEM INTERCORRÊNCIAS OPERATÓRIAS.';
+  }
+
+  document.getElementById('campoBusca').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      buscarPorTermo();
+    }
+  });
+
+  /* =========================================================================
+     AÇÕES DOS BOTÕES
+  ========================================================================= */
+  // Botão 1: Salva no Sheets + Gera PDF
   document.getElementById('formAih').addEventListener('submit', async function(e) {
     e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Preenchendo as 3 guias oficiais...';
+    msg.innerText = 'Salvando na planilha e gerando AIH...';
 
     try {
-      await gerarAihPdf();
-      msg.innerText = '';
+      await gerarAihAdobeForm(true);
+      msg.style.color = '#16a34a';
+      msg.innerText = 'Salvo na planilha e AIH gerada!';
     } catch (err) {
       console.error(err);
       msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao processar PDF: ' + err.message;
+      msg.innerText = 'Erro: ' + err.message;
     }
   });
 
-  async function gerarAihPdf() {
-    const { PDFDocument, rgb, StandardFonts } = PDFLib;
+  // Botão 2: Apenas Gera PDF / Imprime
+  document.getElementById('btnApenasGerarPdf').addEventListener('click', async function() {
+    const msg = document.getElementById('msgStatus');
+    msg.style.color = '#0284c7';
+    msg.innerText = 'Montando documento para impressão...';
+
+    try {
+      await gerarAihAdobeForm(false);
+      msg.style.color = '#16a34a';
+      msg.innerText = 'Pronto para impressão!';
+    } catch (err) {
+      console.error(err);
+      msg.style.color = '#dc2626';
+      msg.innerText = 'Erro ao gerar PDF: ' + err.message;
+    }
+  });
+
+  // Botão 3: Exporta para Word (.doc)
+  document.getElementById('btnGerarWord').addEventListener('click', function() {
+    const nome = document.getElementById('nomePaciente').value || 'Paciente';
+    const pront = document.getElementById('prontuario').value || 'SN';
+
+    const d = {
+      prontuario: pront,
+      nome: nome,
+      cns: document.getElementById('cns').value || '',
+      nasc: document.getElementById('dataNasc').value || '',
+      sexo: document.getElementById('sexo').value || '',
+      raca: document.getElementById('racaCor').value || '',
+      mae: document.getElementById('nomeMae').value || '',
+      endereco: document.getElementById('endereco').value || '',
+      municipio: document.getElementById('municipio').value || '',
+      dtInternacao: document.getElementById('dataInternacao').value || '',
+      dtSaida: document.getElementById('dataSaida').value || '',
+      diag: document.getElementById('diagInicial').value || '',
+      cid: document.getElementById('cidPrincipal').value || '',
+      proced: document.getElementById('procedimento').value || '',
+      codProced: document.getElementById('codProcedimento').value || '',
+      medico: document.getElementById('medicoSolicitante').value || '',
+      cpfMed: document.getElementById('cpfSolicitante').value || '',
+      sinais: document.getElementById('sinaisSintomas').value || '',
+      justificativa: document.getElementById('justificativa').value || '',
+      exames: document.getElementById('exames').value || '',
+      anestesia: document.getElementById('txtAnestesia').value || '',
+      cirurgia: document.getElementById('txtCirurgia').value || ''
+    };
+
+    const conteudoWord = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>AIH - ${d.nome}</title>
+        <style>
+          body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.3; }
+          h2, h3 { text-align: center; margin: 4px 0; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; }
+          td, th { border: 1px solid #000; padding: 6px; font-size: 10pt; }
+          .header-box { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; }
+          .page-break { page-break-before: always; }
+        </style>
+      </head>
+      <body>
+        <!-- FOLHA 1 / 2: LAUDO DE SOLICITAÇÃO AIH -->
+        <div class="header-box">
+          <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
+          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
+          <h2>LAUDO PARA SOLICITAÇÃO DE AIH</h2>
+        </div>
+
+        <table>
+          <tr>
+            <td colspan="2"><b>Paciente:</b> ${d.nome}</td>
+            <td><b>Prontuário:</b> ${d.prontuario}</td>
+          </tr>
+          <tr>
+            <td><b>CNS:</b> ${d.cns}</td>
+            <td><b>Data Nasc:</b> ${d.nasc}</td>
+            <td><b>Sexo:</b> ${d.sexo} | <b>Cor:</b> ${d.raca}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Mãe:</b> ${d.mae}</td>
+            <td><b>Município:</b> ${d.municipio}</td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Endereço:</b> ${d.endereco}</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><b>Data Internação:</b> ${d.dtInternacao}</td>
+            <td><b>Data Saída:</b> ${d.dtSaida}</td>
+          </tr>
+          <tr>
+            <td><b>Diagnóstico Inicial:</b> ${d.diag}</td>
+            <td><b>CID-10:</b> ${d.cid}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Procedimento:</b> ${d.proced} (${d.codProced})</td>
+          </tr>
+        </table>
+
+        <p><b>17. Principais Sinais e Sintomas Clínicos:</b></p>
+        <p style="border: 1px solid #000; padding: 8px;">${d.sinais}</p>
+
+        <p><b>18. Condições que Justificam a Internação:</b></p>
+        <p style="border: 1px solid #000; padding: 8px;">${d.justificativa}</p>
+
+        <p><b>19. Resultados de Provas Diagnósticas (Exames):</b></p>
+        <p style="border: 1px solid #000; padding: 8px;">${d.exames}</p>
+
+        <br>
+        <p align="right"><b>Médico Solicitante:</b> ${d.medico} - CPF: ${d.cpfMed}</p>
+
+        <!-- FOLHA 3 / 4 / 5: PRONTUÁRIO, ANESTESIA E BOLETIM -->
+        <div class="page-break"></div>
+        <div class="header-box">
+          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
+          <h2>FICHA ANESTÉSICA E BOLETIM OPERATÓRIO</h2>
+        </div>
+
+        <p><b>Paciente:</b> ${d.nome} &nbsp;&nbsp;|&nbsp;&nbsp; <b>Prontuário:</b> ${d.prontuario}</p>
+        
+        <br>
+        <h3>Prescrição Anestésica / Drogas Usadas</h3>
+        <p style="border: 1px solid #000; padding: 10px;">${d.anestesia}</p>
+
+        <br>
+        <h3>Descrição do Boletim / Relatório Operatório</h3>
+        <p style="border: 1px solid #000; padding: 10px;">${d.cirurgia}</p>
+
+        <br><br><br>
+        <table style="border: none;">
+          <tr style="border: none;">
+            <td style="border: none; text-align: center;">_______________________________________<br>DR. HIAGO - Anestesista CRM: 8.830</td>
+            <td style="border: none; text-align: center;">_______________________________________<br>${d.medico}<br>Médico Cirurgião</td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff', conteudoWord], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  /* =========================================================================
+     GERADOR DO PDF OFICIAL (PDF-LIB)
+  ========================================================================= */
+  async function gerarAihAdobeForm(salvarNaPlanilha = false) {
+    const { PDFDocument, StandardFonts } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
-    if (!res.ok) throw new Error('Não foi possível carregar o modelo AIH COMPLETA.pdf.');
+    if (!res.ok) throw new Error('Não encontrou o arquivo AIH_FORM.pdf no repositório.');
     const buffer = await res.arrayBuffer();
 
     const pdfDoc = await PDFDocument.load(buffer);
-    const fontRegular = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
-    // Remove as páginas extras a partir da 4ª, mantendo rigorosamente só as 3 guias
-    while (pdfDoc.getPageCount() > 3) {
-      pdfDoc.removePage(pdfDoc.getPageCount() - 1);
-    }
+    const form = pdfDoc.getForm();
+    const fields = form.getFields();
 
-    const pages = pdfDoc.getPages();
-    const pag1 = pages[0]; // Guia 1: Autorização
-    const pag2 = pages[1]; // Guia 2: Laudo Médico
-    const pag3 = pages[2]; // Guia 3: Prontuário de Internação
+    const nomeProced = document.getElementById('procedimento').value || '';
+    const codProced = document.getElementById('codProcedimento').value || '';
+
+    const procedCompleto = (nomeProced && codProced && !nomeProced.includes(codProced))
+      ? `${nomeProced} - ${codProced}`
+      : nomeProced;
 
     const d = {
       prontuario: document.getElementById('prontuario').value || '',
       nome: document.getElementById('nomePaciente').value || '',
       cns: document.getElementById('cns').value || '',
-      dataNasc: document.getElementById('dataNasc').value || '',
-      sexo: document.getElementById('sexo').value || 'M',
-      racaCor: document.getElementById('racaCor').value || 'PARDA',
-      telefone: document.getElementById('telefone').value || '',
-      nomeMae: document.getElementById('nomeMae').value || '',
+      nasc: document.getElementById('dataNasc').value || '',
+      sexo: document.getElementById('sexo').value || 'F',
+      raca: document.getElementById('racaCor').value || 'PARDA',
+      tel: document.getElementById('telefone').value || '',
+      mae: document.getElementById('nomeMae').value || '',
+      pai: document.getElementById('nomePai').value || '',
+      profissao: document.getElementById('profissao').value || 'AGRICULTORA',
       endereco: document.getElementById('endereco').value || '',
-      municipio: document.getElementById('municipio').value || 'FRUTUOSO GOMES - RN',
-      dataInternacao: document.getElementById('dataInternacao').value || '',
-      dataSaida: document.getElementById('dataSaida').value || '',
-      diagInicial: document.getElementById('diagInicial').value || '',
-      cidPrincipal: document.getElementById('cidPrincipal').value || '',
-      procedimento: document.getElementById('procedimento').value || '',
-      codProcedimento: document.getElementById('codProcedimento').value || '',
+      num: document.getElementById('numEndereco').value || 'SN',
+      bairro: document.getElementById('bairro').value || 'ZONA RURAL',
+      municipio: document.getElementById('municipio').value || 'FRUTUOSO GOMES',
+      estado: document.getElementById('estado').value || 'RN',
+      cep: document.getElementById('cep').value || '59890-000',
+      rg: document.getElementById('rg').value || '',
+      dtInternacao: document.getElementById('dataInternacao').value || '',
+      dtSaida: document.getElementById('dataSaida').value || '',
+      diag: document.getElementById('diagInicial').value || '',
+      cid: document.getElementById('cidPrincipal').value || '',
+      procedimento: nomeProced,
+      codProced: codProced,
+      procedComCodigo: procedCompleto,
+      especialidade: document.getElementById('especialidade').value || 'CLINICA MEDICA',
+      medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA',
+      cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
+      dtSol: document.getElementById('dataSolicitacao').value || '',
       sinais: document.getElementById('sinaisSintomas').value || '',
       justificativa: document.getElementById('justificativa').value || '',
       exames: document.getElementById('exames').value || '',
-      medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JACOME FERREIRA FILHO',
-      crm: document.getElementById('crmSolicitante').value || '1675-RN',
-      cnes: document.getElementById('cnesHospital').value || '2408371',
-      hospital: 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE'
+      anestesia: document.getElementById('txtAnestesia').value || '',
+      cirurgia: document.getElementById('txtCirurgia').value || ''
     };
 
-    const print = (page, text, x, y, size, isBold) => {
-      if (!text) return;
-      page.drawText(String(text).toUpperCase(), {
-        x: x,
-        y: y,
-        size: size || 7.5,
-        font: isBold ? fontBold : fontRegular,
-        color: rgb(0, 0, 0)
-      });
+    const normalizar = (txt) => {
+      return (txt || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
     };
 
-    // =========================================================
-    // GUIA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR
-    // =========================================================
-    print(pag1, d.dataInternacao, 110, 715, 8, false);
-    print(pag1, d.prontuario, 330, 715, 8.5, true);
-    print(pag1, d.dataSaida, 485, 698, 8, false);
+    fields.forEach(f => {
+      const originalName = f.getName();
+      const n = normalizar(originalName);
 
-    print(pag1, d.nome, 125, 650, 8, true);
-    print(pag1, d.sexo, 45, 634, 7.5, false);
-    print(pag1, d.dataNasc, 225, 634, 7.5, false);
-    print(pag1, d.cns, 395, 634, 8, false);
+      try {
+        const tf = form.getTextField(originalName);
+        if (tf) {
+          let val = null;
+          let fontSize = 8.5;
+          let isMulti = false;
 
-    print(pag1, d.nomeMae, 95, 617, 7.5, false);
-    print(pag1, d.endereco, 80, 600, 7.5, false);
-    print(pag1, d.municipio, 85, 584, 7.5, false);
-    print(pag1, d.telefone, 430, 584, 7.5, false);
+          // Procedimento e Código
+          if (
+            n.startsWith('24') ||
+            n.includes('24 descricao') ||
+            n.includes('24 desc') ||
+            (n.includes('descricao') && n.includes('procedimento')) ||
+            (n.includes('desc') && n.includes('procedimento')) ||
+            (n.includes('procedimento solicitado') && !n.includes('codigo') && !n.includes('cod')) ||
+            n === 'procedimento solicitado' ||
+            n === 'descricao do procedimento solicitado' ||
+            n === 'campo24 procedimento' ||
+            n === 'campo24'
+          ) {
+            val = d.procedComCodigo;
+            fontSize = 7.8;
+            isMulti = true;
+          }
+          else if (
+            n.startsWith('25') ||
+            n.includes('codigo do procedimento') ||
+            n.includes('codigo procedimento') ||
+            n.includes('cod proced') ||
+            n.includes('proced solic') ||
+            n.includes('proced realiz')
+          ) {
+            val = d.codProced;
+            fontSize = 9.0;
+          }
+          // Justificativa e Laudos
+          else if (
+            n.startsWith('18') || 
+            n.includes('justificam') || 
+            n.includes('justificativa') || 
+            n.includes('condicoes que') || 
+            n.includes('condicoes') ||
+            n === 'campo18 justificativa' ||
+            n === 'campo18'
+          ) {
+            val = d.justificativa; 
+            fontSize = 7.8; 
+            isMulti = true;
+          }
+          else if (
+            n.startsWith('19') || 
+            n.includes('provas') || 
+            n.includes('diagnosticas') || 
+            n.includes('exames') || 
+            n.includes('resultado de exames') || 
+            n.includes('principais resultados') ||
+            n === 'campo19 exames' ||
+            n === 'campo19'
+          ) {
+            val = d.exames; 
+            fontSize = 7.8; 
+            isMulti = true;
+          }
+          else if (
+            n.startsWith('20') || 
+            n.includes('20 diagnostico') || 
+            (n.includes('diagnostico') && !n.includes('cid') && !n.includes('pre') && !n.includes('final')) || 
+            n === 'diagnostico inicial' ||
+            n.includes('diag inicial') ||
+            n === 'campo20 diagnostico' ||
+            n === 'campo20'
+          ) {
+            val = d.diag; 
+            fontSize = 8.5;
+          }
+          else if (
+            n.startsWith('21') || 
+            n.includes('cid 10 principal') || 
+            n.includes('cid principal') || 
+            n === 'cid' || 
+            n.includes('cid 10') ||
+            n.includes('cid princ')
+          ) {
+            val = d.cid; 
+            fontSize = 9.5;
+          }
+          else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
+            val = d.sinais; 
+            fontSize = 7.8; 
+            isMulti = true;
+          }
+          // Datas Blindadas contra texto
+          else if (n.includes('dt intern') || n.includes('admissao') || n === 'data da internacao') {
+            val = (d.dtInternacao && !/[a-zA-Z]/.test(d.dtInternacao)) ? d.dtInternacao : '';
+            fontSize = 8.5;
+          }
+          else if (n.includes('dt saida') || n.includes('alta') || n === 'data da saida') {
+            val = (d.dtSaida && !/[a-zA-Z]/.test(d.dtSaida)) ? d.dtSaida : '';
+            fontSize = 8.5;
+          }
+          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
+            val = (d.dtSol && !/[a-zA-Z]/.test(d.dtSol)) ? d.dtSol : (d.dtInternacao || '');
+            fontSize = 8.5;
+          }
+          else if (n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
+            val = (d.nasc && !/[a-zA-Z]/.test(d.nasc)) ? d.nasc : '';
+            fontSize = 8.5;
+          }
+          // Identificação e Cadastro
+          else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 9.5; }
+          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 8.8; }
+          else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 9.0; }
+          else if (n.includes('sexo')) { val = d.sexo; fontSize = 9.0; }
+          else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8.5; }
+          else if (n.includes('mae')) { val = d.mae; fontSize = 8.5; }
+          else if (n.includes('pai')) { val = d.pai; fontSize = 8.5; }
+          else if (n.includes('profiss')) { val = d.profissao; fontSize = 8.5; }
+          else if (n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 8.0; }
+          else if (n === 'n' || n.startsWith('n ') || n.includes('numero')) { val = d.num; fontSize = 9.0; }
+          else if (n.includes('bairro')) { val = d.bairro; fontSize = 8.5; }
+          else if (n.includes('municipio') || n.includes('naturalidade')) { val = d.municipio; fontSize = 8.5; }
+          else if (n.includes('estado') || n === 'uf' || n.includes('15 uf')) { val = d.estado; fontSize = 9.0; }
+          else if (n.includes('cep')) { val = d.cep; fontSize = 8.5; }
+          else if (n.includes('telefone')) { val = d.tel; fontSize = 8.5; }
+          else if (n.includes('doc') || n === 'rg') { val = d.rg; fontSize = 9.0; }
+          else if (n.includes('mud proc')) { val = 'N'; fontSize = 9.0; }
+          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 8.2; }
+          else if (n.includes('enferm')) { val = 'M'; fontSize = 9.0; }
+          else if (n.includes('leito')) { val = '1'; fontSize = 9.0; }
+          else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8.5; }
+          else if (n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 9.0; }
+          else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.5; }
+          else if (n.includes('tecnica') || n.includes('tipo anest')) { val = 'LOCAL'; fontSize = 8.5; }
+          else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 7.5; isMulti = true; }
+          else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 7.5; isMulti = true; }
 
-    print(pag1, d.procedimento, 140, 524, 7, false);
-    print(pag1, d.cidPrincipal, 85, 468, 8.5, true);
-    print(pag1, d.medico, 115, 422, 7.5, false);
+          if (val !== null && val !== '') {
+            try { 
+              if (isMulti && typeof tf.enableMultiline === 'function') {
+                tf.enableMultiline();
+              }
+            } catch(e) {}
+            try { tf.setFontSize(fontSize); } catch(e) {}
+            tf.setText(String(val).toUpperCase());
+          }
+        }
+      } catch (e) {}
 
-    print(pag1, d.procedimento.substring(0, 36), 65, 355, 6.5, false);
-    print(pag1, "01", 240, 355, 7.5, false);
-    print(pag1, d.cnes, 380, 355, 7.5, false);
+      try {
+        const cb = form.getCheckBox(originalName);
+        if (cb) {
+          const n = normalizar(originalName);
+          if (n.includes('check box2') || n.includes('check box3') || n === 'rg' || n.includes('fem')) {
+            cb.check();
+          }
+        }
+      } catch (e) {}
+    });
 
-    // =========================================================
-    // GUIA 2: LAUDO MÉDICO DE SOLICITAÇÃO (52 CAMPOS)
-    // =========================================================
-    print(pag2, d.hospital, 45, 618, 7, true);
-    print(pag2, d.cnes, 380, 618, 7.5, false);
-    print(pag2, d.hospital, 45, 592, 7, true);
-    print(pag2, d.cnes, 380, 592, 7.5, false);
+    form.updateFieldAppearances(helvetica);
 
-    print(pag2, d.nome, 45, 562, 8, true);
-    print(pag2, d.prontuario, 300, 562, 8, true);
-    print(pag2, d.cns, 415, 562, 8, false);
-
-    print(pag2, d.dataNasc, 45, 532, 7.5, false);
-    if (d.sexo === 'M') {
-      print(pag2, "X", 137, 532, 8.5, true);
-    } else {
-      print(pag2, "X", 175, 532, 8.5, true);
+    // Gravação na Planilha apenas quando solicitado
+    if (salvarNaPlanilha) {
+      fetch(URL_APPS_SCRIPT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(d)
+      }).catch(err => console.warn('Erro Sheets:', err));
     }
-    print(pag2, d.racaCor, 230, 532, 7.5, false);
-    print(pag2, d.nomeMae, 45, 504, 7.5, false);
-    print(pag2, d.telefone, 415, 504, 7.5, false);
 
-    print(pag2, d.endereco, 45, 476, 7.5, false);
-    print(pag2, d.municipio, 45, 448, 7.5, false);
-    print(pag2, "RN", 535, 448, 7.5, false);
-
-    print(pag2, d.sinais.substring(0, 115), 45, 414, 6.8, false);
-    if (d.sinais.length > 115) print(pag2, d.sinais.substring(115, 230), 45, 404, 6.8, false);
-
-    print(pag2, d.justificativa.substring(0, 115), 45, 376, 6.8, false);
-    if (d.justificativa.length > 115) print(pag2, d.justificativa.substring(115, 230), 45, 366, 6.8, false);
-
-    print(pag2, d.exames.substring(0, 115), 45, 338, 6.8, false);
-    if (d.exames.length > 115) print(pag2, d.exames.substring(115, 230), 45, 328, 6.8, false);
-
-    print(pag2, d.diagInicial, 45, 302, 7.5, false);
-    print(pag2, d.cidPrincipal, 345, 302, 8.5, true);
-
-    print(pag2, d.procedimento, 45, 266, 7, false);
-    print(pag2, d.codProcedimento, 435, 266, 8, true);
-
-    print(pag2, d.medico, 45, 210, 7.5, true);
-    print(pag2, d.dataInternacao, 350, 210, 7.5, false);
-    print(pag2, d.crm, 460, 210, 7.5, false);
-
-    // =========================================================
-    // GUIA 3: PRONTUÁRIO DE INTERNAÇÃO
-    // =========================================================
-    print(pag3, d.nome, 105, 680, 8, true);
-    print(pag3, d.prontuario, 480, 680, 8.5, true);
-    print(pag3, d.endereco, 95, 660, 7.5, false);
-    print(pag3, d.municipio, 95, 642, 7.5, false);
-    print(pag3, "RN", 380, 642, 7.5, false);
-    print(pag3, d.dataNasc, 110, 624, 7.5, false);
-    print(pag3, d.racaCor, 260, 624, 7.5, false);
-    print(pag3, d.sexo, 360, 624, 7.5, false);
-    print(pag3, d.nomeMae, 95, 606, 7.5, false);
-    print(pag3, d.dataInternacao, 110, 570, 8, false);
-    print(pag3, d.dataSaida, 260, 570, 8, false);
-    print(pag3, d.diagInicial, 110, 535, 7.5, true);
-
-    const textoProntuario = `${d.sinais} ${d.justificativa}`;
-    print(pag3, textoProntuario.substring(0, 110), 45, 480, 7, false);
-    if (textoProntuario.length > 110) print(pag3, textoProntuario.substring(110, 220), 45, 468, 7, false);
-
-    // =========================================================
-    // GERAÇÃO FINAL DO DOCUMENTO
-    // =========================================================
     pdfBytesGerado = await pdfDoc.save();
     const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
     if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
