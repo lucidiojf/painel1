@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emissão AIH Oficial</title>
+  
+  <!-- Biblioteca para gerar o ficheiro PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -116,7 +119,7 @@
       background: #0369a1;
     }
 
-    /* Modal */
+    /* Janela Modal */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -176,10 +179,10 @@
       cursor: pointer;
     }
 
-    .btn-doc { background: #2b579a; } /* Cor azul clássica Word */
+    .btn-doc { background: #1e3a8a; } /* Word */
+    .btn-pdf { background: #dc2626; } /* PDF */
     .btn-imprimir { background: #0284c7; }
-    .btn-pdf { background: #059669; }
-    .btn-fechar { background: #ef4444; }
+    .btn-fechar { background: #64748b; }
 
     .modal-conteudo-scroll {
       padding: 16px;
@@ -266,14 +269,14 @@
     <form id="formAIH" onsubmit="event.preventDefault(); gerarVisualizacao();">
       
       <fieldset>
-        <legend>1. Dados do Estabelecimento e Registo</legend>
+        <legend>1. Registo e Estabelecimento</legend>
         <div class="form-grid">
           <div class="form-group">
             <label>Nº do Prontuário</label>
             <input type="text" id="prontuario" required placeholder="Ex: 7521">
           </div>
           <div class="form-group">
-            <label>Nº da AIH (se houver)</label>
+            <label>Nº da AIH</label>
             <input type="text" id="num_aih" placeholder="Opcional">
           </div>
           <div class="form-group">
@@ -284,11 +287,11 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Data Admissão/Internação</label>
+            <label>Data Admissão</label>
             <input type="date" id="data_admissao" required>
           </div>
           <div class="form-group">
-            <label>Data de Saída / Alta</label>
+            <label>Data Saída / Alta</label>
             <input type="date" id="data_saida">
           </div>
         </div>
@@ -298,7 +301,7 @@
         <legend>2. Dados do Paciente</legend>
         <div class="form-grid">
           <div class="form-group col-full">
-            <label>Nome Completo do Paciente</label>
+            <label>Nome do Paciente</label>
             <input type="text" id="paciente" required placeholder="Nome do paciente">
           </div>
           <div class="form-group">
@@ -328,7 +331,7 @@
           </div>
           <div class="form-group col-full">
             <label>Nome da Mãe</label>
-            <input type="text" id="mae" placeholder="Nome completo da mãe">
+            <input type="text" id="mae" placeholder="Nome da mãe">
           </div>
           <div class="form-group col-full">
             <label>Endereço Completo</label>
@@ -353,7 +356,7 @@
         <legend>3. Procedimento e Justificativa Clínica</legend>
         <div class="form-grid">
           <div class="form-group">
-            <label>Especialidade / Clínica</label>
+            <label>Especialidade</label>
             <input type="text" id="especialidade" value="CLÍNICA MÉDICA">
           </div>
           <div class="form-group">
@@ -373,12 +376,12 @@
             <input type="text" id="cod_procedimento" placeholder="Ex: 0401020045">
           </div>
           <div class="form-group col-full">
-            <label>Descrição do Procedimento Solicitado</label>
+            <label>Descrição do Procedimento</label>
             <input type="text" id="procedimento" placeholder="Ex: EXCISAO E ENXERTO DE PELE">
           </div>
           <div class="form-group col-full">
-            <label>Sinais e Sintomas Clínicos / Histórico</label>
-            <textarea id="sintomas" rows="2" placeholder="Descreva os sintomas e histórico..."></textarea>
+            <label>Sinais e Sintomas Clínicos</label>
+            <textarea id="sintomas" rows="2" placeholder="Histórico clínico..."></textarea>
           </div>
           <div class="form-group col-full">
             <label>Condições que Justificam a Internação</label>
@@ -391,29 +394,33 @@
         <legend>4. Profissional Solicitante</legend>
         <div class="form-grid">
           <div class="form-group col-full">
-            <label>Nome do Médico Solicitante</label>
+            <label>Médico Solicitante</label>
             <input type="text" id="medico" value="LUCÍDIO JÁCOME FERREIRA">
           </div>
           <div class="form-group">
-            <label>CPF do Solicitante</label>
+            <label>CPF Solicitante</label>
             <input type="text" id="cpf_medico" value="175.499.574-87">
           </div>
         </div>
       </fieldset>
 
-      <button type="submit" class="btn-principal">Gerar e Visualizar AIH</button>
+      <button type="submit" class="btn-principal">Visualizar e Emitir AIH</button>
     </form>
   </div>
 
-  <!-- Modal com botão Baixar DOC (Word) -->
+  <!-- Modal com ambas as opções de exportação -->
   <div id="modalAIH" class="modal-overlay" style="display: none;">
     <div class="modal-janela">
       <div class="modal-cabecalho">
         <div class="modal-titulo">Visualização da AIH Gerada</div>
         <div class="modal-botoes">
-          <button type="button" class="btn-modal btn-doc" onclick="descarregarWordDOC()">Baixar DOC</button>
-          <button type="button" class="btn-modal btn-imprimir" onclick="imprimirAIH()">Imprimir</button>
+          <!-- Botão Word (.doc) -->
+          <button type="button" class="btn-modal btn-doc" onclick="descarregarWordDOC()">Baixar DOC (Word)</button>
+          <!-- Botão PDF (.pdf) -->
           <button type="button" class="btn-modal btn-pdf" onclick="descarregarPDF()">Baixar PDF</button>
+          <!-- Botão Imprimir Direto -->
+          <button type="button" class="btn-modal btn-imprimir" onclick="imprimirAIH()">Imprimir</button>
+          <!-- Botão Fechar -->
           <button type="button" class="btn-modal btn-fechar" onclick="fecharModal()">Fechar</button>
         </div>
       </div>
@@ -428,9 +435,7 @@
     function formatarData(dataStr) {
       if (!dataStr) return '';
       const partes = dataStr.split('-');
-      if (partes.length === 3) {
-        return `${partes[2]}/${partes[1]}/${partes[0]}`;
-      }
+      if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
       return dataStr;
     }
 
@@ -636,6 +641,7 @@
       window.print();
     }
 
+    /* 1. Função para Gerar e Baixar PDF */
     function descarregarPDF() {
       const elemento = document.getElementById('folhaAihImpressao');
       const prontuario = document.getElementById('prontuario').value || 'doc';
@@ -653,16 +659,13 @@
       html2pdf().set(opcoes).from(elemento).save();
     }
 
-    /**
-     * Exportação direta para .doc (Word) em formato editável
-     */
+    /* 2. Função para Gerar e Baixar DOC (Word) */
     function descarregarWordDOC() {
       const conteudoHTML = document.getElementById('folhaAihImpressao').innerHTML;
       const prontuario = document.getElementById('prontuario').value || 'doc';
       const paciente = document.getElementById('paciente').value || 'paciente';
       const nomeFicheiro = `AIH_${prontuario}_${paciente.replace(/\s+/g, '_')}.doc`;
 
-      // Estrutura completa de documento compatível com Microsoft Word / LibreOffice
       const documentoWordCompleto = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' 
               xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -724,7 +727,6 @@
         type: 'application/msword;charset=utf-8'
       });
 
-      // Cria o link invisível para descarregar o ficheiro .doc
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
