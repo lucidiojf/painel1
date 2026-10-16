@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emissão AIH Oficial</title>
+  <title>Emissão AIH Oficial - Hospital Maternidade Severina Carlos de Andrade</title>
   
-  <!-- Biblioteca para gerar o ficheiro PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -17,35 +16,35 @@
     }
 
     body {
-      background-color: #f1f5f9;
-      color: #1e293b;
-      padding: 16px;
+      background-color: #e2e8f0;
+      color: #0f172a;
+      padding: 14px;
     }
 
-    .container {
-      max-width: 860px;
+    .painel-principal {
+      max-width: 900px;
       margin: 0 auto;
       background: #ffffff;
       padding: 24px;
       border-radius: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    header.app-header {
+    .topo-painel {
+      text-align: center;
       border-bottom: 2px solid #0284c7;
       padding-bottom: 12px;
       margin-bottom: 20px;
-      text-align: center;
     }
 
-    header.app-header h1 {
-      font-size: 1.3rem;
+    .topo-painel h1 {
+      font-size: 1.25rem;
       color: #0369a1;
       text-transform: uppercase;
     }
 
-    header.app-header h2 {
-      font-size: 1rem;
+    .topo-painel h2 {
+      font-size: 0.95rem;
       font-weight: normal;
       color: #475569;
     }
@@ -53,45 +52,45 @@
     fieldset {
       border: 1px solid #cbd5e1;
       border-radius: 6px;
-      padding: 16px;
-      margin-bottom: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
     }
 
     legend {
-      padding: 0 8px;
+      padding: 0 6px;
       font-weight: bold;
       color: #0284c7;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
-    .form-grid {
+    .grid-campos {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
     }
 
-    .form-group {
+    .campo-item {
       display: flex;
       flex-direction: column;
     }
 
-    .form-group.col-full {
+    .col-total {
       grid-column: 1 / -1;
     }
 
     label {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       color: #334155;
     }
 
     input, select, textarea {
       width: 100%;
-      padding: 8px 10px;
+      padding: 8px;
       border: 1px solid #94a3b8;
       border-radius: 4px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       background: #fff;
     }
 
@@ -101,25 +100,34 @@
       box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
     }
 
-    .btn-principal {
-      display: block;
-      width: 100%;
-      background: #0284c7;
-      color: #ffffff;
+    .barra-botoes-topo {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-acao {
       border: none;
-      padding: 14px;
-      font-size: 1.05rem;
+      border-radius: 4px;
+      padding: 12px 18px;
       font-weight: bold;
-      border-radius: 6px;
+      font-size: 0.92rem;
       cursor: pointer;
-      margin-top: 10px;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
     }
 
-    .btn-principal:hover {
-      background: #0369a1;
-    }
+    .btn-visualizar { background: #0284c7; flex: 2; min-width: 180px; }
+    .btn-word { background: #1e3a8a; flex: 1; min-width: 140px; }
+    .btn-pdf { background: #dc2626; flex: 1; min-width: 140px; }
+    .btn-imprimir { background: #0284c7; }
+    .btn-fechar { background: #ef4444; }
 
-    /* Janela Modal */
+    /* Modal de Visualização */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -127,509 +135,609 @@
       width: 100vw;
       height: 100vh;
       background: rgba(15, 23, 42, 0.75);
-      z-index: 9999;
+      z-index: 99999;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px;
+      padding: 8px;
     }
 
-    .modal-janela {
-      background: #e2e8f0;
+    .modal-corpo {
+      background: #ffffff;
       width: 100%;
-      max-width: 900px;
+      max-width: 950px;
       max-height: 96vh;
       border-radius: 8px;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 25px rgba(0,0,0,0.3);
     }
 
-    .modal-cabecalho {
+    .modal-barra {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #ffffff;
-      padding: 12px 18px;
+      padding: 10px 16px;
+      background: #f8fafc;
       border-bottom: 2px solid #cbd5e1;
-      flex-wrap: wrap;
       gap: 8px;
-    }
-
-    .modal-titulo {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #0f172a;
-    }
-
-    .modal-botoes {
-      display: flex;
-      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .btn-modal {
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-    }
-
-    .btn-doc { background: #1e3a8a; } /* Word */
-    .btn-pdf { background: #dc2626; } /* PDF */
-    .btn-imprimir { background: #0284c7; }
-    .btn-fechar { background: #64748b; }
-
-    .modal-conteudo-scroll {
+    .modal-scroll {
       padding: 16px;
       overflow-y: auto;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      background: #475569;
       display: flex;
       justify-content: center;
-      background: #64748b;
     }
 
-    .folha-documento {
+    /* Formatação da Página Oficial (A4) */
+    .pagina-oficial {
       background: #ffffff;
       width: 100%;
-      min-width: 680px;
-      max-width: 800px;
+      min-width: 720px;
+      max-width: 820px;
       padding: 24px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
       font-family: Arial, Helvetica, sans-serif;
-      font-size: 11px;
+      font-size: 10.5px;
+      line-height: 1.25;
       color: #000;
+    }
+
+    .quebra-pagina {
+      page-break-before: always;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 2px dashed #94a3b8;
     }
 
     .tabela-aih {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 6px;
+      table-layout: fixed;
     }
 
     .tabela-aih td, .tabela-aih th {
       border: 1px solid #000;
-      padding: 4px 6px;
+      padding: 3px 5px;
       vertical-align: top;
+      word-wrap: break-word;
     }
 
-    .tag-campo {
-      font-size: 8.5px;
+    .rotulo {
+      font-size: 8px;
       font-weight: bold;
       text-transform: uppercase;
-      color: #333;
+      color: #111;
       display: block;
       margin-bottom: 2px;
     }
 
-    .conteudo-campo {
-      font-size: 11px;
-      font-weight: 600;
+    .valor {
+      font-size: 10.5px;
+      font-weight: bold;
       color: #000;
     }
 
+    .faixa-secao {
+      background: #e2e8f0;
+      border: 1px solid #000;
+      font-weight: bold;
+      text-align: center;
+      padding: 3px;
+      font-size: 11px;
+      text-transform: uppercase;
+      margin: 8px 0 4px 0;
+    }
+
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      #folhaAihImpressao, #folhaAihImpressao * {
-        visibility: visible;
-      }
-      #folhaAihImpressao {
+      body * { visibility: hidden; }
+      #documentoCompletoAIH, #documentoCompletoAIH * { visibility: visible; }
+      #documentoCompletoAIH {
         position: absolute;
         left: 0;
         top: 0;
         width: 100%;
         min-width: 100%;
         padding: 0;
+        box-shadow: none;
       }
-      .modal-overlay, .modal-janela, .modal-conteudo-scroll {
+      .quebra-pagina {
+        page-break-before: always;
+        border-top: none;
+        margin-top: 0;
+        padding-top: 0;
+      }
+      .modal-overlay, .modal-corpo, .modal-scroll {
         position: static;
         background: transparent;
       }
-      .modal-cabecalho {
-        display: none !important;
-      }
+      .modal-barra { display: none !important; }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header class="app-header">
+  <div class="painel-principal">
+    <div class="topo-painel">
       <h1>Emissão AIH Oficial</h1>
       <h2>Hospital Maternidade Severina Carlos de Andrade &bull; Frutuoso Gomes - RN</h2>
-    </header>
+    </div>
 
-    <form id="formAIH" onsubmit="event.preventDefault(); gerarVisualizacao();">
+    <form id="formularioAIH" onsubmit="event.preventDefault(); abrirVisualizacao();">
       
+      <!-- 1. IDENTIFICAÇÃO -->
       <fieldset>
-        <legend>1. Registo e Estabelecimento</legend>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Nº do Prontuário</label>
-            <input type="text" id="prontuario" required placeholder="Ex: 7521">
+        <legend>1. Registo e Tipo de AIH</legend>
+        <div class="grid-campos">
+          <div class="campo-item">
+            <label>Nº Prontuário</label>
+            <input type="text" id="prontuario" required value="4819">
           </div>
-          <div class="form-group">
-            <label>Nº da AIH</label>
-            <input type="text" id="num_aih" placeholder="Opcional">
+          <div class="campo-item">
+            <label>Nº da AIH (se houver)</label>
+            <input type="text" id="num_aih" placeholder="Deixar em branco se inicial">
           </div>
-          <div class="form-group">
-            <label>Tipo</label>
+          <div class="campo-item">
+            <label>Tipo de AIH</label>
             <select id="tipo_aih">
-              <option value="01 - Inicial">01 - Inicial</option>
-              <option value="02 - Continuidade">02 - Continuidade</option>
+              <option value="01 – Inicial">01 – Inicial</option>
+              <option value="02 – Continuidade" selected>02 – Continuidade</option>
             </select>
           </div>
-          <div class="form-group">
-            <label>Data Admissão</label>
-            <input type="date" id="data_admissao" required>
+          <div class="campo-item">
+            <label>Data Admissão/Internação</label>
+            <input type="date" id="data_admissao" required value="2026-09-04">
           </div>
-          <div class="form-group">
-            <label>Data Saída / Alta</label>
-            <input type="date" id="data_saida">
+          <div class="campo-item">
+            <label>Data de Saída / Alta</label>
+            <input type="date" id="data_saida" value="2026-09-06">
           </div>
         </div>
       </fieldset>
 
+      <!-- 2. DADOS DO PACIENTE -->
       <fieldset>
         <legend>2. Dados do Paciente</legend>
-        <div class="form-grid">
-          <div class="form-group col-full">
-            <label>Nome do Paciente</label>
-            <input type="text" id="paciente" required placeholder="Nome do paciente">
+        <div class="grid-campos">
+          <div class="campo-item col-total">
+            <label>Nome Completo do Paciente</label>
+            <input type="text" id="paciente" required value="JUCIENE ALVES CAMARA FERREIRA">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Cartão SUS (CNS)</label>
-            <input type="text" id="cns" placeholder="000 0000 0000 0000">
+            <input type="text" id="cns" value="702 9095 5587 9470">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Data de Nascimento</label>
-            <input type="date" id="nascimento">
+            <input type="date" id="nascimento" value="1980-05-12">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Sexo</label>
             <select id="sexo">
-              <option value="F">Feminino</option>
+              <option value="F" selected>Feminino</option>
               <option value="M">Masculino</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Raça / Cor</label>
             <select id="raca">
-              <option value="PARDA">Parda</option>
+              <option value="PARDA" selected>Parda</option>
               <option value="BRANCA">Branca</option>
               <option value="PRETA">Preta</option>
               <option value="AMARELA">Amarela</option>
               <option value="INDIGENA">Indígena</option>
             </select>
           </div>
-          <div class="form-group col-full">
+          <div class="campo-item col-total">
             <label>Nome da Mãe</label>
-            <input type="text" id="mae" placeholder="Nome da mãe">
+            <input type="text" id="mae" value="MARIA ALVES DA SILVA">
           </div>
-          <div class="form-group col-full">
-            <label>Endereço Completo</label>
-            <input type="text" id="endereco" placeholder="Rua, número, bairro ou sítio">
+          <div class="campo-item col-total">
+            <label>Endereço Residencial</label>
+            <input type="text" id="endereco" value="RUA ROLDÃO DANTAS, Nº 34 - CENTRO">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Município</label>
             <input type="text" id="municipio" value="Frutuoso Gomes">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>UF</label>
             <input type="text" id="uf" value="RN">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Telefone</label>
-            <input type="text" id="telefone" placeholder="(84) 90000-0000">
+            <input type="text" id="telefone" value="(84) 99688-3488">
           </div>
         </div>
       </fieldset>
 
+      <!-- 3. PROCEDIMENTO E CLÍNICA -->
       <fieldset>
         <legend>3. Procedimento e Justificativa Clínica</legend>
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Especialidade</label>
+        <div class="grid-campos">
+          <div class="campo-item">
+            <label>Especialidade / Clínica</label>
             <input type="text" id="especialidade" value="CLÍNICA MÉDICA">
           </div>
-          <div class="form-group">
-            <label>Leito / Enfermaria</label>
-            <input type="text" id="leito" value="01">
+          <div class="campo-item">
+            <label>Enfermaria / Leito</label>
+            <input type="text" id="leito" value="ENF. M / LEITO 02">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>CID-10 Principal</label>
-            <input type="text" id="cid" required placeholder="Ex: D23 ou I10">
+            <input type="text" id="cid" required value="I10">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Diagnóstico Inicial</label>
-            <input type="text" id="diagnostico" required placeholder="Ex: Outras neoplasias benignas da pele">
+            <input type="text" id="diagnostico" required value="CRISE HIPERTENSIVA">
           </div>
-          <div class="form-group">
+          <div class="campo-item">
             <label>Código do Procedimento</label>
-            <input type="text" id="cod_procedimento" placeholder="Ex: 0401020045">
+            <input type="text" id="cod_procedimento" value="0303060107">
           </div>
-          <div class="form-group col-full">
+          <div class="campo-item col-total">
             <label>Descrição do Procedimento</label>
-            <input type="text" id="procedimento" placeholder="Ex: EXCISAO E ENXERTO DE PELE">
+            <input type="text" id="procedimento" value="TRATAMENTO DE CRISE HIPERTENSIVA">
           </div>
-          <div class="form-group col-full">
+          <div class="campo-item col-total">
             <label>Sinais e Sintomas Clínicos</label>
-            <textarea id="sintomas" rows="2" placeholder="Histórico clínico..."></textarea>
+            <textarea id="sintomas" rows="2">Cefaleia de forte intensidade, náuseas, tontura e níveis pressóricos elevados na admissão.</textarea>
           </div>
-          <div class="form-group col-full">
+          <div class="campo-item col-total">
             <label>Condições que Justificam a Internação</label>
-            <textarea id="justificativa" rows="2">Quadro clínico com necessidade de intervenção e acompanhamento hospitalar.</textarea>
+            <textarea id="justificativa" rows="2">Quadro clínico agudo necessitando de monitorização intensiva e terapêutica parenteral.</textarea>
           </div>
         </div>
       </fieldset>
 
-      <fieldset>
-        <legend>4. Profissional Solicitante</legend>
-        <div class="form-grid">
-          <div class="form-group col-full">
-            <label>Médico Solicitante</label>
-            <input type="text" id="medico" value="LUCÍDIO JÁCOME FERREIRA">
-          </div>
-          <div class="form-group">
-            <label>CPF Solicitante</label>
-            <input type="text" id="cpf_medico" value="175.499.574-87">
-          </div>
-        </div>
-      </fieldset>
+      <!-- BOTÕES DIRETOS -->
+      <div class="barra-botoes-topo">
+        <button type="submit" class="btn-acao btn-visualizar">Visualizar AIH</button>
+        <button type="button" onclick="gerarDocumentoWordDireto()" class="btn-acao btn-word">Baixar DOC (Word)</button>
+        <button type="button" onclick="gerarPDFDireto()" class="btn-acao btn-pdf">Baixar PDF</button>
+      </div>
 
-      <button type="submit" class="btn-principal">Visualizar e Emitir AIH</button>
     </form>
   </div>
 
-  <!-- Modal com ambas as opções de exportação -->
+  <!-- MODAL DE PRÉ-VISUALIZAÇÃO COMPLETA -->
   <div id="modalAIH" class="modal-overlay" style="display: none;">
-    <div class="modal-janela">
-      <div class="modal-cabecalho">
-        <div class="modal-titulo">Visualização da AIH Gerada</div>
-        <div class="modal-botoes">
-          <!-- Botão Word (.doc) -->
-          <button type="button" class="btn-modal btn-doc" onclick="descarregarWordDOC()">Baixar DOC (Word)</button>
-          <!-- Botão PDF (.pdf) -->
-          <button type="button" class="btn-modal btn-pdf" onclick="descarregarPDF()">Baixar PDF</button>
-          <!-- Botão Imprimir Direto -->
-          <button type="button" class="btn-modal btn-imprimir" onclick="imprimirAIH()">Imprimir</button>
-          <!-- Botão Fechar -->
-          <button type="button" class="btn-modal btn-fechar" onclick="fecharModal()">Fechar</button>
+    <div class="modal-corpo">
+      <div class="modal-barra">
+        <strong style="font-size: 1.05rem;">Visualização da AIH Gerada</strong>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <button type="button" class="btn-acao btn-word" onclick="descarregarWordDOC()">Baixar DOC (Word)</button>
+          <button type="button" class="btn-acao btn-pdf" onclick="descarregarPDF()">Baixar PDF</button>
+          <button type="button" class="btn-acao btn-imprimir" onclick="window.print()">Imprimir</button>
+          <button type="button" class="btn-acao btn-fechar" onclick="fecharModal()">Fechar</button>
         </div>
       </div>
 
-      <div class="modal-conteudo-scroll">
-        <div id="folhaAihImpressao" class="folha-documento"></div>
+      <div class="modal-scroll">
+        <div id="documentoCompletoAIH" class="pagina-oficial"></div>
       </div>
     </div>
   </div>
 
   <script>
-    function formatarData(dataStr) {
-      if (!dataStr) return '';
-      const partes = dataStr.split('-');
-      if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
-      return dataStr;
+    function formatarData(str) {
+      if (!str) return '';
+      const partes = str.split('-');
+      return partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : str;
     }
 
-    function gerarVisualizacao() {
-      const prontuario = document.getElementById('prontuario').value;
-      const numAih = document.getElementById('num_aih').value;
-      const tipoAih = document.getElementById('tipo_aih').value;
-      const dataAdmissao = formatarData(document.getElementById('data_admissao').value);
-      const dataSaida = formatarData(document.getElementById('data_saida').value);
-      const paciente = document.getElementById('paciente').value;
-      const cns = document.getElementById('cns').value;
-      const nascimento = formatarData(document.getElementById('nascimento').value);
-      const sexo = document.getElementById('sexo').value;
-      const raca = document.getElementById('raca').value;
-      const mae = document.getElementById('mae').value;
-      const endereco = document.getElementById('endereco').value;
-      const municipio = document.getElementById('municipio').value;
-      const uf = document.getElementById('uf').value;
-      const telefone = document.getElementById('telefone').value;
-      const especialidade = document.getElementById('especialidade').value;
-      const leito = document.getElementById('leito').value;
-      const cid = document.getElementById('cid').value;
-      const diagnostico = document.getElementById('diagnostico').value;
-      const codProcedimento = document.getElementById('cod_procedimento').value;
-      const procedimento = document.getElementById('procedimento').value;
-      const sintomas = document.getElementById('sintomas').value;
-      const justificativa = document.getElementById('justificativa').value;
-      const medico = document.getElementById('medico').value;
-      const cpfMedico = document.getElementById('cpf_medico').value;
+    function obterDados() {
+      return {
+        prontuario: document.getElementById('prontuario').value || '',
+        numAih: document.getElementById('num_aih').value || '',
+        tipoAih: document.getElementById('tipo_aih').value || '01 – Inicial',
+        dataAdmissao: formatarData(document.getElementById('data_admissao').value),
+        dataSaida: formatarData(document.getElementById('data_saida').value),
+        paciente: document.getElementById('paciente').value || '',
+        cns: document.getElementById('cns').value || '',
+        nascimento: formatarData(document.getElementById('nascimento').value),
+        sexo: document.getElementById('sexo').value || '',
+        raca: document.getElementById('raca').value || '',
+        mae: document.getElementById('mae').value || '',
+        endereco: document.getElementById('endereco').value || '',
+        municipio: document.getElementById('municipio').value || 'Frutuoso Gomes',
+        uf: document.getElementById('uf').value || 'RN',
+        telefone: document.getElementById('telefone').value || '',
+        especialidade: document.getElementById('especialidade').value || 'CLÍNICA MÉDICA',
+        leito: document.getElementById('leito').value || '01',
+        cid: document.getElementById('cid').value || '',
+        diagnostico: document.getElementById('diagnostico').value || '',
+        codProcedimento: document.getElementById('cod_procedimento').value || '',
+        procedimento: document.getElementById('procedimento').value || '',
+        sintomas: document.getElementById('sintomas').value || '',
+        justificativa: document.getElementById('justificativa').value || '',
+        medico: 'LUCÍDIO JÁCOME FERREIRA',
+        cpfMedico: '175.499.574-87',
+        cpfAutorizador: '185.901.284-15'
+      };
+    }
 
-      const htmlDocumento = `
-        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px;">
+    // Monta o template completo com todas as seções oficiais e tabelas alinhadas
+    function construirHtmlDocumento(d) {
+      return `
+        <!-- PÁGINA 1: AUTORIZAÇÃO E LAUDO OFICIAL -->
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px;">
           <h3 style="margin: 0; font-size: 13px; text-transform: uppercase;">Prefeitura Municipal de Frutuoso Gomes</h3>
           <h4 style="margin: 2px 0; font-size: 11px;">Hospital Maternidade Severina Carlos de Andrade</h4>
-          <p style="margin: 0; font-size: 10px;">CNPJ: 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
+          <p style="margin: 0; font-size: 9.5px;">CNPJ: 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
         </div>
 
-        <div style="font-size: 12px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 4px; margin-bottom: 6px; text-transform: uppercase;">
-          Autorização para Internação Hospitalar (AIH)
-        </div>
+        <div class="faixa-secao">Autorização para Internação Hospitalar (AIH)</div>
 
         <table class="tabela-aih">
           <tr>
-            <td style="width: 70%;">
-              <span class="tag-campo">1 - Estabelecimento Solicitante / Executante</span>
-              <span class="conteudo-campo">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span>
+            <td style="width: 50%;">
+              <span class="rotulo">Número da AIH:</span>
+              <span class="valor">${d.numAih || '&nbsp;'}</span>
             </td>
-            <td style="width: 30%;">
-              <span class="tag-campo">2 - CNES</span>
-              <span class="conteudo-campo">2380846</span>
+            <td style="width: 25%;">
+              <span class="rotulo">Prontuário:</span>
+              <span class="valor">${d.prontuario}</span>
             </td>
-          </tr>
-          <tr>
-            <td>
-              <span class="tag-campo">Número da AIH</span>
-              <span class="conteudo-campo">${numAih || '&nbsp;'}</span>
-            </td>
-            <td>
-              <span class="tag-campo">Prontuário</span>
-              <span class="conteudo-campo">${prontuario}</span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <span class="tag-campo">Tipo de AIH</span>
-              <span class="conteudo-campo">${tipoAih}</span>
-            </td>
-            <td>
-              <span class="tag-campo">Período de Atendimento</span>
-              <span class="conteudo-campo">${dataAdmissao} a ${dataSaida || 'Em aberto'}</span>
-            </td>
-          </tr>
-        </table>
-
-        <div style="font-size: 11px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 3px; margin: 8px 0 6px 0; text-transform: uppercase;">
-          Dados do Paciente
-        </div>
-        
-        <table class="tabela-aih">
-          <tr>
-            <td colspan="2" style="width: 70%;">
-              <span class="tag-campo">Nome do Paciente</span>
-              <span class="conteudo-campo">${paciente}</span>
-            </td>
-            <td style="width: 30%;">
-              <span class="tag-campo">Cartão SUS (CNS)</span>
-              <span class="conteudo-campo">${cns || '&nbsp;'}</span>
-            </td>
-          </tr>
-          <tr>
-            <td style="width: 35%;">
-              <span class="tag-campo">Data de Nascimento</span>
-              <span class="conteudo-campo">${nascimento || '&nbsp;'}</span>
-            </td>
-            <td style="width: 20%;">
-              <span class="tag-campo">Sexo</span>
-              <span class="conteudo-campo">${sexo}</span>
-            </td>
-            <td style="width: 45%;">
-              <span class="tag-campo">Raça / Cor</span>
-              <span class="conteudo-campo">${raca}</span>
+            <td style="width: 25%;">
+              <span class="rotulo">Tipo:</span>
+              <span class="valor">${d.tipoAih}</span>
             </td>
           </tr>
           <tr>
             <td colspan="2">
-              <span class="tag-campo">Nome da Mãe</span>
-              <span class="conteudo-campo">${mae || '&nbsp;'}</span>
+              <span class="rotulo">Estabelecimento Solicitante / Executante (CNES):</span>
+              <span class="valor">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE (2380846)</span>
             </td>
             <td>
-              <span class="tag-campo">Telefone</span>
-              <span class="conteudo-campo">${telefone || '&nbsp;'}</span>
+              <span class="rotulo">Órgão Emissor:</span>
+              <span class="valor">SESAP / RN</span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <span class="rotulo">Data da Internação:</span>
+              <span class="valor">${d.dataAdmissao}</span>
+            </td>
+            <td>
+              <span class="rotulo">Data da Saída:</span>
+              <span class="valor">${d.dataSaida || 'Em aberto'}</span>
+            </td>
+          </tr>
+        </table>
+
+        <div class="faixa-secao">Dados do Paciente</div>
+
+        <table class="tabela-aih">
+          <tr>
+            <td style="width: 70%;" colspan="2">
+              <span class="rotulo">Nome do Paciente:</span>
+              <span class="valor">${d.paciente}</span>
+            </td>
+            <td style="width: 30%;">
+              <span class="rotulo">Cartão SUS (CNS):</span>
+              <span class="valor">${d.cns}</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 30%;">
+              <span class="rotulo">Data Nascimento:</span>
+              <span class="valor">${d.nascimento}</span>
+            </td>
+            <td style="width: 20%;">
+              <span class="rotulo">Sexo:</span>
+              <span class="valor">${d.sexo}</span>
+            </td>
+            <td style="width: 50%;">
+              <span class="rotulo">Raça / Cor:</span>
+              <span class="valor">${d.raca}</span>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <span class="rotulo">Nome da Mãe:</span>
+              <span class="valor">${d.mae}</span>
+            </td>
+            <td>
+              <span class="rotulo">Telefone:</span>
+              <span class="valor">${d.telefone}</span>
             </td>
           </tr>
           <tr>
             <td colspan="3">
-              <span class="tag-campo">Endereço Residencial</span>
-              <span class="conteudo-campo">${endereco} - ${municipio}/${uf}</span>
+              <span class="rotulo">Endereço Residencial:</span>
+              <span class="valor">${d.endereco} &bull; ${d.municipio} - ${d.uf}</span>
             </td>
           </tr>
         </table>
 
-        <div style="font-size: 11px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 3px; margin: 8px 0 6px 0; text-transform: uppercase;">
-          Dados Clínicos e Justificativa de Internação
-        </div>
+        <div class="faixa-secao">Dados do Procedimento e Justificativa de Internação</div>
 
         <table class="tabela-aih">
           <tr>
             <td style="width: 70%;">
-              <span class="tag-campo">Especialidade / Clínica</span>
-              <span class="conteudo-campo">${especialidade}</span>
+              <span class="rotulo">Procedimento Solicitado / Realizado:</span>
+              <span class="valor">${d.procedimento}</span>
             </td>
             <td style="width: 30%;">
-              <span class="tag-campo">Leito / Enfermaria</span>
-              <span class="conteudo-campo">${leito}</span>
+              <span class="rotulo">Código do Procedimento:</span>
+              <span class="valor">${d.codProcedimento}</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="rotulo">Especialidade / Caráter de Atendimento:</span>
+              <span class="valor">${d.especialidade} &bull; Urgência/Emergência</span>
+            </td>
+            <td>
+              <span class="rotulo">Enfermaria / Leito:</span>
+              <span class="valor">${d.leito}</span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span class="rotulo">Diagnóstico Inicial:</span>
+              <span class="valor">${d.diagnostico}</span>
+            </td>
+            <td>
+              <span class="rotulo">CID-10 Principal:</span>
+              <span class="valor">${d.cid}</span>
             </td>
           </tr>
           <tr>
             <td colspan="2">
-              <span class="tag-campo">Principais Sinais e Sintomas Clínicos</span>
-              <div class="conteudo-campo" style="min-height: 28px;">${sintomas || '&nbsp;'}</div>
+              <span class="rotulo">Principais Sinais e Sintomas Clínicos:</span>
+              <div class="valor" style="min-height: 28px;">${d.sintomas}</div>
             </td>
           </tr>
           <tr>
             <td colspan="2">
-              <span class="tag-campo">Condições que Justificam a Internação</span>
-              <div class="conteudo-campo" style="min-height: 25px;">${justificativa || '&nbsp;'}</div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <span class="tag-campo">Diagnóstico Inicial</span>
-              <span class="conteudo-campo">${diagnostico}</span>
-            </td>
-            <td>
-              <span class="tag-campo">CID-10 Principal</span>
-              <span class="conteudo-campo">${cid}</span>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <span class="tag-campo">Procedimento Solicitado / Realizado</span>
-              <span class="conteudo-campo">${procedimento || '&nbsp;'}</span>
-            </td>
-            <td>
-              <span class="tag-campo">Código do Procedimento</span>
-              <span class="conteudo-campo">${codProcedimento || '&nbsp;'}</span>
+              <span class="rotulo">Condições que Justificam a Internação:</span>
+              <div class="valor" style="min-height: 24px;">${d.justificativa}</div>
             </td>
           </tr>
         </table>
 
-        <div style="font-size: 11px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 3px; margin: 8px 0 6px 0; text-transform: uppercase;">
-          Profissional Solicitante e Autorização
+        <!-- PROCEDIMENTOS REALIZADOS / FATURAMENTO -->
+        <table class="tabela-aih" style="margin-top: 6px;">
+          <tr style="background: #f1f5f9; text-align: center;">
+            <th style="width: 10%;">Linha</th>
+            <th style="width: 25%;">Procedimento</th>
+            <th style="width: 10%;">Qtd.</th>
+            <th style="width: 20%;">CPF Solicitante</th>
+            <th style="width: 15%;">CBO</th>
+            <th style="width: 10%;">CNES</th>
+            <th style="width: 10%;">CNPJ</th>
+          </tr>
+          <tr style="text-align: center;">
+            <td>01</td>
+            <td>${d.codProcedimento}</td>
+            <td>01</td>
+            <td>${d.cpfMedico}</td>
+            <td>225125</td>
+            <td>2380846</td>
+            <td>08.349.052</td>
+          </tr>
+        </table>
+
+        <!-- ASSINATURAS -->
+        <table class="tabela-aih" style="margin-top: 8px;">
+          <tr>
+            <td style="width: 50%; height: 50px; text-align: center; vertical-align: bottom;">
+              <div style="border-top: 1px dotted #000; font-size: 9.5px; padding-top: 3px;">
+                ${d.medico}<br>
+                CPF: ${d.cpfMedico} &bull; Médico Solicitante
+              </div>
+            </td>
+            <td style="width: 50%; height: 50px; text-align: center; vertical-align: bottom;">
+              <div style="border-top: 1px dotted #000; font-size: 9.5px; padding-top: 3px;">
+                AUTORIZADOR SMS / HOSPITAL<br>
+                CPF: ${d.cpfAutorizador} &bull; Data: ${d.dataAdmissao}
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- PÁGINA 2: PRONTUÁRIO CLÍNICO DE INTERNAÇÃO -->
+        <div class="quebra-pagina"></div>
+
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px;">
+          <h3 style="margin: 0; font-size: 12px; text-transform: uppercase;">Estado do Rio Grande do Norte &bull; Secretaria Municipal de Saúde</h3>
+          <h4 style="margin: 2px 0; font-size: 11px;">Hospital Maternidade Severina Carlos de Andrade</h4>
+          <h2 style="margin: 4px 0 0 0; font-size: 12px; text-decoration: underline;">PRONTUÁRIO DE INTERNAÇÃO HOSPITALAR</h2>
         </div>
 
         <table class="tabela-aih">
           <tr>
-            <td style="width: 60%; height: 60px; vertical-align: bottom;">
-              <div style="border-top: 1px dotted #000; text-align: center; font-size: 10px; margin-top: 35px;">
-                ${medico}<br>
-                CPF: ${cpfMedico} &bull; Médico Solicitante
+            <td colspan="2"><span class="rotulo">Nome do Paciente:</span><span class="valor">${d.paciente}</span></td>
+            <td><span class="rotulo">Prontuário:</span><span class="valor">${d.prontuario}</span></td>
+          </tr>
+          <tr>
+            <td style="width: 50%;"><span class="rotulo">Endereço:</span><span class="valor">${d.endereco}</span></td>
+            <td style="width: 30%;"><span class="rotulo">Município:</span><span class="valor">${d.municipio} / ${d.uf}</span></td>
+            <td style="width: 20%;"><span class="rotulo">Telefone:</span><span class="valor">${d.telefone}</span></td>
+          </tr>
+          <tr>
+            <td><span class="rotulo">Data Admissão:</span><span class="valor">${d.dataAdmissao}</span></td>
+            <td><span class="rotulo">Data Alta:</span><span class="valor">${d.dataSaida || 'Em acompanhamento'}</span></td>
+            <td><span class="rotulo">Leito:</span><span class="valor">${d.leito}</span></td>
+          </tr>
+        </table>
+
+        <div class="faixa-secao">Sumário de História Clínica, Exame Físico e Conduta</div>
+        <table class="tabela-aih">
+          <tr>
+            <td style="height: 120px; vertical-align: top;">
+              <span class="rotulo">Histórico Clínico e Tratamento:</span>
+              <p style="margin-top: 4px;">Paciente deu entrada apresentando: <strong>${d.sintomas}</strong>.</p>
+              <p style="margin-top: 6px;"><strong>Diagnóstico Confirmado:</strong> ${d.diagnostico} (CID-10: ${d.cid}).</p>
+              <p style="margin-top: 6px;"><strong>Procedimento Instituído:</strong> ${d.procedimento} (${d.codProcedimento}).</p>
+              <p style="margin-top: 6px;">Evolução estável durante o período de permanência hospitalar.</p>
+            </td>
+          </tr>
+        </table>
+
+        <!-- PÁGINA 3: BOLETIM CIRÚRGICO / PROCEDIMENTOS -->
+        <div class="quebra-pagina"></div>
+
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 4px; margin-bottom: 6px;">
+          <h3 style="margin: 0; font-size: 12px; text-transform: uppercase;">Hospital Maternidade Severina Carlos de Andrade</h3>
+          <h2 style="margin: 4px 0 0 0; font-size: 12px; text-decoration: underline;">BOLETIM OPERATÓRIO / FICHA DE PROCEDIMENTO</h2>
+        </div>
+
+        <table class="tabela-aih">
+          <tr>
+            <td style="width: 70%;"><span class="rotulo">Paciente:</span><span class="valor">${d.paciente}</span></td>
+            <td style="width: 30%;"><span class="rotulo">Prontuário:</span><span class="valor">${d.prontuario}</span></td>
+          </tr>
+          <tr>
+            <td><span class="rotulo">Procedimento Realizado:</span><span class="valor">${d.procedimento}</span></td>
+            <td><span class="rotulo">Código:</span><span class="valor">${d.codProcedimento}</span></td>
+          </tr>
+          <tr>
+            <td><span class="rotulo">Cirurgião / Médico Responsável:</span><span class="valor">${d.medico}</span></td>
+            <td><span class="rotulo">Data:</span><span class="valor">${d.dataAdmissao}</span></td>
+          </tr>
+        </table>
+
+        <div class="faixa-secao">Descrição e Relatório Técnico</div>
+        <table class="tabela-aih">
+          <tr>
+            <td style="height: 110px; vertical-align: top;">
+              <span class="rotulo">Relatório:</span>
+              <p style="margin-top: 4px;">Procedimento realizado sob técnica asséptica habitual, sem intercorrências no ato. Paciente tolerou bem a intervenção, com parâmetros estáveis.</p>
+            </td>
+          </tr>
+        </table>
+
+        <table class="tabela-aih" style="margin-top: 15px;">
+          <tr>
+            <td style="width: 50%; height: 50px; text-align: center; vertical-align: bottom;">
+              <div style="border-top: 1px dotted #000; font-size: 9.5px; padding-top: 4px;">
+                ${d.medico}<br>
+                CRM / CPF: ${d.cpfMedico}
               </div>
             </td>
-            <td style="width: 40%; vertical-align: middle;">
-              <span class="tag-campo">Data da Solicitação</span>
-              <span class="conteudo-campo">${dataAdmissao || new Date().toLocaleDateString('pt-BR')}</span>
-              <br><br>
-              <span class="tag-campo">Caráter do Atendimento</span>
-              <span class="conteudo-campo">Urgência / Emergência</span>
+            <td style="width: 50%; height: 50px; text-align: center; vertical-align: bottom;">
+              <div style="border-top: 1px dotted #000; font-size: 9.5px; padding-top: 4px;">
+                Equipe de Enfermagem / Centro Cirúrgico
+              </div>
             </td>
           </tr>
         </table>
       `;
+    }
 
-      document.getElementById('folhaAihImpressao').innerHTML = htmlDocumento;
+    function abrirVisualizacao() {
+      const dados = obterDados();
+      document.getElementById('documentoCompletoAIH').innerHTML = construirHtmlDocumento(dados);
       document.getElementById('modalAIH').style.display = 'flex';
     }
 
@@ -637,20 +745,25 @@
       document.getElementById('modalAIH').style.display = 'none';
     }
 
-    function imprimirAIH() {
-      window.print();
+    function gerarPDFDireto() {
+      abrirVisualizacao();
+      descarregarPDF();
     }
 
-    /* 1. Função para Gerar e Baixar PDF */
+    function gerarDocumentoWordDireto() {
+      abrirVisualizacao();
+      descarregarWordDOC();
+    }
+
+    /* Geração de PDF */
     function descarregarPDF() {
-      const elemento = document.getElementById('folhaAihImpressao');
-      const prontuario = document.getElementById('prontuario').value || 'doc';
-      const paciente = document.getElementById('paciente').value || 'paciente';
-      const nomeLimpo = `AIH_${prontuario}_${paciente.replace(/\s+/g, '_')}.pdf`;
+      const elemento = document.getElementById('documentoCompletoAIH');
+      const d = obterDados();
+      const nomeArquivo = `AIH_${d.prontuario}_${d.paciente.replace(/\s+/g, '_')}.pdf`;
 
       const opcoes = {
-        margin: [8, 8, 8, 8],
-        filename: nomeLimpo,
+        margin: [6, 6, 6, 6],
+        filename: nomeArquivo,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -659,16 +772,16 @@
       html2pdf().set(opcoes).from(elemento).save();
     }
 
-    /* 2. Função para Gerar e Baixar DOC (Word) */
+    /* Geração do DOCX / DOC nativo sem colar palavras */
     function descarregarWordDOC() {
-      const conteudoHTML = document.getElementById('folhaAihImpressao').innerHTML;
-      const prontuario = document.getElementById('prontuario').value || 'doc';
-      const paciente = document.getElementById('paciente').value || 'paciente';
-      const nomeFicheiro = `AIH_${prontuario}_${paciente.replace(/\s+/g, '_')}.doc`;
+      const d = obterDados();
+      const conteudoHTML = document.getElementById('documentoCompletoAIH').innerHTML;
+      const nomeArquivo = `AIH_${d.prontuario}_${d.paciente.replace(/\s+/g, '_')}.doc`;
 
-      const documentoWordCompleto = `
-        <html xmlns:o='urn:schemas-microsoft-com:office:office' 
-              xmlns:w='urn:schemas-microsoft-com:office:word' 
+      // Estrutura com marcação e declaração XML exata para o Word interpretar tabelas e quebras de página
+      const documentoWord = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office'
+              xmlns:w='urn:schemas-microsoft-com:office:word'
               xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
@@ -684,36 +797,57 @@
           <![endif]-->
           <style>
             @page {
-              size: A4 portrait;
-              margin: 1.5cm 1.5cm 1.5cm 1.5cm;
+              size: 21cm 29.7cm;
+              margin: 1.2cm 1.2cm 1.2cm 1.2cm;
               mso-page-orientation: portrait;
             }
             body {
               font-family: Arial, sans-serif;
-              font-size: 11pt;
+              font-size: 10pt;
               color: #000;
+              line-height: 1.2;
+            }
+            p {
+              margin: 0 0 4pt 0;
             }
             table {
               width: 100%;
               border-collapse: collapse;
-              margin-bottom: 8px;
+              margin-bottom: 6pt;
+              mso-table-lspace: 0pt;
+              mso-table-rspace: 0pt;
             }
             td, th {
-              border: 1pt solid #000;
+              border: 1pt solid #000000;
               padding: 4pt 6pt;
               vertical-align: top;
             }
-            .tag-campo {
-              font-size: 8pt;
+            .rotulo {
+              font-size: 7.5pt;
               font-weight: bold;
               text-transform: uppercase;
-              color: #333;
+              color: #333333;
               display: block;
+              margin-bottom: 2pt;
             }
-            .conteudo-campo {
-              font-size: 10.5pt;
+            .valor {
+              font-size: 10pt;
               font-weight: bold;
-              color: #000;
+              color: #000000;
+            }
+            .faixa-secao {
+              background-color: #E2E8F0;
+              border: 1pt solid #000000;
+              font-weight: bold;
+              text-align: center;
+              padding: 3pt;
+              font-size: 10pt;
+              text-transform: uppercase;
+              margin: 8pt 0 4pt 0;
+            }
+            .quebra-pagina {
+              page-break-before: always;
+              mso-break-type: page-break;
             }
           </style>
         </head>
@@ -723,14 +857,14 @@
         </html>
       `;
 
-      const blob = new Blob(['\ufeff' + documentoWordCompleto], {
+      const blob = new Blob(['\ufeff' + documentoWord], {
         type: 'application/msword;charset=utf-8'
       });
 
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = nomeFicheiro;
+      link.download = nomeArquivo;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
