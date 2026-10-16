@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Emissão AIH Oficial</title>
-  <!-- Biblioteca para gerar PDF diretamente no dispositivo móvel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     * {
@@ -111,14 +110,13 @@
       border-radius: 6px;
       cursor: pointer;
       margin-top: 10px;
-      transition: background 0.2s;
     }
 
     .btn-principal:hover {
       background: #0369a1;
     }
 
-    /* Modal de Pré-visualização */
+    /* Modal */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -153,7 +151,7 @@
       padding: 12px 18px;
       border-bottom: 2px solid #cbd5e1;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .modal-titulo {
@@ -164,21 +162,23 @@
 
     .modal-botoes {
       display: flex;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     .btn-modal {
       border: none;
       border-radius: 4px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       font-size: 0.85rem;
       font-weight: bold;
       color: #fff;
       cursor: pointer;
     }
 
+    .btn-doc { background: #2b579a; } /* Cor azul clássica Word */
     .btn-imprimir { background: #0284c7; }
-    .btn-pdf { background: #0369a1; }
+    .btn-pdf { background: #059669; }
     .btn-fechar { background: #ef4444; }
 
     .modal-conteudo-scroll {
@@ -191,7 +191,6 @@
       background: #64748b;
     }
 
-    /* Estilo de Folha A4 Oficial */
     .folha-documento {
       background: #ffffff;
       width: 100%;
@@ -202,39 +201,6 @@
       font-family: Arial, Helvetica, sans-serif;
       font-size: 11px;
       color: #000;
-    }
-
-    .folha-cabecalho {
-      text-align: center;
-      border-bottom: 2px solid #000;
-      padding-bottom: 8px;
-      margin-bottom: 10px;
-    }
-
-    .folha-cabecalho h3 {
-      font-size: 13px;
-      margin-bottom: 2px;
-      text-transform: uppercase;
-    }
-
-    .folha-cabecalho h4 {
-      font-size: 11px;
-      margin-bottom: 2px;
-    }
-
-    .folha-cabecalho p {
-      font-size: 10px;
-    }
-
-    .folha-titulo {
-      font-size: 13px;
-      font-weight: bold;
-      text-align: center;
-      background: #e2e8f0;
-      border: 1px solid #000;
-      padding: 4px;
-      margin-bottom: 6px;
-      text-transform: uppercase;
     }
 
     .tabela-aih {
@@ -264,7 +230,6 @@
       color: #000;
     }
 
-    /* Regras de Impressão */
     @media print {
       body * {
         visibility: hidden;
@@ -279,12 +244,10 @@
         width: 100%;
         min-width: 100%;
         padding: 0;
-        box-shadow: none;
       }
       .modal-overlay, .modal-janela, .modal-conteudo-scroll {
         position: static;
         background: transparent;
-        overflow: visible;
       }
       .modal-cabecalho {
         display: none !important;
@@ -302,7 +265,6 @@
 
     <form id="formAIH" onsubmit="event.preventDefault(); gerarVisualizacao();">
       
-      <!-- Dados de Identificação -->
       <fieldset>
         <legend>1. Dados do Estabelecimento e Registo</legend>
         <div class="form-grid">
@@ -332,7 +294,6 @@
         </div>
       </fieldset>
 
-      <!-- Dados do Paciente -->
       <fieldset>
         <legend>2. Dados do Paciente</legend>
         <div class="form-grid">
@@ -388,7 +349,6 @@
         </div>
       </fieldset>
 
-      <!-- Dados Clínicos e Procedimento -->
       <fieldset>
         <legend>3. Procedimento e Justificativa Clínica</legend>
         <div class="form-grid">
@@ -422,12 +382,11 @@
           </div>
           <div class="form-group col-full">
             <label>Condições que Justificam a Internação</label>
-            <textarea id="justificativa" rows="2" placeholder="Descreva a justificação clínica...">Quadro clínico com necessidade de intervenção e acompanhamento hospitalar.</textarea>
+            <textarea id="justificativa" rows="2">Quadro clínico com necessidade de intervenção e acompanhamento hospitalar.</textarea>
           </div>
         </div>
       </fieldset>
 
-      <!-- Solicitante -->
       <fieldset>
         <legend>4. Profissional Solicitante</legend>
         <div class="form-grid">
@@ -446,30 +405,26 @@
     </form>
   </div>
 
-  <!-- Modal de Pré-visualização -->
+  <!-- Modal com botão Baixar DOC (Word) -->
   <div id="modalAIH" class="modal-overlay" style="display: none;">
     <div class="modal-janela">
-      
-      <!-- Cabeçalho com Ações -->
       <div class="modal-cabecalho">
         <div class="modal-titulo">Visualização da AIH Gerada</div>
         <div class="modal-botoes">
+          <button type="button" class="btn-modal btn-doc" onclick="descarregarWordDOC()">Baixar DOC</button>
           <button type="button" class="btn-modal btn-imprimir" onclick="imprimirAIH()">Imprimir</button>
           <button type="button" class="btn-modal btn-pdf" onclick="descarregarPDF()">Baixar PDF</button>
           <button type="button" class="btn-modal btn-fechar" onclick="fecharModal()">Fechar</button>
         </div>
       </div>
 
-      <!-- Área de Documento -->
       <div class="modal-conteudo-scroll">
         <div id="folhaAihImpressao" class="folha-documento"></div>
       </div>
-
     </div>
   </div>
 
   <script>
-    // Formatar data AAAA-MM-DD para DD/MM/AAAA
     function formatarData(dataStr) {
       if (!dataStr) return '';
       const partes = dataStr.split('-');
@@ -507,13 +462,15 @@
       const cpfMedico = document.getElementById('cpf_medico').value;
 
       const htmlDocumento = `
-        <div class="folha-cabecalho">
-          <h3>Prefeitura Municipal de Frutuoso Gomes</h3>
-          <h4>Hospital Maternidade Severina Carlos de Andrade</h4>
-          <p>CNPJ: 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 6px; margin-bottom: 10px;">
+          <h3 style="margin: 0; font-size: 13px; text-transform: uppercase;">Prefeitura Municipal de Frutuoso Gomes</h3>
+          <h4 style="margin: 2px 0; font-size: 11px;">Hospital Maternidade Severina Carlos de Andrade</h4>
+          <p style="margin: 0; font-size: 10px;">CNPJ: 08.349.052/0001-80 &bull; Frutuoso Gomes - RN</p>
         </div>
 
-        <div class="folha-titulo">Autorização para Internação Hospitalar (AIH)</div>
+        <div style="font-size: 12px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 4px; margin-bottom: 6px; text-transform: uppercase;">
+          Autorização para Internação Hospitalar (AIH)
+        </div>
 
         <table class="tabela-aih">
           <tr>
@@ -548,7 +505,9 @@
           </tr>
         </table>
 
-        <div class="folha-titulo" style="margin-top: 8px;">Dados do Paciente</div>
+        <div style="font-size: 11px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 3px; margin: 8px 0 6px 0; text-transform: uppercase;">
+          Dados do Paciente
+        </div>
         
         <table class="tabela-aih">
           <tr>
@@ -593,7 +552,9 @@
           </tr>
         </table>
 
-        <div class="folha-titulo" style="margin-top: 8px;">Dados Clínicos e Justificativa de Internação</div>
+        <div style="font-size: 11px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 3px; margin: 8px 0 6px 0; text-transform: uppercase;">
+          Dados Clínicos e Justificativa de Internação
+        </div>
 
         <table class="tabela-aih">
           <tr>
@@ -609,7 +570,7 @@
           <tr>
             <td colspan="2">
               <span class="tag-campo">Principais Sinais e Sintomas Clínicos</span>
-              <div class="conteudo-campo" style="min-height: 30px;">${sintomas || '&nbsp;'}</div>
+              <div class="conteudo-campo" style="min-height: 28px;">${sintomas || '&nbsp;'}</div>
             </td>
           </tr>
           <tr>
@@ -634,4 +595,10 @@
               <span class="conteudo-campo">${procedimento || '&nbsp;'}</span>
             </td>
             <td>
-              <span clas
+              <span class="tag-campo">Código do Procedimento</span>
+              <span class="conteudo-campo">${codProcedimento || '&nbsp;'}</span>
+            </td>
+          </tr>
+        </table>
+
+        <div style="font-size: 11px; font-weight: bold; text-align: center; background: #e2e8f0; border: 1px solid #000; padding: 3px; marg
