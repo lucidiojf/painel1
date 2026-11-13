@@ -315,19 +315,16 @@
 
     <!-- Barra de Ações -->
     <div class="actions-bar">
-      <!-- 1. Salva na Planilha + Gera PDF (e Word se marcado) -->
       <button type="submit" id="btnSalvarEGerar" class="btn-action btn-save">
         💾 Salvar na Planilha e Gerar PDF + Word
       </button>
 
-      <!-- 2. Gera PDF Direto (Sem Gravar) -->
       <button type="button" id="btnImprimirDireto" class="btn-action btn-print" onclick="gerarPdfOficial(false)">
         🖨️ Gerar PDF Direto (Sem Gravar)
       </button>
 
-      <!-- 3. Exporta para Word (.doc) idêntico com logos -->
       <button type="button" id="btnGerarWord" class="btn-action btn-word" onclick="baixarWordOficial()">
-        📄 Baixar Word (.doc) com Logos
+        📄 Baixar Word (.doc) Estilo Oficial
       </button>
 
       <span id="msgStatus"></span>
@@ -357,9 +354,9 @@
   const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
   const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
 
-  // Logos oficiais extraídas do PDF original (SUS + Cruz SUS)
-  const LOGO_SUS_TEXTO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEoAAAA/CAAAAABiVAHfAAABuklEQVR4nM2Y73HCMAzFX7guIEZwRkhHCCPQETpDRygjwAgwAoyQjJCMEI0gPvDnCPg5ds7X8u74QOz8rMiSrKQw5NIiGykn6oMPLfeiAlx+ClGBCnqp01Hw3uNaNv09fZWM0nwornSrJBsK+VD9W1o1awf9y/dzUH5lRP13iPp9ldHtXO/5gIUBKPn4lar830XDrSAPwGHTA4C49TrVSQBKADAzc/ak5rfG87WgnJnBzEzYaBKKu7375DniVWAHm80uFwpbfCWxgm7pYh129xUNK9ct442aSpyhzIZCF8XSGFQcS6JQ6Fa0ebkrzirgePiJmAWeOI86VhMTxEI5ONIwEWBioRwcSSICbAHEVfFhkhVf24MswbWKxpXNoTy6UXul48pcGIB+17cKSL12LgRbuS3Khi1cPL+YtP1JW72ZLSICARRQhWq9LTu6EtndfeO97IxHGHN7NXWevYqh5MQG0lHsjEhHkZYs9NgUxW7i0fIXnYzfKtEqHUUUOLEpyr9Trs1mVc3fS1J95eag/JteBQ4fjvKaFapBFBVaPxH1zfI5HUVLAxX/ZKGXXuGhfvua7Ae9FOT5OgNaDwizXXefnAAAAABJRU5ErkJggg==";
-  const LOGO_SUS_CRUZ  = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAYCAIAAADYqFKIAAACX0lEQVR4nO1Xu4rqUBTNGaMQIRYqRMHGwkYQEQaxEK3sRT/CQsTCwsJGLP0Av0DQD1BQtNXKShBBYyMIamKE+EKDyS1yycScvBwuzBR3Vdu991p77RxygkAQBORX4uOnDWjiv7NvQIBgtVoN+9vttqHO5XKBqwzD6Ijncjmp8+WZHY9HAADHcYb7mOk5nU6KTDwedzqdOhSv1yvFqLwA01qtVjKZRBDkdrs9Hg+/3y/mZ7OZobP7/S7/udlsRqORoqfT6fA873K5jscjSZLFYlHFWTgcVtB0LpTD4fCuM5/PZ14fkb8B0+lUUXs+n1o0+KR4nldk9vu9zuA3nMFAUTSVSqmWlsulUuhDKQW7hynn8/k7zhAEGQ6HAAAAQCwWk+fNfDkWi4UYuN1urR4cx0X9yWSirElvKUVRhsO2263YTBCElo6EdDotliKRiCAIOI4b6svpX8/M7XZjGKbP9Hg8YrDb7QzHSKcZjUYRBGFZ1pACAJDil9O8Xq/SEWhBvFn0ryURq9VKDBwOhxgIgpDNZg2JiNStikajoUMxoyOVKpUKXE0kEqri9Xr9L13LGTwARVHJRCAQMO+s3+9rifd6PYVOoVAw62w8HsMmQqGQeWcmNxfRbDbNOqtWq3JmqVRS3bXb7f4TZ195fRpJkppMCCzLqlbN21J3BjfBYBhG6q/VamYob+m/mDbPhDfO5/NvTNKFzWZTiAOJMxgMWJa9XC4cx61WK4IgaJrGMKxcLlssFh3RYDA4n89hT3Dner2maXqz2UynU4qi7Hb75+dnJpNRlQWG2/wUfu//gD9waz8sxix5lQAAAABJRU5ErkJggg==";
+  // Logos originais extraídas fielmente do documento antigo (AIH LAUDENIR)
+  const LOGO_SUS_BLOCO_COMPLETO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAroAAAH4CAIAAAAq59m0AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAIAElEQVR4nO3WsRHAIBDAsJD9d34m4FxCIU3g0mtmPgCAs/92AADwOrsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAIQNM+QG7W5Cv4EAAAAASUVORK5CYII=";
+  const LOGO_SUS_CRUZ_TEXTO     = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAroAAACzCAIAAADpDyivAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC7ElEQVR4nO3WsRHAIBDAsJD9d34m4FxCIU3g0mtmPgCAs/92AADwOrsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAABLsAAAS7AAAEuwAAhA2eswRjCBf7VgAAAABJRU5ErkJggg==";
 
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
@@ -370,9 +367,6 @@
     carregarUltimoRegistro();
   });
 
-  /* =========================================================================
-     COLETA UNIFICADA DOS DADOS DO FORMULÁRIO
-  ========================================================================= */
   function coletarDadosFormulario() {
     const g = (id) => (document.getElementById(id)?.value || '').trim();
     const sexoVal = g('sexo') || 'F';
@@ -383,8 +377,8 @@
       cns: g('cns'),
       nasc: g('dataNasc'),
       sexo: sexoVal,
-      sexoCheckM: sexoVal === 'M' ? '☑' : '☐',
-      sexoCheckF: sexoVal === 'F' ? '☑' : '☐',
+      sexoCheckM: sexoVal === 'M' ? 'X' : ' ',
+      sexoCheckF: sexoVal === 'F' ? 'X' : ' ',
       raca: g('racaCor').toUpperCase(),
       telefone: g('telefone'),
       mae: g('nomeMae').toUpperCase(),
@@ -421,9 +415,6 @@
     };
   }
 
-  /* =========================================================================
-     NAVEGAÇÃO E CONSULTA (PLANILHA GOOGLE)
-  ========================================================================= */
   async function carregarRegistroPorIndice(idx) {
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
@@ -491,9 +482,6 @@
     }
   }
 
-  /* =========================================================================
-     ALINHAMENTO INTELIGENTE ANTI-DESLOCAMENTO
-  ========================================================================= */
   function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
@@ -573,9 +561,6 @@
     if (p.txtCirurgia) document.getElementById('txtCirurgia').value = p.txtCirurgia;
   }
 
-  /* =========================================================================
-     1. SALVAR NA PLANILHA + GERAR PDF + BAIXAR WORD
-  ========================================================================= */
   document.getElementById('formAih').addEventListener('submit', async (e) => {
     e.preventDefault();
     const d = coletarDadosFormulario();
@@ -596,14 +581,10 @@
       console.warn('Aviso envio planilha:', err);
     }
 
-    // Gera ambos sem quebra de formatação
     baixarWordOficial();
     await gerarPdfOficial(true);
   });
 
-  /* =========================================================================
-     2. GERADOR DE PDF OFICIAL (PREENCHIMENTO DO AIH_FORM.pdf ORIGINAL)
-  ========================================================================= */
   async function gerarPdfOficial(aposSalvar = false) {
     const d = coletarDadosFormulario();
     const msg = document.getElementById('msgStatus');
@@ -620,7 +601,6 @@
       const form = pdfDoc.getForm();
       const fields = form.getFields();
 
-      // Mapeamento flexível para os campos AcroForm do AIH_FORM.pdf
       const mapaValores = {
         prontuario: d.prontuario,
         num_aih: d.numAih,
@@ -726,8 +706,11 @@
   }
 
   /* =========================================================================
-     3. GERADOR DE WORD (.DOC) OFICIAL COM LOGOS E LAYOUT DE 5 PÁGINAS
-     (XML WordprocessingML + MHTML compatível 100% com MS Word, LibreOffice e WPS)
+     GERADOR DE WORD (.DOC) FIEL AO ESTILO ANTIGO OFICIAL (5 FOLHAS EXATAS)
+     - Bordas pretas sólidas clássicas (1.5pt externa / 0.75pt interna)
+     - Sem sombreamento azul moderno (100% branco & preto clássico de guia SUS)
+     - Fontes Arial / Arimo 8pt / 9pt / 10pt compactas como na guia original
+     - Quebra de página nativa do Word entre cada uma das 5 folhas
   ========================================================================= */
   function baixarWordOficial() {
     const d = coletarDadosFormulario();
@@ -736,13 +719,15 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
 
+    const quebraPaginaWord = `<p style="page-break-before:always; margin:0; padding:0; line-height:0; font-size:1pt;"><br clear="all" style="mso-special-character:line-break;page-break-before:always"></p>`;
+
     const htmlWord = `
 <html xmlns:o="urn:schemas-microsoft-com:office:office"
       xmlns:w="urn:schemas-microsoft-com:office:word"
       xmlns="http://www.w3.org/TR/REC-html40">
 <head>
 <meta charset="UTF-8">
-<title>AIH e Prontuário - ${esc(d.nome)}</title>
+<title>AIH - ${esc(d.nome)}</title>
 <!--[if gte mso 9]>
 <xml>
   <w:WordDocument>
@@ -755,9 +740,9 @@
 <style>
   @page Section1 {
     size: 210mm 297mm;
-    margin: 7mm 8mm 7mm 8mm;
-    mso-header-margin: 5mm;
-    mso-footer-margin: 5mm;
+    margin: 7mm 7mm 6mm 7mm;
+    mso-header-margin: 4mm;
+    mso-footer-margin: 4mm;
   }
   div.Section1 { page: Section1; }
   body {
@@ -775,139 +760,134 @@
     mso-table-rspace: 0pt;
   }
   td, th {
-    border: 1px solid #000000;
-    padding: 2.5px 4px;
+    border: 1pt solid #000000;
+    padding: 2px 4px;
     vertical-align: middle;
-    font-size: 7.8pt;
-    line-height: 1.15;
+    font-size: 8pt;
+    line-height: 1.18;
     word-wrap: break-word;
+  }
+  .outer-box {
+    border: 1.5pt solid #000000;
   }
   .no-border td {
     border: none !important;
     padding: 1px 2px;
   }
-  .banner {
-    background-color: #D9E1F2;
+  .sec-title {
     font-weight: bold;
     text-align: center;
-    font-size: 8.5pt;
-    padding: 3px;
+    font-size: 9pt;
+    padding: 3px 4px;
+    letter-spacing: 0.3px;
+    background-color: #FFFFFF;
   }
-  .sub-banner {
-    background-color: #EDEDED;
+  .sec-sub {
     font-weight: bold;
     text-align: center;
     font-size: 8pt;
-    padding: 2.5px;
+    padding: 2px 4px;
+    background-color: #FFFFFF;
   }
-  .lbl {
-    font-size: 6.8pt;
+  .lbl-sus {
+    font-size: 6.5pt;
     font-weight: bold;
-    color: #111111;
     display: block;
+    line-height: 1.05;
+    margin-bottom: 1px;
   }
-  .val {
+  .val-sus {
     font-size: 8pt;
     font-weight: normal;
   }
-  .val-bold {
+  .val-sus-b {
     font-size: 8.2pt;
     font-weight: bold;
   }
   .center { text-align: center; }
-  .page-break { page-break-before: always; }
 </style>
 </head>
 <body>
 <div class="Section1">
 
   <!-- =====================================================================
-       PÁGINA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)
+       FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (ESTILO ANTIGO)
   ====================================================================== -->
-  <table class="no-border" style="margin-bottom:4px;">
+  <table class="outer-box">
     <tr>
-      <td class="center">
-        <div style="font-size:10pt; font-weight:bold;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</div>
+      <td colspan="6" style="padding:5px 8px;">
+        <div style="font-size:9.5pt; font-weight:bold;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</div>
         <div style="font-size:9.5pt; font-weight:bold;">Hospital Maternidade Severina Carlos de Andrade</div>
-        <div style="font-size:8pt;">C.N.P.J 08.349.052/0001-80 &nbsp;|&nbsp; Frutuoso Gomes - RN</div>
+        <div style="font-size:8.5pt;">C.N.P.J &nbsp;&nbsp; 08.349.052/0001-80</div>
+        <div style="font-size:8.5pt;">Frutuoso Gomes - RN</div>
       </td>
     </tr>
-  </table>
-
-  <table>
-    <tr><td colspan="6" class="banner">AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</td></tr>
     <tr>
-      <td colspan="2"><b>Número da AIH:</b> ${esc(d.numAih)}</td>
-      <td><b>Prontuário:</b> ${esc(d.prontuario)}</td>
-      <td colspan="3"><b>Tipo:</b> ( &nbsp; ) 01 - Inicial &nbsp;&nbsp; ( &nbsp; ) Continuidade</td>
+      <td colspan="6" class="sec-title">AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</td>
     </tr>
     <tr>
-      <td colspan="2"><b>Apresentação:</b></td>
-      <td colspan="2"><b>Órgão Emissor:</b></td>
-      <td><b>Internação:</b> ${esc(d.dtInternacao)}</td>
-      <td><b>Saída:</b> ${esc(d.dtSaida)}</td>
-    </tr>
-    <tr><td colspan="6" class="sub-banner">DADOS DO PACIENTE</td></tr>
-    <tr>
-      <td colspan="4"><b>Nome do Paciente:</b> <span class="val-bold">${esc(d.nome)}</span></td>
-      <td><b>Sexo:</b> ${esc(d.sexo)}</td>
-      <td><b>Nasc.:</b> ${esc(d.nasc)}</td>
-    </tr>
-    <tr>
-      <td colspan="2"><b>Raça/Cor:</b> ${esc(d.raca)}</td>
-      <td colspan="2"><b>Cartão SUS:</b> ${esc(d.cns)}</td>
-      <td colspan="2"><b>Telefone:</b> ${esc(d.telefone)}</td>
+      <td colspan="6" style="padding:4px 6px; line-height:1.45;">
+        <b>Número da AIH:</b> ${esc(d.numAih)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Prontuário:</b> <b>${esc(d.prontuario)}</b> &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Tipo:</b> ( &nbsp;X&nbsp; ) 01 – Inicial &nbsp;&nbsp; ( &nbsp;&nbsp;&nbsp; ) Continuidade &nbsp;&nbsp;&nbsp;
+        <b>Apresentação:</b><br>
+        <b>Órgão Emissor:</b><br>
+        <b>Data da internação:</b> ${esc(d.dtInternacao)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Data da Saída:</b> ${esc(d.dtSaida)}
+      </td>
     </tr>
     <tr>
-      <td colspan="6"><b>Nome da Mãe:</b> ${esc(d.mae)}</td>
+      <td colspan="6" class="sec-sub">DADOS DO PACIENTE</td>
     </tr>
     <tr>
-      <td colspan="4"><b>Endereço:</b> ${esc(d.endereco)}</td>
-      <td><b>Nº:</b> ${esc(d.numero)}</td>
-      <td><b>Bairro:</b> ${esc(d.bairro)}</td>
+      <td colspan="6" style="padding:4px 6px; line-height:1.45;">
+        <b>Nome do Paciente:</b> <b>${esc(d.nome)}</b><br>
+        <b>Cartão SUS:</b> ${esc(d.cns)} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Sexo:</b> ${esc(d.sexo)} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Data Nascimento:</b> ${esc(d.nasc)} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Raça/Cor:</b> ${esc(d.raca)}<br>
+        <b>Nome da Mãe:</b> ${esc(d.mae)}<br>
+        <b>Endereço:</b> ${esc(d.endereco)} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Nº:</b> ${esc(d.numero)} &nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Bairro:</b> ${esc(d.bairro)}<br>
+        <b>Município:</b> ${esc(d.municipio)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Estado:</b> ${esc(d.estado)}<br>
+        <b>CEP:</b> ${esc(d.cep)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Nacionalidade:</b> Brasileira &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Telefone:</b> ${esc(d.telefone)}<br>
+        <b>Tipo de Documento:</b> ( X ) Identidade &nbsp; ( &nbsp; ) CPF &nbsp; ( &nbsp; ) Registro de Nascimento &nbsp; ( &nbsp; ) Registro de Casamento<br>
+        <b>Número do Documento:</b> ${esc(d.rg)}
+      </td>
     </tr>
     <tr>
-      <td colspan="3"><b>Município:</b> ${esc(d.municipio)}</td>
-      <td><b>UF:</b> ${esc(d.estado)}</td>
-      <td><b>CEP:</b> ${esc(d.cep)}</td>
-      <td><b>Nacionalidade:</b> Brasileira</td>
+      <td colspan="6" class="sec-sub">DADOS DO PROCEDIMENTO</td>
     </tr>
     <tr>
-      <td colspan="4"><b>Tipo de Documento:</b> ( &nbsp; ) Identidade &nbsp; ( &nbsp; ) CPF &nbsp; ( &nbsp; ) Cert. Nascimento &nbsp; ( &nbsp; ) Cert. Casamento</td>
-      <td colspan="2"><b>Nº Documento:</b> ${esc(d.rg)}</td>
-    </tr>
-    <tr><td colspan="6" class="sub-banner">DADOS DO PROCEDIMENTO</td></tr>
-    <tr>
-      <td colspan="2"><b>Procedimento solicitado:</b> ${esc(d.codProced)}</td>
-      <td colspan="2"><b>Procedimento realizado:</b> ${esc(d.codProced)}</td>
-      <td colspan="2"><b>Mudança de Procedimento (S/N):</b> N</td>
-    </tr>
-    <tr>
-      <td colspan="2"><b>Especialidade:</b> ${esc(d.especialidade)}</td>
-      <td colspan="2"><b>Caráter de atendimento:</b> 02</td>
-      <td><b>Enfermaria:</b> ${esc(d.enfermaria)}</td>
-      <td><b>Leito:</b> ${esc(d.leito)}</td>
-    </tr>
-    <tr>
-      <td colspan="6"><b>Modalidade:</b> ( &nbsp; ) Hospitalar &nbsp;&nbsp;&nbsp; ( &nbsp; ) Hospitalar Dia &nbsp;&nbsp;&nbsp; ( &nbsp; ) Internação Domiciliar</td>
-    </tr>
-    <tr>
-      <td colspan="2"><b>CID Principal:</b> ${esc(d.cid)}</td>
-      <td colspan="2"><b>CID Secundário:</b></td>
-      <td><b>CID Causas Assoc.:</b></td>
-      <td><b>CID Causa Morte:</b></td>
+      <td colspan="6" style="padding:4px 6px; line-height:1.45;">
+        <b>Procedimento solicitado:</b> ${esc(d.codProced)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Mudança de Procedimento (S/N):</b> N<br>
+        <b>Procedimento realizado:</b> ${esc(d.codProced)}<br>
+        <b>Especialidade:</b> ${esc(d.especialidade)}<br>
+        <b>Caráter de atendimento:</b> Emergência/Urgência<br>
+        <b>Modalidade:</b> ( X ) Hospitalar &nbsp; ( &nbsp; ) Hospitalar Dia &nbsp; ( &nbsp; ) Internação Domiciliar &nbsp;&nbsp;&nbsp;
+        <b>Enferm:</b> ${esc(d.enfermaria)} &nbsp;&nbsp;&nbsp; <b>Leito:</b> ${esc(d.leito)}<br>
+        <b>CID Principal:</b> ${esc(d.cid)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>CID Secundário:</b><br>
+        <b>CID Causas Assoc:</b><br>
+        <b>CID Causa da Morte:</b><br>
+        <b>Motivo da Saída/Permanência:</b> ALTA HOSPITALAR<br>
+        <b>CPF Solicitante:</b> ${esc(d.cpfMed)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>CPF Autorizador:</b> 185.901.284-15 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Data da Autorização:</b> ${esc(d.dtSolicitacao)}
+      </td>
     </tr>
     <tr>
-      <td colspan="2"><b>Motivo Saída/Permanência:</b> ALTA</td>
-      <td colspan="2"><b>CPF Solicitante:</b> ${esc(d.cpfMed)}</td>
-      <td><b>CPF Autorizador:</b> 185.901.284-15</td>
-      <td><b>Data Autoriz.:</b> ${esc(d.dtSolicitacao)}</td>
+      <td colspan="6" class="sec-sub">PROCEDIMENTOS REALIZADOS</td>
     </tr>
   </table>
 
-  <table style="margin-top:4px;">
-    <tr><td colspan="7" class="banner">PROCEDIMENTOS REALIZADOS</td></tr>
-    <tr class="sub-banner">
+  <table class="outer-box" style="border-top:none;">
+    <tr class="center" style="font-weight:bold;">
       <td style="width:7%;">Linha</td>
       <td style="width:23%;">PROCEDIMENTO</td>
       <td style="width:8%;">Qtd.</td>
@@ -916,243 +896,227 @@
       <td style="width:13%;">CNES</td>
       <td style="width:19%;">CNPJ</td>
     </tr>
-    <tr>
-      <td class="center">01</td>
-      <td class="center">${esc(d.codProced)}</td>
-      <td class="center">01</td>
-      <td class="center">${esc(d.cpfMed)}</td>
-      <td class="center"></td>
-      <td class="center">2380846</td>
-      <td class="center">08.349.052/0001-80</td>
+    <tr class="center">
+      <td>01</td>
+      <td>${esc(d.codProced)}</td>
+      <td>01</td>
+      <td>${esc(d.cpfMed)}</td>
+      <td></td>
+      <td>2380846</td>
+      <td>08.349.052/0001-80</td>
     </tr>
-    <tr>
-      <td class="center">02</td><td></td><td></td><td></td><td></td>
-      <td class="center">2380846</td>
-      <td class="center">08.349.052/0001-80</td>
-    </tr>
-    <tr><td class="center">03</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td class="center">04</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td class="center">05</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td class="center">06</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>02</td><td></td><td></td><td></td><td></td><td>2380846</td><td>08.349.052/0001-80</td></tr>
+    <tr class="center"><td>03</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>04</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>05</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>06</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>07</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>08</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>09</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr class="center"><td>10</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
   </table>
 
   <!-- =====================================================================
-       PÁGINA 2: LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO (SUS)
+       FOLHA 2: LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
   ====================================================================== -->
-  <p style="page-break-before:always; margin:0; padding:0; line-height:0;"><br clear="all" style="mso-special-character:line-break;page-break-before:always"></p>
+  ${quebraPaginaWord}
 
-  <table style="margin-bottom:4px;">
+  <table class="outer-box">
     <tr>
-      <td style="width:28%; text-align:center;">
-        <img src="${LOGO_SUS_TEXTO}" width="62" height="26" alt="SUS">
-        <div style="font-size:6.5pt; font-weight:bold;">Sistema Único de Saúde<br>Ministério da Saúde</div>
+      <td colspan="2" style="width:36%; text-align:center; padding:3px;">
+        <img src="${LOGO_SUS_BLOCO_COMPLETO}" width="165" height="36" alt="SUS - Sistema Único de Saúde">
       </td>
-      <td style="width:72%; text-align:center; font-size:10pt; font-weight:bold;">
+      <td colspan="4" style="width:64%; text-align:center; font-size:9.5pt; font-weight:bold; padding:4px;">
         LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
       </td>
     </tr>
-  </table>
 
-  <table>
-    <tr><td colspan="6" class="banner">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE</td></tr>
+    <tr><td colspan="6" class="sec-sub">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE</td></tr>
     <tr>
-      <td colspan="5"><span class="lbl">1. Nome do Estabelecimento de Saúde Solicitante</span><span class="val-bold">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
-      <td><span class="lbl">2. CNES</span><span class="val-bold">2380846</span></td>
+      <td colspan="5"><span class="lbl-sus">1. NOME DO ESTABELECIMENTO DE SAÚDE SOLICITANTE</span><span class="val-sus-b">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
+      <td><span class="lbl-sus">2. CNES</span><span class="val-sus-b">2380846</span></td>
     </tr>
     <tr>
-      <td colspan="5"><span class="lbl">3. Nome do Estabelecimento Executante</span><span class="val-bold">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
-      <td><span class="lbl">4. CNES</span><span class="val-bold">2380846</span></td>
+      <td colspan="5"><span class="lbl-sus">3. NOME DO ESTABELECIMENTO EXECUTANTE</span><span class="val-sus-b">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</span></td>
+      <td><span class="lbl-sus">4. CNES</span><span class="val-sus-b">2380846</span></td>
     </tr>
 
-    <tr><td colspan="6" class="banner">IDENTIFICAÇÃO DO PACIENTE</td></tr>
+    <tr><td colspan="6" class="sec-sub">IDENTIFICAÇÃO DO PACIENTE</td></tr>
     <tr>
-      <td colspan="4"><span class="lbl">5. Nome do Paciente</span><span class="val-bold">${esc(d.nome)}</span></td>
-      <td colspan="2"><span class="lbl">6. Número do Prontuário</span><span class="val-bold">${esc(d.prontuario)}</span></td>
+      <td colspan="5"><span class="lbl-sus">5. NOME DO PACIENTE</span><span class="val-sus-b">${esc(d.nome)}</span></td>
+      <td><span class="lbl-sus">6. Nº. DO PRONTUÁRIO</span><span class="val-sus-b">${esc(d.prontuario)}</span></td>
     </tr>
     <tr>
-      <td colspan="2"><span class="lbl">7. Cartão Nacional de Saúde (CNS)</span><span class="val">${esc(d.cns)}</span></td>
-      <td><span class="lbl">8. Data de Nascimento</span><span class="val">${esc(d.nasc)}</span></td>
-      <td colspan="2"><span class="lbl">9. Sexo</span><span class="val">${d.sexoCheckM} Masc &nbsp;&nbsp; ${d.sexoCheckF} Fem</span></td>
-      <td><span class="lbl">10. Raça/Cor</span><span class="val">${esc(d.raca)}</span></td>
+      <td colspan="2"><span class="lbl-sus">7. CARTÃO NACIONAL DE SAÚDE (CNS)</span><span class="val-sus">${esc(d.cns)}</span></td>
+      <td colspan="2"><span class="lbl-sus">8. DATA DE NASCIMENTO</span><span class="val-sus">${esc(d.nasc)}</span></td>
+      <td colspan="2"><span class="lbl-sus">9. SEXO</span><span class="val-sus">( ${d.sexoCheckM} ) Masc &nbsp;&nbsp;&nbsp; ( ${d.sexoCheckF} ) Fem.</span></td>
     </tr>
     <tr>
-      <td colspan="4"><span class="lbl">11. Nome da Mãe ou Responsável</span><span class="val">${esc(d.mae)}</span></td>
-      <td colspan="2"><span class="lbl">12. Telefone de Contato</span><span class="val">${esc(d.telefone)}</span></td>
+      <td colspan="3"><span class="lbl-sus">10. NOME DA MÃE OU RESPONSÁVEL</span><span class="val-sus">${esc(d.mae)}</span></td>
+      <td><span class="lbl-sus">11. TELEFONE DE CONTATO</span><span class="val-sus">${esc(d.telefone)}</span></td>
+      <td colspan="2"><span class="lbl-sus">12. ENDEREÇO</span><span class="val-sus">${esc(d.endereco)}, ${esc(d.numero)} – ${esc(d.bairro)}</span></td>
     </tr>
     <tr>
-      <td colspan="6"><span class="lbl">13. Endereço (Rua, Nº, Bairro)</span><span class="val">${esc(d.endereco)}, ${esc(d.numero)} - ${esc(d.bairro)}</span></td>
-    </tr>
-    <tr>
-      <td colspan="3"><span class="lbl">14. Município de Residência</span><span class="val">${esc(d.municipio)}</span></td>
-      <td><span class="lbl">15. Cód. IBGE Município</span><span class="val">240410</span></td>
-      <td><span class="lbl">16. UF</span><span class="val">${esc(d.estado)}</span></td>
-      <td><span class="lbl">17. CEP</span><span class="val">${esc(d.cep)}</span></td>
+      <td colspan="3"><span class="lbl-sus">13. MUNICÍPIO DE RESIDÊNCIA</span><span class="val-sus">${esc(d.municipio)}</span></td>
+      <td><span class="lbl-sus">14. COD IBGE MUNICÍPIO</span><span class="val-sus">240410</span></td>
+      <td><span class="lbl-sus">15. UF</span><span class="val-sus">${esc(d.estado)}</span></td>
+      <td><span class="lbl-sus">16. CEP</span><span class="val-sus">${esc(d.cep)}</span></td>
     </tr>
 
-    <tr><td colspan="6" class="banner">JUSTIFICATIVA DA INTERNAÇÃO</td></tr>
+    <tr><td colspan="6" class="sec-sub">JUSTIFICATIVA DA INTERNAÇÃO</td></tr>
     <tr>
-      <td colspan="6" style="height:30px; vertical-align:top;"><span class="lbl">18. Principais Sinais e Sintomas Clínicos</span><span class="val">${esc(d.sinaisSintomas)}</span></td>
+      <td colspan="6" style="height:40px; vertical-align:top;"><span class="lbl-sus">17. PRINCIPAIS SINAIS E SINTOMAS CLÍNICOS:</span><span class="val-sus">${esc(d.sinaisSintomas)}</span></td>
     </tr>
     <tr>
-      <td colspan="6" style="height:22px; vertical-align:top;"><span class="lbl">19. Condições que Justificam a Internação</span><span class="val">${esc(d.justificativa)}</span></td>
+      <td colspan="6" style="height:26px; vertical-align:top;"><span class="lbl-sus">18. CONDIÇÕES QUE JUSTIFICAM A INTERNAÇÃO:</span><span class="val-sus">${esc(d.justificativa)}</span></td>
     </tr>
     <tr>
-      <td colspan="6" style="height:24px; vertical-align:top;"><span class="lbl">20. Principais Resultados de Provas Diagnósticas (Resultado de Exames Realizados)</span><span class="val">${esc(d.exames)}</span></td>
+      <td colspan="6" style="height:28px; vertical-align:top;"><span class="lbl-sus">19. PRINCIPAIS RESULTADOS DE PROVAS DIAGNÓSTICAS (RESULTADOS DE EXAMES REALIZADOS):</span><span class="val-sus">${esc(d.exames)}</span></td>
     </tr>
     <tr>
-      <td colspan="3"><span class="lbl">21. Diagnóstico Inicial</span><span class="val-bold">${esc(d.diag)}</span></td>
-      <td><span class="lbl">22. CID-10 Principal</span><span class="val-bold">${esc(d.cid)}</span></td>
-      <td><span class="lbl">23. CID-10 Secundário</span></td>
-      <td><span class="lbl">24. CID-10 Causas Assoc.</span></td>
-    </tr>
-
-    <tr><td colspan="6" class="banner">PROCEDIMENTO SOLICITADO</td></tr>
-    <tr>
-      <td colspan="4"><span class="lbl">25. Descrição do Procedimento Solicitado</span><span class="val-bold">${esc(d.procedimento)}</span></td>
-      <td colspan="2"><span class="lbl">26. Código do Procedimento</span><span class="val-bold">${esc(d.codProced)}</span></td>
-    </tr>
-    <tr>
-      <td colspan="2"><span class="lbl">27. Clínica</span><span class="val">${esc(d.especialidade)}</span></td>
-      <td><span class="lbl">28. Caráter Internação</span><span class="val">02</span></td>
-      <td><span class="lbl">29. Documento</span><span class="val">☐ CNS &nbsp; ☑ CPF</span></td>
-      <td colspan="2"><span class="lbl">30. Nº Documento (CNS/CPF) Prof. Solicitante</span><span class="val">${esc(d.cpfMed)}</span></td>
-    </tr>
-    <tr>
-      <td colspan="3"><span class="lbl">31. Nome do Profissional Solicitante</span><span class="val-bold">${esc(d.medico)}</span></td>
-      <td><span class="lbl">32. Data da Solicitação</span><span class="val">${esc(d.dtSolicitacao)}</span></td>
-      <td colspan="2" style="height:30px; vertical-align:top;"><span class="lbl">33. Assinatura e Carimbo (Nº Registro Conselho)</span></td>
+      <td colspan="3"><span class="lbl-sus">20. DIAGNÓSTICO INICIAL</span><span class="val-sus-b">${esc(d.diag)}</span></td>
+      <td><span class="lbl-sus">21. CID 10 PRINCIPAL</span><span class="val-sus-b">${esc(d.cid)}</span></td>
+      <td><span class="lbl-sus">22. CID 10 SECUNDÁRIO</span></td>
+      <td><span class="lbl-sus">23. CID 10 CAUSAS ASSOCIADAS</span></td>
     </tr>
 
-    <tr><td colspan="6" class="sub-banner">PREENCHER EM CASO DE CAUSAS EXTERNAS (ACIDENTE OU VIOLÊNCIA)</td></tr>
+    <tr><td colspan="6" class="sec-sub">PROCEDIMENTO SOLICITADO</td></tr>
     <tr>
-      <td colspan="3"><span class="lbl">34. Tipo de Acidente</span>( &nbsp; ) Trânsito &nbsp; ( &nbsp; ) Trab. Típico &nbsp; ( &nbsp; ) Trab. Trajeto</td>
-      <td><span class="lbl">35. CNPJ Seguradora</span></td>
-      <td><span class="lbl">36. Nº Bilhete</span></td>
-      <td><span class="lbl">37. Série</span></td>
+      <td colspan="4"><span class="lbl-sus">24. DESCRIÇÃO DO PROCEDIMENTO SOLICITADO</span><span class="val-sus-b">${esc(d.procedimento)}</span></td>
+      <td colspan="2"><span class="lbl-sus">25. CÓDIGO DO PROCEDIMENTO</span><span class="val-sus-b">${esc(d.codProced)}</span></td>
     </tr>
     <tr>
-      <td colspan="6"><span class="lbl">38. Vínculo com a Previdência</span>( &nbsp; ) Empregado &nbsp; ( &nbsp; ) Empregador &nbsp; ( &nbsp; ) Autônomo &nbsp; ( &nbsp; ) Desempregado &nbsp; ( &nbsp; ) Aposentado &nbsp; ( &nbsp; ) Não Segurado</td>
+      <td colspan="2"><span class="lbl-sus">26. CLÍNICA</span><span class="val-sus">${esc(d.especialidade)}</span></td>
+      <td><span class="lbl-sus">27. CARÁTER DA INTERNAÇÃO</span><span class="val-sus">URGÊNCIA/EMERGÊNCIA</span></td>
+      <td><span class="lbl-sus">28. DOCUMENTO</span><span class="val-sus">( &nbsp; ) CNS &nbsp; ( X ) CPF</span></td>
+      <td colspan="2"><span class="lbl-sus">29. Nº DOCUMENTO (CNS/CPF) DO PROFISSIONAL SOLICITANTE</span><span class="val-sus">${esc(d.cpfMed)}</span></td>
+    </tr>
+    <tr>
+      <td colspan="3"><span class="lbl-sus">30. NOME DO PROFISSIONAL SOLICITANTE/ASSISTENTE</span><span class="val-sus-b">${esc(d.medico)}</span></td>
+      <td><span class="lbl-sus">31. DATA DA SOLICITAÇÃO</span><span class="val-sus">${esc(d.dtSolicitacao)}</span></td>
+      <td colspan="2" style="height:28px; vertical-align:top;"><span class="lbl-sus">32. ASSINATURA E CARIMBO (Nº DO REGISTRO DO CONSELHO)</span></td>
     </tr>
 
-    <tr><td colspan="6" class="banner">AUTORIZAÇÃO</td></tr>
+    <tr><td colspan="6" class="sec-sub">PREENCHER EM CASO DE CAUSAS EXTERNAS (ACIDENTE OU VIOLÊNCIA)</td></tr>
     <tr>
-      <td colspan="3"><span class="lbl">43. Nome do Profissional Autorizador</span></td>
-      <td><span class="lbl">44. Cód. Órgão Emissor</span></td>
-      <td colspan="2"><span class="lbl">49. Nº da Autorização de Internação Hospitalar (AIH)</span><span class="val-bold">${esc(d.numAih)}</span></td>
+      <td colspan="2"><span class="lbl-sus">33. ( &nbsp; ) ACIDENTE DE TRÂNSITO</span></td>
+      <td colspan="2"><span class="lbl-sus">36. CNPJ DA SEGURADORA</span></td>
+      <td><span class="lbl-sus">37. Nº DO BILHETE</span></td>
+      <td><span class="lbl-sus">38. SÉRIE</span></td>
     </tr>
     <tr>
-      <td><span class="lbl">45. Documento</span>( &nbsp; ) CNS &nbsp; ( &nbsp; ) CPF</td>
-      <td colspan="2"><span class="lbl">46. Nº Documento Prof. Autorizador</span><span class="val">185.901.284-15</span></td>
-      <td><span class="lbl">47. Data Autorização</span><span class="val">${esc(d.dtSolicitacao)}</span></td>
-      <td colspan="2" style="height:24px; vertical-align:top;"><span class="lbl">48. Assinatura e Carimbo</span></td>
+      <td colspan="2"><span class="lbl-sus">34. ( &nbsp; ) ACIDENTE TRABALHO TÍPICO</span></td>
+      <td colspan="2"><span class="lbl-sus">39. CNPJ DA EMPRESA</span></td>
+      <td><span class="lbl-sus">40. CNAE DA EMPRESA</span></td>
+      <td><span class="lbl-sus">41. CBOR</span></td>
+    </tr>
+    <tr>
+      <td colspan="2"><span class="lbl-sus">35. ( &nbsp; ) ACIDENTE TRABALHO TRAJETO</span></td>
+      <td colspan="4"><span class="lbl-sus">42. VÍNCULO COM A PREVIDÊNCIA</span>( &nbsp; ) EMPREGADO &nbsp; ( &nbsp; ) EMPREGADOR &nbsp; ( &nbsp; ) DESEMPREGADO &nbsp; ( &nbsp; ) APOSENTADO &nbsp; ( &nbsp; ) NÃO SEGURADO</td>
+    </tr>
+
+    <tr><td colspan="6" class="sec-sub">AUTORIZAÇÃO</td></tr>
+    <tr>
+      <td colspan="3"><span class="lbl-sus">43. NOME DO PROFISSIONAL AUTORIZADOR</span></td>
+      <td><span class="lbl-sus">44. CÓD. ÓRGÃO EMISSOR</span></td>
+      <td colspan="2"><span class="lbl-sus">49. Nº DA AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</span><span class="val-sus-b">${esc(d.numAih)}</span></td>
+    </tr>
+    <tr>
+      <td><span class="lbl-sus">45. DOCUMENTO</span>( &nbsp; ) CNS &nbsp; ( &nbsp; ) CPF</td>
+      <td colspan="2"><span class="lbl-sus">46. Nº DOCUMENTO (CNS/CPF) PROF. AUTORIZADOR</span><span class="val-sus">185.901.284-15</span></td>
+      <td><span class="lbl-sus">47. DATA DA AUTORIZAÇÃO</span><span class="val-sus">${esc(d.dtSolicitacao)}</span></td>
+      <td colspan="2" style="height:26px; vertical-align:top;"><span class="lbl-sus">48. ASSINATURA E CARIMBO (Nº REGISTRO CONSELHO)</span></td>
     </tr>
   </table>
 
   <!-- =====================================================================
-       PÁGINA 3: PRONTUÁRIO DE INTERNAÇÃO
+       FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO (ESTILO ANTIGO)
   ====================================================================== -->
-  <p style="page-break-before:always; margin:0; padding:0; line-height:0;"><br clear="all" style="mso-special-character:line-break;page-break-before:always"></p>
+  ${quebraPaginaWord}
 
-  <table class="no-border" style="margin-bottom:4px;">
+  <table class="outer-box">
     <tr>
-      <td style="width:14%; text-align:center;">
-        <img src="${LOGO_SUS_CRUZ}" width="42" height="36" alt="SUS">
+      <td style="padding:5px 8px;">
+        <table class="no-border">
+          <tr>
+            <td style="width:76%;">
+              <div style="font-size:9.5pt; font-weight:bold;">ESTADO DO RIO GRANDE DO NORTE</div>
+              <div style="font-size:8.5pt;">Secretaria Municipal de Saúde de Frutuoso Gomes</div>
+              <div style="font-size:9.5pt; font-weight:bold;">Hospital Maternidade Severina Carlos de Andrade</div>
+            </td>
+            <td style="width:24%; text-align:right; vertical-align:middle;">
+              <img src="${LOGO_SUS_CRUZ_TEXTO}" width="95" height="32" alt="SUS">
+            </td>
+          </tr>
+        </table>
       </td>
-      <td style="width:72%; text-align:center;">
-        <div style="font-size:9.5pt; font-weight:bold;">ESTADO DO RIO GRANDE DO NORTE</div>
-        <div style="font-size:9pt;">Secretaria Municipal de Saúde de Frutuoso Gomes</div>
-        <div style="font-size:9.5pt; font-weight:bold;">Hospital Maternidade Severina Carlos de Andrade</div>
+    </tr>
+    <tr>
+      <td class="sec-title">PRONTUÁRIO DE INTERNAÇÃO</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 8px; line-height:1.55;">
+        <b>Paciente:</b> <b>${esc(d.nome)}</b><br>
+        <b>Endereço:</b> ${esc(d.endereco)}, ${esc(d.numero)} – ${esc(d.bairro)}<br>
+        <b>Município:</b> ${esc(d.municipio)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>UF:</b> ${esc(d.estado)}<br>
+        <b>Data de Nascimento:</b> ${esc(d.nasc)} &nbsp;&nbsp;&nbsp;&nbsp; <b>Naturalidade:</b> ${esc(d.municipio)} - ${esc(d.estado)} &nbsp;&nbsp;&nbsp;&nbsp; <b>Cor:</b> ${esc(d.raca)}<br>
+        <b>Sexo:</b> ${esc(d.sexo)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Profissão:</b> ${esc(d.profissao)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Nº Prontuário:</b> <b>${esc(d.prontuario)}</b><br>
+        <b>RG:</b> ${esc(d.rg)} &nbsp;&nbsp;&nbsp;&nbsp; <b>Data Expedição:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>CPF:</b><br>
+        <b>Registro:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Livro:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Folhas:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Data Expedição:</b><br>
+        <b>Nome do Pai:</b> ${esc(d.pai)}<br>
+        <b>Nome da Mãe:</b> ${esc(d.mae)}<br>
+        <b>Serviço:</b> ${esc(d.especialidade)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Enfermaria:</b> ${esc(d.enfermaria)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Leito:</b> ${esc(d.leito)}
       </td>
-      <td style="width:14%; text-align:center; font-weight:bold; font-size:11pt;">SUS</td>
-    </tr>
-  </table>
-
-  <table>
-    <tr><td colspan="4" class="banner">PRONTUÁRIO DE INTERNAÇÃO</td></tr>
-    <tr>
-      <td colspan="3"><b>Nome do Paciente:</b> <span class="val-bold">${esc(d.nome)}</span></td>
-      <td><b>Nº do Prontuário:</b> <span class="val-bold">${esc(d.prontuario)}</span></td>
     </tr>
     <tr>
-      <td colspan="2"><b>Endereço:</b> ${esc(d.endereco)}, ${esc(d.numero)} - ${esc(d.bairro)}</td>
-      <td><b>Município:</b> ${esc(d.municipio)}</td>
-      <td><b>UF:</b> ${esc(d.estado)}</td>
+      <td style="padding:6px 8px; line-height:1.55;">
+        <b>Data de Admissão:</b> ${esc(d.dtInternacao)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Alta/Transf:</b> ( X ) ${esc(d.dtSaida)} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Dias de Permanência:</b> &nbsp;&nbsp;&nbsp;&nbsp; dias.<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>Óbito:</b> ( &nbsp; )<br><br>
+        <b>DIAGNÓSTICO INICIAL:</b> ${esc(d.diag)}<br>
+        <b>DIAGNÓSTICO FINAL:</b> ${esc(d.diag)}
+      </td>
     </tr>
     <tr>
-      <td><b>Data de Nascimento:</b> ${esc(d.nasc)}</td>
-      <td><b>Naturalidade:</b> ${esc(d.municipio)}</td>
-      <td><b>Cor:</b> ${esc(d.raca)}</td>
-      <td><b>Sexo:</b> ${esc(d.sexo)}</td>
+      <td class="sec-sub">Sumário de História Clínica, Exame Físico e Tratamento</td>
     </tr>
     <tr>
-      <td><b>Profissão:</b> ${esc(d.profissao)}</td>
-      <td><b>RG:</b> ${esc(d.rg)}</td>
-      <td><b>Data Expedição:</b></td>
-      <td><b>CPF:</b></td>
-    </tr>
-    <tr>
-      <td><b>Registro:</b></td>
-      <td><b>Livro:</b></td>
-      <td><b>Folhas:</b></td>
-      <td><b>Data Expedição:</b></td>
-    </tr>
-    <tr>
-      <td colspan="4"><b>Nome do Pai:</b> ${esc(d.pai)}</td>
-    </tr>
-    <tr>
-      <td colspan="4"><b>Nome da Mãe:</b> ${esc(d.mae)}</td>
-    </tr>
-    <tr>
-      <td colspan="2"><b>Serviço:</b> ${esc(d.especialidade)}</td>
-      <td><b>Enfermaria:</b> ${esc(d.enfermaria)}</td>
-      <td><b>Leito:</b> ${esc(d.leito)}</td>
-    </tr>
-    <tr>
-      <td><b>Data de Admissão:</b> ${esc(d.dtInternacao)}</td>
-      <td><b>Alta:</b> ( &nbsp; ) ${esc(d.dtSaida)}</td>
-      <td><b>Óbito:</b> ( &nbsp; )</td>
-      <td><b>Dias Permanência:</b></td>
-    </tr>
-    <tr>
-      <td colspan="2"><b>Diagnóstico Inicial:</b> ${esc(d.diag)}</td>
-      <td colspan="2"><b>Diagnóstico Final:</b> ${esc(d.diag)}</td>
-    </tr>
-    <tr><td colspan="4" class="sub-banner">Sumário de História Clínica, Exame Físico e Tratamento</td></tr>
-    <tr>
-      <td colspan="4" style="height:375px; vertical-align:top; padding:8px;">
-        Paciente deu entrada com quadro de ${esc(d.sinaisSintomas)}
+      <td style="height:410px; vertical-align:top; padding:8px; line-height:1.45;">
+        Paciente deu entrada com quadro de:<br><br>
+        ${esc(d.sinaisSintomas)}
       </td>
     </tr>
   </table>
 
   <!-- =====================================================================
-       PÁGINA 4: FICHA DE ANESTESIA
+       FOLHA 4: FICHA DE ANESTESIA (ESTILO ANTIGO)
   ====================================================================== -->
-  <p style="page-break-before:always; margin:0; padding:0; line-height:0;"><br clear="all" style="mso-special-character:line-break;page-break-before:always"></p>
+  ${quebraPaginaWord}
 
-  <table class="no-border" style="margin-bottom:4px;">
+  <table class="outer-box">
     <tr>
-      <td class="center">
+      <td colspan="4" class="center" style="padding:5px;">
         <div style="font-size:9.5pt; font-weight:bold;">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</div>
         <div style="font-size:8.5pt;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES &nbsp;|&nbsp; Secretaria Municipal de Saúde</div>
       </td>
     </tr>
-  </table>
-
-  <table>
-    <tr><td colspan="4" class="banner">FICHA DE ANESTESIA</td></tr>
     <tr>
-      <td colspan="2"><b>Nome:</b> <span class="val-bold">${esc(d.nome)}</span></td>
-      <td><b>Prontuário:</b> ${esc(d.prontuario)}</td>
-      <td><b>Apto/Enf.:</b> ${esc(d.enfermaria)}</td>
+      <td colspan="4" class="sec-title">FICHA DE ANESTESIA</td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Nome:</b> <b>${esc(d.nome)}</b></td>
+      <td><b>Prontuario:</b> <b>${esc(d.prontuario)}</b></td>
+      <td><b>Apto:</b> ${esc(d.enfermaria)}</td>
     </tr>
     <tr>
       <td><b>GIH:</b></td>
-      <td colspan="3"><b>Pré-medicação:</b></td>
+      <td colspan="3"><b>Premedicação:</b></td>
     </tr>
     <tr>
       <td colspan="2"><b>Anestesia Tipo:</b> ${esc(d.tipoAnestesia)}</td>
-      <td colspan="2"><b>Técnica:</b> ${esc(d.tipoAnestesia)}</td>
+      <td colspan="2"><b>Tecnica:</b> ${esc(d.tipoAnestesia)}</td>
     </tr>
     <tr>
       <td colspan="4"><b>Operação:</b> ${esc(d.procedimento)}</td>
@@ -1163,17 +1127,17 @@
     </tr>
   </table>
 
-  <table style="margin-top:4px;">
-    <tr class="sub-banner">
-      <td style="width:8%;">Hora</td>
+  <table class="outer-box" style="border-top:none;">
+    <tr class="center" style="font-weight:bold;">
+      <td style="width:7%;">Hora</td>
       <td style="width:5%;"></td><td style="width:5%;"></td><td style="width:5%;"></td>
       <td style="width:5%;"></td><td style="width:5%;"></td><td style="width:5%;"></td>
       <td style="width:5%;"></td><td style="width:5%;"></td><td style="width:5%;"></td>
       <td style="width:5%;"></td><td style="width:5%;"></td><td style="width:5%;"></td>
-      <td style="width:32%;">Drogas Usadas</td>
+      <td style="width:33%;">Drogas Usadas</td>
     </tr>
     <tr><td class="center"><b>20</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
-      <td rowspan="12" style="vertical-align:top; padding:6px;">${esc(d.txtAnestesia)}</td>
+      <td rowspan="12" style="vertical-align:top; padding:6px; line-height:1.35;">${esc(d.txtAnestesia)}</td>
     </tr>
     <tr><td class="center"><b>18</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
     <tr><td class="center"><b>16</b></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
@@ -1188,19 +1152,19 @@
     <tr><td class="center">&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
   </table>
 
-  <table style="margin-top:4px;">
+  <table class="outer-box" style="border-top:none;">
     <tr>
-      <td style="width:36%;"><b>Início da Anestesia:</b></td>
-      <td style="width:28%;"><b>1. Geral:</b> ( &nbsp; )</td>
-      <td rowspan="5" style="width:36%; text-align:center; vertical-align:bottom; padding:6px;">
-        <div style="text-align:left; margin-bottom:28px;"><b>Data:</b> ${esc(d.dtInternacao)}</div>
+      <td style="width:35%;"><b>Inicio da Anestesia:</b></td>
+      <td style="width:27%;"><b>1. Geral:</b> ( &nbsp; )</td>
+      <td rowspan="5" style="width:38%; text-align:center; vertical-align:bottom; padding:6px;">
+        <div style="text-align:left; margin-bottom:32px;"><b>Data:</b> ${esc(d.dtInternacao)}</div>
         <div>___________________________________</div>
-        <div><b>Médico Anestesista:</b> ${esc(d.medicoAnestesista)}</div>
+        <div><b>Medico Anestesista:</b> ${esc(d.medicoAnestesista)}</div>
         <div><b>CRM:</b> ${esc(d.crmAnestesista)}</div>
       </td>
     </tr>
     <tr>
-      <td><b>Início da Operação:</b></td>
+      <td><b>Inicio da Operação:</b></td>
       <td><b>2. Local:</b> ( &nbsp; )</td>
     </tr>
     <tr>
@@ -1209,7 +1173,7 @@
     </tr>
     <tr>
       <td><b>Fim da Anestesia:</b></td>
-      <td><b>Nº Minutos:</b></td>
+      <td><b>N. Minutos:</b></td>
     </tr>
     <tr>
       <td colspan="2"><b>Duração da Anestesia:</b></td>
@@ -1217,24 +1181,23 @@
   </table>
 
   <!-- =====================================================================
-       PÁGINA 5: BOLETIM OPERATÓRIO
+       FOLHA 5: BOLETIM OPERATÓRIO (ESTILO ANTIGO)
   ====================================================================== -->
-  <p style="page-break-before:always; margin:0; padding:0; line-height:0;"><br clear="all" style="mso-special-character:line-break;page-break-before:always"></p>
+  ${quebraPaginaWord}
 
-  <table class="no-border" style="margin-bottom:4px;">
+  <table class="outer-box">
     <tr>
-      <td class="center">
+      <td colspan="3" class="center" style="padding:5px;">
         <div style="font-size:9.5pt; font-weight:bold;">HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</div>
         <div style="font-size:8.5pt;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES &nbsp;|&nbsp; Secretaria Municipal de Saúde</div>
       </td>
     </tr>
-  </table>
-
-  <table>
-    <tr><td colspan="3" class="banner">BOLETIM OPERATÓRIO</td></tr>
     <tr>
-      <td colspan="2"><b>Nome:</b> <span class="val-bold">${esc(d.nome)}</span></td>
-      <td><b>Prontuário:</b> <span class="val-bold">${esc(d.prontuario)}</span></td>
+      <td colspan="3" class="sec-title">BOLETIM OPERATÓRIO</td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Nome:</b> <b>${esc(d.nome)}</b></td>
+      <td><b>Prontuário:</b> <b>${esc(d.prontuario)}</b></td>
     </tr>
     <tr>
       <td colspan="3"><b>Diagnóstico Pré-Operatório:</b> ${esc(d.diag)}</td>
@@ -1242,27 +1205,31 @@
     <tr>
       <td colspan="3"><b>Indicação Terapêutica:</b> ${esc(d.procedimento)}</td>
     </tr>
-    <tr><td colspan="3" class="sub-banner">INTERNAÇÃO</td></tr>
     <tr>
-      <td><b>Início:</b></td>
+      <td colspan="3" class="sec-sub">INTERNAÇÃO</td>
+    </tr>
+    <tr>
+      <td><b>Inicio:</b></td>
       <td><b>Fim:</b></td>
       <td><b>Duração:</b></td>
     </tr>
     <tr><td colspan="3"><b>Operador:</b> ${esc(d.medicoOperador)}</td></tr>
-    <tr><td colspan="3"><b>1º Auxiliar:</b></td></tr>
-    <tr><td colspan="3"><b>2º Auxiliar:</b></td></tr>
-    <tr><td colspan="3"><b>3º Anestesista:</b> ${esc(d.medicoAnestesista)}</td></tr>
-    <tr><td colspan="3" class="banner">RELATÓRIO DE INTERNAÇÃO</td></tr>
+    <tr><td colspan="3"><b>1 Auxiliar:</b></td></tr>
+    <tr><td colspan="3"><b>2 Auxiliar:</b></td></tr>
+    <tr><td colspan="3"><b>3 Anestesista:</b> ${esc(d.medicoAnestesista)}</td></tr>
     <tr>
-      <td colspan="3" style="height:355px; vertical-align:top; padding:8px;">
+      <td colspan="3" class="sec-sub">RELATÓRIO DE INTERNAÇÃO</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="height:410px; vertical-align:top; padding:8px; line-height:1.4;">
         <div style="font-weight:bold; font-size:7.5pt; margin-bottom:10px;">
-          Via de acesso / Incisão – Aspecto nos órgãos e lesões encontradas – Técnicas empregadas e descrição dos processos – Ligaduras e suturas empregadas – Drenagem / Curativos – Diagnóstico operatório – Prognóstico operatório – OBS:
+          Via de acesso Incisão – Aspecto nos órgãos e lesões encontradas – Técnicas empregadas e descrição dos processos – Ligaduras e suturas empregadas – Drenagem curativos – Diagnósticos operatório – Prognostico operatório – OBS:
         </div>
         <div>${esc(d.txtCirurgia)}</div>
       </td>
     </tr>
     <tr>
-      <td colspan="3" style="padding:10px 8px;">
+      <td colspan="3" style="padding:12px 8px;">
         <table class="no-border">
           <tr>
             <td style="width:45%;"><b>Data:</b> ${esc(d.dtInternacao)}</td>
@@ -1294,7 +1261,7 @@
 
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#1d4ed8';
-    msg.innerText = 'Arquivo Word (.doc) gerado com layout oficial e logos!';
+    msg.innerText = 'Arquivo Word (.doc) gerado no estilo clássico oficial (5 folhas)!';
   }
 </script>
 </body>
