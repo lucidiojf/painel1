@@ -24,7 +24,7 @@
     body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.5; }
     .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 24px; }
     
-    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
     h1 { font-size: 1.5rem; color: #0f172a; }
     
     .nav-bar { display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
@@ -75,7 +75,11 @@
 <div class="container">
   <header>
     <h1>Emissão AIH Oficial</h1>
-    <button type="button" class="btn-nav" onclick="location.reload()">↻ Recarregar</button>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <label for="inputLogoLocal" class="btn-nav" style="background:#475569; margin:0; display:inline-block;">🖼️ Selecionar Brasão</label>
+      <input type="file" id="inputLogoLocal" accept="image/*" style="display:none;" onchange="carregarLogoManual(this)">
+      <button type="button" class="btn-nav" onclick="location.reload()">↻ Recarregar</button>
+    </div>
   </header>
 
   <div class="nav-bar">
@@ -266,11 +270,11 @@
       <div class="grid grid-2">
         <div class="form-group">
           <label for="txtAnestesia">Drogas Usadas / Prescrição Anestésica:</label>
-          <textarea id="txtAnestesia" rows="2">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
+          <textarea id="txtAnestesia" rows="3">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
         </div>
         <div class="form-group">
           <label for="txtCirurgia">Descrição do Ato Cirúrgico / Relatório:</label>
-          <textarea id="txtCirurgia" rows="2">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
+          <textarea id="txtCirurgia" rows="3">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
         </div>
       </div>
     </fieldset>
@@ -320,12 +324,126 @@
   let totalRegistros = 1;
   let logoBase64Cache = null;
 
+  // Desenha o Brasão de Frutuoso Gomes (Cacto, Sol, Serras, Algodão, Milho e Faixa 20-12-63)
+  // caso o arquivo logo_fg.png não seja encontrado no servidor
+  function desenharBrasaoFrutuosoGomesFallback() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 160;
+    canvas.height = 135;
+    const ctx = canvas.getContext('2d');
+
+    // Ramos laterais (Algodão à esquerda e Milho à direita)
+    ctx.strokeStyle = '#15803d';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(80, 58, 48, Math.PI * 0.65, Math.PI * 1.35);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(80, 58, 48, -Math.PI * 0.35, Math.PI * 0.35);
+    ctx.stroke();
+
+    // Capuchos de algodão à esquerda
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#64748b';
+    ctx.lineWidth = 1.5;
+    [[34, 34], [30, 52], [33, 70], [40, 86]].forEach(([x, y]) => {
+      ctx.beginPath();
+      ctx.arc(x, y, 5.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    });
+
+    // Espigas de milho à direita
+    ctx.fillStyle = '#eab308';
+    [[126, 36], [129, 55], [125, 74]].forEach(([x, y]) => {
+      ctx.beginPath();
+      ctx.ellipse(x, y, 4, 8, 0.3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Escudo Central
+    ctx.beginPath();
+    ctx.moveTo(46, 12);
+    ctx.lineTo(114, 12);
+    ctx.lineTo(114, 62);
+    ctx.quadraticCurveTo(114, 92, 80, 104);
+    ctx.quadraticCurveTo(46, 92, 46, 62);
+    ctx.closePath();
+    ctx.fillStyle = '#0ea5e9';
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = '#0f172a';
+    ctx.stroke();
+
+    // Topo escuro com nome FRUTUOSO GOMES
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(48, 14, 64, 15);
+    ctx.font = 'bold 7.2px Arial';
+    ctx.fillStyle = '#facc15';
+    ctx.textAlign = 'center';
+    ctx.fillText('FRUTUOSO GOMES', 80, 24);
+
+    // Sol nascendo atrás das serras
+    ctx.fillStyle = '#facc15';
+    ctx.beginPath();
+    ctx.arc(92, 48, 11, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Serras ao fundo
+    ctx.fillStyle = '#78350f';
+    ctx.beginPath();
+    ctx.moveTo(74, 58);
+    ctx.lineTo(94, 42);
+    ctx.lineTo(112, 58);
+    ctx.closePath();
+    ctx.fill();
+
+    // Campo verde e rio azul
+    ctx.fillStyle = '#16a34a';
+    ctx.beginPath();
+    ctx.moveTo(48, 58);
+    ctx.lineTo(112, 58);
+    ctx.quadraticCurveTo(110, 88, 80, 101);
+    ctx.quadraticCurveTo(50, 88, 48, 58);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#0284c7';
+    ctx.beginPath();
+    ctx.moveTo(86, 58);
+    ctx.lineTo(96, 58);
+    ctx.lineTo(82, 100);
+    ctx.lineTo(72, 96);
+    ctx.closePath();
+    ctx.fill();
+
+    // Mandacaru (Cacto verde à esquerda do escudo)
+    ctx.fillStyle = '#15803d';
+    ctx.fillRect(62, 34, 6, 36);
+    ctx.fillRect(55, 44, 7, 4);
+    ctx.fillRect(55, 38, 4, 8);
+    ctx.fillRect(68, 48, 7, 4);
+    ctx.fillRect(71, 41, 4, 9);
+
+    // Faixas inferiores 20 - 12 - 63
+    const datas = [['20', 46, 108], ['12', 80, 113], ['63', 114, 108]];
+    datas.forEach(([txt, x, y]) => {
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(x - 13, y, 26, 15);
+      ctx.font = 'bold 9.5px Arial';
+      ctx.fillStyle = '#facc15';
+      ctx.fillText(txt, x, y + 11);
+    });
+
+    return canvas.toDataURL('image/png');
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
+    logoBase64Cache = desenharBrasaoFrutuosoGomesFallback();
     carregarLogoEmBase64();
     carregarUltimoRegistro();
   });
 
-  // Converte logo_fg.png do repositório em Base64 para nunca falhar no Word
   async function carregarLogoEmBase64() {
     try {
       const resp = await fetch(URL_LOGO_OFICIAL);
@@ -333,11 +451,22 @@
       const blob = await resp.blob();
       const reader = new FileReader();
       reader.onloadend = () => {
-        logoBase64Cache = reader.result;
+        if (reader.result) logoBase64Cache = reader.result;
       };
       reader.readAsDataURL(blob);
-    } catch (e) {
-      console.warn('Logo não encontrado no repositório:', e);
+    } catch (e) {}
+  }
+
+  function carregarLogoManual(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        logoBase64Cache = e.target.result;
+        const msg = document.getElementById('msgStatus');
+        msg.style.color = '#16a34a';
+        msg.innerText = 'Brasão carregado com sucesso!';
+      };
+      reader.readAsDataURL(input.files[0]);
     }
   }
 
@@ -552,12 +681,12 @@
   });
 
   /* =========================================================================
-     EXPORTAÇÃO WORD (.DOC) IDÊNTICA AO MODELO APROVADO (LOGO AO LADO + 5 PÁGINAS)
+     EXPORTAÇÃO WORD (.DOC) COM BRASÃO AO LADO, PÁGINA 1 E 2 IGUAIS NA LARGURA E ESPAÇOS AMPLIADOS
   ========================================================================= */
   function cabecalhoComLogoAoLado(tituloPrincipal, subtitulo1, subtitulo2, tituloDocumento) {
-    const srcImg = logoBase64Cache || new URL('logo_fg.png', window.location.href).href;
-    const celulaLogo = `<td style="width: 65pt; border: none; text-align: center; vertical-align: middle;">
-      <img src="${srcImg}" width="64" height="54" alt="Brasão">
+    const srcImg = logoBase64Cache || desenharBrasaoFrutuosoGomesFallback();
+    const celulaLogo = `<td style="width: 68pt; border: none; text-align: center; vertical-align: middle;">
+      <img src="${srcImg}" width="66" height="56" alt="Brasão">
     </td>`;
 
     return `
@@ -565,14 +694,14 @@
         <tr style="border: none;">
           ${celulaLogo}
           <td style="border: none; text-align: center; vertical-align: middle;">
-            <div style="font-size: 10pt; font-weight: bold;">${tituloPrincipal}</div>
-            ${subtitulo1 ? `<div style="font-size: 9pt; font-weight: bold;">${subtitulo1}</div>` : ''}
-            ${subtitulo2 ? `<div style="font-size: 8pt;">${subtitulo2}</div>` : ''}
+            <div style="font-size: 10.5pt; font-weight: bold;">${tituloPrincipal}</div>
+            ${subtitulo1 ? `<div style="font-size: 9.5pt; font-weight: bold;">${subtitulo1}</div>` : ''}
+            ${subtitulo2 ? `<div style="font-size: 8.5pt;">${subtitulo2}</div>` : ''}
           </td>
-          <td style="width: 65pt; border: none;">&nbsp;</td>
+          <td style="width: 68pt; border: none;">&nbsp;</td>
         </tr>
       </table>
-      <div style="background: #d9e2ec; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 2.5pt; margin-bottom: 5pt;">
+      <div style="background: #d9e2ec; border: 1pt solid #000; font-weight: bold; font-size: 9.5pt; text-align: center; padding: 3pt; margin-bottom: 5pt;">
         ${tituloDocumento}
       </div>
     `;
@@ -621,6 +750,14 @@
       `<tr><td style="border-top:none; border-left:1pt solid #000; border-right:1pt solid #000; border-bottom:0.5pt solid #888; height:16pt;">&nbsp;</td></tr>`
     ).join('');
 
+    const linhasPautadasAnestesia = Array.from({ length: 11 }, () =>
+      `<tr><td style="border-top:none; border-left:1pt solid #000; border-right:1pt solid #000; border-bottom:0.5pt solid #94a3b8; height:18pt;">&nbsp;</td></tr>`
+    ).join('');
+
+    const linhasPautadasCirurgia = Array.from({ length: 7 }, () =>
+      `<tr><td style="border-top:none; border-left:1pt solid #000; border-right:1pt solid #000; border-bottom:0.5pt solid #94a3b8; height:17pt;">&nbsp;</td></tr>`
+    ).join('');
+
     const conteudoWord = `
       <html xmlns:v="urn:schemas-microsoft-com:vml"
             xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -631,20 +768,20 @@
         <title>AIH - ${d.nome}</title>
         <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
         <style>
-          @page Section1 { size: 595.3pt 841.9pt; margin: 22pt 24pt 22pt 24pt; }
-          div.Section1 { page: Section1; width: 547pt; margin: 0 auto; }
+          @page Section1 { size: 595.3pt 841.9pt; margin: 20pt 22pt 20pt 22pt; }
+          div.Section1 { page: Section1; width: 551pt; margin: 0 auto; }
           body { font-family: Arial, sans-serif; font-size: 8.5pt; color: #000; }
-          table.box { width: 100%; border-collapse: collapse; margin-bottom: 4pt; }
-          table.box td, table.box th { border: 1pt solid #000; padding: 3pt 4pt; font-size: 7.8pt; vertical-align: top; }
-          .sec { background: #e2e8f0; border: 1pt solid #000; border-bottom: none; font-weight: bold; font-size: 7.5pt; padding: 2pt 5pt; text-transform: uppercase; text-align: left; }
-          .lbl { display: block; font-size: 5.8pt; font-weight: bold; text-transform: uppercase; color: #222; }
-          .val { font-size: 8.2pt; font-weight: bold; text-transform: uppercase; }
+          table.box { width: 100%; border-collapse: collapse; margin-bottom: 4.5pt; table-layout: fixed; }
+          table.box td, table.box th { border: 1pt solid #000; padding: 3.5pt 5pt; font-size: 8pt; vertical-align: top; word-wrap: break-word; }
+          .sec { background: #e2e8f0; border: 1pt solid #000; border-bottom: none; font-weight: bold; font-size: 7.8pt; padding: 2.5pt 5pt; text-transform: uppercase; text-align: left; }
+          .lbl { display: block; font-size: 6pt; font-weight: bold; text-transform: uppercase; color: #222; margin-bottom: 1pt; }
+          .val { font-size: 8.5pt; font-weight: bold; text-transform: uppercase; }
         </style>
       </head>
       <body>
         <div class="Section1" align="center">
 
-          <!-- PÁGINA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR -->
+          <!-- PÁGINA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (MESMA LARGURA E ENCAIXE DA PÁGINA 2) -->
           ${cabecalhoComLogoAoLado(
             'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES',
             'Hospital Maternidade Severina Carlos de Andrade',
@@ -654,60 +791,60 @@
 
           <table class="box">
             <tr>
-              <td style="width:35%;"><span class="lbl">Número da AIH:</span><span class="val">&nbsp;</span></td>
-              <td style="width:25%;"><span class="lbl">Prontuário:</span><span class="val">${d.prontuario}</span></td>
-              <td style="width:40%;"><span class="lbl">Tipo:</span><span class="val">(X) 01 - inicial &nbsp;&nbsp; ( ) Continuidade</span></td>
+              <td style="width:35%; height:24pt;"><span class="lbl">Número da AIH:</span><span class="val">&nbsp;</span></td>
+              <td style="width:25%; height:24pt;"><span class="lbl">Prontuário:</span><span class="val">${d.prontuario}</span></td>
+              <td style="width:40%; height:24pt;"><span class="lbl">Tipo:</span><span class="val">(X) 01 - inicial &nbsp;&nbsp; ( ) Continuidade</span></td>
             </tr>
             <tr>
-              <td><span class="lbl">Apresentação / Órgão Emissor:</span><span class="val">240410 - SMS FRUTUOSO GOMES</span></td>
-              <td><span class="lbl">Data da Internação:</span><span class="val">${d.dtInternacao}</span></td>
-              <td><span class="lbl">Data da Saída:</span><span class="val">${d.dtSaida}</span></td>
+              <td style="height:24pt;"><span class="lbl">Apresentação / Órgão Emissor:</span><span class="val">240410 - SMS FRUTUOSO GOMES</span></td>
+              <td style="height:24pt;"><span class="lbl">Data da Internação:</span><span class="val">${d.dtInternacao}</span></td>
+              <td style="height:24pt;"><span class="lbl">Data da Saída:</span><span class="val">${d.dtSaida}</span></td>
             </tr>
           </table>
 
           <div class="sec">DADOS DO PACIENTE</div>
           <table class="box">
             <tr>
-              <td colspan="2" style="width:68%;"><span class="lbl">Nome do Paciente:</span><span class="val">${d.nome}</span></td>
-              <td style="width:32%;"><span class="lbl">Cartão SUS:</span><span class="val">${d.cns}</span></td>
+              <td colspan="2" style="width:68%; height:24pt;"><span class="lbl">Nome do Paciente:</span><span class="val">${d.nome}</span></td>
+              <td style="width:32%; height:24pt;"><span class="lbl">Cartão SUS:</span><span class="val">${d.cns}</span></td>
             </tr>
             <tr>
-              <td><span class="lbl">Data de Nascimento:</span><span class="val">${d.nasc}</span></td>
-              <td><span class="lbl">Sexo:</span><span class="val">${d.sexo}</span></td>
-              <td><span class="lbl">Raça/Cor:</span><span class="val">${d.raca}</span></td>
+              <td style="height:24pt;"><span class="lbl">Data de Nascimento:</span><span class="val">${d.nasc}</span></td>
+              <td style="height:24pt;"><span class="lbl">Sexo:</span><span class="val">${d.sexo}</span></td>
+              <td style="height:24pt;"><span class="lbl">Raça/Cor:</span><span class="val">${d.raca}</span></td>
             </tr>
             <tr>
-              <td colspan="2"><span class="lbl">Nome da mãe:</span><span class="val">${d.mae}</span></td>
-              <td><span class="lbl">Telefone:</span><span class="val">${d.tel}</span></td>
+              <td colspan="2" style="height:24pt;"><span class="lbl">Nome da mãe:</span><span class="val">${d.mae}</span></td>
+              <td style="height:24pt;"><span class="lbl">Telefone:</span><span class="val">${d.tel}</span></td>
             </tr>
             <tr>
-              <td colspan="2"><span class="lbl">Endereço:</span><span class="val">${d.endereco}</span></td>
-              <td><span class="lbl">N°. / Bairro:</span><span class="val">${d.num} - ${d.bairro}</span></td>
+              <td colspan="2" style="height:24pt;"><span class="lbl">Endereço:</span><span class="val">${d.endereco}</span></td>
+              <td style="height:24pt;"><span class="lbl">N°. / Bairro:</span><span class="val">${d.num} - ${d.bairro}</span></td>
             </tr>
             <tr>
-              <td><span class="lbl">Município:</span><span class="val">${d.municipio}</span></td>
-              <td><span class="lbl">Estado / CEP:</span><span class="val">${d.estado} - ${d.cep}</span></td>
-              <td><span class="lbl">Nacionalidade / Doc:</span><span class="val">BRASILEIRA | RG: ${d.rg}</span></td>
+              <td style="height:24pt;"><span class="lbl">Município:</span><span class="val">${d.municipio}</span></td>
+              <td style="height:24pt;"><span class="lbl">Estado / CEP:</span><span class="val">${d.estado} - ${d.cep}</span></td>
+              <td style="height:24pt;"><span class="lbl">Nacionalidade / Doc:</span><span class="val">BRASILEIRA | RG: ${d.rg}</span></td>
             </tr>
           </table>
 
           <div class="sec">DADOS DO PROCEDIMENTO</div>
           <table class="box">
             <tr>
-              <td style="width:50%; height:30pt;"><span class="lbl">Procedimento solicitado:</span><span class="val">${d.codProced} - ${d.proced}</span></td>
-              <td style="width:50%; height:30pt;"><span class="lbl">Procedimento Realizado:</span><span class="val">${d.codProced} - ${d.proced}</span></td>
+              <td style="width:50%; height:32pt;"><span class="lbl">Procedimento solicitado:</span><span class="val">${d.codProced} - ${d.proced}</span></td>
+              <td style="width:50%; height:32pt;"><span class="lbl">Procedimento Realizado:</span><span class="val">${d.codProced} - ${d.proced}</span></td>
             </tr>
             <tr>
-              <td style="height:26pt;"><span class="lbl">Especialidade / Mudança de Procedimento (S/N):</span><span class="val">${d.especialidade} &nbsp;|&nbsp; N</span></td>
-              <td style="height:26pt;"><span class="lbl">Modalidade / Enfermaria / Leito:</span><span class="val">(X) Hospitalar &nbsp;|&nbsp; Enf: M &nbsp;|&nbsp; Leito: 01</span></td>
+              <td style="height:28pt;"><span class="lbl">Especialidade / Mudança de Procedimento (S/N):</span><span class="val">${d.especialidade} &nbsp;|&nbsp; N</span></td>
+              <td style="height:28pt;"><span class="lbl">Modalidade / Enfermaria / Leito:</span><span class="val">(X) Hospitalar &nbsp;|&nbsp; Enf: M &nbsp;|&nbsp; Leito: 01</span></td>
             </tr>
             <tr>
-              <td style="height:26pt;"><span class="lbl">CID Principal:</span><span class="val">${d.cid} - ${d.diag}</span></td>
-              <td style="height:26pt;"><span class="lbl">Motivo da Saída/Permanência:</span><span class="val">ALTA (${d.dias} DIA(S))</span></td>
+              <td style="height:28pt;"><span class="lbl">CID Principal:</span><span class="val">${d.cid} - ${d.diag}</span></td>
+              <td style="height:28pt;"><span class="lbl">Motivo da Saída/Permanência:</span><span class="val">ALTA (${d.dias} DIA(S))</span></td>
             </tr>
             <tr>
-              <td style="height:26pt;"><span class="lbl">CPF Solicitante:</span><span class="val">${d.cpfMed} (${d.medico})</span></td>
-              <td style="height:26pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">185.901.284-15 &nbsp;|&nbsp; ${d.dtInternacao}</span></td>
+              <td style="height:28pt;"><span class="lbl">CPF Solicitante:</span><span class="val">${d.cpfMed} (${d.medico})</span></td>
+              <td style="height:28pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">185.901.284-15 &nbsp;|&nbsp; ${d.dtInternacao}</span></td>
             </tr>
           </table>
 
@@ -722,22 +859,23 @@
               <th style="width:18%;">CNPJ</th>
             </tr>
             <tr>
-              <td align="center" style="height:17pt;">01</td>
+              <td align="center" style="height:19pt;">01</td>
               <td>${d.codProced} - ${d.proced}</td>
               <td align="center">01</td>
               <td align="center">${d.cpfMed}</td>
               <td align="center">2380846</td>
               <td align="center">08.349.052/0001-80</td>
             </tr>
-            <tr><td align="center" style="height:17pt;">02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">03</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">04</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">05</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td align="center" style="height:19pt;">02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td align="center" style="height:19pt;">03</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td align="center" style="height:19pt;">04</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td align="center" style="height:19pt;">05</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td align="center" style="height:19pt;">06</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
           </table>
 
           ${quebraWord}
 
-          <!-- PÁGINA 2: LAUDO PARA SOLICITAÇÃO DE AIH (COMPLETO EM 1 PÁGINA A4 SEM VAZAR PARA A 3) -->
+          <!-- PÁGINA 2: LAUDO PARA SOLICITAÇÃO DE AIH (COMPLETO EM 1 PÁGINA A4) -->
           ${cabecalhoComLogoAoLado(
             'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES',
             'Hospital Maternidade Severina Carlos de Andrade',
@@ -884,7 +1022,7 @@
 
           ${quebraWord}
 
-          <!-- PÁGINA 4: FICHA DE ANESTESIA -->
+          <!-- PÁGINA 4: FICHA DE ANESTESIA (ESPAÇO AMPLIADO PARA DROGAS ANESTÉSICAS) -->
           ${cabecalhoComLogoAoLado(
             'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE',
             'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES - RN',
@@ -907,9 +1045,12 @@
             </tr>
           </table>
 
-          <div class="sec">DROGAS ANESTESIA</div>
-          <table class="box">
-            <tr><td style="height:180pt;"><span class="val">${d.anestesia}</span></td></tr>
+          <div class="sec">DROGAS ANESTESIA / PRESCRIÇÃO E EVOLUÇÃO ANESTÉSICA</div>
+          <table class="box" style="margin-bottom:4pt;">
+            <tr>
+              <td style="border-bottom:0.5pt solid #94a3b8; height:22pt;"><span class="val">${d.anestesia}</span></td>
+            </tr>
+            ${linhasPautadasAnestesia}
           </table>
 
           <table class="box">
@@ -931,7 +1072,7 @@
 
           ${quebraWord}
 
-          <!-- PÁGINA 5: BOLETIM OPERATÓRIO E MATERIAL/MEDICAMENTO DE SALA -->
+          <!-- PÁGINA 5: BOLETIM OPERATÓRIO (ESPAÇO AMPLIADO PARA DESCRIÇÃO DO ATO CIRÚRGICO) -->
           ${cabecalhoComLogoAoLado(
             'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE',
             'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES - RN',
@@ -951,8 +1092,11 @@
           </table>
 
           <div class="sec">Descrição do Ato Cirúrgico</div>
-          <table class="box">
-            <tr><td style="height:110pt;"><span class="val">${d.cirurgia}</span></td></tr>
+          <table class="box" style="margin-bottom:5pt;">
+            <tr>
+              <td style="border-bottom:0.5pt solid #94a3b8; height:22pt;"><span class="val">${d.cirurgia}</span></td>
+            </tr>
+            ${linhasPautadasCirurgia}
           </table>
 
           <table class="box">
