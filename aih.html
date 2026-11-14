@@ -27,7 +27,6 @@
     header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; }
     h1 { font-size: 1.5rem; color: #0f172a; }
     
-    /* Barra de Navegação */
     .nav-bar { display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
     .nav-group { display: flex; align-items: center; gap: 8px; }
     .btn-nav { background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem; }
@@ -40,7 +39,6 @@
     .busca-box { display: flex; gap: 6px; }
     .busca-box input { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; min-width: 200px; }
     
-    /* Formulário */
     fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fff; }
     legend { font-weight: 600; color: var(--primary); padding: 0 8px; font-size: 1.05rem; }
     .grid { display: grid; gap: 12px; }
@@ -54,7 +52,6 @@
     input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px #bae6fd; }
     textarea { resize: vertical; }
 
-    /* Barra de Ações */
     .actions-bar { display: flex; gap: 12px; margin-top: 24px; align-items: center; flex-wrap: wrap; }
     .btn-action { padding: 12px 18px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; color: white; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; }
     .btn-save { background: var(--primary); }
@@ -66,7 +63,6 @@
     
     #msgStatus { font-size: 0.9rem; font-weight: 600; }
 
-    /* Modal */
     .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 9999; justify-content: center; align-items: center; }
     .modal-content { background: white; width: 90%; height: 90%; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
     .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid var(--border); }
@@ -82,7 +78,6 @@
     <button type="button" class="btn-nav" onclick="location.reload()">↻ Recarregar</button>
   </header>
 
-  <!-- Barra de Navegação -->
   <div class="nav-bar">
     <div class="nav-group">
       <button type="button" id="btnAnt" class="btn-nav" onclick="navegarRegistro(-1)">◀</button>
@@ -97,7 +92,6 @@
   </div>
 
   <form id="formAih">
-    <!-- Identificação do Paciente -->
     <fieldset>
       <legend>Identificação do Paciente</legend>
       <div class="grid grid-3">
@@ -187,7 +181,6 @@
       </div>
     </fieldset>
 
-    <!-- Dados Clínicos e Procedimento -->
     <fieldset>
       <legend>Dados Clínicos e Internação</legend>
       <div class="grid grid-4">
@@ -200,8 +193,8 @@
           <input type="text" id="dataSaida" placeholder="DD/MM/AAAA" oninput="atualizarDiasInternacao()">
         </div>
         <div class="form-group">
-          <label for="diasPermanencia">Dias de Internação (Folha 3):</label>
-          <input type="text" id="diasPermanencia" value="1" placeholder="Ex: 1">
+          <label for="diasPermanencia">Dias de Permanência:</label>
+          <input type="text" id="diasPermanencia" value="1">
         </div>
         <div class="form-group">
           <label for="dataSolicitacao">Data Solicitação:</label>
@@ -211,15 +204,15 @@
 
       <div class="grid grid-3" style="margin-top: 10px;">
         <div class="form-group">
-          <label for="diagInicial">Diagnóstico Inicial:</label>
+          <label for="diagInicial">23. Diagnóstico Inicial:</label>
           <input type="text" id="diagInicial">
         </div>
         <div class="form-group">
-          <label for="cidPrincipal">CID-10 Principal:</label>
+          <label for="cidPrincipal">24. CID-10 Principal:</label>
           <input type="text" id="cidPrincipal">
         </div>
         <div class="form-group">
-          <label for="especialidade">Especialidade / Clínica:</label>
+          <label for="especialidade">29. Especialidade / Clínica:</label>
           <select id="especialidade">
             <option value="CLINICA CIRURGICA">CLINICA CIRURGICA</option>
             <option value="CLINICA MEDICA">CLINICA MEDICA</option>
@@ -231,60 +224,57 @@
 
       <div class="grid grid-2" style="margin-top: 10px;">
         <div class="form-group">
-          <label for="procedimento">Descrição do Procedimento:</label>
+          <label for="procedimento">27. Descrição do Procedimento Solicitado:</label>
           <input type="text" id="procedimento">
         </div>
         <div class="form-group">
-          <label for="codProcedimento">Código SIGTAP:</label>
+          <label for="codProcedimento">28. Código do Procedimento (SIGTAP):</label>
           <input type="text" id="codProcedimento">
         </div>
       </div>
 
       <div class="grid grid-2" style="margin-top: 10px;">
         <div class="form-group">
-          <label for="medicoSolicitante">Nome do Solicitante:</label>
+          <label for="medicoSolicitante">33. Nome do Profissional Solicitante:</label>
           <input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA">
         </div>
         <div class="form-group">
-          <label for="cpfSolicitante">CPF do Solicitante:</label>
+          <label for="cpfSolicitante">32. CPF do Solicitante:</label>
           <input type="text" id="cpfSolicitante" value="175.499.574-87">
         </div>
       </div>
     </fieldset>
 
-    <!-- Laudos -->
     <fieldset>
-      <legend>Laudo e Justificativa de Internação</legend>
+      <legend>Justificativa da Internação</legend>
       <div class="form-group">
-        <label for="sinaisSintomas">17. Principais Sinais e Sintomas Clínicos:</label>
+        <label for="sinaisSintomas">20. Principais Sinais e Sintomas Clínicos:</label>
         <textarea id="sinaisSintomas" rows="2"></textarea>
       </div>
       <div class="form-group" style="margin-top: 10px;">
-        <label for="justificativa">18. Condições que Justificam a Internação:</label>
+        <label for="justificativa">21. Condições que Justificam a Internação:</label>
         <textarea id="justificativa" rows="2"></textarea>
       </div>
       <div class="form-group" style="margin-top: 10px;">
-        <label for="exames">19. Principais Resultados de Provas Diagnósticas (Exames):</label>
+        <label for="exames">22. Principais Resultados de Provas Diagnósticas (Exames):</label>
         <textarea id="exames" rows="2"></textarea>
       </div>
     </fieldset>
 
-    <!-- Bloco Operatório -->
     <fieldset>
-      <legend>Anestesia e Relatório de Internação</legend>
+      <legend>Anestesia e Relatório Operatório</legend>
       <div class="grid grid-2">
         <div class="form-group">
-          <label for="txtAnestesia">Drogas Usadas / Prescrição Anestésica (Folha 4):</label>
+          <label for="txtAnestesia">Drogas Usadas / Prescrição Anestésica:</label>
           <textarea id="txtAnestesia" rows="2">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
         </div>
         <div class="form-group">
-          <label for="txtCirurgia">Descrição do Boletim / Relatório (Folha 5):</label>
+          <label for="txtCirurgia">Descrição do Ato Cirúrgico / Relatório:</label>
           <textarea id="txtCirurgia" rows="2">SEM INTERCORRÊNCIAS OPERATÓRIAS.</textarea>
         </div>
       </div>
     </fieldset>
 
-    <!-- Barra de Ações -->
     <div class="actions-bar">
       <button type="submit" id="btnSalvarEGerar" class="btn-action btn-save">
         💾 Salvar na Planilha e Gerar AIH
@@ -303,7 +293,6 @@
   </form>
 </div>
 
-<!-- Modal com o PDF -->
 <div id="modalVisualizacao" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -334,7 +323,7 @@
   });
 
   /* =========================================================================
-     CÁLCULO AUTOMÁTICO DOS DIAS DE INTERNAÇÃO (FOLHA 3)
+     CÁLCULO AUTOMÁTICO DOS DIAS DE PERMANÊNCIA (DATA SAÍDA - DATA INTERNAÇÃO)
   ========================================================================= */
   function calcularDiasInternacao(dtAdmStr, dtAltaStr) {
     if (!dtAdmStr || !dtAltaStr) return "1";
@@ -438,7 +427,6 @@
 
     const endStr = (p.endereco || '').toString().toUpperCase();
     const munStr = (p.municipio || '').toString().toUpperCase();
-    
     const deslocado = endStr.includes('SILVA') || endStr.includes('SOARES') || endStr.includes('BATISTA') || munStr.includes('SITIO') || munStr.includes('RUA') || munStr.includes('SN');
 
     let mae = p.mae || '';
@@ -469,7 +457,6 @@
       cpfMed = '175.499.574-87';
     }
 
-    // 1. Identificação
     document.getElementById('prontuario').value = p.prontuario || '';
     document.getElementById('nomePaciente').value = p.nome || '';
     document.getElementById('cns').value = p.cns || '';
@@ -481,7 +468,6 @@
     document.getElementById('nomePai').value = p.pai || '';
     document.getElementById('profissao').value = 'AGRICULTORA';
 
-    // 2. Endereço
     document.getElementById('endereco').value = endereco || 'SITIO ARROJADO';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
@@ -490,24 +476,20 @@
     document.getElementById('cep').value = '59890-000';
     document.getElementById('rg').value = '';
 
-    // 3. Datas e Cálculo Automático de Dias
     document.getElementById('dataInternacao').value = dtInternacao;
     document.getElementById('dataSaida').value = dtSaida;
     document.getElementById('dataSolicitacao').value = dtInternacao;
     atualizarDiasInternacao();
 
-    // 4. Clínicos
     document.getElementById('diagInicial').value = diag;
     document.getElementById('cidPrincipal').value = cid;
     document.getElementById('procedimento').value = procedimento;
     document.getElementById('codProcedimento').value = codProced;
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
-    // 5. Solicitante
     document.getElementById('medicoSolicitante').value = medico;
     document.getElementById('cpfSolicitante').value = cpfMed;
 
-    // 6. Laudos
     document.getElementById('sinaisSintomas').value = (p.sinais && !p.sinais.includes('175.')) ? p.sinais : 
       'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA. EVOLUIU SEM ANORMALIDADES.';
     document.getElementById('justificativa').value = p.justificativa || 
@@ -563,7 +545,7 @@
   });
 
   /* =========================================================================
-     EXPORTAÇÃO PARA WORD (.DOC) COM CABEÇALHO E LOGOS CENTRALIZADOS
+     EXPORTAÇÃO PARA WORD (.DOC) COM CABEÇALHOS E LOGOS CENTRALIZADOS
   ========================================================================= */
   document.getElementById('btnGerarWord').addEventListener('click', function() {
     const nome = document.getElementById('nomePaciente').value || 'Paciente';
@@ -611,30 +593,30 @@
         </style>
       </head>
       <body>
-        <!-- FOLHA 1 / 2: LAUDO DE SOLICITAÇÃO AIH (LOGO CENTRALIZADO) -->
         <div class="header-box" align="center">
           <p class="center"><b>SUS - SISTEMA ÚNICO DE SAÚDE</b></p>
           <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
           <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
+          <p class="center">CNPJ 08.349.052/0001-80 | Frutuoso Gomes - RN</p>
           <h2>LAUDO PARA SOLICITAÇÃO DE AIH</h2>
         </div>
 
         <table>
           <tr>
-            <td colspan="2"><b>Paciente:</b> ${d.nome}</td>
-            <td><b>Prontuário:</b> ${d.prontuario}</td>
+            <td colspan="2"><b>5-Nome do Paciente:</b> ${d.nome}</td>
+            <td><b>6-Nº Prontuário:</b> ${d.prontuario}</td>
           </tr>
           <tr>
-            <td><b>CNS:</b> ${d.cns}</td>
-            <td><b>Data Nasc:</b> ${d.nasc}</td>
-            <td><b>Sexo:</b> ${d.sexo} | <b>Cor:</b> ${d.raca}</td>
+            <td><b>7-CNS:</b> ${d.cns}</td>
+            <td><b>8-Data Nasc:</b> ${d.nasc}</td>
+            <td><b>9-Sexo:</b> ${d.sexo} | <b>10-Raça/Cor:</b> ${d.raca}</td>
           </tr>
           <tr>
-            <td colspan="2"><b>Mãe:</b> ${d.mae}</td>
-            <td><b>Município:</b> ${d.municipio}</td>
+            <td colspan="2"><b>11-Nome da Mãe:</b> ${d.mae}</td>
+            <td><b>16-Município:</b> ${d.municipio}</td>
           </tr>
           <tr>
-            <td colspan="3"><b>Endereço:</b> ${d.endereco}</td>
+            <td colspan="3"><b>15-Endereço:</b> ${d.endereco}</td>
           </tr>
         </table>
 
@@ -642,44 +624,44 @@
           <tr>
             <td><b>Data Internação:</b> ${d.dtInternacao}</td>
             <td><b>Data Saída:</b> ${d.dtSaida}</td>
-            <td><b>Dias Permanência:</b> ${d.dias} dia(s)</td>
+            <td><b>Dias de Permanência:</b> ${d.dias} dia(s)</td>
           </tr>
           <tr>
-            <td colspan="2"><b>Diagnóstico Inicial:</b> ${d.diag}</td>
-            <td><b>CID-10:</b> ${d.cid}</td>
+            <td colspan="2"><b>23-Diagnóstico Inicial:</b> ${d.diag}</td>
+            <td><b>24-CID 10 Principal:</b> ${d.cid}</td>
           </tr>
           <tr>
-            <td colspan="3"><b>Procedimento:</b> ${d.proced} (${d.codProced})</td>
+            <td colspan="3"><b>27-Procedimento Solicitado:</b> ${d.proced} &nbsp;|&nbsp; <b>28-Código:</b> ${d.codProced}</td>
           </tr>
         </table>
 
-        <p><b>17. Principais Sinais e Sintomas Clínicos:</b></p>
+        <p><b>20-Principais Sinais e Sintomas Clínicos:</b></p>
         <p style="border: 1px solid #000; padding: 8px;">${d.sinais}</p>
 
-        <p><b>18. Condições que Justificam a Internação:</b></p>
+        <p><b>21-Condições que Justificam a Internação:</b></p>
         <p style="border: 1px solid #000; padding: 8px;">${d.justificativa}</p>
 
-        <p><b>19. Resultados de Provas Diagnósticas (Exames):</b></p>
+        <p><b>22-Principais Resultados de Provas Diagnósticas (Exames):</b></p>
         <p style="border: 1px solid #000; padding: 8px;">${d.exames}</p>
 
         <br>
-        <p align="right"><b>Médico Solicitante:</b> ${d.medico} - CPF: ${d.cpfMed}</p>
+        <p align="right"><b>33-Profissional Solicitante:</b> ${d.medico} - CPF: ${d.cpfMed}</p>
 
-        <!-- FOLHA 3: PRONTUÁRIO E DIAS DE PERMANÊNCIA -->
         <div class="page-break"></div>
         <div class="header-box" align="center">
           <p class="center"><b>ESTADO DO RIO GRANDE DO NORTE</b></p>
+          <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
           <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
-          <h2>PRONTUÁRIO DE INTERNAÇÃO / BOLETIM</h2>
+          <h2>PRONTUÁRIO DE INTERNAÇÃO / BOLETIM OPERATÓRIO</h2>
         </div>
 
         <table>
           <tr>
-            <td><b>Paciente:</b> ${d.nome}</td>
-            <td><b>Prontuário:</b> ${d.prontuario}</td>
+            <td><b>Nome do Cliente:</b> ${d.nome}</td>
+            <td><b>Nº Prontuário:</b> ${d.prontuario}</td>
           </tr>
           <tr>
-            <td><b>Admissão:</b> ${d.dtInternacao} | <b>Alta:</b> ${d.dtSaida}</td>
+            <td><b>Data Admissão:</b> ${d.dtInternacao} | <b>Alta:</b> ${d.dtSaida}</td>
             <td><b>Dias de Permanência:</b> ${d.dias} dia(s)</td>
           </tr>
         </table>
@@ -689,14 +671,14 @@
         <p style="border: 1px solid #000; padding: 10px;">${d.anestesia}</p>
 
         <br>
-        <h3>Descrição do Boletim / Relatório Operatório</h3>
+        <h3>Descrição do Ato Cirúrgico / Relatório</h3>
         <p style="border: 1px solid #000; padding: 10px;">${d.cirurgia}</p>
 
         <br><br><br>
         <table style="border: none;">
           <tr style="border: none;">
             <td style="border: none; text-align: center;">_______________________________________<br>DR. HIAGO - Anestesista CRM: 8.830</td>
-            <td style="border: none; text-align: center;">_______________________________________<br>${d.medico}<br>Médico Cirurgião</td>
+            <td style="border: none; text-align: center;">_______________________________________<br>${d.medico}<br>Médico Cirurgião - CRM 1.675</td>
           </tr>
         </table>
       </body>
@@ -715,7 +697,7 @@
   });
 
   /* =========================================================================
-     GERAÇÃO DO PDF COM AJUSTE DE LAYOUT DA FOLHA 2 E DIAS NA FOLHA 3
+     GERAÇÃO DO PDF ADAPTADA À NOVA NUMERAÇÃO (20-34) E DIAS NA FOLHA DO PRONTUÁRIO
   ========================================================================= */
   async function gerarAihAdobeForm(opcoes = { salvarNaPlanilha: false, abrirImpressaoDireta: false }) {
     const { PDFDocument, StandardFonts, TextAlignment } = PDFLib;
@@ -800,31 +782,28 @@
           let isMulti = false;
           let alignCenter = false;
 
-          // DIAS DE PERMANÊNCIA / INTERNAÇÃO (FOLHA 3)
+          // DIAS DE PERMANÊNCIA (PRONTUÁRIO DE INTERNAÇÃO)
           if (n.includes('dias') || n.includes('permanencia') || n.includes('dias de permanencia')) {
             val = d.diasPermanencia;
             fontSize = 9.0;
             alignCenter = true;
           }
-          // 24. Descrição do Procedimento (Folha 2 ajustada para não estourar)
+          // 27 (ou 24) - Descrição do Procedimento Solicitado
           else if (
-            n.startsWith('24') ||
-            n.includes('24 descricao') ||
-            n.includes('24 desc') ||
+            n.startsWith('27') ||
+            n.startsWith('24 descricao') ||
             (n.includes('descricao') && n.includes('procedimento')) ||
             (n.includes('desc') && n.includes('procedimento')) ||
             (n.includes('procedimento solicitado') && !n.includes('codigo') && !n.includes('cod')) ||
-            n === 'procedimento solicitado' ||
-            n === 'descricao do procedimento solicitado' ||
-            n === 'campo24 procedimento' ||
-            n === 'campo24'
+            n === 'procedimento solicitado'
           ) {
             val = d.procedComCodigo;
             fontSize = 7.4;
             isMulti = false;
           }
-          // 25. Código SIGTAP (Centralizado na caixa da Folha 2)
+          // 28 (ou 25) - Código do Procedimento
           else if (
+            n.startsWith('28') ||
             n.startsWith('25') ||
             n.includes('codigo do procedimento') ||
             n.includes('codigo procedimento') ||
@@ -836,68 +815,64 @@
             fontSize = 8.5;
             alignCenter = true;
           }
-          // 18. Justificativa (Fonte compacta na Folha 2)
-          else if (
-            n.startsWith('18') || 
-            n.includes('justificam') || 
-            n.includes('justificativa') || 
-            n.includes('condicoes que') || 
-            n.includes('condicoes') ||
-            n === 'campo18 justificativa' ||
-            n === 'campo18'
-          ) {
-            val = d.justificativa; 
-            fontSize = 7.2; 
+          // 20 (ou 17) - Principais Sinais e Sintomas Clínicos
+          else if (n.startsWith('20') || n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
+            val = d.sinais;
+            fontSize = 7.2;
             isMulti = true;
           }
-          // 19. Exames (Fonte compacta na Folha 2)
+          // 21 (ou 18) - Condições que Justificam a Internação
           else if (
-            n.startsWith('19') || 
-            n.includes('provas') || 
-            n.includes('diagnosticas') || 
-            n.includes('exames') || 
-            n.includes('resultado de exames') || 
-            n.includes('principais resultados') ||
-            n === 'campo19 exames' ||
-            n === 'campo19'
+            n.startsWith('21') ||
+            n.startsWith('18') ||
+            n.includes('justificam') ||
+            n.includes('justificativa') ||
+            n.includes('condicoes que') ||
+            n.includes('condicoes')
           ) {
-            val = d.exames; 
-            fontSize = 7.2; 
+            val = d.justificativa;
+            fontSize = 7.2;
             isMulti = true;
           }
-          // 20. Diagnóstico Inicial
+          // 22 (ou 19) - Principais Resultados de Provas Diagnósticas
           else if (
-            n.startsWith('20') || 
-            n.includes('20 diagnostico') || 
-            (n.includes('diagnostico') && !n.includes('cid') && !n.includes('pre') && !n.includes('final')) || 
+            n.startsWith('22') ||
+            n.startsWith('19') ||
+            n.includes('provas') ||
+            n.includes('diagnosticas') ||
+            n.includes('exames') ||
+            n.includes('resultado de exames')
+          ) {
+            val = d.exames;
+            fontSize = 7.2;
+            isMulti = true;
+          }
+          // 23 (ou 20) - Diagnóstico Inicial
+          else if (
+            n.startsWith('23') ||
+            n.includes('20 diagnostico') ||
+            (n.includes('diagnostico') && !n.includes('cid') && !n.includes('pre') && !n.includes('final')) ||
             n === 'diagnostico inicial' ||
-            n.includes('diag inicial') ||
-            n === 'campo20 diagnostico' ||
-            n === 'campo20'
+            n.includes('diag inicial')
           ) {
-            val = d.diag; 
+            val = d.diag;
             fontSize = 7.8;
           }
-          // 21. CID Principal (Centralizado na caixa da Folha 2)
+          // 24 (ou 21) - CID 10 Principal
           else if (
-            n.startsWith('21') || 
-            n.includes('cid 10 principal') || 
-            n.includes('cid principal') || 
-            n === 'cid' || 
+            n.startsWith('24 cid') ||
+            n.startsWith('21 cid') ||
+            n.includes('cid 10 principal') ||
+            n.includes('cid principal') ||
+            n === 'cid' ||
             n.includes('cid 10') ||
             n.includes('cid princ')
           ) {
-            val = d.cid; 
+            val = d.cid;
             fontSize = 8.8;
             alignCenter = true;
           }
-          // 17. Sinais e Sintomas
-          else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
-            val = d.sinais; 
-            fontSize = 7.2; 
-            isMulti = true;
-          }
-          // Datas
+          // Datas Blindadas
           else if (n.includes('dt intern') || n.includes('admissao') || n === 'data da internacao') {
             val = (d.dtInternacao && !/[a-zA-Z]/.test(d.dtInternacao)) ? d.dtInternacao : '';
             fontSize = 8.2;
@@ -906,41 +881,41 @@
             val = (d.dtSaida && !/[a-zA-Z]/.test(d.dtSaida)) ? d.dtSaida : '';
             fontSize = 8.2;
           }
-          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
+          else if (n.startsWith('34') || n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
             val = (d.dtSol && !/[a-zA-Z]/.test(d.dtSol)) ? d.dtSol : (d.dtInternacao || '');
             fontSize = 8.2;
           }
-          else if (n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
+          else if (n.startsWith('8') || n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
             val = (d.nasc && !/[a-zA-Z]/.test(d.nasc)) ? d.nasc : '';
             fontSize = 8.2;
           }
           // Identificação Geral
-          else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 9.0; alignCenter = true; }
-          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 8.5; }
-          else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 8.5; alignCenter = true; }
-          else if (n.includes('sexo')) { val = d.sexo; fontSize = 8.5; alignCenter = true; }
-          else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8.0; }
-          else if (n.includes('mae')) { val = d.mae; fontSize = 8.0; }
+          else if (n.startsWith('6') || n.includes('prontuario')) { val = d.prontuario; fontSize = 9.0; alignCenter = true; }
+          else if ((n.startsWith('5') || n.includes('nome')) && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante') && !n.includes('estabelecimento') && !n.includes('responsavel') && !n.includes('autorizador')) { val = d.nome; fontSize = 8.5; }
+          else if (n.startsWith('7') || n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 8.5; alignCenter = true; }
+          else if (n.startsWith('9') || n.includes('sexo')) { val = d.sexo; fontSize = 8.5; alignCenter = true; }
+          else if (n.startsWith('10') || n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8.0; }
+          else if (n.startsWith('11') || n.includes('mae')) { val = d.mae; fontSize = 8.0; }
           else if (n.includes('pai')) { val = d.pai; fontSize = 8.0; }
           else if (n.includes('profiss')) { val = d.profissao; fontSize = 8.0; }
-          else if (n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 7.6; }
+          else if (n.startsWith('15') || n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 7.6; }
           else if (n === 'n' || n.startsWith('n ') || n.includes('numero')) { val = d.num; fontSize = 8.5; alignCenter = true; }
           else if (n.includes('bairro')) { val = d.bairro; fontSize = 8.0; }
-          else if (n.includes('municipio') || n.includes('naturalidade')) { val = d.municipio; fontSize = 8.0; }
-          else if (n.includes('estado') || n === 'uf' || n.includes('15 uf')) { val = d.estado; fontSize = 8.5; alignCenter = true; }
-          else if (n.includes('cep')) { val = d.cep; fontSize = 8.0; alignCenter = true; }
-          else if (n.includes('telefone')) { val = d.tel; fontSize = 8.0; }
+          else if (n.startsWith('16') || n.includes('municipio') || n.includes('naturalidade')) { val = d.municipio; fontSize = 8.0; }
+          else if (n.startsWith('18 uf') || n.includes('estado') || n === 'uf') { val = d.estado; fontSize = 8.5; alignCenter = true; }
+          else if (n.startsWith('19 cep') || n.includes('cep')) { val = d.cep; fontSize = 8.0; alignCenter = true; }
+          else if (n.startsWith('12') || n.includes('telefone')) { val = d.tel; fontSize = 8.0; }
           else if (n.includes('doc') || n === 'rg') { val = d.rg; fontSize = 8.5; }
           else if (n.includes('mud proc')) { val = 'N'; fontSize = 8.5; alignCenter = true; }
-          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 7.8; }
+          else if (n.startsWith('29') || n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 7.8; }
           else if (n.includes('enferm')) { val = 'M'; fontSize = 8.5; alignCenter = true; }
           else if (n.includes('leito')) { val = '1'; fontSize = 8.5; alignCenter = true; }
           else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8.0; }
-          else if (n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 8.5; }
-          else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.0; }
+          else if (n.startsWith('32') || n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 8.5; }
+          else if (n.startsWith('33') || n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.0; }
           else if (n.includes('tecnica') || n.includes('tipo anest')) { val = 'LOCAL'; fontSize = 8.0; alignCenter = true; }
           else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 7.5; isMulti = true; }
-          else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 7.5; isMulti = true; }
+          else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('descricao do ato')) { val = d.cirurgia; fontSize = 7.5; isMulti = true; }
 
           if (val !== null && val !== '') {
             try { 
