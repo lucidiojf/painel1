@@ -466,7 +466,7 @@
     document.getElementById('municipio').value = municipio;
     document.getElementById('estado').value = estado;
     document.getElementById('cep').value = '59890-000';
-    document.getElementById('rg').value = '';
+    document.getElementById('rg').value = p.rg || p.documento || p.doc || '';
 
     document.getElementById('dataInternacao').value = dtInternacao;
     document.getElementById('dataSaida').value = dtSaida;
@@ -475,8 +475,8 @@
 
     document.getElementById('diagInicial').value = diag;
     document.getElementById('cidPrincipal').value = cid;
-    document.getElementById('procedimento').value = procedimento;
-    document.getElementById('codProcedimento').value = codProced;
+    document.getElementById('procedimento').value = procedimento || p.procedimento || '';
+    document.getElementById('codProcedimento').value = codProced || p.codProced || '';
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
     document.getElementById('medicoSolicitante').value = medico;
@@ -579,7 +579,7 @@
       municipio: document.getElementById('municipio').value || 'FRUTUOSO GOMES',
       estado: document.getElementById('estado').value || 'RN',
       cep: document.getElementById('cep').value || '59890-000',
-      rg: document.getElementById('rg').value || 'SN',
+      rg: (document.getElementById('rg').value || '').trim(),
       dtInternacao: document.getElementById('dataInternacao').value || '',
       dtSaida: document.getElementById('dataSaida').value || '',
       dias: document.getElementById('diasPermanencia').value || '1',
@@ -667,7 +667,11 @@
             <tr>
               <td style="height:22pt;"><span class="lbl">Município:</span><span class="val">${d.municipio}</span></td>
               <td style="height:22pt;"><span class="lbl">Estado / CEP:</span><span class="val">${d.estado} - ${d.cep}</span></td>
-              <td style="height:22pt;"><span class="lbl">Nacionalidade / Doc:</span><span class="val">BRASILEIRA | RG: ${d.rg}</span></td>
+              <td style="height:22pt;"><span class="lbl">Nacionalidade:</span><span class="val">BRASILEIRA</span></td>
+            </tr>
+            <tr>
+              <td colspan="2" style="height:22pt;"><span class="lbl">Tipo de Documento:</span><span class="val" style="font-size:7pt;">(${d.rg ? 'X' : ' '}) Identidade &nbsp; ( ) CPF &nbsp; ( ) Reg. Nascimento &nbsp; ( ) Reg. Casamento &nbsp; (${d.rg ? ' ' : 'X'}) Sem identificação</span></td>
+              <td style="height:22pt;"><span class="lbl">Número do Documento:</span><span class="val">${d.rg}</span></td>
             </tr>
           </table>
 
@@ -687,7 +691,7 @@
             </tr>
             <tr>
               <td style="height:26pt;"><span class="lbl">CPF Solicitante:</span><span class="val">${d.cpfMed} (${d.medico})</span></td>
-              <td style="height:26pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">185.901.284-15 &nbsp;|&nbsp; ${d.dtInternacao}</span></td>
+              <td style="height:26pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">CPF: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Data: ${d.dtInternacao}</span></td>
             </tr>
           </table>
 
@@ -758,6 +762,10 @@
               <td><span class="lbl">16-MUNICÍPIO DE RESIDÊNCIA</span><span class="val">${d.municipio}</span></td>
               <td><span class="lbl">17-IBGE / 18-UF / 19-CEP</span><span class="val">240410 / ${d.estado} / ${d.cep}</span></td>
             </tr>
+            <tr>
+              <td colspan="2"><span class="lbl">TIPO DE DOCUMENTO DO PACIENTE</span><span class="val" style="font-size:7.2pt;">(${d.rg ? 'X' : ' '}) Identidade &nbsp; ( ) CPF &nbsp; ( ) Certidão &nbsp; (${d.rg ? ' ' : 'X'}) Sem ident.</span></td>
+              <td colspan="2"><span class="lbl">NÚMERO DO DOCUMENTO (RG)</span><span class="val">${d.rg}</span></td>
+            </tr>
           </table>
 
           <div class="sec">JUSTIFICATIVA DA INTERNAÇÃO</div>
@@ -775,8 +783,8 @@
           <div class="sec">PROCEDIMENTO SOLICITADO</div>
           <table class="box">
             <tr>
-              <td colspan="2" style="width:65%;"><span class="lbl">27-DESCRIÇÃO DO PROCEDIMENTO SOLICITADO</span><span class="val">${d.proced}</span></td>
-              <td colspan="2" style="width:35%;"><span class="lbl">28-CÓDIGO DO PROCEDIMENTO</span><span class="val">${d.codProced}</span></td>
+              <td colspan="2" style="width:65%; height:24pt;"><span class="lbl">27-DESCRIÇÃO DO PROCEDIMENTO SOLICITADO</span><span class="val">${d.proced || '&nbsp;'}</span></td>
+              <td colspan="2" style="width:35%; height:24pt;"><span class="lbl">28-CÓDIGO DO PROCEDIMENTO</span><span class="val">${d.codProced || '&nbsp;'}</span></td>
             </tr>
             <tr>
               <td><span class="lbl">29-CLÍNICA</span><span class="val">${d.especialidade}</span></td>
@@ -796,7 +804,7 @@
             <tr><td colspan="3"><span class="lbl">36 a 45 - VÍNCULO COM A PREVIDÊNCIA</span><span class="val">( ) Empregado &nbsp; ( ) Empregador &nbsp; ( ) Autônomo &nbsp; ( ) Aposentado &nbsp; (X) Não Segurado</span></td></tr>
             <tr>
               <td style="width:40%;"><span class="lbl">46-NOME DO PROFISSIONAL AUTORIZADOR</span><span class="val">AUTORIZADOR MUNICIPAL</span></td>
-              <td style="width:30%;"><span class="lbl">48-DOC / 49-N° DOC AUTORIZADOR</span><span class="val">(X) CPF: 185.901.284-15</span></td>
+              <td style="width:30%;"><span class="lbl">48-DOC / 49-N° DOC AUTORIZADOR</span><span class="val">( ) CNS &nbsp; ( ) CPF: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
               <td style="width:30%;"><span class="lbl">50-DATA AUTZ. / 52-N° AIH</span><span class="val">${d.dtInternacao}</span></td>
             </tr>
           </table>
@@ -827,8 +835,8 @@
             </tr>
             <tr>
               <td><span class="lbl">Nome da Mãe:</span><span class="val">${d.mae}</span></td>
-              <td><span class="lbl">Nome do Pai:</span><span class="val">${d.pai}</span></td>
-              <td><span class="lbl">RG / Registro:</span><span class="val">${d.rg}</span></td>
+              <td><span class="lbl">RG:</span><span class="val">${d.rg}</span></td>
+              <td><span class="lbl">CPF (Preencher):</span><span class="val">&nbsp;</span></td>
             </tr>
             <tr>
               <td><span class="lbl">Serviço:</span><span class="val">${d.especialidade}</span></td>
@@ -1079,7 +1087,7 @@
           else if (n.includes('enferm')) { val = 'M'; fontSize = 8.5; alignCenter = true; }
           else if (n.includes('leito')) { val = '1'; fontSize = 8.5; alignCenter = true; }
           else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8.0; }
-          else if (n.startsWith('32') || n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 8.5; }
+          else if (n.startsWith('32') || n.includes('cpf sol') || n.includes('cpf med')) { val = d.cpfMed; fontSize = 8.5; }
           else if (n.startsWith('33') || n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.0; }
           else if (n.includes('tecnica') || n.includes('tipo anest')) { val = 'LOCAL'; fontSize = 8.0; alignCenter = true; }
           else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 7.5; isMulti = true; }
