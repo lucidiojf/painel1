@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emissão AIH Oficial — A4 (PDF &amp; DOCX)</title>
+  <title>Emissão AIH Oficial</title>
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     :root {
       --primary: #0284c7;
@@ -22,44 +21,42 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 14px; line-height: 1.45; }
-    .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 10px; box-shadow: 0 4px 10px -1px rgb(0 0 0 / 0.1); padding: 18px; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.5; }
+    .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 24px; }
     
-    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 16px; gap: 10px; flex-wrap: wrap; }
-    h1 { font-size: 1.3rem; color: #0f172a; }
+    header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 20px; }
+    h1 { font-size: 1.5rem; color: #0f172a; }
     
-    .nav-bar { display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; padding: 10px 14px; border-radius: 8px; margin-bottom: 18px; gap: 10px; flex-wrap: wrap; }
-    .nav-group { display: flex; align-items: center; gap: 6px; }
-    .btn-nav { background: var(--primary); color: white; border: none; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+    /* Barra de Navegação */
+    .nav-bar { display: flex; align-items: center; justify-content: space-between; background: #e0f2fe; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; gap: 12px; flex-wrap: wrap; }
+    .nav-group { display: flex; align-items: center; gap: 8px; }
+    .btn-nav { background: var(--primary); color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95rem; }
     .btn-nav:hover:not(:disabled) { background: var(--primary-hover); }
     .btn-nav:disabled { background: #94a3b8; cursor: not-allowed; }
     .btn-ultimo { background: var(--success); }
     .btn-ultimo:hover { background: var(--success-hover); }
-    .lbl-registro { font-weight: 700; color: #0369a1; min-width: 72px; text-align: center; font-size: 0.9rem; }
+    .lbl-registro { font-weight: 600; color: #0369a1; min-width: 80px; text-align: center; }
     
-    .busca-box { display: flex; gap: 6px; flex: 1; max-width: 340px; }
-    .busca-box input { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; width: 100%; }
+    .busca-box { display: flex; gap: 6px; }
+    .busca-box input { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; min-width: 200px; }
     
-    fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 16px; background: #fff; }
-    legend { font-weight: 700; color: var(--primary); padding: 0 8px; font-size: 0.98rem; }
-    .grid { display: grid; gap: 10px; }
+    /* Formulário */
+    fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 20px; background: #fff; }
+    legend { font-weight: 600; color: var(--primary); padding: 0 8px; font-size: 1.05rem; }
+    .grid { display: grid; gap: 12px; }
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(3, 1fr); }
     .grid-4 { grid-template-columns: repeat(4, 1fr); }
     
-    @media (max-width: 680px) {
-      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-      .span-2-desktop { grid-column: span 1 !important; }
-    }
-
-    .form-group { display: flex; flex-direction: column; gap: 3px; }
-    label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
-    input, select, textarea { border: 1px solid var(--border); padding: 8px 10px; border-radius: 6px; font-size: 0.92rem; color: #0f172a; width: 100%; background: #fff; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
+    input, select, textarea { border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 0.9rem; color: #0f172a; width: 100%; }
     input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px #bae6fd; }
     textarea { resize: vertical; }
 
-    .actions-bar { display: flex; gap: 10px; margin-top: 20px; align-items: center; flex-wrap: wrap; }
-    .btn-action { padding: 12px 16px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; color: white; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.92rem; }
+    /* Barra de Ações */
+    .actions-bar { display: flex; gap: 12px; margin-top: 24px; align-items: center; flex-wrap: wrap; }
+    .btn-action { padding: 12px 18px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; color: white; display: flex; align-items: center; gap: 8px; font-size: 0.92rem; }
     .btn-save { background: var(--primary); }
     .btn-save:hover { background: var(--primary-hover); }
     .btn-print { background: var(--success); }
@@ -67,11 +64,12 @@
     .btn-word { background: var(--word); }
     .btn-word:hover { background: var(--word-hover); }
     
-    #msgStatus { font-size: 0.9rem; font-weight: 600; width: 100%; margin-top: 4px; }
+    #msgStatus { font-size: 0.9rem; font-weight: 600; }
 
-    .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.75); z-index: 9999; justify-content: center; align-items: center; }
-    .modal-content { background: white; width: 95%; height: 92%; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
-    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f1f5f9; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+    /* Modal */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); z-index: 9999; justify-content: center; align-items: center; }
+    .modal-content { background: white; width: 90%; height: 90%; border-radius: 8px; display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #f1f5f9; border-bottom: 1px solid var(--border); }
     .modal-body { flex: 1; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
   </style>
@@ -80,10 +78,11 @@
 
 <div class="container">
   <header>
-    <h1>Emissão AIH Oficial — A4 (5 Folhas Separadas)</h1>
+    <h1>Emissão AIH Oficial</h1>
     <button type="button" class="btn-nav" onclick="location.reload()">↻ Recarregar</button>
   </header>
 
+  <!-- Barra de Navegação -->
   <div class="nav-bar">
     <div class="nav-group">
       <button type="button" id="btnAnt" class="btn-nav" onclick="navegarRegistro(-1)">◀</button>
@@ -98,6 +97,7 @@
   </div>
 
   <form id="formAih">
+    <!-- Identificação do Paciente -->
     <fieldset>
       <legend>Identificação do Paciente</legend>
       <div class="grid grid-3">
@@ -153,7 +153,7 @@
       </div>
 
       <div class="grid grid-4" style="margin-top: 10px;">
-        <div class="form-group span-2-desktop" style="grid-column: span 2;">
+        <div class="form-group" style="grid-column: span 2;">
           <label for="endereco">Endereço Completo:</label>
           <input type="text" id="endereco" value="SITIO MUMBAÇA, SN - ZONA RURAL">
         </div>
@@ -187,20 +187,21 @@
       </div>
     </fieldset>
 
+    <!-- Dados Clínicos e Procedimento -->
     <fieldset>
       <legend>Dados Clínicos e Internação</legend>
       <div class="grid grid-4">
         <div class="form-group">
-          <label for="numAih">Número da AIH:</label>
-          <input type="text" id="numAih">
-        </div>
-        <div class="form-group">
           <label for="dataInternacao">Data Internação:</label>
-          <input type="text" id="dataInternacao" placeholder="DD/MM/AAAA">
+          <input type="text" id="dataInternacao" placeholder="DD/MM/AAAA" oninput="atualizarDiasInternacao()">
         </div>
         <div class="form-group">
           <label for="dataSaida">Data Saída (Alta):</label>
-          <input type="text" id="dataSaida" placeholder="DD/MM/AAAA">
+          <input type="text" id="dataSaida" placeholder="DD/MM/AAAA" oninput="atualizarDiasInternacao()">
+        </div>
+        <div class="form-group">
+          <label for="diasPermanencia">Dias de Internação (Folha 3):</label>
+          <input type="text" id="diasPermanencia" value="1" placeholder="Ex: 1">
         </div>
         <div class="form-group">
           <label for="dataSolicitacao">Data Solicitação:</label>
@@ -208,7 +209,7 @@
         </div>
       </div>
 
-      <div class="grid grid-4" style="margin-top: 10px;">
+      <div class="grid grid-3" style="margin-top: 10px;">
         <div class="form-group">
           <label for="diagInicial">Diagnóstico Inicial:</label>
           <input type="text" id="diagInicial">
@@ -225,13 +226,6 @@
             <option value="OBSTETRICIA">OBSTETRICIA</option>
             <option value="PEDIATRIA">PEDIATRIA</option>
           </select>
-        </div>
-        <div class="form-group">
-          <label for="enfermariaLeito">Enfermaria / Leito:</label>
-          <div style="display:flex; gap:6px;">
-            <input type="text" id="enfermaria" value="M" placeholder="Enf.">
-            <input type="text" id="leito" value="1" placeholder="Leito">
-          </div>
         </div>
       </div>
 
@@ -258,6 +252,7 @@
       </div>
     </fieldset>
 
+    <!-- Laudos -->
     <fieldset>
       <legend>Laudo e Justificativa de Internação</legend>
       <div class="form-group">
@@ -266,7 +261,7 @@
       </div>
       <div class="form-group" style="margin-top: 10px;">
         <label for="justificativa">18. Condições que Justificam a Internação:</label>
-        <textarea id="justificativa" rows="2">RISCO DE COMPLICAÇÃO</textarea>
+        <textarea id="justificativa" rows="2"></textarea>
       </div>
       <div class="form-group" style="margin-top: 10px;">
         <label for="exames">19. Principais Resultados de Provas Diagnósticas (Exames):</label>
@@ -274,29 +269,13 @@
       </div>
     </fieldset>
 
+    <!-- Bloco Operatório -->
     <fieldset>
       <legend>Anestesia e Relatório de Internação</legend>
-      <div class="grid grid-3" style="margin-bottom: 10px;">
-        <div class="form-group">
-          <label for="medicoAnestesista">Médico Anestesista / CRM:</label>
-          <div style="display:flex; gap:6px;">
-            <input type="text" id="medicoAnestesista" value="DR HIAGO" placeholder="Nome">
-            <input type="text" id="crmAnestesista" value="8.830" placeholder="CRM" style="max-width:95px;">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="tipoAnestesia">Tipo / Técnica Anestésica:</label>
-          <input type="text" id="tipoAnestesia" value="LOCAL">
-        </div>
-        <div class="form-group">
-          <label for="medicoOperador">Médico Operador:</label>
-          <input type="text" id="medicoOperador" value="LUCIDIO JÁCOME FERREIRA">
-        </div>
-      </div>
       <div class="grid grid-2">
         <div class="form-group">
           <label for="txtAnestesia">Drogas Usadas / Prescrição Anestésica (Folha 4):</label>
-          <textarea id="txtAnestesia" rows="2">LIDOCAINA A 2% - 20 ML SF - 500 ML EV</textarea>
+          <textarea id="txtAnestesia" rows="2">Lidocaina a 2% - 20 ml SF - 500 ml EV</textarea>
         </div>
         <div class="form-group">
           <label for="txtCirurgia">Descrição do Boletim / Relatório (Folha 5):</label>
@@ -305,17 +284,18 @@
       </div>
     </fieldset>
 
+    <!-- Barra de Ações -->
     <div class="actions-bar">
       <button type="submit" id="btnSalvarEGerar" class="btn-action btn-save">
-        💾 Salvar na Planilha e Gerar PDF + DOCX (A4)
+        💾 Salvar na Planilha e Gerar AIH
       </button>
 
-      <button type="button" id="btnImprimirDireto" class="btn-action btn-print" onclick="gerarPdfOficial(false)">
-        🖨️ Gerar PDF A4 (5 Folhas)
+      <button type="button" id="btnImprimirDireto" class="btn-action btn-print">
+        🖨️ Imprimir Direto (Sem Gravar)
       </button>
 
-      <button type="button" id="btnGerarWord" class="btn-action btn-word" onclick="baixarDocxNativoA4()">
-        📄 Baixar Word (.docx) A4 (5 Folhas)
+      <button type="button" id="btnGerarWord" class="btn-action btn-word">
+        📄 Baixar em Word (.doc)
       </button>
 
       <span id="msgStatus"></span>
@@ -323,14 +303,14 @@
   </form>
 </div>
 
+<!-- Modal com o PDF -->
 <div id="modalVisualizacao" class="modal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3 style="color: #0f172a;">Visualização da AIH Gerada (A4 — 5 Folhas)</h3>
-      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-        <button type="button" class="btn-nav btn-ultimo" onclick="imprimirPdf()">Imprimir</button>
+      <h3 style="color: #0f172a;">Visualização da AIH Gerada</h3>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="btn-nav btn-ultimo" onclick="imprimirPdf()">Imprimir Novamente</button>
         <button type="button" class="btn-nav" id="btnDownload">Baixar PDF</button>
-        <button type="button" class="btn-nav" style="background:var(--word);" onclick="baixarDocxNativoA4()">Baixar Word (.docx)</button>
         <button type="button" class="btn-nav" style="background:#ef4444;" onclick="fecharModal()">Fechar</button>
       </div>
     </div>
@@ -344,9 +324,6 @@
   const URL_PDF_BASE = 'AIH_FORM.pdf?v=' + Date.now();
   const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
 
-  const LOGO_LAUDO_B64 = "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";
-  const LOGO_PRONT_B64 = "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";
-
   let pdfBytesGerado = null;
   let pdfBlobUrl = null;
   let indiceAtual = 1;
@@ -356,54 +333,34 @@
     carregarUltimoRegistro();
   });
 
-  function coletarDadosFormulario() {
-    const g = (id) => (document.getElementById(id)?.value || '').trim();
-    const sexoVal = g('sexo') || 'F';
-    return {
-      numAih: g('numAih'),
-      prontuario: g('prontuario'),
-      nome: g('nomePaciente').toUpperCase(),
-      cns: g('cns'),
-      nasc: g('dataNasc'),
-      sexo: sexoVal,
-      sexoCheckM: sexoVal === 'M' ? 'X' : ' ',
-      sexoCheckF: sexoVal === 'F' ? 'X' : ' ',
-      raca: g('racaCor').toUpperCase(),
-      telefone: g('telefone'),
-      mae: g('nomeMae').toUpperCase(),
-      pai: g('nomePai').toUpperCase(),
-      profissao: g('profissao').toUpperCase(),
-      endereco: g('endereco').toUpperCase(),
-      numero: g('numEndereco').toUpperCase() || 'SN',
-      bairro: g('bairro').toUpperCase() || 'ZONA RURAL',
-      municipio: g('municipio').toUpperCase() || 'FRUTUOSO GOMES',
-      estado: g('estado').toUpperCase() || 'RN',
-      cep: g('cep') || '59890-000',
-      rg: g('rg').toUpperCase() || 'SN',
-      dtInternacao: g('dataInternacao'),
-      dtSaida: g('dataSaida'),
-      dtSolicitacao: g('dataSolicitacao') || g('dataInternacao'),
-      diag: g('diagInicial').toUpperCase(),
-      cid: g('cidPrincipal').toUpperCase(),
-      especialidade: g('especialidade').toUpperCase(),
-      enfermaria: g('enfermaria').toUpperCase() || 'M',
-      leito: g('leito') || '1',
-      procedimento: g('procedimento').toUpperCase(),
-      codProced: g('codProcedimento'),
-      medico: g('medicoSolicitante').toUpperCase(),
-      cpfMed: g('cpfSolicitante'),
-      sinaisSintomas: g('sinaisSintomas').toUpperCase(),
-      justificativa: g('justificativa').toUpperCase(),
-      exames: g('exames').toUpperCase(),
-      medicoAnestesista: g('medicoAnestesista').toUpperCase(),
-      crmAnestesista: g('crmAnestesista'),
-      tipoAnestesia: g('tipoAnestesia').toUpperCase() || 'LOCAL',
-      medicoOperador: g('medicoOperador').toUpperCase(),
-      txtAnestesia: g('txtAnestesia').toUpperCase(),
-      txtCirurgia: g('txtCirurgia').toUpperCase()
-    };
+  /* =========================================================================
+     CÁLCULO AUTOMÁTICO DOS DIAS DE INTERNAÇÃO (FOLHA 3)
+  ========================================================================= */
+  function calcularDiasInternacao(dtAdmStr, dtAltaStr) {
+    if (!dtAdmStr || !dtAltaStr) return "1";
+    const p1 = dtAdmStr.trim().split('/');
+    const p2 = dtAltaStr.trim().split('/');
+    if (p1.length !== 3 || p2.length !== 3) return "1";
+
+    const d1 = new Date(parseInt(p1[2], 10), parseInt(p1[1], 10) - 1, parseInt(p1[0], 10));
+    const d2 = new Date(parseInt(p2[2], 10), parseInt(p2[1], 10) - 1, parseInt(p2[0], 10));
+
+    if (isNaN(d1.getTime()) || isNaN(d2.getTime())) return "1";
+
+    const diffMs = d2 - d1;
+    const diffDias = Math.round(diffMs / (1000 * 60 * 60 * 24));
+    return diffDias <= 0 ? "1" : String(diffDias);
   }
 
+  function atualizarDiasInternacao() {
+    const adm = document.getElementById('dataInternacao').value;
+    const alta = document.getElementById('dataSaida').value;
+    document.getElementById('diasPermanencia').value = calcularDiasInternacao(adm, alta);
+  }
+
+  /* =========================================================================
+     NAVEGAÇÃO E CONSULTA
+  ========================================================================= */
   async function carregarRegistroPorIndice(idx) {
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
@@ -471,6 +428,9 @@
     }
   }
 
+  /* =========================================================================
+     ALINHAMENTO INTELIGENTE ANTI-DESLOCAMENTO
+  ========================================================================= */
   function atualizarControlesNav(p) {
     document.getElementById('lblRegistro').innerText = `${indiceAtual} / ${totalRegistros}`;
     document.getElementById('btnAnt').disabled = (indiceAtual <= 1);
@@ -478,6 +438,7 @@
 
     const endStr = (p.endereco || '').toString().toUpperCase();
     const munStr = (p.municipio || '').toString().toUpperCase();
+    
     const deslocado = endStr.includes('SILVA') || endStr.includes('SOARES') || endStr.includes('BATISTA') || munStr.includes('SITIO') || munStr.includes('RUA') || munStr.includes('SN');
 
     let mae = p.mae || '';
@@ -498,7 +459,7 @@
       endereco = p.municipio;
       municipio = (p.estado && p.estado.length > 3) ? p.estado : 'FRUTUOSO GOMES';
       estado = 'RN';
-      dtInternacao = p.dtSaida || '';
+      dtInternacao = p.dtSaida || '08/07/2026';
       dtSaida = p.dtSaida || dtInternacao;
       diag = p.cid;
       cid = p.procedimento;
@@ -508,330 +469,550 @@
       cpfMed = '175.499.574-87';
     }
 
-    document.getElementById('numAih').value = p.numAih || '';
+    // 1. Identificação
     document.getElementById('prontuario').value = p.prontuario || '';
     document.getElementById('nomePaciente').value = p.nome || '';
     document.getElementById('cns').value = p.cns || '';
     document.getElementById('dataNasc').value = p.nasc || '';
     document.getElementById('sexo').value = (p.sexo && p.sexo.toString().toUpperCase().startsWith('M')) ? 'M' : 'F';
     document.getElementById('racaCor').value = p.raca || 'PARDA';
-    document.getElementById('telefone').value = p.telefone || '84 99980 5728';
+    document.getElementById('telefone').value = '84 99980 5728';
     document.getElementById('nomeMae').value = mae;
     document.getElementById('nomePai').value = p.pai || '';
-    document.getElementById('profissao').value = p.profissao || 'AGRICULTORA';
+    document.getElementById('profissao').value = 'AGRICULTORA';
 
+    // 2. Endereço
     document.getElementById('endereco').value = endereco || 'SITIO ARROJADO';
     document.getElementById('numEndereco').value = 'SN';
     document.getElementById('bairro').value = 'ZONA RURAL';
     document.getElementById('municipio').value = municipio;
     document.getElementById('estado').value = estado;
     document.getElementById('cep').value = '59890-000';
-    document.getElementById('rg').value = p.rg || '';
+    document.getElementById('rg').value = '';
 
+    // 3. Datas e Cálculo Automático de Dias
     document.getElementById('dataInternacao').value = dtInternacao;
     document.getElementById('dataSaida').value = dtSaida;
     document.getElementById('dataSolicitacao').value = dtInternacao;
+    atualizarDiasInternacao();
 
+    // 4. Clínicos
     document.getElementById('diagInicial').value = diag;
     document.getElementById('cidPrincipal').value = cid;
     document.getElementById('procedimento').value = procedimento;
     document.getElementById('codProcedimento').value = codProced;
     if (p.especialidade) document.getElementById('especialidade').value = p.especialidade;
 
+    // 5. Solicitante
     document.getElementById('medicoSolicitante').value = medico;
     document.getElementById('cpfSolicitante').value = cpfMed;
-    document.getElementById('medicoOperador').value = medico;
 
-    if (p.sinaisSintomas) document.getElementById('sinaisSintomas').value = p.sinaisSintomas;
-    if (p.justificativa) document.getElementById('justificativa').value = p.justificativa;
-    if (p.exames) document.getElementById('exames').value = p.exames;
-    if (p.txtAnestesia) document.getElementById('txtAnestesia').value = p.txtAnestesia;
-    if (p.txtCirurgia) document.getElementById('txtCirurgia').value = p.txtCirurgia;
+    // 6. Laudos
+    document.getElementById('sinaisSintomas').value = (p.sinais && !p.sinais.includes('175.')) ? p.sinais : 
+      'LESÕES DE PELE DE MMSS POSSIVELMENTE BENIGNA. EVOLUIU SEM ANORMALIDADES.';
+    document.getElementById('justificativa').value = p.justificativa || 
+      'NECESSIDADE DE REALIZAR BIOPSIA / EXERESE.';
+    document.getElementById('exames').value = p.exames || 
+      'EXS SEM ANORMALIDADES';
+
+    document.getElementById('txtAnestesia').value = 'Lidocaina a 2% - 20 ml SF - 500 ml EV';
+    document.getElementById('txtCirurgia').value = 'SEM INTERCORRÊNCIAS OPERATÓRIAS.';
   }
 
-  document.getElementById('formAih').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const d = coletarDadosFormulario();
-    const msg = document.getElementById('msgStatus');
-    msg.style.color = '#0284c7';
-    msg.innerText = 'Salvando na planilha Google e gerando arquivos A4...';
-
-    try {
-      await fetch(URL_APPS_SCRIPT, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(d)
-      });
-      msg.style.color = '#16a34a';
-      msg.innerText = 'Dados enviados para a planilha! Gerando PDF A4 e DOCX A4...';
-    } catch (err) {
-      console.warn('Aviso envio planilha:', err);
+  document.getElementById('campoBusca').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      buscarPorTermo();
     }
-
-    await baixarDocxNativoA4();
-    await gerarPdfOficial(true);
   });
 
   /* =========================================================================
-     GERADOR DE PDF A4 (5 FOLHAS SEPARADAS)
-     - Se AIH_FORM.pdf existir no repo, preenche os campos e ajusta escala A4.
-     - Se AIH_FORM.pdf falhar ou não existir, gera automaticamente um PDF A4
-       oficial completo com as 5 folhas separadas e logos do SUS!
+     AÇÕES DOS BOTÕES
   ========================================================================= */
-  async function gerarPdfOficial(aposSalvar = false) {
-    const d = coletarDadosFormulario();
+  document.getElementById('formAih').addEventListener('submit', async function(e) {
+    e.preventDefault();
     const msg = document.getElementById('msgStatus');
     msg.style.color = '#0284c7';
-    msg.innerText = 'Gerando PDF oficial A4 (5 folhas)...';
+    msg.innerText = 'Salvando na planilha e gerando AIH...';
 
     try {
-      let pdfDoc = null;
-      let usouBase = false;
+      await gerarAihAdobeForm({ salvarNaPlanilha: true, abrirImpressaoDireta: false });
+      msg.style.color = '#16a34a';
+      msg.innerText = 'Salvo na planilha e AIH gerada!';
+    } catch (err) {
+      console.error(err);
+      msg.style.color = '#dc2626';
+      msg.innerText = 'Erro: ' + err.message;
+    }
+  });
+
+  document.getElementById('btnImprimirDireto').addEventListener('click', async function() {
+    const msg = document.getElementById('msgStatus');
+    msg.style.color = '#0284c7';
+    msg.innerText = 'Gerando documento e abrindo impressão...';
+
+    try {
+      await gerarAihAdobeForm({ salvarNaPlanilha: false, abrirImpressaoDireta: true });
+      msg.style.color = '#16a34a';
+      msg.innerText = 'Janela de impressão aberta com sucesso!';
+    } catch (err) {
+      console.error(err);
+      msg.style.color = '#dc2626';
+      msg.innerText = 'Erro ao imprimir: ' + err.message;
+    }
+  });
+
+  /* =========================================================================
+     EXPORTAÇÃO PARA WORD (.DOC) COM CABEÇALHO E LOGOS CENTRALIZADOS
+  ========================================================================= */
+  document.getElementById('btnGerarWord').addEventListener('click', function() {
+    const nome = document.getElementById('nomePaciente').value || 'Paciente';
+    const pront = document.getElementById('prontuario').value || 'SN';
+    const dias = document.getElementById('diasPermanencia').value || '1';
+
+    const d = {
+      prontuario: pront,
+      nome: nome,
+      cns: document.getElementById('cns').value || '',
+      nasc: document.getElementById('dataNasc').value || '',
+      sexo: document.getElementById('sexo').value || '',
+      raca: document.getElementById('racaCor').value || '',
+      mae: document.getElementById('nomeMae').value || '',
+      endereco: document.getElementById('endereco').value || '',
+      municipio: document.getElementById('municipio').value || '',
+      dtInternacao: document.getElementById('dataInternacao').value || '',
+      dtSaida: document.getElementById('dataSaida').value || '',
+      dias: dias,
+      diag: document.getElementById('diagInicial').value || '',
+      cid: document.getElementById('cidPrincipal').value || '',
+      proced: document.getElementById('procedimento').value || '',
+      codProced: document.getElementById('codProcedimento').value || '',
+      medico: document.getElementById('medicoSolicitante').value || '',
+      cpfMed: document.getElementById('cpfSolicitante').value || '',
+      sinais: document.getElementById('sinaisSintomas').value || '',
+      justificativa: document.getElementById('justificativa').value || '',
+      exames: document.getElementById('exames').value || '',
+      anestesia: document.getElementById('txtAnestesia').value || '',
+      cirurgia: document.getElementById('txtCirurgia').value || ''
+    };
+
+    const conteudoWord = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>AIH - ${d.nome}</title>
+        <style>
+          body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.3; }
+          h2, h3, p.center { text-align: center; margin: 4px 0; }
+          table { width: 100%; border-collapse: collapse; margin-top: 10px; margin-bottom: 10px; }
+          td, th { border: 1px solid #000; padding: 6px; font-size: 10pt; }
+          .header-box { text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; width: 100%; }
+          .page-break { page-break-before: always; }
+        </style>
+      </head>
+      <body>
+        <!-- FOLHA 1 / 2: LAUDO DE SOLICITAÇÃO AIH (LOGO CENTRALIZADO) -->
+        <div class="header-box" align="center">
+          <p class="center"><b>SUS - SISTEMA ÚNICO DE SAÚDE</b></p>
+          <h3>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</h3>
+          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
+          <h2>LAUDO PARA SOLICITAÇÃO DE AIH</h2>
+        </div>
+
+        <table>
+          <tr>
+            <td colspan="2"><b>Paciente:</b> ${d.nome}</td>
+            <td><b>Prontuário:</b> ${d.prontuario}</td>
+          </tr>
+          <tr>
+            <td><b>CNS:</b> ${d.cns}</td>
+            <td><b>Data Nasc:</b> ${d.nasc}</td>
+            <td><b>Sexo:</b> ${d.sexo} | <b>Cor:</b> ${d.raca}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Mãe:</b> ${d.mae}</td>
+            <td><b>Município:</b> ${d.municipio}</td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Endereço:</b> ${d.endereco}</td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td><b>Data Internação:</b> ${d.dtInternacao}</td>
+            <td><b>Data Saída:</b> ${d.dtSaida}</td>
+            <td><b>Dias Permanência:</b> ${d.dias} dia(s)</td>
+          </tr>
+          <tr>
+            <td colspan="2"><b>Diagnóstico Inicial:</b> ${d.diag}</td>
+            <td><b>CID-10:</b> ${d.cid}</td>
+          </tr>
+          <tr>
+            <td colspan="3"><b>Procedimento:</b> ${d.proced} (${d.codProced})</td>
+          </tr>
+        </table>
+
+        <p><b>17. Principais Sinais e Sintomas Clínicos:</b></p>
+        <p style="border: 1px solid #000; padding: 8px;">${d.sinais}</p>
+
+        <p><b>18. Condições que Justificam a Internação:</b></p>
+        <p style="border: 1px solid #000; padding: 8px;">${d.justificativa}</p>
+
+        <p><b>19. Resultados de Provas Diagnósticas (Exames):</b></p>
+        <p style="border: 1px solid #000; padding: 8px;">${d.exames}</p>
+
+        <br>
+        <p align="right"><b>Médico Solicitante:</b> ${d.medico} - CPF: ${d.cpfMed}</p>
+
+        <!-- FOLHA 3: PRONTUÁRIO E DIAS DE PERMANÊNCIA -->
+        <div class="page-break"></div>
+        <div class="header-box" align="center">
+          <p class="center"><b>ESTADO DO RIO GRANDE DO NORTE</b></p>
+          <h3>HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE</h3>
+          <h2>PRONTUÁRIO DE INTERNAÇÃO / BOLETIM</h2>
+        </div>
+
+        <table>
+          <tr>
+            <td><b>Paciente:</b> ${d.nome}</td>
+            <td><b>Prontuário:</b> ${d.prontuario}</td>
+          </tr>
+          <tr>
+            <td><b>Admissão:</b> ${d.dtInternacao} | <b>Alta:</b> ${d.dtSaida}</td>
+            <td><b>Dias de Permanência:</b> ${d.dias} dia(s)</td>
+          </tr>
+        </table>
+        
+        <br>
+        <h3>Prescrição Anestésica / Drogas Usadas</h3>
+        <p style="border: 1px solid #000; padding: 10px;">${d.anestesia}</p>
+
+        <br>
+        <h3>Descrição do Boletim / Relatório Operatório</h3>
+        <p style="border: 1px solid #000; padding: 10px;">${d.cirurgia}</p>
+
+        <br><br><br>
+        <table style="border: none;">
+          <tr style="border: none;">
+            <td style="border: none; text-align: center;">_______________________________________<br>DR. HIAGO - Anestesista CRM: 8.830</td>
+            <td style="border: none; text-align: center;">_______________________________________<br>${d.medico}<br>Médico Cirurgião</td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff', conteudoWord], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  /* =========================================================================
+     GERAÇÃO DO PDF COM AJUSTE DE LAYOUT DA FOLHA 2 E DIAS NA FOLHA 3
+  ========================================================================= */
+  async function gerarAihAdobeForm(opcoes = { salvarNaPlanilha: false, abrirImpressaoDireta: false }) {
+    const { PDFDocument, StandardFonts, TextAlignment } = PDFLib;
+
+    const res = await fetch(URL_PDF_BASE);
+    if (!res.ok) throw new Error('Arquivo AIH_FORM.pdf não encontrado no repositório.');
+    const buffer = await res.arrayBuffer();
+
+    const pdfDoc = await PDFDocument.load(buffer);
+    const helvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+    const form = pdfDoc.getForm();
+    const fields = form.getFields();
+
+    const nomeProced = document.getElementById('procedimento').value || '';
+    const codProced = document.getElementById('codProcedimento').value || '';
+
+    const procedCompleto = (nomeProced && codProced && !nomeProced.includes(codProced))
+      ? `${nomeProced} - ${codProced}`
+      : nomeProced;
+
+    const dtInternacao = document.getElementById('dataInternacao').value || '';
+    const dtSaida = document.getElementById('dataSaida').value || '';
+    const diasInternacao = document.getElementById('diasPermanencia').value || calcularDiasInternacao(dtInternacao, dtSaida);
+
+    const d = {
+      prontuario: document.getElementById('prontuario').value || '',
+      nome: document.getElementById('nomePaciente').value || '',
+      cns: document.getElementById('cns').value || '',
+      nasc: document.getElementById('dataNasc').value || '',
+      sexo: document.getElementById('sexo').value || 'F',
+      raca: document.getElementById('racaCor').value || 'PARDA',
+      tel: document.getElementById('telefone').value || '',
+      mae: document.getElementById('nomeMae').value || '',
+      pai: document.getElementById('nomePai').value || '',
+      profissao: document.getElementById('profissao').value || 'AGRICULTORA',
+      endereco: document.getElementById('endereco').value || '',
+      num: document.getElementById('numEndereco').value || 'SN',
+      bairro: document.getElementById('bairro').value || 'ZONA RURAL',
+      municipio: document.getElementById('municipio').value || 'FRUTUOSO GOMES',
+      estado: document.getElementById('estado').value || 'RN',
+      cep: document.getElementById('cep').value || '59890-000',
+      rg: document.getElementById('rg').value || '',
+      dtInternacao: dtInternacao,
+      dtSaida: dtSaida,
+      diasPermanencia: diasInternacao,
+      diag: document.getElementById('diagInicial').value || '',
+      cid: document.getElementById('cidPrincipal').value || '',
+      procedimento: nomeProced,
+      codProced: codProced,
+      procedComCodigo: procedCompleto,
+      especialidade: document.getElementById('especialidade').value || 'CLINICA MEDICA',
+      medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA',
+      cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
+      dtSol: document.getElementById('dataSolicitacao').value || '',
+      sinais: document.getElementById('sinaisSintomas').value || '',
+      justificativa: document.getElementById('justificativa').value || '',
+      exames: document.getElementById('exames').value || '',
+      anestesia: document.getElementById('txtAnestesia').value || '',
+      cirurgia: document.getElementById('txtCirurgia').value || ''
+    };
+
+    const normalizar = (txt) => {
+      return (txt || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    };
+
+    fields.forEach(f => {
+      const originalName = f.getName();
+      const n = normalizar(originalName);
 
       try {
-        const res = await fetch(URL_PDF_BASE);
-        if (res.ok) {
-          const existingPdfBytes = await res.arrayBuffer();
-          pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
-          const form = pdfDoc.getForm();
-          const fields = form.getFields();
+        const tf = form.getTextField(originalName);
+        if (tf) {
+          let val = null;
+          let fontSize = 8.0;
+          let isMulti = false;
+          let alignCenter = false;
 
-          const mapaValores = {
-            prontuario: d.prontuario,
-            num_aih: d.numAih,
-            aih: d.numAih,
-            nome: d.nome,
-            paciente: d.nome,
-            cns: d.cns,
-            cartao_sus: d.cns,
-            nasc: d.nasc,
-            nascimento: d.nasc,
-            sexo: d.sexo,
-            raca: d.raca,
-            cor: d.raca,
-            telefone: d.telefone,
-            mae: d.mae,
-            pai: d.pai,
-            profissao: d.profissao,
-            endereco: `${d.endereco}, ${d.numero} - ${d.bairro}`,
-            municipio: d.municipio,
-            estado: d.estado,
-            uf: d.estado,
-            cep: d.cep,
-            rg: d.rg,
-            internacao: d.dtInternacao,
-            admissao: d.dtInternacao,
-            saida: d.dtSaida,
-            solicitacao: d.dtSolicitacao,
-            diagnostico: d.diag,
-            cid: d.cid,
-            especialidade: d.especialidade,
-            clinica: d.especialidade,
-            enfermaria: d.enfermaria,
-            leito: d.leito,
-            procedimento: `${d.procedimento} ${d.codProced}`.trim(),
-            codigo: d.codProced,
-            solicitante: d.medico,
-            medico: d.medico,
-            cpf_solicitante: d.cpfMed,
-            sinais: d.sinaisSintomas,
-            sintomas: d.sinaisSintomas,
-            justificativa: d.justificativa,
-            condicoes: d.justificativa,
-            exames: d.exames,
-            anestesia: d.txtAnestesia,
-            drogas: d.txtAnestesia,
-            cirurgia: d.txtCirurgia,
-            relatorio: d.txtCirurgia,
-            anestesista: d.medicoAnestesista,
-            crm: d.crmAnestesista
-          };
+          // DIAS DE PERMANÊNCIA / INTERNAÇÃO (FOLHA 3)
+          if (n.includes('dias') || n.includes('permanencia') || n.includes('dias de permanencia')) {
+            val = d.diasPermanencia;
+            fontSize = 9.0;
+            alignCenter = true;
+          }
+          // 24. Descrição do Procedimento (Folha 2 ajustada para não estourar)
+          else if (
+            n.startsWith('24') ||
+            n.includes('24 descricao') ||
+            n.includes('24 desc') ||
+            (n.includes('descricao') && n.includes('procedimento')) ||
+            (n.includes('desc') && n.includes('procedimento')) ||
+            (n.includes('procedimento solicitado') && !n.includes('codigo') && !n.includes('cod')) ||
+            n === 'procedimento solicitado' ||
+            n === 'descricao do procedimento solicitado' ||
+            n === 'campo24 procedimento' ||
+            n === 'campo24'
+          ) {
+            val = d.procedComCodigo;
+            fontSize = 7.4;
+            isMulti = false;
+          }
+          // 25. Código SIGTAP (Centralizado na caixa da Folha 2)
+          else if (
+            n.startsWith('25') ||
+            n.includes('codigo do procedimento') ||
+            n.includes('codigo procedimento') ||
+            n.includes('cod proced') ||
+            n.includes('proced solic') ||
+            n.includes('proced realiz')
+          ) {
+            val = d.codProced;
+            fontSize = 8.5;
+            alignCenter = true;
+          }
+          // 18. Justificativa (Fonte compacta na Folha 2)
+          else if (
+            n.startsWith('18') || 
+            n.includes('justificam') || 
+            n.includes('justificativa') || 
+            n.includes('condicoes que') || 
+            n.includes('condicoes') ||
+            n === 'campo18 justificativa' ||
+            n === 'campo18'
+          ) {
+            val = d.justificativa; 
+            fontSize = 7.2; 
+            isMulti = true;
+          }
+          // 19. Exames (Fonte compacta na Folha 2)
+          else if (
+            n.startsWith('19') || 
+            n.includes('provas') || 
+            n.includes('diagnosticas') || 
+            n.includes('exames') || 
+            n.includes('resultado de exames') || 
+            n.includes('principais resultados') ||
+            n === 'campo19 exames' ||
+            n === 'campo19'
+          ) {
+            val = d.exames; 
+            fontSize = 7.2; 
+            isMulti = true;
+          }
+          // 20. Diagnóstico Inicial
+          else if (
+            n.startsWith('20') || 
+            n.includes('20 diagnostico') || 
+            (n.includes('diagnostico') && !n.includes('cid') && !n.includes('pre') && !n.includes('final')) || 
+            n === 'diagnostico inicial' ||
+            n.includes('diag inicial') ||
+            n === 'campo20 diagnostico' ||
+            n === 'campo20'
+          ) {
+            val = d.diag; 
+            fontSize = 7.8;
+          }
+          // 21. CID Principal (Centralizado na caixa da Folha 2)
+          else if (
+            n.startsWith('21') || 
+            n.includes('cid 10 principal') || 
+            n.includes('cid principal') || 
+            n === 'cid' || 
+            n.includes('cid 10') ||
+            n.includes('cid princ')
+          ) {
+            val = d.cid; 
+            fontSize = 8.8;
+            alignCenter = true;
+          }
+          // 17. Sinais e Sintomas
+          else if (n.startsWith('17') || n.includes('sinais') || n.includes('sintomas')) {
+            val = d.sinais; 
+            fontSize = 7.2; 
+            isMulti = true;
+          }
+          // Datas
+          else if (n.includes('dt intern') || n.includes('admissao') || n === 'data da internacao') {
+            val = (d.dtInternacao && !/[a-zA-Z]/.test(d.dtInternacao)) ? d.dtInternacao : '';
+            fontSize = 8.2;
+          }
+          else if (n.includes('dt saida') || n.includes('alta') || n === 'data da saida') {
+            val = (d.dtSaida && !/[a-zA-Z]/.test(d.dtSaida)) ? d.dtSaida : '';
+            fontSize = 8.2;
+          }
+          else if (n.includes('data autz') || n.includes('dt exped') || n.includes('dt cir') || n.includes('dt sol') || n.includes('data da solicitacao')) {
+            val = (d.dtSol && !/[a-zA-Z]/.test(d.dtSol)) ? d.dtSol : (d.dtInternacao || '');
+            fontSize = 8.2;
+          }
+          else if (n.includes('dn') || n.includes('nasc') || n === 'data de nascimento') {
+            val = (d.nasc && !/[a-zA-Z]/.test(d.nasc)) ? d.nasc : '';
+            fontSize = 8.2;
+          }
+          // Identificação Geral
+          else if (n.includes('prontuario')) { val = d.prontuario; fontSize = 9.0; alignCenter = true; }
+          else if (n.includes('nome') && !n.includes('mae') && !n.includes('pai') && !n.includes('med') && !n.includes('cirurg') && !n.includes('solicitante')) { val = d.nome; fontSize = 8.5; }
+          else if (n.includes('sus') || n.includes('cns')) { val = d.cns; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('sexo')) { val = d.sexo; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('cor') || n.includes('raca')) { val = d.raca; fontSize = 8.0; }
+          else if (n.includes('mae')) { val = d.mae; fontSize = 8.0; }
+          else if (n.includes('pai')) { val = d.pai; fontSize = 8.0; }
+          else if (n.includes('profiss')) { val = d.profissao; fontSize = 8.0; }
+          else if (n.includes('endereco')) { val = `${d.endereco}, ${d.num} - ${d.bairro}`; fontSize = 7.6; }
+          else if (n === 'n' || n.startsWith('n ') || n.includes('numero')) { val = d.num; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('bairro')) { val = d.bairro; fontSize = 8.0; }
+          else if (n.includes('municipio') || n.includes('naturalidade')) { val = d.municipio; fontSize = 8.0; }
+          else if (n.includes('estado') || n === 'uf' || n.includes('15 uf')) { val = d.estado; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('cep')) { val = d.cep; fontSize = 8.0; alignCenter = true; }
+          else if (n.includes('telefone')) { val = d.tel; fontSize = 8.0; }
+          else if (n.includes('doc') || n === 'rg') { val = d.rg; fontSize = 8.5; }
+          else if (n.includes('mud proc')) { val = 'N'; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 7.8; }
+          else if (n.includes('enferm')) { val = 'M'; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('leito')) { val = '1'; fontSize = 8.5; alignCenter = true; }
+          else if (n.includes('mot saida')) { val = 'ALTA'; fontSize = 8.0; }
+          else if (n.includes('cpf sol') || n.includes('cpf med') || n.includes('documento cns cpf do profissional')) { val = d.cpfMed; fontSize = 8.5; }
+          else if (n.includes('nome med') || n.includes('profissional solicitante')) { val = d.medico; fontSize = 8.0; }
+          else if (n.includes('tecnica') || n.includes('tipo anest')) { val = 'LOCAL'; fontSize = 8.0; alignCenter = true; }
+          else if (n.includes('drogas usadas') || n.includes('anestesia')) { val = d.anestesia; fontSize = 7.5; isMulti = true; }
+          else if (n.includes('boletim') || n.includes('relatorio de internacao') || n.includes('relatorio')) { val = d.cirurgia; fontSize = 7.5; isMulti = true; }
 
-          fields.forEach(field => {
-            const fname = field.getName().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-            try {
-              if (field.constructor.name === 'PDFTextField') {
-                for (const [chave, valor] of Object.entries(mapaValores)) {
-                  if (fname.includes(chave) && valor) {
-                    field.setText(String(valor));
-                    break;
-                  }
-                }
-              } else if (field.constructor.name === 'PDFCheckBox') {
-                if ((fname.includes('masc') || fname === 'm') && d.sexo === 'M') field.check();
-                if ((fname.includes('fem') || fname === 'f') && d.sexo === 'F') field.check();
+          if (val !== null && val !== '') {
+            try { 
+              if (isMulti && typeof tf.enableMultiline === 'function') {
+                tf.enableMultiline();
               }
-            } catch (errField) {}
-          });
-
-          // Garante que todas as 5 páginas estejam em tamanho A4 exato (595.28 x 841.89 pt)
-          pdfDoc.getPages().forEach(pg => {
-            pg.setSize(595.28, 841.89);
-          });
-          usouBase = true;
+            } catch(e) {}
+            try {
+              if (alignCenter && typeof tf.setAlignment === 'function') {
+                tf.setAlignment(TextAlignment.Center);
+              }
+            } catch(e) {}
+            try { tf.setFontSize(fontSize); } catch(e) {}
+            tf.setText(String(val).toUpperCase());
+          }
         }
-      } catch (eBase) {
-        usouBase = false;
-      }
+      } catch (e) {}
 
-      if (!usouBase) {
-        pdfDoc = await construirPdfA4DoZero(d);
-      }
+      try {
+        const cb = form.getCheckBox(originalName);
+        if (cb) {
+          const n = normalizar(originalName);
+          if (n.includes('check box2') || n.includes('check box3') || n === 'rg' || n.includes('fem')) {
+            cb.check();
+          }
+        }
+      } catch (e) {}
+    });
 
-      pdfBytesGerado = await pdfDoc.save();
-      const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
-      if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
-      pdfBlobUrl = URL.createObjectURL(blob);
+    form.updateFieldAppearances(helvetica);
 
-      document.getElementById('pdfFrame').src = pdfBlobUrl;
-      document.getElementById('btnDownload').onclick = () => {
-        const a = document.createElement('a');
-        a.href = pdfBlobUrl;
-        a.download = `AIH_${d.prontuario || 'PACIENTE'}_${d.nome.replace(/\s+/g, '_')}.pdf`;
-        a.click();
+    if (opcoes.salvarNaPlanilha) {
+      fetch(URL_APPS_SCRIPT, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(d)
+      }).catch(err => console.warn('Erro Sheets:', err));
+    }
+
+    pdfBytesGerado = await pdfDoc.save();
+    const blob = new Blob([pdfBytesGerado], { type: 'application/pdf' });
+    if (pdfBlobUrl) URL.revokeObjectURL(pdfBlobUrl);
+    pdfBlobUrl = URL.createObjectURL(blob);
+
+    const frame = document.getElementById('pdfFrame');
+    frame.src = pdfBlobUrl;
+
+    const btnDown = document.getElementById('btnDownload');
+    btnDown.onclick = () => {
+      const a = document.createElement('a');
+      a.href = pdfBlobUrl;
+      a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.pdf`;
+      a.click();
+    };
+
+    document.getElementById('modalVisualizacao').style.display = 'flex';
+
+    if (opcoes.abrirImpressaoDireta) {
+      frame.onload = () => {
+        setTimeout(() => {
+          if (frame.contentWindow) {
+            frame.contentWindow.focus();
+            frame.contentWindow.print();
+          }
+        }, 300);
       };
-      document.getElementById('modalVisualizacao').style.display = 'flex';
-
-      msg.style.color = '#16a34a';
-      msg.innerText = aposSalvar
-        ? 'Salvo na planilha! PDF A4 (5 folhas) e Word .docx A4 (5 folhas) prontos.'
-        : 'PDF A4 (5 folhas) gerado com sucesso!';
-    } catch (err) {
-      msg.style.color = '#dc2626';
-      msg.innerText = 'Erro ao gerar PDF: ' + err.message;
     }
   }
 
-  // Construtor PDF A4 puro (595.28 x 841.89 pt) com 5 páginas separadas caso AIH_FORM.pdf não seja encontrado
-  async function construirPdfA4DoZero(d) {
-    const { PDFDocument, StandardFonts, rgb } = PDFLib;
-    const pdfDoc = await PDFDocument.create();
-    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-    const imgLaudoBytes = Uint8Array.from(atob(LOGO_LAUDO_B64), c => c.charCodeAt(0));
-    const imgProntBytes = Uint8Array.from(atob(LOGO_PRONT_B64), c => c.charCodeAt(0));
-    const pngLaudo = await pdfDoc.embedPng(imgLaudoBytes);
-    const pngPront = await pdfDoc.embedPng(imgProntBytes);
-
-    const W = 595.28, H = 841.89;
-    const M = 22;
-    const CW = W - M * 2;
-    const black = rgb(0, 0, 0);
-
-    const box = (pg, x, yTop, w, h, lineWidth = 0.8) => {
-      pg.drawRectangle({ x, y: H - yTop - h, width: w, height: h, borderColor: black, borderWidth: lineWidth });
-    };
-    const txt = (pg, str, x, yTop, size = 8, bold = false) => {
-      pg.drawText(String(str || ''), { x, y: H - yTop - size, size, font: bold ? fontBold : font, color: black });
-    };
-    const txtCenter = (pg, str, x, yTop, w, size = 9, bold = true) => {
-      const f = bold ? fontBold : font;
-      const tw = f.widthOfTextAtSize(String(str || ''), size);
-      pg.drawText(String(str || ''), { x: x + (w - tw) / 2, y: H - yTop - size, size, font: f, color: black });
-    };
-
-    // FOLHA 1: AIH
-    const p1 = pdfDoc.addPage([W, H]);
-    box(p1, M, M, CW, H - M * 2, 1.4);
-    txt(p1, 'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES', M + 8, M + 8, 9.5, true);
-    txt(p1, 'Hospital Maternidade Severina Carlos de Andrade', M + 8, M + 21, 9.5, true);
-    txt(p1, 'C.N.P.J   08.349.052/0001-80   |   Frutuoso Gomes - RN', M + 8, M + 34, 8.5, false);
-    box(p1, M, M + 50, CW, 20, 1);
-    txtCenter(p1, 'AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR', M, M + 55, CW, 9.5, true);
-    txt(p1, `Número da AIH: ${d.numAih}       Prontuário: ${d.prontuario}       Tipo: ( X ) 01 - Inicial   (   ) Continuidade`, M + 8, M + 78, 8.5, true);
-    txt(p1, `Data da Internação: ${d.dtInternacao}          Data da Saída: ${d.dtSaida}`, M + 8, M + 94, 8.5, false);
-    box(p1, M, M + 112, CW, 18, 1);
-    txtCenter(p1, 'DADOS DO PACIENTE', M, M + 116, CW, 8.5, true);
-    txt(p1, `Nome do Paciente: ${d.nome}`, M + 8, M + 138, 8.5, true);
-    txt(p1, `Cartão SUS: ${d.cns}      Sexo: ${d.sexo}      Nascimento: ${d.nasc}      Raça/Cor: ${d.raca}`, M + 8, M + 153, 8.5, false);
-    txt(p1, `Nome da Mãe: ${d.mae}`, M + 8, M + 168, 8.5, false);
-    txt(p1, `Endereço: ${d.endereco}, Nº ${d.numero} - ${d.bairro}`, M + 8, M + 183, 8.5, false);
-    txt(p1, `Município: ${d.municipio}   UF: ${d.estado}   CEP: ${d.cep}   Telefone: ${d.telefone}`, M + 8, M + 198, 8.5, false);
-    box(p1, M, M + 218, CW, 18, 1);
-    txtCenter(p1, 'DADOS DO PROCEDIMENTO', M, M + 222, CW, 8.5, true);
-    txt(p1, `Procedimento Solicitado: ${d.codProced}      Procedimento Realizado: ${d.codProced}`, M + 8, M + 244, 8.5, false);
-    txt(p1, `Especialidade: ${d.especialidade}      Enfermaria: ${d.enfermaria}      Leito: ${d.leito}`, M + 8, M + 259, 8.5, false);
-    txt(p1, `CID Principal: ${d.cid}      Motivo Saída: ALTA HOSPITALAR`, M + 8, M + 274, 8.5, false);
-    txt(p1, `CPF Solicitante: ${d.cpfMed}      CPF Autorizador: 185.901.284-15      Data: ${d.dtSolicitacao}`, M + 8, M + 289, 8.5, false);
-    box(p1, M, M + 310, CW, 18, 1);
-    txtCenter(p1, 'PROCEDIMENTOS REALIZADOS', M, M + 314, CW, 8.5, true);
-
-    // FOLHA 2: LAUDO SUS
-    const p2 = pdfDoc.addPage([W, H]);
-    box(p2, M, M, CW, H - M * 2, 1.4);
-    p2.drawImage(pngLaudo, { x: M + 6, y: H - M - 40, width: 145, height: 34 });
-    txtCenter(p2, 'LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR', M + 155, M + 16, CW - 160, 8.5, true);
-    box(p2, M, M + 46, CW, 16, 1);
-    txtCenter(p2, 'IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE', M, M + 49, CW, 8, true);
-    txt(p2, '1. Estabelecimento Solicitante: HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE   |   CNES: 2380846', M + 6, M + 68, 8, true);
-    txt(p2, '3. Estabelecimento Executante: HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE   |   CNES: 2380846', M + 6, M + 83, 8, true);
-    box(p2, M, M + 100, CW, 16, 1);
-    txtCenter(p2, 'IDENTIFICAÇÃO DO PACIENTE', M, M + 103, CW, 8, true);
-    txt(p2, `5. Paciente: ${d.nome}      6. Prontuário: ${d.prontuario}`, M + 6, M + 122, 8, true);
-    txt(p2, `7. CNS: ${d.cns}   8. Nasc.: ${d.nasc}   9. Sexo: ${d.sexo}   10. Raça: ${d.raca}`, M + 6, M + 137, 8, false);
-    txt(p2, `11. Mãe: ${d.mae}   12. Tel: ${d.telefone}`, M + 6, M + 152, 8, false);
-    txt(p2, `13. Endereço: ${d.endereco}, ${d.numero} - ${d.bairro} - ${d.municipio}/${d.estado}`, M + 6, M + 167, 8, false);
-    box(p2, M, M + 185, CW, 16, 1);
-    txtCenter(p2, 'JUSTIFICATIVA DA INTERNAÇÃO', M, M + 188, CW, 8, true);
-    txt(p2, `17. Sinais e Sintomas: ${d.sinaisSintomas.slice(0, 95)}`, M + 6, M + 208, 8, false);
-    txt(p2, `18. Condições: ${d.justificativa.slice(0, 95)}`, M + 6, M + 230, 8, false);
-    txt(p2, `19. Exames: ${d.exames.slice(0, 95)}`, M + 6, M + 252, 8, false);
-    txt(p2, `20. Diagnóstico: ${d.diag}      21. CID Principal: ${d.cid}`, M + 6, M + 274, 8, true);
-    box(p2, M, M + 292, CW, 16, 1);
-    txtCenter(p2, 'PROCEDIMENTO SOLICITADO', M, M + 295, CW, 8, true);
-    txt(p2, `24. Procedimento: ${d.procedimento}      25. Código: ${d.codProced}`, M + 6, M + 314, 8, true);
-    txt(p2, `30. Solicitante: ${d.medico}   CPF: ${d.cpfMed}   Data: ${d.dtSolicitacao}`, M + 6, M + 330, 8, false);
-
-    // FOLHA 3: PRONTUÁRIO
-    const p3 = pdfDoc.addPage([W, H]);
-    box(p3, M, M, CW, H - M * 2, 1.4);
-    p3.drawImage(pngPront, { x: W - M - 95, y: H - M - 38, width: 85, height: 28 });
-    txt(p3, 'ESTADO DO RIO GRANDE DO NORTE', M + 8, M + 8, 9.5, true);
-    txt(p3, 'Secretaria Municipal de Saúde de Frutuoso Gomes', M + 8, M + 20, 8.5, false);
-    txt(p3, 'Hospital Maternidade Severina Carlos de Andrade', M + 8, M + 32, 9.5, true);
-    box(p3, M, M + 48, CW, 20, 1);
-    txtCenter(p3, 'PRONTUÁRIO DE INTERNAÇÃO', M, M + 53, CW, 9.5, true);
-    txt(p3, `Paciente: ${d.nome}      Prontuário: ${d.prontuario}`, M + 8, M + 76, 8.5, true);
-    txt(p3, `Endereço: ${d.endereco}, ${d.numero} - ${d.bairro} - ${d.municipio}/${d.estado}`, M + 8, M + 92, 8.5, false);
-    txt(p3, `Nasc.: ${d.nasc}   Cor: ${d.raca}   Sexo: ${d.sexo}   Profissão: ${d.profissao}`, M + 8, M + 108, 8.5, false);
-    txt(p3, `Mãe: ${d.mae}   |   Pai: ${d.pai}`, M + 8, M + 124, 8.5, false);
-    txt(p3, `Serviço: ${d.especialidade}   Enfermaria: ${d.enfermaria}   Leito: ${d.leito}`, M + 8, M + 140, 8.5, false);
-    txt(p3, `Admissão: ${d.dtInternacao}   Alta: ${d.dtSaida}   Diagnóstico: ${d.diag}`, M + 8, M + 156, 8.5, true);
-    box(p3, M, M + 175, CW, 18, 1);
-    txtCenter(p3, 'Sumário de História Clínica, Exame Físico e Tratamento', M, M + 179, CW, 8.5, true);
-    txt(p3, `Paciente deu entrada com quadro de: ${d.sinaisSintomas.slice(0, 95)}`, M + 8, M + 202, 8.5, false);
-
-    // FOLHA 4: FICHA DE ANESTESIA
-    const p4 = pdfDoc.addPage([W, H]);
-    box(p4, M, M, CW, H - M * 2, 1.4);
-    txtCenter(p4, 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE', M, M + 8, CW, 9.5, true);
-    box(p4, M, M + 26, CW, 20, 1);
-    txtCenter(p4, 'FICHA DE ANESTESIA', M, M + 31, CW, 9.5, true);
-    txt(p4, `Nome: ${d.nome}      Prontuário: ${d.prontuario}      Apto: ${d.enfermaria}`, M + 8, M + 54, 8.5, true);
-    txt(p4, `Anestesia Tipo: ${d.tipoAnestesia}      Técnica: ${d.tipoAnestesia}`, M + 8, M + 70, 8.5, false);
-    txt(p4, `Operação: ${d.procedimento}`, M + 8, M + 86, 8.5, false);
-    txt(p4, `Operador: ${d.medicoOperador}`, M + 8, M + 102, 8.5, false);
-    txt(p4, `Drogas Usadas: ${d.txtAnestesia.slice(0, 95)}`, M + 8, M + 122, 8.5, true);
-    txt(p4, `Data: ${d.dtInternacao}      Médico Anestesista: ${d.medicoAnestesista}   CRM: ${d.crmAnestesista}`, M + 8, H - M - 30, 8.5, true);
-
-    // FOLHA 5: BOLETIM OPERATÓRIO
-    const p5 = pdfDoc.addPage([W, H]);
-    box(p5, M, M, CW, H - M * 2, 1.4);
-    txtCenter(p5, 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE', M, M + 8, CW, 9.5, true);
-    box(p5, M, M + 26, CW, 20, 1);
-    txtCenter(p5, 'BOLETIM OPERATÓRIO', M, M + 31, CW, 9.5, true);
-    txt(p5, `Nome: ${d.nome}      Prontuário: ${d.prontuario}`, M + 8, M + 54, 8.5, true);
-    txt(p5, `Diagnóstico Pré-Operatório: ${d.diag}`, M + 8, M + 70, 8.5, false);
-    txt(p5, `Indicação Terapêutica: ${d.procedimento}`, M + 8, M + 86, 8.5, false);
-    txt(p5, `Operador: ${d.medicoOperador}      Anestesista: ${d.medicoAnestesista}`, M + 8, M + 102, 8.5, false);
-    box(p5, M, M + 120, CW, 18, 1);
-    txtCenter(p5, 'RELATÓRIO DE INTERNAÇÃO', M, M + 124, CW, 8.5, true);
-    txt(p5, d.txtCirurgia.slice(0, 100), M + 8, M + 148, 8.5, false);
-    txt(p5, `Data: ${d.dtInternacao}                                   Médico Operador: ${d.medicoOperador}`, M + 8, H - M - 30, 8.5, true);
-
-    return pdfDoc;
+  function fecharModal() {
+    document.getElementById('modalVisualizacao').style.display = 'none';
   }
 
   function imprimirPdf() {
@@ -840,521 +1021,6 @@
       frame.contentWindow.focus();
       frame.contentWindow.print();
     }
-  }
-
-  function fecharModal() {
-    document.getElementById('modalVisualizacao').style.display = 'none';
-  }
-
-  /* =========================================================================
-     GERADOR NATIVO DE .DOCX REAL (OPENXML ZIP) — TAMANHO A4 EXATO + 5 FOLHAS
-     - <w:pgSz w:w="11906" w:h="16838"/> = 210mm x 297mm (A4 Oficial)
-     - Quebra de página nativa <w:br w:type="page"/> entre todas as 5 folhas:
-       1. AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR
-       2. LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
-       3. PRONTUÁRIO DE INTERNAÇÃO
-       4. FICHA DE ANESTESIA
-       5. BOLETIM OPERATÓRIO
-  ========================================================================= */
-  async function baixarDocxNativoA4() {
-    const d = coletarDadosFormulario();
-    const msg = document.getElementById('msgStatus');
-    msg.style.color = '#1d4ed8';
-    msg.innerText = 'Montando arquivo Word (.docx) nativo em A4 (5 folhas)...';
-
-    const xmlEsc = (s) => String(s || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-
-    const pText = (runs, align = 'left', spBefore = 0, spAfter = 20, lineRule = 240) => {
-      const runsXml = runs.map(r => {
-        const b = r.b ? '<w:b/>' : '';
-        const sz = (r.sz || 8.5) * 2;
-        const lines = xmlEsc(r.t).split('\n');
-        const tXml = lines.map((ln, idx) => (idx > 0 ? '<w:br/>' : '') + `<w:t xml:space="preserve">${ln}</w:t>`).join('');
-        return `<w:r><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/>${b}<w:sz w:val="${sz}"/><w:szCs w:val="${sz}"/></w:rPr>${tXml}</w:r>`;
-      }).join('');
-      return `<w:p><w:pPr><w:jc w:val="${align}"/><w:spacing w:before="${spBefore}" w:after="${spAfter}" w:line="${lineRule}" w:lineRule="auto"/></w:pPr>${runsXml}</w:p>`;
-    };
-
-    const pageBreakXml = `<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/></w:pPr><w:r><w:br w:type="page"/></w:r></w:p>`;
-
-    const cellXml = (wDxa, innerXml, span = 1, vAlign = 'center', padTop = 35, padBot = 35, padLeft = 75, padRight = 75, extraBorders = '') => {
-      const spanXml = span > 1 ? `<w:gridSpan w:val="${span}"/>` : '';
-      return `<w:tc><w:tcPr><w:tcW w:w="${wDxa}" w:type="dxa"/>${spanXml}<w:vAlign w:val="${vAlign}"/>${extraBorders}<w:tcMar><w:top w:w="${padTop}" w:type="dxa"/><w:bottom w:w="${padBot}" w:type="dxa"/><w:left w:w="${padLeft}" w:type="dxa"/><w:right w:w="${padRight}" w:type="dxa"/></w:tcMar></w:tcPr>${innerXml}</w:tc>`;
-    };
-
-    const rowXml = (cellsXml, trHeight = null) => {
-      const hXml = trHeight ? `<w:trPr><w:trHeight w:val="${trHeight}" w:hRule="atLeast"/></w:trPr>` : '';
-      return `<w:tr>${hXml}${cellsXml}</w:tr>`;
-    };
-
-    const tableXml = (colWidths, rowsXml, outerSz = 12, innerSz = 6) => {
-      const grid = colWidths.map(w => `<w:gridCol w:w="${w}"/>`).join('');
-      return `<w:tbl><w:tblPr><w:tblW w:w="11112" w:type="dxa"/><w:jc w:val="center"/><w:tblBorders><w:top w:val="single" w:sz="${outerSz}" w:space="0" w:color="000000"/><w:left w:val="single" w:sz="${outerSz}" w:space="0" w:color="000000"/><w:bottom w:val="single" w:sz="${outerSz}" w:space="0" w:color="000000"/><w:right w:val="single" w:sz="${outerSz}" w:space="0" w:color="000000"/><w:insideH w:val="single" w:sz="${innerSz}" w:space="0" w:color="000000"/><w:insideV w:val="single" w:sz="${innerSz}" w:space="0" w:color="000000"/></w:tblBorders></w:tblPr><w:tblGrid>${grid}</w:tblGrid>${rowsXml}</w:tbl>`;
-    };
-
-    const imgDrawingXml = (rId, cx, cy, idNum) => `
-      <w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="0"/></w:pPr><w:r><w:drawing>
-        <wp:inline distT="0" distB="0" distL="0" distR="0" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
-          <wp:extent cx="${cx}" cy="${cy}"/>
-          <wp:docPr id="${idNum}" name="LogoSUS${idNum}"/>
-          <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
-            <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
-              <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
-                <pic:nvPicPr><pic:cNvPr id="${idNum}" name="LogoSUS${idNum}.png"/><pic:cNvPicPr/></pic:nvPicPr>
-                <pic:blipFill><a:blip r:embed="${rId}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>
-                <pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr>
-              </pic:pic>
-            </a:graphicData>
-          </a:graphic>
-        </wp:inline>
-      </w:drawing></w:r></w:p>`;
-
-    // =========================================================================
-    // FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (Total width = 11112 dxa)
-    // =========================================================================
-    const colsF1 = [800, 2500, 900, 2100, 1200, 1500, 2112]; // sum = 11112
-    const f1Rows = [
-      rowXml(cellXml(11112,
-        pText([{ t: 'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES', b: true, sz: 9.5 }], 'left', 0, 15) +
-        pText([{ t: 'Hospital Maternidade Severina Carlos de Andrade', b: true, sz: 9.5 }], 'left', 0, 15) +
-        pText([{ t: 'C.N.P.J   08.349.052/0001-80', sz: 8.5 }], 'left', 0, 15) +
-        pText([{ t: 'Frutuoso Gomes - RN', sz: 8.5 }], 'left', 0, 0), 7)),
-      rowXml(cellXml(11112, pText([{ t: 'AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR', b: true, sz: 9.5 }], 'center', 10, 10), 7)),
-      rowXml(cellXml(11112,
-        pText([
-          { t: 'Número da AIH: ', b: true, sz: 8.5 }, { t: `${d.numAih}          `, sz: 8.5 },
-          { t: 'Prontuário: ', b: true, sz: 8.5 }, { t: `${d.prontuario}      `, b: true, sz: 8.5 },
-          { t: 'Tipo: ', b: true, sz: 8.5 }, { t: '(  X  ) 01 – Inicial   (     ) Continuidade      ', sz: 8.5 },
-          { t: 'Apresentação:', b: true, sz: 8.5 }
-        ], 'left', 10, 25) +
-        pText([{ t: 'Órgão Emissor:', b: true, sz: 8.5 }], 'left', 0, 25) +
-        pText([
-          { t: 'Data da internação: ', b: true, sz: 8.5 }, { t: `${d.dtInternacao}               `, sz: 8.5 },
-          { t: 'Data da Saída: ', b: true, sz: 8.5 }, { t: d.dtSaida, sz: 8.5 }
-        ], 'left', 0, 10), 7)),
-      rowXml(cellXml(11112, pText([{ t: 'DADOS DO PACIENTE', b: true, sz: 8.5 }], 'center', 5, 5), 7)),
-      rowXml(cellXml(11112,
-        pText([{ t: 'Nome do Paciente: ', b: true, sz: 8.5 }, { t: d.nome, b: true, sz: 9 }], 'left', 10, 25) +
-        pText([
-          { t: 'Cartão SUS: ', b: true, sz: 8.5 }, { t: `${d.cns}     `, sz: 8.5 },
-          { t: 'Sexo: ', b: true, sz: 8.5 }, { t: `${d.sexo}     `, sz: 8.5 },
-          { t: 'Data Nascimento: ', b: true, sz: 8.5 }, { t: `${d.nasc}     `, sz: 8.5 },
-          { t: 'Raça/Cor: ', b: true, sz: 8.5 }, { t: d.raca, sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([{ t: 'Nome da Mãe: ', b: true, sz: 8.5 }, { t: d.mae, sz: 8.5 }], 'left', 0, 25) +
-        pText([
-          { t: 'Endereço: ', b: true, sz: 8.5 }, { t: `${d.endereco}     `, sz: 8.5 },
-          { t: 'Nº: ', b: true, sz: 8.5 }, { t: `${d.numero}     `, sz: 8.5 },
-          { t: 'Bairro: ', b: true, sz: 8.5 }, { t: d.bairro, sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([
-          { t: 'Município: ', b: true, sz: 8.5 }, { t: `${d.municipio}          `, sz: 8.5 },
-          { t: 'Estado: ', b: true, sz: 8.5 }, { t: d.estado, sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([
-          { t: 'CEP: ', b: true, sz: 8.5 }, { t: `${d.cep}       `, sz: 8.5 },
-          { t: 'Nacionalidade: ', b: true, sz: 8.5 }, { t: 'Brasileira       ', sz: 8.5 },
-          { t: 'Telefone: ', b: true, sz: 8.5 }, { t: d.telefone, sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([
-          { t: 'Tipo de Documento: ', b: true, sz: 8.5 },
-          { t: '( X ) Identidade   (   ) CPF   (   ) Registro de Nascimento   (   ) Registro de Casamento', sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([{ t: 'Número do Documento: ', b: true, sz: 8.5 }, { t: d.rg, sz: 8.5 }], 'left', 0, 10), 7)),
-      rowXml(cellXml(11112, pText([{ t: 'DADOS DO PROCEDIMENTO', b: true, sz: 8.5 }], 'center', 5, 5), 7)),
-      rowXml(cellXml(11112,
-        pText([
-          { t: 'Procedimento solicitado: ', b: true, sz: 8.5 }, { t: `${d.codProced}       `, sz: 8.5 },
-          { t: 'Mudança de Procedimento (S/N): ', b: true, sz: 8.5 }, { t: 'N', sz: 8.5 }
-        ], 'left', 10, 25) +
-        pText([{ t: 'Procedimento realizado: ', b: true, sz: 8.5 }, { t: d.codProced, sz: 8.5 }], 'left', 0, 25) +
-        pText([{ t: 'Especialidade: ', b: true, sz: 8.5 }, { t: d.especialidade, sz: 8.5 }], 'left', 0, 25) +
-        pText([{ t: 'Caráter de atendimento: ', b: true, sz: 8.5 }, { t: 'Emergência/Urgência', sz: 8.5 }], 'left', 0, 25) +
-        pText([
-          { t: 'Modalidade: ', b: true, sz: 8.5 }, { t: '( X ) Hospitalar  (  ) Hospitalar Dia  (  ) Internação Domiciliar   ', sz: 8.5 },
-          { t: 'Enferm: ', b: true, sz: 8.5 }, { t: `${d.enfermaria}    `, sz: 8.5 },
-          { t: 'Leito: ', b: true, sz: 8.5 }, { t: d.leito, sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([
-          { t: 'CID Principal: ', b: true, sz: 8.5 }, { t: `${d.cid}          `, sz: 8.5 },
-          { t: 'CID Secundário:', b: true, sz: 8.5 }
-        ], 'left', 0, 25) +
-        pText([{ t: 'CID Causas Assoc:', b: true, sz: 8.5 }], 'left', 0, 25) +
-        pText([{ t: 'CID Causa da Morte:', b: true, sz: 8.5 }], 'left', 0, 25) +
-        pText([{ t: 'Motivo da Saída/Permanência: ', b: true, sz: 8.5 }, { t: 'ALTA HOSPITALAR', sz: 8.5 }], 'left', 0, 25) +
-        pText([
-          { t: 'CPF Solicitante: ', b: true, sz: 8.5 }, { t: `${d.cpfMed}     `, sz: 8.5 },
-          { t: 'CPF Autorizador: ', b: true, sz: 8.5 }, { t: '185.901.284-15     ', sz: 8.5 },
-          { t: 'Data da Autorização: ', b: true, sz: 8.5 }, { t: d.dtSolicitacao, sz: 8.5 }
-        ], 'left', 0, 10), 7)),
-      rowXml(cellXml(11112, pText([{ t: 'PROCEDIMENTOS REALIZADOS', b: true, sz: 8.5 }], 'center', 5, 5), 7)),
-      rowXml(
-        cellXml(800, pText([{ t: 'Linha', b: true, sz: 8 }], 'center', 0, 0)) +
-        cellXml(2500, pText([{ t: 'PROCEDIMENTO', b: true, sz: 8 }], 'center', 0, 0)) +
-        cellXml(900, pText([{ t: 'Qtd.', b: true, sz: 8 }], 'center', 0, 0)) +
-        cellXml(2100, pText([{ t: 'CPF', b: true, sz: 8 }], 'center', 0, 0)) +
-        cellXml(1200, pText([{ t: 'CBO', b: true, sz: 8 }], 'center', 0, 0)) +
-        cellXml(1500, pText([{ t: 'CNES', b: true, sz: 8 }], 'center', 0, 0)) +
-        cellXml(2112, pText([{ t: 'CNPJ', b: true, sz: 8 }], 'center', 0, 0))
-      )
-    ];
-
-    for (let i = 1; i <= 11; i++) {
-      const ln = i < 10 ? `0${i}` : `${i}`;
-      const pCod = i === 1 ? d.codProced : '';
-      const pQtd = i === 1 && d.codProced ? '01' : '';
-      const pCpf = i === 1 ? d.cpfMed : '';
-      const pCnes = i <= 2 ? '2380846' : '';
-      const pCnpj = i <= 2 ? '08.349.052/0001-80' : '';
-      f1Rows.push(rowXml(
-        cellXml(800, pText([{ t: ln, sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25) +
-        cellXml(2500, pText([{ t: pCod, sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25) +
-        cellXml(900, pText([{ t: pQtd, sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25) +
-        cellXml(2100, pText([{ t: pCpf, sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25) +
-        cellXml(1200, pText([{ t: '', sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25) +
-        cellXml(1500, pText([{ t: pCnes, sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25) +
-        cellXml(2112, pText([{ t: pCnpj, sz: 8 }], 'center', 0, 0), 1, 'center', 25, 25)
-      ));
-    }
-    const folha1Xml = tableXml(colsF1, f1Rows.join(''));
-
-    // =========================================================================
-    // FOLHA 2: LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
-    // =========================================================================
-    const colsF2 = [1900, 1900, 1900, 1800, 1800, 1812]; // sum = 11112
-    const susField = (lbl, val, boldVal = false) =>
-      pText([{ t: lbl, b: true, sz: 6.5 }], 'left', 0, 10, 210) +
-      pText([{ t: val || ' ', b: boldVal, sz: 8 }], 'left', 0, 0, 220);
-
-    const f2Rows = [
-      rowXml(
-        cellXml(3800, imgDrawingXml('rId10', 1800000, 400000, 1), 2) +
-        cellXml(7312, pText([{ t: 'LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR', b: true, sz: 9.5 }], 'center', 0, 0), 4)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE', b: true, sz: 8 }], 'center', 0, 0), 6)),
-      rowXml(
-        cellXml(9300, susField('1. NOME DO ESTABELECIMENTO DE SAÚDE SOLICITANTE', 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE', true), 5) +
-        cellXml(1812, susField('2. CNES', '2380846', true), 1)
-      ),
-      rowXml(
-        cellXml(9300, susField('3. NOME DO ESTABELECIMENTO EXECUTANTE', 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE', true), 5) +
-        cellXml(1812, susField('4. CNES', '2380846', true), 1)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'IDENTIFICAÇÃO DO PACIENTE', b: true, sz: 8 }], 'center', 0, 0), 6)),
-      rowXml(
-        cellXml(9300, susField('5. NOME DO PACIENTE', d.nome, true), 5) +
-        cellXml(1812, susField('6. Nº. DO PRONTUÁRIO', d.prontuario, true), 1)
-      ),
-      rowXml(
-        cellXml(3800, susField('7. CARTÃO NACIONAL DE SAÚDE (CNS)', d.cns), 2) +
-        cellXml(3700, susField('8. DATA DE NASCIMENTO', d.nasc), 2) +
-        cellXml(3612, susField('9. SEXO', `( ${d.sexoCheckM} ) Masc     ( ${d.sexoCheckF} ) Fem.`), 2)
-      ),
-      rowXml(
-        cellXml(5700, susField('10. NOME DA MÃE OU RESPONSÁVEL', d.mae), 3) +
-        cellXml(1800, susField('11. TELEFONE DE CONTATO', d.telefone), 1) +
-        cellXml(3612, susField('12. ENDEREÇO', `${d.endereco}, ${d.numero} – ${d.bairro}`), 2)
-      ),
-      rowXml(
-        cellXml(5700, susField('13. MUNICÍPIO DE RESIDÊNCIA', d.municipio), 3) +
-        cellXml(1800, susField('14. COD IBGE MUNICÍPIO', '240410'), 1) +
-        cellXml(1800, susField('15. UF', d.estado), 1) +
-        cellXml(1812, susField('16. CEP', d.cep), 1)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'JUSTIFICATIVA DA INTERNAÇÃO', b: true, sz: 8 }], 'center', 0, 0), 6)),
-      rowXml(cellXml(11112, susField('17. PRINCIPAIS SINAIS E SINTOMAS CLÍNICOS:', d.sinaisSintomas), 6, 'top'), 750),
-      rowXml(cellXml(11112, susField('18. CONDIÇÕES QUE JUSTIFICAM A INTERNAÇÃO:', d.justificativa), 6, 'top'), 520),
-      rowXml(cellXml(11112, susField('19. PRINCIPAIS RESULTADOS DE PROVAS DIAGNÓSTICAS (RESULTADOS DE EXAMES REALIZADOS):', d.exames), 6, 'top'), 560),
-      rowXml(
-        cellXml(5700, susField('20. DIAGNÓSTICO INICIAL', d.diag, true), 3) +
-        cellXml(1800, susField('21. CID 10 PRINCIPAL', d.cid, true), 1) +
-        cellXml(1800, susField('22. CID 10 SECUNDÁRIO', ''), 1) +
-        cellXml(1812, susField('23. CID 10 CAUSAS ASSOCIADAS', ''), 1)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'PROCEDIMENTO SOLICITADO', b: true, sz: 8 }], 'center', 0, 0), 6)),
-      rowXml(
-        cellXml(7500, susField('24. DESCRIÇÃO DO PROCEDIMENTO SOLICITADO', d.procedimento, true), 4) +
-        cellXml(3612, susField('25. CÓDIGO DO PROCEDIMENTO', d.codProced, true), 2)
-      ),
-      rowXml(
-        cellXml(3800, susField('26. CLÍNICA', d.especialidade), 2) +
-        cellXml(1900, susField('27. CARÁTER DA INTERNAÇÃO', 'URGÊNCIA/EMERGÊNCIA'), 1) +
-        cellXml(1800, susField('28. DOCUMENTO', '(   ) CNS   ( X ) CPF'), 1) +
-        cellXml(3612, susField('29. Nº. DOCUMENTO (CNS/CPF) PROFISSIONAL SOLICITANTE', d.cpfMed), 2)
-      ),
-      rowXml(
-        cellXml(5700, susField('30. NOME DO PROFISSIONAL SOLICITANTE/ASSISTENTE', d.medico, true), 3) +
-        cellXml(1800, susField('31. DATA DA SOLICITAÇÃO', d.dtSolicitacao), 1) +
-        cellXml(3612, susField('32. ASSINATURA E CARIMBO (Nº. REGISTRO CONSELHO)', ''), 2, 'top'), 560
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'PREENCHER EM CASO DE CAUSAS EXTERNAS (ACIDENTE OU VIOLÊNCIA)', b: true, sz: 7.5 }], 'center', 0, 0), 6)),
-      rowXml(
-        cellXml(3800, susField('33. (   ) ACIDENTE DE TRÂNSITO', ''), 2) +
-        cellXml(3700, susField('36. CNPJ DA SEGURADORA', ''), 2) +
-        cellXml(1800, susField('37. Nº. DO BILHETE', ''), 1) +
-        cellXml(1812, susField('38. SÉRIE', ''), 1)
-      ),
-      rowXml(
-        cellXml(3800, susField('34. (   ) ACIDENTE TRABALHO TÍPICO', ''), 2) +
-        cellXml(3700, susField('39. CNPJ DA EMPRESA', ''), 2) +
-        cellXml(1800, susField('40. CNAE DA EMPRESA', ''), 1) +
-        cellXml(1812, susField('41. CBOR', ''), 1)
-      ),
-      rowXml(
-        cellXml(3800, susField('35. (   ) ACIDENTE TRABALHO TRAJETO', ''), 2) +
-        cellXml(7312, susField('42. VÍNCULO COM A PREVIDÊNCIA', '(  ) EMPREGADO   (  ) EMPREGADOR   (  ) DESEMPREGADO   (  ) APOSENTADO   (  ) NÃO SEGURADO'), 4)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'AUTORIZAÇÃO', b: true, sz: 8 }], 'center', 0, 0), 6)),
-      rowXml(
-        cellXml(5700, susField('43. NOME DO PROFISSIONAL AUTORIZADOR', ''), 3) +
-        cellXml(1800, susField('44. CÓD. ÓRGÃO EMISSOR', ''), 1) +
-        cellXml(3612, susField('49. Nº. DA AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR', d.numAih, true), 2)
-      ),
-      rowXml(
-        cellXml(1900, susField('45. DOCUMENTO', '(  ) CNS   (  ) CPF'), 1) +
-        cellXml(3800, susField('46. Nº. DOCUMENTO (CNS/CPF) AUTORIZADOR', '185.901.284-15'), 2) +
-        cellXml(1800, susField('47. DATA AUTORIZAÇÃO', d.dtSolicitacao), 1) +
-        cellXml(3612, susField('48. ASSINATURA E CARIMBO', ''), 2, 'top'), 520
-      )
-    ];
-    const folha2Xml = tableXml(colsF2, f2Rows.join(''));
-
-    // =========================================================================
-    // FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO (Total width = 11112 dxa)
-    // =========================================================================
-    const colsF3 = [8600, 2512]; // sum = 11112
-    const f3Rows = [
-      rowXml(
-        cellXml(8600,
-          pText([{ t: 'ESTADO DO RIO GRANDE DO NORTE', b: true, sz: 9.5 }], 'left', 0, 15) +
-          pText([{ t: 'Secretaria Municipal de Saúde de Frutuoso Gomes', sz: 8.5 }], 'left', 0, 15) +
-          pText([{ t: 'Hospital Maternidade Severina Carlos de Andrade', b: true, sz: 9.5 }], 'left', 0, 0)) +
-        cellXml(2512, imgDrawingXml('rId11', 1050000, 350000, 2))
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'PRONTUÁRIO DE INTERNAÇÃO', b: true, sz: 9.5 }], 'center', 10, 10), 2)),
-      rowXml(cellXml(11112,
-        pText([{ t: 'Paciente: ', b: true, sz: 8.5 }, { t: d.nome, b: true, sz: 9 }], 'left', 10, 30) +
-        pText([{ t: 'Endereço: ', b: true, sz: 8.5 }, { t: `${d.endereco}, ${d.numero} – ${d.bairro}`, sz: 8.5 }], 'left', 0, 30) +
-        pText([{ t: 'Município: ', b: true, sz: 8.5 }, { t: `${d.municipio}               `, sz: 8.5 }, { t: 'UF: ', b: true, sz: 8.5 }, { t: d.estado, sz: 8.5 }], 'left', 0, 30) +
-        pText([
-          { t: 'Data de Nascimento: ', b: true, sz: 8.5 }, { t: `${d.nasc}      `, sz: 8.5 },
-          { t: 'Naturalidade: ', b: true, sz: 8.5 }, { t: `${d.municipio} - ${d.estado}      `, sz: 8.5 },
-          { t: 'Cor: ', b: true, sz: 8.5 }, { t: d.raca, sz: 8.5 }
-        ], 'left', 0, 30) +
-        pText([
-          { t: 'Sexo: ', b: true, sz: 8.5 }, { t: `${d.sexo}       `, sz: 8.5 },
-          { t: 'Profissão: ', b: true, sz: 8.5 }, { t: `${d.profissao}       `, sz: 8.5 },
-          { t: 'Nº Prontuário: ', b: true, sz: 8.5 }, { t: d.prontuario, b: true, sz: 9 }
-        ], 'left', 0, 30) +
-        pText([
-          { t: 'RG: ', b: true, sz: 8.5 }, { t: `${d.rg}      `, sz: 8.5 },
-          { t: 'Data Expedição: ', b: true, sz: 8.5 }, { t: '               ', sz: 8.5 },
-          { t: 'CPF: ', b: true, sz: 8.5 }
-        ], 'left', 0, 30) +
-        pText([{ t: 'Registro:          Livro:          Folhas:          Data Expedição:', b: true, sz: 8.5 }], 'left', 0, 30) +
-        pText([{ t: 'Nome do Pai: ', b: true, sz: 8.5 }, { t: d.pai, sz: 8.5 }], 'left', 0, 30) +
-        pText([{ t: 'Nome da Mãe: ', b: true, sz: 8.5 }, { t: d.mae, sz: 8.5 }], 'left', 0, 30) +
-        pText([
-          { t: 'Serviço: ', b: true, sz: 8.5 }, { t: `${d.especialidade}       `, sz: 8.5 },
-          { t: 'Enfermaria: ', b: true, sz: 8.5 }, { t: `${d.enfermaria}       `, sz: 8.5 },
-          { t: 'Leito: ', b: true, sz: 8.5 }, { t: d.leito, sz: 8.5 }
-        ], 'left', 0, 10), 2)),
-      rowXml(cellXml(11112,
-        pText([
-          { t: 'Data de Admissão: ', b: true, sz: 8.5 }, { t: `${d.dtInternacao}       `, sz: 8.5 },
-          { t: 'Alta/Transf: ', b: true, sz: 8.5 }, { t: `( X ) ${d.dtSaida}       `, sz: 8.5 },
-          { t: 'Dias de Permanência: ', b: true, sz: 8.5 }, { t: '      dias.', sz: 8.5 }
-        ], 'left', 10, 25) +
-        pText([{ t: '                                                                                  Óbito: (   )', b: true, sz: 8.5 }], 'left', 0, 35) +
-        pText([{ t: 'DIAGNÓSTICO INICIAL: ', b: true, sz: 8.5 }, { t: d.diag, b: true, sz: 8.5 }], 'left', 0, 25) +
-        pText([{ t: 'DIAGNÓSTICO FINAL: ', b: true, sz: 8.5 }, { t: d.diag, b: true, sz: 8.5 }], 'left', 0, 10), 2)),
-      rowXml(cellXml(11112, pText([{ t: 'Sumário de História Clínica, Exame Físico e Tratamento', b: true, sz: 8.5 }], 'center', 5, 5), 2)),
-      rowXml(cellXml(11112,
-        pText([{ t: 'Paciente deu entrada com quadro de:', b: true, sz: 8.5 }], 'left', 20, 40) +
-        pText([{ t: d.sinaisSintomas, sz: 8.5 }], 'left', 0, 0), 2, 'top'), 7400)
-    ];
-    const folha3Xml = tableXml(colsF3, f3Rows.join(''));
-
-    // =========================================================================
-    // FOLHA 4: FICHA DE ANESTESIA (Total width = 11112 dxa)
-    // =========================================================================
-    const colsF4 = [800, 560, 560, 560, 560, 560, 560, 560, 560, 560, 560, 560, 560, 3592]; // sum = 11112
-    const f4Rows = [
-      rowXml(cellXml(11112,
-        pText([{ t: 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE', b: true, sz: 9.5 }], 'center', 0, 10) +
-        pText([{ t: 'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES  |  Secretaria Municipal de Saúde', sz: 8.5 }], 'center', 0, 0), 14)),
-      rowXml(cellXml(11112, pText([{ t: 'FICHA DE ANESTESIA', b: true, sz: 9.5 }], 'center', 10, 10), 14)),
-      rowXml(
-        cellXml(6400, pText([{ t: 'Nome: ', b: true, sz: 8.5 }, { t: d.nome, b: true, sz: 8.5 }], 'left', 0, 0), 9) +
-        cellXml(2500, pText([{ t: 'Prontuario: ', b: true, sz: 8.5 }, { t: d.prontuario, b: true, sz: 8.5 }], 'left', 0, 0), 4) +
-        cellXml(2212, pText([{ t: 'Apto: ', b: true, sz: 8.5 }, { t: d.enfermaria, sz: 8.5 }], 'left', 0, 0), 1)
-      ),
-      rowXml(
-        cellXml(2480, pText([{ t: 'GIH:', b: true, sz: 8.5 }], 'left', 0, 0), 4) +
-        cellXml(8632, pText([{ t: 'Premedicação:', b: true, sz: 8.5 }], 'left', 0, 0), 10)
-      ),
-      rowXml(
-        cellXml(5840, pText([{ t: 'Anestesia Tipo: ', b: true, sz: 8.5 }, { t: d.tipoAnestesia, sz: 8.5 }], 'left', 0, 0), 10) +
-        cellXml(5272, pText([{ t: 'Tecnica: ', b: true, sz: 8.5 }, { t: d.tipoAnestesia, sz: 8.5 }], 'left', 0, 0), 4)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'Operação: ', b: true, sz: 8.5 }, { t: d.procedimento, sz: 8.5 }], 'left', 0, 0), 14)),
-      rowXml(
-        cellXml(7520, pText([{ t: 'Operador: ', b: true, sz: 8.5 }, { t: d.medicoOperador, sz: 8.5 }], 'left', 0, 0), 13) +
-        cellXml(3592, pText([{ t: 'CRM:', b: true, sz: 8.5 }], 'left', 0, 0), 1)
-      ),
-      rowXml(
-        cellXml(800, pText([{ t: 'Hora', b: true, sz: 8 }], 'center', 0, 0)) +
-        Array(12).fill(0).map(() => cellXml(560, pText([{ t: '', sz: 8 }]))).join('') +
-        cellXml(3592, pText([{ t: 'Drogas Usadas', b: true, sz: 8 }], 'center', 0, 0))
-      )
-    ];
-
-    const horas = ['20', '18', '16', '14', '12', '10', '08', '06', '04', '02', '00', ' '];
-    horas.forEach((hr, idx) => {
-      const vMerge = idx === 0 ? '<w:vMerge w:val="restart"/>' : '<w:vMerge/>';
-      const drogasTxt = idx === 0 ? pText([{ t: d.txtAnestesia, sz: 8.5 }], 'left', 15, 0) : pText([{ t: '', sz: 8 }]);
-      f4Rows.push(rowXml(
-        cellXml(800, pText([{ t: hr, b: true, sz: 8 }], 'center', 0, 0), 1, 'center', 45, 45) +
-        Array(12).fill(0).map(() => cellXml(560, pText([{ t: '', sz: 8 }]), 1, 'center', 45, 45)).join('') +
-        cellXml(3592, drogasTxt, 1, 'top', 45, 45, 75, 75, vMerge)
-      ));
-    });
-
-    // Rodapé da Ficha de Anestesia (mesclado na mesma tabela de 14 colunas)
-    const rodapeAnest = [
-      ['Inicio da Anestesia:', '1. Geral: (   )', true],
-      ['Inicio da Operação:', '2. Local: (   )', false],
-      ['Fim da Operação:', '3. Outros: (   )', false],
-      ['Fim da Anestesia:', 'N. Minutos:', false],
-      ['Duração da Anestesia:', '', false]
-    ];
-    rodapeAnest.forEach((item, idx) => {
-      const vMerge = idx === 0 ? '<w:vMerge w:val="restart"/>' : '<w:vMerge/>';
-      const rightCellContent = idx === 0
-        ? pText([{ t: 'Data: ', b: true, sz: 8.5 }, { t: d.dtInternacao, sz: 8.5 }], 'left', 10, 260) +
-          pText([{ t: '___________________________________', sz: 8.5 }], 'center', 0, 10) +
-          pText([{ t: 'Medico Anestesista: ', b: true, sz: 8.5 }, { t: d.medicoAnestesista, sz: 8.5 }], 'center', 0, 10) +
-          pText([{ t: 'CRM: ', b: true, sz: 8.5 }, { t: d.crmAnestesista, sz: 8.5 }], 'center', 0, 0)
-        : pText([{ t: '', sz: 8 }]);
-
-      f4Rows.push(rowXml(
-        cellXml(4160, pText([{ t: item[0], b: true, sz: 8.5 }], 'left', 0, 0), 7, 'center', 45, 45) +
-        cellXml(3360, pText([{ t: item[1], b: true, sz: 8.5 }], 'left', 0, 0), 6, 'center', 45, 45) +
-        cellXml(3592, rightCellContent, 1, 'bottom', 45, 45, 75, 75, vMerge)
-      ));
-    });
-    const folha4Xml = tableXml(colsF4, f4Rows.join(''));
-
-    // =========================================================================
-    // FOLHA 5: BOLETIM OPERATÓRIO (Total width = 11112 dxa)
-    // =========================================================================
-    const colsF5 = [3704, 3704, 3704]; // sum = 11112
-    const f5Rows = [
-      rowXml(cellXml(11112,
-        pText([{ t: 'HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE', b: true, sz: 9.5 }], 'center', 0, 10) +
-        pText([{ t: 'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES  |  Secretaria Municipal de Saúde', sz: 8.5 }], 'center', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: 'BOLETIM OPERATÓRIO', b: true, sz: 9.5 }], 'center', 10, 10), 3)),
-      rowXml(
-        cellXml(7408, pText([{ t: 'Nome: ', b: true, sz: 8.5 }, { t: d.nome, b: true, sz: 9 }], 'left', 0, 0), 2) +
-        cellXml(3704, pText([{ t: 'Prontuário: ', b: true, sz: 8.5 }, { t: d.prontuario, b: true, sz: 9 }], 'left', 0, 0), 1)
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'Diagnóstico Pré-Operatório: ', b: true, sz: 8.5 }, { t: d.diag, sz: 8.5 }], 'left', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: 'Indicação Terapêutica: ', b: true, sz: 8.5 }, { t: d.procedimento, sz: 8.5 }], 'left', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: 'INTERNAÇÃO', b: true, sz: 8.5 }], 'center', 5, 5), 3)),
-      rowXml(
-        cellXml(3704, pText([{ t: 'Inicio:', b: true, sz: 8.5 }], 'left', 0, 0)) +
-        cellXml(3704, pText([{ t: 'Fim:', b: true, sz: 8.5 }], 'left', 0, 0)) +
-        cellXml(3704, pText([{ t: 'Duração:', b: true, sz: 8.5 }], 'left', 0, 0))
-      ),
-      rowXml(cellXml(11112, pText([{ t: 'Operador: ', b: true, sz: 8.5 }, { t: d.medicoOperador, sz: 8.5 }], 'left', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: '1 Auxiliar:', b: true, sz: 8.5 }], 'left', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: '2 Auxiliar:', b: true, sz: 8.5 }], 'left', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: '3 Anestesista: ', b: true, sz: 8.5 }, { t: d.medicoAnestesista, sz: 8.5 }], 'left', 0, 0), 3)),
-      rowXml(cellXml(11112, pText([{ t: 'RELATÓRIO DE INTERNAÇÃO', b: true, sz: 8.5 }], 'center', 5, 5), 3)),
-      rowXml(cellXml(11112,
-        pText([{ t: 'Via de acesso Incisão – Aspecto nos órgãos e lesões encontradas – Técnicas empregadas e descrição dos processos – Ligaduras e suturas empregadas – Drenagem curativos – Diagnósticos operatório – Prognostico operatório – OBS:', b: true, sz: 7.5 }], 'left', 10, 40) +
-        pText([{ t: d.txtCirurgia, sz: 8.5 }], 'left', 0, 0), 3, 'top'), 7400),
-      rowXml(
-        cellXml(3704, pText([{ t: 'Data: ', b: true, sz: 8.5 }, { t: d.dtInternacao, sz: 8.5 }], 'left', 40, 20), 1) +
-        cellXml(7408,
-          pText([{ t: '___________________________________________', sz: 8.5 }], 'center', 40, 10) +
-          pText([{ t: 'Médico Operador', b: true, sz: 8.5 }], 'center', 0, 10), 2)
-      )
-    ];
-    const folha5Xml = tableXml(colsF5, f5Rows.join(''));
-
-    // =========================================================================
-    // MONTAGEM DO PACOTE .DOCX REAL COM TAMANHO A4 EXATO (11906 x 16838 dxa)
-    // =========================================================================
-    const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-            xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <w:body>
-    ${folha1Xml}
-    ${pageBreakXml}
-    ${folha2Xml}
-    ${pageBreakXml}
-    ${folha3Xml}
-    ${pageBreakXml}
-    ${folha4Xml}
-    ${pageBreakXml}
-    ${folha5Xml}
-    <w:sectPr>
-      <w:pgSz w:w="11906" w:h="16838"/>
-      <w:pgMar w:top="397" w:right="397" w:bottom="397" w:left="397" w:header="200" w:footer="200" w:gutter="0"/>
-    </w:sectPr>
-  </w:body>
-</w:document>`;
-
-    const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Default Extension="png" ContentType="image/png"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-</Types>`;
-
-    const rootRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-
-    const docRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId10" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/logo_laudo.png"/>
-  <Relationship Id="rId11" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/logo_pront.png"/>
-</Relationships>`;
-
-    const zip = new JSZip();
-    zip.file('[Content_Types].xml', contentTypesXml);
-    zip.folder('_rels').file('.rels', rootRelsXml);
-    const wordFolder = zip.folder('word');
-    wordFolder.file('document.xml', documentXml);
-    wordFolder.folder('_rels').file('document.xml.rels', docRelsXml);
-    const mediaFolder = wordFolder.folder('media');
-    mediaFolder.file('logo_laudo.png', LOGO_LAUDO_B64, { base64: true });
-    mediaFolder.file('logo_pront.png', LOGO_PRONT_B64, { base64: true });
-
-    const docxBlob = await zip.generateAsync({
-      type: 'blob',
-      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    });
-
-    const url = URL.createObjectURL(docxBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `AIH_${d.prontuario || 'PACIENTE'}_${d.nome.replace(/\s+/g, '_') || 'DOCUMENTO'}.docx`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 2500);
-
-    msg.style.color = '#1d4ed8';
-    msg.innerText = 'Word (.docx) nativo em A4 gerado com 5 folhas separadas e logos oficiais!';
   }
 </script>
 </body>
