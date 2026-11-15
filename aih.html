@@ -549,7 +549,14 @@
       <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
         <tr>
           <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+            <!--[if gte mso 9]>
+            <v:shape id="logoWord" type="#_x0000_t75" style="width:50pt;height:43pt;" stroked="false">
+              <v:imagedata src="${BRASAO_OFICIAL_B64}" o:title="Brasao"/>
+            </v:shape>
+            <![endif]-->
+            <!--[if !gte mso 9]><!-->
             <img src="${BRASAO_OFICIAL_B64}" width="60" height="52" alt="Brasão Frutuoso Gomes">
+            <!--<![endif]-->
           </td>
           <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
             <div style="font-size: 10pt; font-weight: bold;">${tituloPrincipal}</div>
@@ -865,8 +872,11 @@
           <div class="sec">Sumário de História Clínica, Exame Físico e Tratamento</div>
           <table class="box" style="margin-bottom:0;">
             <tr>
-              <td style="border-bottom:0.5pt solid #888;">
-                <b>História Clínica:</b> ${d.sinais} | <b>Justificativa:</b> ${d.justificativa} | <b>Exames:</b> ${d.exames} | <b>Conduta/Alta:</b> ${d.cirurgia}
+              <td style="border-bottom:0.5pt solid #888; height:55pt; vertical-align:top;">
+                <b>20- Sinais e Sintomas:</b> ${d.sinais}<br>
+                <b>21- Condições (Justificativa):</b> ${d.justificativa}<br>
+                <b>22- Provas Diagnósticas (Exames):</b> ${d.exames}<br>
+                <b>Conduta / Evolução:</b> ${d.cirurgia}
               </td>
             </tr>
             ${linhasPautadasSumario}
@@ -875,7 +885,7 @@
           <table style="width:100%; border:none; margin-top:8pt;">
             <tr style="border:none;">
               <td style="border:none; text-align:left; width:28%; vertical-align:bottom;"><b>Data:</b> ${d.dtSaida || d.dtInternacao || '____/____/________'}</td>
-              <td style="border:none; text-align:center; width:38%;">_____________________________________<br><b>${d.medico}</b><br>Médico Assistente - CRM-RN 1.675</td>
+              <td style="border:none; text-align:center; width:38%;">_____________________________________<br><b>${d.medico}</b><br>Médico Assistente</td>
               <td style="border:none; text-align:center; width:34%;">_____________________________________<br>Direção Clínica / Enfermagem</td>
             </tr>
           </table>
