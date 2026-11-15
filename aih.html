@@ -1124,11 +1124,64 @@
     form.updateFieldAppearances(helvetica);
 
     if (opcoes.salvarNaPlanilha) {
+      const agora = new Date();
+      const dataHoraRegistro = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR');
+      const enderecoCompleto = `${d.endereco}${d.num ? ', ' + d.num : ''}${d.bairro ? ' - ' + d.bairro : ''}`;
+
+      const payloadPlanilha = {
+        ...d,
+        dataHoraRegistro: dataHoraRegistro,
+        numAih: '',
+        cpfPaciente: '',
+        codIbge: '240410',
+        leitoEnf: 'ENF. M / LEITO 01',
+        cirurgiao: d.medico,
+        anestesista: 'DR. HIAGO',
+        auxiliar1: '',
+        tipoAnestesia: 'LOCAL',
+        horarioCirurgia: '11:15 - 11:59',
+        linhaOrdenada: [
+          dataHoraRegistro,                 // 1. Data/Hora Registro
+          d.prontuario,                     // 2. Nº Prontuário
+          '',                               // 3. Nº AIH
+          d.nome,                           // 4. Paciente
+          d.cns,                            // 5. Cartão SUS (CNS)
+          d.sexo,                           // 6. Sexo
+          d.nasc,                           // 7. Data Nascimento
+          d.raca,                           // 8. Raça / Cor
+          d.rg,                             // 9. RG
+          '',                               // 10. CPF (deixado em branco conforme solicitado)
+          d.mae,                            // 11. Nome da Mãe
+          d.pai,                            // 12. Nome do Pai
+          enderecoCompleto,                 // 13. Endereço
+          d.tel,                            // 14. Telefone
+          d.municipio,                      // 15. Município
+          '240410',                         // 16. Cód. IBGE
+          d.dtInternacao,                   // 17. Data Admissão
+          d.dtSaida,                        // 18. Data Saída
+          d.especialidade,                  // 19. Especialidade
+          'ENF. M / LEITO 01',              // 20. Leito / Enfermaria
+          d.cid,                            // 21. CID-10 Principal
+          d.diag,                           // 22. Diagnóstico Inicial
+          d.codProced,                      // 23. Cód. Procedimento
+          d.procedimento,                   // 24. Descrição Procedimento
+          d.sinais,                         // 25. Histórico / Sintomas
+          d.medico,                         // 26. Médico Solicitante
+          d.cpfMed,                         // 27. Doc Solicitante
+          d.medico,                         // 28. Cirurgião Operador
+          'DR. HIAGO',                      // 29. Anestesista
+          '',                               // 30. 1º Auxiliar
+          'LOCAL',                          // 31. Tipo Anestesia
+          '11:15 - 11:59',                  // 32. Horário Cirurgia (Início - Fim)
+          d.cirurgia                        // 33. Relatório Cirúrgico
+        ]
+      };
+
       fetch(URL_APPS_SCRIPT, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(d)
+        body: JSON.stringify(payloadPlanilha)
       }).catch(err => console.warn('Erro Sheets:', err));
     }
 
