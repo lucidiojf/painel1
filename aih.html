@@ -179,6 +179,13 @@
           <input type="text" id="rg">
         </div>
       </div>
+
+      <div class="grid grid-4" style="margin-top: 10px;">
+        <div class="form-group">
+          <label for="cpfPaciente">CPF do Paciente:</label>
+          <input type="text" id="cpfPaciente" placeholder="000.000.000-00">
+        </div>
+      </div>
     </fieldset>
 
     <fieldset>
@@ -467,6 +474,7 @@
     document.getElementById('estado').value = estado;
     document.getElementById('cep').value = '59890-000';
     document.getElementById('rg').value = p.rg || p.documento || p.doc || '';
+    document.getElementById('cpfPaciente').value = p.cpf || p.cpfPaciente || '';
 
     document.getElementById('dataInternacao').value = dtInternacao;
     document.getElementById('dataSaida').value = dtSaida;
@@ -580,6 +588,7 @@
       estado: document.getElementById('estado').value || 'RN',
       cep: document.getElementById('cep').value || '59890-000',
       rg: (document.getElementById('rg').value || '').trim(),
+      cpfPaciente: (document.getElementById('cpfPaciente').value || '').trim(),
       dtInternacao: document.getElementById('dataInternacao').value || '',
       dtSaida: document.getElementById('dataSaida').value || '',
       dias: document.getElementById('diasPermanencia').value || '1',
@@ -836,7 +845,7 @@
             <tr>
               <td><span class="lbl">Nome da Mãe:</span><span class="val">${d.mae}</span></td>
               <td><span class="lbl">RG:</span><span class="val">${d.rg}</span></td>
-              <td><span class="lbl">CPF (Preencher):</span><span class="val">&nbsp;</span></td>
+              <td><span class="lbl">CPF:</span><span class="val">${d.cpfPaciente || '&nbsp;'}</span></td>
             </tr>
             <tr>
               <td><span class="lbl">Serviço:</span><span class="val">${d.especialidade}</span></td>
@@ -928,6 +937,7 @@
       estado: document.getElementById('estado').value || 'RN',
       cep: document.getElementById('cep').value || '59890-000',
       rg: document.getElementById('rg').value || '',
+      cpfPaciente: (document.getElementById('cpfPaciente').value || '').trim(),
       dtInternacao: dtInternacao,
       dtSaida: dtSaida,
       diasPermanencia: diasInternacao,
@@ -1081,6 +1091,7 @@
           else if (n.startsWith('18 uf') || n.includes('estado') || n === 'uf') { val = d.estado; fontSize = 8.5; alignCenter = true; }
           else if (n.startsWith('19 cep') || n.includes('cep')) { val = d.cep; fontSize = 8.0; alignCenter = true; }
           else if (n.startsWith('12') || n.includes('telefone')) { val = d.tel; fontSize = 8.0; }
+          else if (n === 'cpf' || (n.includes('cpf') && !n.includes('sol') && !n.includes('med') && !n.includes('aut') && !n.includes('empresa') && !n.includes('profissional'))) { val = d.cpfPaciente; fontSize = 8.5; }
           else if (n.includes('doc') || n === 'rg') { val = d.rg; fontSize = 8.5; }
           else if (n.includes('mud proc')) { val = 'N'; fontSize = 8.5; alignCenter = true; }
           else if (n.startsWith('29') || n.includes('especialidade') || n.includes('clinica') || n.includes('servico')) { val = d.especialidade; fontSize = 7.8; }
@@ -1132,7 +1143,7 @@
         ...d,
         dataHoraRegistro: dataHoraRegistro,
         numAih: '',
-        cpfPaciente: '',
+        cpfPaciente: d.cpfPaciente,
         codIbge: '240410',
         leitoEnf: 'ENF. M / LEITO 01',
         cirurgiao: d.medico,
@@ -1150,7 +1161,7 @@
           d.nasc,                           // 7. Data Nascimento
           d.raca,                           // 8. Raça / Cor
           d.rg,                             // 9. RG
-          '',                               // 10. CPF (deixado em branco conforme solicitado)
+          d.cpfPaciente,                    // 10. CPF do Paciente
           d.mae,                            // 11. Nome da Mãe
           d.pai,                            // 12. Nome do Pai
           enderecoCompleto,                 // 13. Endereço
