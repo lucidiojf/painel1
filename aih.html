@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -730,7 +731,7 @@
             </tr>
             <tr>
               <td style="height:26pt;"><span class="lbl">CPF Solicitante:</span><span class="val">${d.cpfMed} - ${d.medico}</span></td>
-              <td style="height:26pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">CPF: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Data: ${d.dtInternacao}</span></td>
+              <td style="height:26pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">CPF: ${d.cpfMed} | Data: ${d.dtInternacao}</span></td>
             </tr>
           </table>
 
@@ -843,7 +844,7 @@
             <tr><td colspan="3"><span class="lbl">36 a 45 - VÍNCULO COM A PREVIDÊNCIA</span><span class="val">( ) Empregado &nbsp; ( ) Empregador &nbsp; ( ) Autônomo &nbsp; ( ) Aposentado &nbsp; (X) Não Segurado</span></td></tr>
             <tr>
               <td style="width:40%;"><span class="lbl">46-NOME DO PROFISSIONAL AUTORIZADOR</span><span class="val">AUTORIZADOR MUNICIPAL</span></td>
-              <td style="width:30%;"><span class="lbl">48-DOC / 49-N° DOC AUTORIZADOR</span><span class="val">( ) CNS &nbsp; ( ) CPF: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+              <td style="width:30%;"><span class="lbl">48-DOC / 49-N° DOC AUTORIZADOR</span><span class="val">( ) CNS &nbsp; (X) CPF: ${d.cpfMed}</span></td>
               <td style="width:30%;"><span class="lbl">50-DATA AUTZ. / 52-N° AIH</span><span class="val">${d.dtInternacao}</span></td>
             </tr>
           </table>
@@ -1270,4 +1271,4 @@
   }
 </script>
 </body>
-</html>
+</html>PK
