@@ -2,8 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIH 3 Folhas Oficiais - Frutuoso Gomes</title>
+    <title>AIH - 3 Folhas Oficiais (Padrão Frutuoso Gomes)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -13,31 +12,26 @@
         }
 
         body {
-            background-color: #eef2f5;
+            background-color: #525659;
             padding: 20px;
             color: #000;
         }
 
         .container {
-            max-width: 950px;
-            background: #fff;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Barra de Ações */
+        /* Barra de Ações (Fica na tela, some na impressão/Word) */
         .action-bar {
-            background: #003366;
+            background: #1a365d;
             padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-radius: 4px;
+            border-radius: 6px;
             margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .action-bar h2 {
@@ -47,76 +41,63 @@
 
         .btn-group {
             display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .btn-group button {
             background: #fff;
-            color: #003366;
+            color: #1a365d;
             border: none;
-            padding: 8px 12px;
+            padding: 8px 14px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 12px;
+            transition: background 0.2s;
         }
 
         .btn-group button:hover {
-            background: #f0f0f0;
+            background: #e2e8f0;
         }
 
         .btn-clear {
-            background: #d9534f !important;
+            background: #e53e3e !important;
             color: #fff !important;
         }
 
-        /* Estrutura das 3 Páginas Oficiais */
+        /* Folhas A4 Estritas */
         .aih-page {
-            width: 100%;
-            border: 2px solid #000;
+            width: 210mm;
+            min-height: 297mm;
             background: #fff;
-            margin-bottom: 30px;
-            padding: 12px;
+            margin: 0 auto 30px auto;
+            padding: 12mm;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             break-after: page;
             font-size: 9.5px;
+            position: relative;
         }
 
-        table.aih-table {
+        .header-table, .aih-table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-top: 3px;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
-        table.aih-table th, table.aih-table td {
+        .header-table td, .aih-table td {
             border: 1px solid #000;
             padding: 3px 5px;
             vertical-align: top;
             text-align: left;
         }
 
-        .header-box {
+        .header-logo-text {
             text-align: center;
             font-weight: bold;
-            font-size: 9px;
+            font-size: 9.5px;
             line-height: 1.3;
-            padding: 5px;
-            background: #f9f9f9;
-            border: 1px solid #000;
-            margin-bottom: 4px;
-        }
-
-        .header-box img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 2px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .section-header {
@@ -128,6 +109,7 @@
             font-size: 9px;
             text-transform: uppercase;
             margin-top: 4px;
+            margin-bottom: 2px;
         }
 
         label {
@@ -151,26 +133,26 @@
 
         input:focus, select:focus, textarea:focus {
             background: #ffffe0;
-            border-bottom: 1px solid #003366;
+            border-bottom: 1px solid #1a365d;
         }
 
         @media print {
-            @page { size: A4; margin: 10mm; }
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
-            .container { border: none; box-shadow: none; max-width: 100%; padding: 0; margin: 0; }
-            .aih-page { border: 2px solid #000; margin: 0; padding: 10px; page-break-after: always; height: 275mm; }
+            .container { max-width: 100%; padding: 0; margin: 0; }
+            .aih-page { border: none; box-shadow: none; margin: 0; padding: 10mm; width: 100%; height: 100%; page-break-after: always; }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- Barra de Ações -->
         <div class="action-bar">
-            <h2>AIH - Padrão 3 Folhas Oficiais (Frutuoso Gomes)</h2>
+            <h2>Gerador AIH - 3 Folhas Oficiais</h2>
             <div class="btn-group">
-                <button onclick="window.print()">🖨️ Imprimir / Gerar PDF</button>
-                <button onclick="exportarWordInstantaneo()">📄 Baixar Word (Editável)</button>
+                <button onclick="window.print()">🖨️ Imprimir / PDF</button>
+                <button onclick="exportarWordPuro()">📄 Baixar Word (Editável)</button>
                 <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
             </div>
         </div>
@@ -178,12 +160,16 @@
         <div id="conteudoImpresso">
             <!-- ================= FOLHA 1 ================= -->
             <div class="aih-page">
-                <div class="header-box">
-                    PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                    Hospital Maternidade Severina Carlos de Andrade<br>
-                    CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
-                    <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>
-                </div>
+                <table class="header-table">
+                    <tr>
+                        <td class="header-logo-text">
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                            Hospital Maternidade Severina Carlos de Andrade<br>
+                            CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
+                            <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>
+                        </td>
+                    </tr>
+                </table>
 
                 <table class="aih-table">
                     <tr>
@@ -219,7 +205,6 @@
                     </tr>
                 </table>
 
-                <div class="section-header">DADOS DO PROCEDIMENTO</div>
                 <table class="aih-table">
                     <tr>
                         <td style="width: 70%;"><label>Procedimento Solicitado</label><input type="text" id="procedimentoSolicitado"></td>
@@ -236,7 +221,7 @@
                 </table>
 
                 <div class="section-header">PROCEDIMENTOS REALIZADOS</div>
-                <table class="aih-table" style="text-align: center; font-size: 8.5px;">
+                <table class="aih-table" style="text-align: center;">
                     <tr style="background: #f0f0f0;"><td>Linha</td><td>PROCEDIMENTO</td><td>Qtd.</td><td>C P F</td><td>C B O</td><td>CNES</td><td>CNPJ</td></tr>
                     <tr>
                         <td>01</td>
@@ -252,10 +237,14 @@
 
             <!-- ================= FOLHA 2 ================= -->
             <div class="aih-page">
-                <div class="header-box">
-                    MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
-                    <strong>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</strong>
-                </div>
+                <table class="header-table">
+                    <tr>
+                        <td class="header-logo-text">
+                            MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
+                            <strong>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</strong>
+                        </td>
+                    </tr>
+                </table>
 
                 <div class="section-header">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE</div>
                 <table class="aih-table">
@@ -285,13 +274,12 @@
 
                 <div class="section-header">JUSTIFICATIVA DA INTERNAÇÃO</div>
                 <table class="aih-table">
-                    <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2"></textarea></td></tr>
+                    <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="3"></textarea></td></tr>
                     <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao"></td></tr>
                     <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><input type="text" id="resultadosExames"></td></tr>
                     <tr><td><label>20. Diagnóstico Inicial &nbsp;|&nbsp; 21. CID-10 Principal</label><input type="text" id="diagCid" placeholder="Ex: PÉ DIABÉTICO | E10.5"></td></tr>
                 </table>
 
-                <div class="section-header">PROCEDIMENTO SOLICITADO E PROFISSIONAL</div>
                 <table class="aih-table">
                     <tr>
                         <td style="width: 75%;"><label>24. Descrição do Procedimento</label><input type="text" id="procSolFolha2"></td>
@@ -306,12 +294,16 @@
 
             <!-- ================= FOLHA 3 ================= -->
             <div class="aih-page">
-                <div class="header-box">
-                    ESTADO DO RIO GRANDE DO NORTE<br>
-                    Secretaria Municipal de Saúde de Frutuoso Gomes<br>
-                    Hospital Maternidade Severina Carlos de Andrade<br>
-                    <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>
-                </div>
+                <table class="header-table">
+                    <tr>
+                        <td class="header-logo-text">
+                            ESTADO DO RIO GRANDE DO NORTE<br>
+                            Secretaria Municipal de Saúde de Frutuoso Gomes<br>
+                            Hospital Maternidade Severina Carlos de Andrade<br>
+                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>
+                        </td>
+                    </tr>
+                </table>
 
                 <table class="aih-table">
                     <tr>
@@ -326,7 +318,7 @@
 
                 <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
                 <table class="aih-table">
-                    <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="12" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                    <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="16" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
                     <tr><td><label>Diagnóstico Inicial &nbsp;|&nbsp; Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
                 </table>
             </div>
@@ -338,11 +330,11 @@
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_v6', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_v7', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_v6');
+            const salvos = localStorage.getItem('aih_3_folhas_v7');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -354,7 +346,7 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_v6');
+                localStorage.removeItem('aih_3_folhas_v7');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                     if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
@@ -392,8 +384,8 @@
             });
         });
 
-        // Função instantânea otimizada
-        function exportarWordInstantaneo() {
+        // Exportação limpa e idêntica para o Word sem travar
+        function exportarWordPuro() {
             let html = document.getElementById('conteudoImpresso').innerHTML;
 
             document.querySelectorAll('input').forEach(inp => {
@@ -412,7 +404,7 @@
                 html = html.replace(new RegExp(`id="${sel.id}"[^>]*>[\\s\\S]*?<\/select>`, 'g'), `> ${textoFinal} `);
             });
 
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9.5px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px; } table.aih-table td { border: 1px solid #000; padding: 4px; vertical-align: top; } .aih-page { page-break-after: always; margin-bottom: 20px; } .header-box { text-align: center; font-weight: bold; border: 1px solid #000; padding: 5px; background: #f5f5f5; margin-bottom: 4px; } .section-header { background: #dcdcdc; font-weight: bold; padding: 3px; border: 1px solid #000; margin-top: 4px; }</style></head><body>';
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9.5px; } table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 8px; } td { border: 1px solid #000; padding: 4px; vertical-align: top; } .aih-page { page-break-after: always; margin-bottom: 20px; } .header-table td { text-align: center; font-weight: bold; background: #f5f5f5; }</style></head><body>';
             const rodape = '</body></html>';
 
             const blob = new Blob(['\ufeff' + cabecalho + html + rodape], { type: 'application/msword;charset=utf-8' });
