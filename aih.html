@@ -62,19 +62,19 @@
             color: #fff !important;
         }
 
-        /* Páginas A4 com tamanho de letra ideal e sem vazamento */
+        /* Páginas A4 com tamanho ideal e travadas */
         .aih-page {
             width: 210mm;
             height: 297mm;
             max-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 6mm 10mm;
+            padding: 5mm 8mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             page-break-inside: avoid;
             box-sizing: border-box;
-            font-size: 9px;
+            font-size: 8.5px;
             overflow: hidden;
         }
 
@@ -82,12 +82,12 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-bottom: 2px;
+            margin-bottom: 1.5px;
         }
 
         th, td {
             border: 1px solid #000;
-            padding: 2px 4px;
+            padding: 1.5px 3px;
             vertical-align: top;
             text-align: left;
         }
@@ -95,12 +95,12 @@
         .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 9px;
+            font-size: 8px;
             background: #f9f9f9;
-            padding: 4px;
-            line-height: 1.2;
+            padding: 3px;
+            line-height: 1.1;
             border: 1px solid #000;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .header-table {
@@ -114,18 +114,26 @@
             vertical-align: middle;
         }
 
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 8px;
-            padding: 2px 4px;
+            font-size: 7.5px;
+            padding: 1.5px 3px;
             margin-top: 2px;
             margin-bottom: 1px;
         }
 
         label {
-            font-size: 7px;
+            font-size: 6px;
             font-weight: bold;
             display: block;
             text-transform: uppercase;
@@ -138,7 +146,7 @@
             border: none;
             border-bottom: 1px dotted #666;
             background: transparent;
-            font-size: 9px;
+            font-size: 8.5px;
             outline: none;
             padding: 0px;
         }
@@ -148,20 +156,9 @@
             border-bottom: 1px solid #1a365d;
         }
 
-        /* Regras estritas para Impressão e PDF */
         @media print {
-            @page {
-                size: A4 portrait;
-                margin: 0;
-            }
-            body {
-                background: #fff;
-                padding: 0;
-                margin: 0;
-            }
-            .action-bar {
-                display: none !important;
-            }
+            body { background: #fff; padding: 0; }
+            .action-bar { display: none !important; }
             .aih-page {
                 border: none !important;
                 box-shadow: none !important;
@@ -171,7 +168,7 @@
                 max-height: 297mm !important;
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
-                padding: 6mm 10mm !important;
+                padding: 5mm 8mm !important;
             }
         }
     </style>
@@ -193,13 +190,8 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 50px; text-align: center;">
-                            <svg width="38" height="38" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
-                                <circle cx="50" cy="50" r="46" fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
-                                <circle cx="50" cy="50" r="38" fill="#52b788" />
-                                <path d="M 30 65 Q 50 30 70 65 Z" fill="#d8f3dc"/>
-                                <text x="50" y="80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">F.G.</text>
-                            </svg>
+                        <td style="width: 55px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='https://i.imgur.com/8Qp4Q2N.png';">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -298,7 +290,7 @@
                 </tr>
             </table>
             <div class="section-title">Procedimentos Realizados (12 Linhas)</div>
-            <table style="text-align:center; font-size:8px;">
+            <table style="text-align:center; font-size:7.5px;">
                 <tr style="background:#eee;">
                     <td style="width:5%;">Linha</td>
                     <td style="width:35%;">PROCEDIMENTO</td>
@@ -330,13 +322,8 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 50px; text-align: center;">
-                            <svg width="38" height="38" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
-                                <circle cx="50" cy="50" r="46" fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
-                                <circle cx="50" cy="50" r="38" fill="#52b788" />
-                                <path d="M 30 65 Q 50 30 70 65 Z" fill="#d8f3dc"/>
-                                <text x="50" y="80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">F.G.</text>
-                            </svg>
+                        <td style="width: 55px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='https://i.imgur.com/8Qp4Q2N.png';">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -387,11 +374,11 @@
                     <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
                 </tr>
             </table>
-            <div class="section-title">17 a 26. Justificativa da Internação</div>
+            <div class="section-title">17 a 26. Justificativa da Internação (Espaço Ampliado)</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2"></textarea></td></tr>
-                <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><input type="text" id="resultadosExames"></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="3" style="font-size:8.5px;"></textarea></td></tr>
+                <tr><td><label>18. Condições que Justificam a Internação</label><textarea id="condicoesInternacao" rows="2" style="font-size:8.5px;"></textarea></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames Laboratoriais e Outros)</label><textarea id="resultadosExames" rows="3" style="font-size:8.5px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -452,41 +439,6 @@
                     </td>
                     <td><label>32. Nº do Documento (CPF do Profissional)</label><input type="text" id="cpfSolicitanteFolha2" readonly></td>
                 </tr>
-                <tr>
-                    <td><label>34. Data da Solicitação</label><input type="date" id="dataSolicitacao"></td>
-                    <td><label>35. Assinatura e Carimbo</label></td>
-                </tr>
-            </table>
-            <div class="section-title">36 a 45. Causas Externas (Acidentes ou Violências)</div>
-            <table>
-                <tr>
-                    <td colspan="2"><label>36 a 38. Acidente (Trânsito / Trabalho Típico / Trajeto)</label><input type="text" id="acidenteTipo"></td>
-                    <td><label>39. CNPJ Seguradora</label><input type="text" id="cnpjSeguradora"></td>
-                </tr>
-                <tr>
-                    <td><label>40. N° Bilhete</label><input type="text" id="numBilhete"></td>
-                    <td><label>41. Série</label><input type="text" id="serieBilhete"></td>
-                    <td><label>42. CNPJ Empresa</label><input type="text" id="cnpjEmpresa"></td>
-                </tr>
-                <tr>
-                    <td><label>43. CNAE Empresa</label><input type="text" id="cnaeEmpresa"></td>
-                    <td><label>44. CBOR</label><input type="text" id="cbor"></td>
-                    <td><label>45. Vínculo Previdência</label><input type="text" id="vinculoPrev"></td>
-                </tr>
-            </table>
-            <div class="section-title">46 a 52. Autorização</div>
-            <table>
-                <tr>
-                    <td style="width:70%"><label>46. Nome do Profissional Autorizador</label><input type="text" id="nomeAutorizador"></td>
-                    <td style="width:30%"><label>47. Cód. Órgão Emissor</label><input type="text" id="codOrgaoEmissor" value="SES-RN"></td>
-                </tr>
-                <tr>
-                    <td><label>49. Nº da Autorização (AIH)</label><input type="text" id="numAutorizacaoAIH"></td>
-                    <td><label>48 & 50. CPF / Data Autorização</label><input type="text" id="dataAutorizacao"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><label>51 & 52. Assinatura e Carimbo do Gestor / Autorizador</label><div style="height:10px;"></div></td>
-                </tr>
             </table>
         </div>
 
@@ -495,13 +447,8 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 50px; text-align: center;">
-                            <svg width="38" height="38" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
-                                <circle cx="50" cy="50" r="46" fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
-                                <circle cx="50" cy="50" r="38" fill="#52b788" />
-                                <path d="M 30 65 Q 50 30 70 65 Z" fill="#d8f3dc"/>
-                                <text x="50" y="80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">F.G.</text>
-                            </svg>
+                        <td style="width: 55px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='https://i.imgur.com/8Qp4Q2N.png';">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -618,7 +565,7 @@
             </table>
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="20" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="22" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -638,11 +585,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v28', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v29', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v28');
+        const salvos = localStorage.getItem('aih_dados_v29');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -656,7 +603,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v28');
+            localStorage.removeItem('aih_dados_v29');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
