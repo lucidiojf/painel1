@@ -2,18 +2,27 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>AIH - 3 Folhas Oficiais (Frutuoso Gomes)</title>
+    <title>AIH 3 Folhas Oficiais - Frutuoso Gomes</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
         body {
             background-color: #525659;
-            font-family: Arial, sans-serif;
-            margin: 0;
             padding: 20px;
+            color: #000;
         }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
+
+        /* Barra de Ações */
         .action-bar {
             background: #1a365d;
             padding: 15px;
@@ -23,11 +32,18 @@
             border-radius: 6px;
             margin-bottom: 20px;
         }
+
         .action-bar h2 {
             color: #fff;
             font-size: 1.1rem;
             margin: 0;
         }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
         .btn-group button {
             background: #fff;
             color: #1a365d;
@@ -37,9 +53,17 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .btn-group button:hover {
             background: #e2e8f0;
         }
+
+        .btn-clear {
+            background: #e53e3e !important;
+            color: #fff !important;
+        }
+
+        /* Estrutura das Páginas A4 */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
@@ -50,6 +74,7 @@
             page-break-after: always;
             box-sizing: border-box;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -57,12 +82,14 @@
             margin-bottom: 5px;
             font-size: 9.5px;
         }
+
         th, td {
             border: 1px solid #000;
             padding: 4px 6px;
             vertical-align: top;
             text-align: left;
         }
+
         .header-box {
             text-align: center;
             font-weight: bold;
@@ -70,13 +97,16 @@
             background: #f5f5f5;
             padding: 6px;
         }
+
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
             font-size: 9px;
             padding: 4px;
+            margin-top: 4px;
         }
+
         label {
             font-size: 7.5px;
             font-weight: bold;
@@ -84,6 +114,7 @@
             text-transform: uppercase;
             color: #333;
         }
+
         input, select, textarea {
             width: 100%;
             border: none;
@@ -92,6 +123,12 @@
             font-size: 9.5px;
             outline: none;
         }
+
+        input:focus, select:focus, textarea:focus {
+            background: #ffffe0;
+            border-bottom: 1px solid #1a365d;
+        }
+
         @media print {
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
@@ -105,7 +142,8 @@
         <h2>Gerador AIH - 3 Folhas Oficiais</h2>
         <div class="btn-group">
             <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-            <button onclick="exportarWordExato()">📄 Baixar Word Oficial</button>
+            <button onclick="exportarWordSemQuadradinhos()">📄 Baixar Word Oficial (Editável)</button>
+            <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
         </div>
     </div>
 
@@ -160,7 +198,7 @@
             </table>
             <div class="section-title">Procedimentos Realizados</div>
             <table style="text-align:center;">
-                <tr style="background:#eee;"><td>Linha</td><td>PROCEDIMENTO</td><td>Qtd.</td><td>C P ف</td><td>C B O</td><td>CNES</td><td>CNPJ</td></tr>
+                <tr style="background:#eee;"><td>Linha</td><td>PROCEDIMENTO</td><td>Qtd.</td><td>C P F</td><td>C B O</td><td>CNES</td><td>CNPJ</td></tr>
                 <tr><td>01</td><td><input type="text" id="proc1"></td><td><input type="text" value="1"></td><td><input type="text" id="cpfProc1"></td><td><input type="text" id="cbo1"></td><td>2380846</td><td>08.349.052/0001-80</td></tr>
             </table>
         </div>
@@ -238,8 +276,37 @@
 </div>
 
 <script>
-    // Sincronização automática de Nome e Prontuário entre as folhas
+    // Salvamento automático e Sincronização
+    function salvarDados() {
+        const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
+        const dados = {};
+        campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
+        localStorage.setItem('aih_dados_v8', JSON.stringify(dados));
+    }
+
+    function carregarDados() {
+        const salvos = localStorage.getItem('aih_dados_v8');
+        if (salvos) {
+            const dados = JSON.parse(salvos);
+            for (const id in dados) {
+                const campo = document.getElementById(id);
+                if (campo) campo.value = dados[id];
+            }
+        }
+    }
+
+    function limparFormulario() {
+        if (confirm('Deseja limpar os dados?')) {
+            localStorage.removeItem('aih_dados_v8');
+            document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
+                if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
+            });
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        carregarDados();
+
         const p = document.getElementById('nomePaciente');
         const p2 = document.getElementById('pacienteFolha2');
         const cp = document.getElementById('clienteProntuario');
@@ -247,8 +314,10 @@
             p.addEventListener('input', (e) => {
                 if (p2) p2.value = e.target.value;
                 if (cp) cp.value = e.target.value;
+                salvarDados();
             });
         }
+
         const pr = document.getElementById('prontuario');
         const pr2 = document.getElementById('prontuarioFolha2');
         const npr = document.getElementById('numProntuario');
@@ -256,30 +325,43 @@
             pr.addEventListener('input', (e) => {
                 if (pr2) pr2.value = e.target.value;
                 if (npr) npr.value = e.target.value;
+                salvarDados();
             });
         }
+
+        document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
+            c.addEventListener('input', salvarDados);
+            c.addEventListener('change', salvarDados);
+        });
     });
 
+    // Função que converte o formulário em texto puro limpo para o Word (Sem caixas/quadradinhos)
     function exportarWordExato() {
-        let html = document.getElementById('conteudoImpresso').innerHTML;
-        
-        // Substitui os campos preenchidos por texto estático limpo no Word
-        document.querySelectorAll('input').forEach(inp => {
-            html = html.replace(new RegExp(`id="${inp.id}"[^>]*>`, 'g'), `> ${inp.value || ''} `);
-        });
-        document.querySelectorAll('textarea').forEach(ta => {
-            html = html.replace(new RegExp(`id="${ta.id}"[^>]*>[\\s\\S]*?<\/textarea>`, 'g'), `> ${(ta.value || '').replace(/\n/g, '<br>')} `);
-        });
-        document.querySelectorAll('select').forEach(sel => {
-            let val = sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].text : '';
-            if (val === 'Selecione') val = '';
-            html = html.replace(new RegExp(`id="${sel.id}"[^>]*>[\\s\\S]*?<\/select>`, 'g'), `> ${val} `);
+        let clone = document.getElementById('conteudoImpresso').cloneNode(true);
+
+        clone.querySelectorAll('input, select, textarea').forEach(el => {
+            let valor = el.value || '';
+            if (el.tagName === 'SELECT' && el.selectedIndex >= 0) {
+                valor = el.options[el.selectedIndex].text;
+                if (valor === 'Selecione') valor = '';
+            }
+            if (el.tagName === 'TEXTAREA') {
+                valor = valor.replace(/\n/g, '<br>');
+            }
+            const span = document.createElement('span');
+            span.style.fontFamily = 'Arial';
+            span.style.fontSize = '9.5px';
+            span.style.fontWeight = 'bold';
+            span.style.color = '#000080'; // Texto azul escuro destacado no Word
+            span.innerHTML = ' ' + valor;
+            el.parentNode.replaceChild(span, el);
         });
 
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial;font-size:10px;}table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:8px;}td{border:1px solid #000;padding:4px;vertical-align:top;}.aih-page{page-break-after:always;}</style></head><body>';
+        const conteudoHTML = clone.innerHTML;
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial;font-size:9.5px;}table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:8px;}td{border:1px solid #000;padding:4px;vertical-align:top;}.aih-page{page-break-after:always;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:6px;border:1px solid #000;margin-bottom:5px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:4px;margin-top:4px;}</style></head><body>';
         const rodape = '</body></html>';
 
-        const blob = new Blob(['\ufeff' + cabecalho + html + rodape], { type: 'application/msword;charset=utf-8' });
+        const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
