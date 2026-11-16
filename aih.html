@@ -276,16 +276,15 @@
 </div>
 
 <script>
-    // Salvamento automático e Sincronização
     function salvarDados() {
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v8', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v9', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v8');
+        const salvos = localStorage.getItem('aih_dados_v9');
         if (salvos) {
             const dados = JSON.parse(salvos);
             for (const id in dados) {
@@ -297,7 +296,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v8');
+            localStorage.removeItem('aih_dados_v9');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
             });
@@ -314,7 +313,7 @@
             p.addEventListener('input', (e) => {
                 if (p2) p2.value = e.target.value;
                 if (cp) cp.value = e.target.value;
-                salvarDados();
+                if (typeof salvarDados === 'function') salvarDados();
             });
         }
 
@@ -325,7 +324,7 @@
             pr.addEventListener('input', (e) => {
                 if (pr2) pr2.value = e.target.value;
                 if (npr) npr.value = e.target.value;
-                salvarDados();
+                if (typeof salvarDados === 'function') salvarDados();
             });
         }
 
@@ -335,30 +334,42 @@
         });
     });
 
-    // Função que converte o formulário em texto puro limpo para o Word (Sem caixas/quadradinhos)
-    function exportarWordExato() {
-        let clone = document.getElementById('conteudoImpresso').cloneNode(true);
+    // Função definitiva para exportar para o Word SEM QUADRADINHOS / INPUTS
+    function exportarWordSemQuadradinhos() {
+        // Cria um clone do conteúdo impresso para manipulação
+        const clone = document.getElementById('conteudoImpresso').cloneNode(true);
 
-        clone.querySelectorAll('input, select, textarea').forEach(el => {
-            let valor = el.value || '';
-            if (el.tagName === 'SELECT' && el.selectedIndex >= 0) {
-                valor = el.options[el.selectedIndex].text;
-                if (valor === 'Selecione') valor = '';
-            }
-            if (el.tagName === 'TEXTAREA') {
-                valor = valor.replace(/\n/g, '<br>');
-            }
+        // Substitui todos os inputs por tags span com o texto digitado
+        clone.querySelectorAll('input').forEach(input => {
             const span = document.createElement('span');
-            span.style.fontFamily = 'Arial';
-            span.style.fontSize = '9.5px';
             span.style.fontWeight = 'bold';
-            span.style.color = '#000080'; // Texto azul escuro destacado no Word
-            span.innerHTML = ' ' + valor;
-            el.parentNode.replaceChild(span, el);
+            span.style.color = '#000';
+            span.textContent = input.value || '';
+            input.parentNode.replaceChild(span, input);
+        });
+
+        // Substitui todos os selects pelo texto selecionado
+        clone.querySelectorAll('select').forEach(select => {
+            const span = document.createElement('span');
+            span.style.fontWeight = 'bold';
+            span.style.color = '#000';
+            const selectedOpt = select.options[select.selectedIndex];
+            span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
+            select.parentNode.replaceChild(span, select);
+        });
+
+        // Substitui todos os textareas pelo texto digitado mantendo as quebras de linha
+        clone.querySelectorAll('textarea').forEach(textarea => {
+            const div = document.createElement('div');
+            div.style.fontWeight = 'bold';
+            div.style.color = '#000';
+            div.style.whiteSpace = 'pre-wrap';
+            div.textContent = textarea.value || '';
+            textarea.parentNode.replaceChild(div, textarea);
         });
 
         const conteudoHTML = clone.innerHTML;
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial;font-size:9.5px;}table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:8px;}td{border:1px solid #000;padding:4px;vertical-align:top;}.aih-page{page-break-after:always;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:6px;border:1px solid #000;margin-bottom:5px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:4px;margin-top:4px;}</style></head><body>';
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:8px;} td{border:1px solid #000;padding:4px;vertical-align:top;}.aih-page{page-break-after:always;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:6px;border:1px solid #000;margin-bottom:5px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:4px;margin-top:4px;}</style></head><body>';
         const rodape = '</body></html>';
 
         const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
