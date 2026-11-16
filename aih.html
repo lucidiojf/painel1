@@ -10,15 +10,18 @@
             padding: 0;
             font-family: Arial, sans-serif;
         }
+
         body {
             background-color: #525659;
             padding: 20px;
             color: #000;
         }
+
         .container {
             max-width: 950px;
             margin: 0 auto;
         }
+
         .action-bar {
             background: #1a365d;
             padding: 15px;
@@ -28,15 +31,18 @@
             border-radius: 6px;
             margin-bottom: 20px;
         }
+
         .action-bar h2 {
             color: #fff;
             font-size: 1.1rem;
             margin: 0;
         }
+
         .btn-group {
             display: flex;
             gap: 10px;
         }
+
         .btn-group button {
             background: #fff;
             color: #1a365d;
@@ -46,13 +52,17 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .btn-group button:hover {
             background: #e2e8f0;
         }
+
         .btn-clear {
             background: #e53e3e !important;
             color: #fff !important;
         }
+
+        /* Páginas A4 Estritas */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
@@ -64,18 +74,21 @@
             box-sizing: border-box;
             font-size: 8px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
             margin-bottom: 2px;
         }
+
         th, td {
             border: 1px solid #000;
             padding: 2px 3px;
             vertical-align: top;
             text-align: left;
         }
+
         .header-box {
             text-align: center;
             font-weight: bold;
@@ -84,13 +97,7 @@
             padding: 3px;
             line-height: 1.2;
         }
-        .header-box img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 2px auto;
-        }
+
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
@@ -100,6 +107,7 @@
             margin-top: 2px;
             margin-bottom: 1px;
         }
+
         label {
             font-size: 6px;
             font-weight: bold;
@@ -108,6 +116,7 @@
             color: #333;
             margin-bottom: 1px;
         }
+
         input, select, textarea {
             width: 100%;
             border: none;
@@ -117,10 +126,12 @@
             outline: none;
             padding: 0px;
         }
+
         input:focus, select:focus, textarea:focus {
             background: #ffffe0;
             border-bottom: 1px solid #1a365d;
         }
+
         @media print {
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
@@ -152,7 +163,13 @@
                 <tr>
                     <td style="width:34%"><label>Número da AIH</label><input type="text" id="numAih"></td>
                     <td style="width:34%"><label>Prontuário</label><input type="text" id="prontuario"></td>
-                    <td style="width:32%"><label>Tipo: ( ) 01 - Inicial ( ) Continuidade</label><input type="text" id="tipoAih" value="01 - Inicial"></td>
+                    <td style="width:32%">
+                        <label>Tipo (01 - Inicial / 02 - Continuidade)</label>
+                        <select id="tipoAih">
+                            <option value="01 - Inicial">01 - Inicial</option>
+                            <option value="02 - Continuidade">02 - Continuidade</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td><label>Apresentação</label><input type="text" id="apresentacao"></td>
@@ -169,7 +186,17 @@
                 <tr>
                     <td style="width:20%"><label>Sexo</label><select id="sexoPaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select></td>
                     <td style="width:30%"><label>Data de Nascimento</label><input type="date" id="nascimentoPaciente"></td>
-                    <td style="width:25%"><label>Raça/Cor</label><input type="text" id="racaPaciente"></td>
+                    <td style="width:25%">
+                        <label>Raça/Cor</label>
+                        <select id="racaPaciente">
+                            <option value="">Selecione</option>
+                            <option value="Branca">Branca</option>
+                            <option value="Parda">Parda</option>
+                            <option value="Negra">Negra</option>
+                            <option value="Amarela">Amarela</option>
+                            <option value="Indígena">Indígena</option>
+                        </select>
+                    </td>
                     <td style="width:25%"><label>Cartão SUS</label><input type="text" id="cnsPaciente"></td>
                 </tr>
                 <tr><td colspan="4"><label>Nome da Mãe</label><input type="text" id="nomeMae"></td></tr>
@@ -196,10 +223,25 @@
                 </tr>
                 <tr>
                     <td><label>Especialidade</label><input type="text" id="especialidade"></td>
-                    <td><label>Caráter de Atendimento</label><input type="text" id="caraterAtendimento"></td>
+                    <td>
+                        <label>Modalidade</label>
+                        <select id="modalidade">
+                            <option value="Hospitalar">Hospitalar</option>
+                            <option value="Hospitalar Dia">Hospitalar Dia</option>
+                            <option value="Internação Domiciliar">Internação Domiciliar</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
-                    <td><label>Motivo da Saída / Permanência</label><input type="text" id="motivoSaida"></td>
+                    <td>
+                        <label>Motivo da Saída / Permanência</label>
+                        <select id="motivoSaida">
+                            <option value="">Selecione</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Transferência">Transferência</option>
+                            <option value="Óbito">Óbito</option>
+                        </select>
+                    </td>
                     <td><label>CPF Solicitante / Autorizador</label><input type="text" id="cpfSolicitante"></td>
                 </tr>
             </table>
@@ -214,7 +256,6 @@
                     <td style="width:10%;">CNES</td>
                     <td style="width:10%;">CNPJ</td>
                 </tr>
-                <!-- Gerando 12 linhas estritas -->
                 <script>
                     for(let i=1; i<=12; i++) {
                         let numStr = i < 10 ? '0' + i : i;
@@ -313,11 +354,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v11', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v12', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v11');
+        const salvos = localStorage.getItem('aih_dados_v12');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -331,7 +372,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v11');
+            localStorage.removeItem('aih_dados_v12');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario', 'nacionalidade'].includes(c.id)) c.value = '';
             });
