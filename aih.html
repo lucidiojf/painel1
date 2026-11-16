@@ -918,11 +918,11 @@
       </html>
     `;
 
-    const blob = new Blob(['\ufeff', conteudoWord], { type: 'application/msword' });
+    const blob = new Blob(['\ufeff', conteudoWord], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.doc`;
+    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
