@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIH 3 Folhas Oficiais - Frutuoso Gomes</title>
+    <title>AIH 3 Folhas - Preenchimento e Exportação Word</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,7 +27,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Barra de Ações (Oculta na exportação do Word e impressão) */
+        /* Barra de Ações (Oculta na exportação e impressão) */
         .action-bar {
             background: #003366;
             padding: 15px;
@@ -159,8 +159,8 @@
         <div class="action-bar">
             <h2>AIH - Padrão 3 Folhas Oficiais (Frutuoso Gomes)</h2>
             <div class="btn-group">
-                <button onclick="window.print()">🖨️ Imprimir / PDF (3 Folhas)</button>
-                <button onclick="exportarWord()">📄 Baixar Word (Oficial Editável)</button>
+                <button onclick="window.print()">🖨️ Imprimir / PDF</button>
+                <button onclick="exportarWordPreenchido()">📄 Baixar Word (Preenchido)</button>
                 <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
             </div>
         </div>
@@ -485,16 +485,16 @@
     </div>
 
     <script>
-        // Auto-save no localStorage
+        // Auto-save no localStorage para não perder dados ao navegar
         function salvarDados() {
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_editavel', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_oficial_v5', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_editavel');
+            const salvos = localStorage.getItem('aih_3_folhas_oficial_v5');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -506,7 +506,7 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_editavel');
+                localStorage.removeItem('aih_3_folhas_oficial_v5');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                     if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
@@ -545,12 +545,35 @@
             });
         });
 
-        // Exportador avançado para Word (.doc) com namespaces nativos do Office
-        function exportarWord() {
-            const conteudoHTML = document.getElementById('conteudoImpresso').innerHTML;
+        // Função mágica que congela o valor digitado nos inputs dentro do HTML para o Word
+        function exportarWordPreenchido() {
+            // Converte todos os inputs e textareas atuais em atributos value fixos no HTML
+            const paginaClone = document.getElementById('conteudoImpresso').cloneNode(true);
             
-            // Namespaces oficiais do Microsoft Word para preservar tabelas, margens e grades nativas
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 8px; } table.aih-table td { border: 1px solid #000; padding: 3px; vertical-align: top; } .aih-page { page-break-after: always; } .header-title, .section-header { font-weight: bold; background: #e0e0e0; border: 1px solid #000; padding: 3px; }</style></head><body>';
+            const inputs = paginaClone.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    if (input.checked) input.setAttribute('checked', 'checked');
+                } else {
+                    input.setAttribute('value', input.value);
+                }
+            });
+
+            const textareas = paginaClone.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.innerHTML = textarea.value;
+            });
+
+            const selects = paginaClone.querySelectorAll('select');
+            selects.forEach(select => {
+                const opt = select.querySelector(`option[value="${select.value}"]`);
+                if (opt) opt.setAttribute('selected', 'selected');
+            });
+
+            const conteudoHTML = paginaClone.innerHTML;
+            
+            // Cabeçalho XML do Word para manter tabelas e formatação idênticas ao original
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 8px; } table.aih-table td { border: 1px solid #000; padding: 3px; vertical-align: top; } .aih-page { page-break-after: always; } input, textarea, select { font-size: 9px; font-family: Arial; border: none; background: transparent; }</style></head><body>';
             
             const rodape = '</body></html>';
             const codigoCompleto = cabecalho + conteudoHTML + rodape;
@@ -559,7 +582,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
+            a.download = 'AIH_3_Folhas_Preenchida.doc';
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {
