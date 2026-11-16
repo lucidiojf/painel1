@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIH 3 Folhas - Preenchimento e Exportação Word</title>
+    <title>AIH 3 Folhas - Frutuoso Gomes</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,7 +27,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Barra de Ações (Oculta na exportação e impressão) */
+        /* Barra de Ações (Oculta na impressão) */
         .action-bar {
             background: #003366;
             padding: 15px;
@@ -71,62 +71,62 @@
             color: #fff !important;
         }
 
-        /* Estrutura das 3 Páginas Oficiais para A4 / Word */
+        /* Estrutura das 3 Páginas Oficiais */
         .aih-page {
             width: 100%;
             border: 2px solid #000;
             background: #fff;
             margin-bottom: 30px;
-            padding: 10px;
+            padding: 15px;
             page-break-after: always;
             break-after: page;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         table.aih-table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-top: 3px;
-            margin-bottom: 3px;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
 
         table.aih-table th, table.aih-table td {
             border: 1px solid #000;
-            padding: 3px 4px;
+            padding: 4px 6px;
             vertical-align: top;
             text-align: left;
         }
 
-        .header-title {
+        .header-box {
             text-align: center;
             font-weight: bold;
             font-size: 10px;
             line-height: 1.4;
-            padding: 5px;
-            background: #f9f9f9;
+            padding: 6px;
+            background: #f5f5f5;
             border: 1px solid #000;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
 
         .section-header {
             background: #dcdcdc;
             font-weight: bold;
             text-align: left;
-            padding: 3px 4px;
+            padding: 4px 6px;
             border: 1px solid #000;
-            font-size: 9px;
+            font-size: 9.5px;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         label {
-            font-size: 7px;
+            font-size: 7.5px;
             font-weight: bold;
             display: block;
             color: #333;
             text-transform: uppercase;
-            margin-bottom: 1px;
+            margin-bottom: 2px;
         }
 
         input[type="text"], input[type="date"], select, textarea {
@@ -134,8 +134,8 @@
             border: none;
             border-bottom: 1px dotted #666;
             background: transparent;
-            font-size: 9px;
-            padding: 1px;
+            font-size: 10px;
+            padding: 2px;
             outline: none;
         }
 
@@ -159,8 +159,8 @@
         <div class="action-bar">
             <h2>AIH - Padrão 3 Folhas Oficiais (Frutuoso Gomes)</h2>
             <div class="btn-group">
-                <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-                <button onclick="exportarWordPreenchido()">📄 Baixar Word (Preenchido)</button>
+                <button onclick="window.print()">🖨️ Imprimir / Gerar PDF</button>
+                <button onclick="exportarWordOficial()">📄 Baixar Word (Editável)</button>
                 <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
             </div>
         </div>
@@ -168,11 +168,11 @@
         <div id="conteudoImpresso">
             <!-- ================= FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR ================= -->
             <div class="aih-page">
-                <div class="header-title">
+                <div class="header-box">
                     PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
                     Hospital Maternidade Severina Carlos de Andrade<br>
                     CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
-                    <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</strong>[cite: 20]
+                    <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>[cite: 20]
                 </div>
 
                 <table class="aih-table">
@@ -291,7 +291,7 @@
                 </table>
 
                 <div class="section-header">PROCEDIMENTOS REALIZADOS</div>
-                <table class="aih-table" style="text-align: center; font-size: 8px;">
+                <table class="aih-table" style="text-align: center; font-size: 9px;">
                     <tr style="background: #f0f0f0;">
                         <td>Linha</td>
                         <td>PROCEDIMENTO</td>
@@ -315,7 +315,7 @@
 
             <!-- ================= FOLHA 2: LAUDO PARA SOLICITAÇÃO DE AIH (SUS) ================= -->
             <div class="aih-page">
-                <div class="header-title">
+                <div class="header-box">
                     MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
                     <strong>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</strong>[cite: 20]
                 </div>
@@ -435,7 +435,7 @@
 
             <!-- ================= FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO ================= -->
             <div class="aih-page">
-                <div class="header-title">
+                <div class="header-box">
                     ESTADO DO RIO GRANDE DO NORTE<br>
                     Secretaria Municipal de Saúde de Frutuoso Gomes<br>
                     Hospital Maternidade Severina Carlos de Andrade<br>
@@ -485,16 +485,16 @@
     </div>
 
     <script>
-        // Auto-save no localStorage para não perder dados ao navegar
+        // Auto-save no localStorage
         function salvarDados() {
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_oficial_v5', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_oficial_v6', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_oficial_v5');
+            const salvos = localStorage.getItem('aih_3_folhas_oficial_v6');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -506,7 +506,7 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_oficial_v5');
+                localStorage.removeItem('aih_3_folhas_oficial_v6');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                     if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
@@ -545,50 +545,34 @@
             });
         });
 
-        // Função mágica que congela o valor digitado nos inputs dentro do HTML para o Word
-        function exportarWordPreenchido() {
-            // Converte todos os inputs e textareas atuais em atributos value fixos no HTML
-            const paginaClone = document.getElementById('conteudoImpresso').cloneNode(true);
+        // Função de exportação otimizada para o Word manter as tabelas íntegras
+        function exportarWordOficial() {
+            const clone = document.getElementById('conteudoImpresso').cloneNode(true);
             
-            const inputs = paginaClone.querySelectorAll('input');
-            inputs.forEach(input => {
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    if (input.checked) input.setAttribute('checked', 'checked');
-                } else {
-                    input.setAttribute('value', input.value);
-                }
+            // Fixa os valores digitados nos inputs para o Word ler corretamente
+            clone.querySelectorAll('input').forEach(i => {
+                if(i.type !== 'checkbox') i.setAttribute('value', i.value);
+            });
+            clone.querySelectorAll('textarea').forEach(t => {
+                t.innerHTML = t.value;
+            });
+            clone.querySelectorAll('select').forEach(s => {
+                const opt = s.querySelector(`option[value="${s.value}"]`);
+                if(opt) opt.setAttribute('selected', 'selected');
             });
 
-            const textareas = paginaClone.querySelectorAll('textarea');
-            textareas.forEach(textarea => {
-                textarea.innerHTML = textarea.value;
-            });
-
-            const selects = paginaClone.querySelectorAll('select');
-            selects.forEach(select => {
-                const opt = select.querySelector(`option[value="${select.value}"]`);
-                if (opt) opt.setAttribute('selected', 'selected');
-            });
-
-            const conteudoHTML = paginaClone.innerHTML;
-            
-            // Cabeçalho XML do Word para manter tabelas e formatação idênticas ao original
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 8px; } table.aih-table td { border: 1px solid #000; padding: 3px; vertical-align: top; } .aih-page { page-break-after: always; } input, textarea, select { font-size: 9px; font-family: Arial; border: none; background: transparent; }</style></head><body>';
-            
+            const conteudoHTML = clone.innerHTML;
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 10px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px; } table.aih-table td { border: 1px solid #000; padding: 4px; vertical-align: top; } .aih-page { page-break-after: always; }</style></head><body>';
             const rodape = '</body></html>';
-            const codigoCompleto = cabecalho + conteudoHTML + rodape;
-
-            const blob = new Blob(['\ufeff' + codigoCompleto], { type: 'application/msword;charset=utf-8' });
+            
+            const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'AIH_3_Folhas_Preenchida.doc';
+            a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
             document.body.appendChild(a);
             a.click();
-            setTimeout(() => {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 100);
+            setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
         }
     </script>
 </body>
