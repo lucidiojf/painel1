@@ -321,18 +321,462 @@
   const URL_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbyxbtbbTXdDl2jp3I2Ka9w0VWV4n3FwlokJsYi2yzR6yYL0JLFpUuNn8sGZjYiT4bKohQ/exec';
   const BRASAO_OFICIAL_B64 = 'data:image/png;base64,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v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v/v15
 
-  const mhtml = `MIME-Version: 1.0\nContent-Type: multipart/related; boundary="----=_NextPart_AIH_FRUTUOSO_GOMES"\n\n------=_NextPart_AIH_FRUTUOSO_GOMES\nContent-Type: text/html; charset="utf-8"\nContent-Transfer-Encoding: quoted-printable\nContent-Location: file:///C:/aih.htm\n\n${htmlCorpo}\n\n------=_NextPart_AIH_FRUTUOSO_GOMES\nContent-Type: image/png\nContent-Transfer-Encoding: base64\nContent-Location: cid:logoBrasao\n\n${BRASAO_OFICIAL_B64.split(',')[1]}\n------=_NextPart_AIH_FRUTUOSO_GOMES--`;
+  <script>
+  let registrosCarregados = [];
+  let indiceAtual = 0;
 
-  const blob = new Blob([mhtml], { type: 'application/msword' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.doc`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-});
+  function atualizarDiasInternacao() {
+    const dtInt = document.getElementById('dataInternacao').value;
+    const dtSai = document.getElementById('dataSaida').value;
+    if (dtInt.length === 10 && dtSai.length === 10) {
+      const partsI = dtInt.split('/');
+      const partsS = dtSai.split('/');
+      const dI = new Date(partsI[2], partsI[1] - 1, partsI[0]);
+      const dS = new Date(partsS[2], partsS[1] - 1, partsS[0]);
+      const diffTime = Math.abs(dS - dI);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById('diasPermanencia').value = diffDays > 0 ? diffDays : 1;
+    }
+  }
+
+  function preencherFormulario(d) {
+    document.getElementById('prontuario').value = d.prontuario || '';
+    document.getElementById('nomePaciente').value = d.nomePaciente || '';
+    document.getElementById('cns').value = d.cns || '';
+    document.getElementById('dataNasc').value = d.dataNasc || '';
+    document.getElementById('sexo').value = d.sexo || 'M';
+    document.getElementById('racaCor').value = d.racaCor || 'PARDA';
+    document.getElementById('telefone').value = d.telefone || '84 99980 5728';
+    document.getElementById('nomeMae').value = d.nomeMae || '';
+    document.getElementById('nomePai').value = d.nomePai || '';
+    document.getElementById('profissao').value = d.profissao || 'AGRICULTORA';
+    document.getElementById('endereco').value = d.endereco || '';
+    document.getElementById('numEndereco').value = d.numEndereco || 'SN';
+    document.getElementById('bairro').value = d.bairro || 'ZONA RURAL';
+    document.getElementById('municipio').value = d.municipio || 'FRUTUOSO GOMES';
+    document.getElementById('estado').value = d.estado || 'RN';
+    document.getElementById('cep').value = d.cep || '59890-000';
+    document.getElementById('rg').value = d.rg || '';
+    document.getElementById('cpfPaciente').value = d.cpfPaciente || '';
+    document.getElementById('dataInternacao').value = d.dataInternacao || '';
+    document.getElementById('dataSaida').value = d.dataSaida || '';
+    document.getElementById('diasPermanencia').value = d.diasPermanencia || '1';
+    document.getElementById('dataSolicitacao').value = d.dataSolicitacao || '';
+    document.getElementById('diagInicial').value = d.diagInicial || '';
+    document.getElementById('cidPrincipal').value = d.cidPrincipal || '';
+    document.getElementById('especialidade').value = d.especialidade || 'CLINICA CIRURGICA';
+    document.getElementById('procedimento').value = d.procedimento || '';
+    document.getElementById('codProcedimento').value = d.codProcedimento || '';
+    document.getElementById('medicoSolicitante').value = d.medicoSolicitante || 'LUCIDIO JÁCOME FERREIRA';
+    document.getElementById('cpfSolicitante').value = d.cpfSolicitante || '175.499.574-87';
+    document.getElementById('sinaisSintomas').value = d.sinaisSintomas || '';
+    document.getElementById('justificativa').value = d.justificativa || '';
+    document.getElementById('exames').value = d.exames || '';
+    document.getElementById('txtAnestesia').value = d.txtAnestesia || 'Lidocaina a 2% - 20 ml SF - 500 ml EV';
+    document.getElementById('txtCirurgia').value = d.txtCirurgia || 'SEM INTERCORRÊNCIAS OPERATÓRIAS.';
+  }
+
+  function navegarRegistro(direcao) {
+    if (registrosCarregados.length === 0) return;
+    indiceAtual += direcao;
+    if (indiceAtual < 0) indiceAtual = 0;
+    if (indiceAtual >= registrosCarregados.length) indiceAtual = registrosCarregados.length - 1;
+    preencherFormulario(registrosCarregados[indiceAtual]);
+    document.getElementById('lblRegistro').innerText = `${indiceAtual + 1} / ${registrosCarregados.length}`;
+  }
+
+  function carregarUltimoRegistro() {
+    fetch(URL_APPS_SCRIPT + '?acao=listar')
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.length > 0) {
+          registrosCarregados = res;
+          indiceAtual = registrosCarregados.length - 1;
+          preencherFormulario(registrosCarregados[indiceAtual]);
+          document.getElementById('lblRegistro').innerText = `${indiceAtual + 1} / ${registrosCarregados.length}`;
+          document.getElementById('msgStatus').innerText = 'Último registro carregado!';
+          setTimeout(() => document.getElementById('msgStatus').innerText = '', 3000);
+        }
+      })
+      .catch(err => console.error('Erro ao buscar registros:', err));
+  }
+
+  function buscarPorTermo() {
+    const termo = document.getElementById('campoBusca').value.toLowerCase();
+    const encontrados = registrosCarregados.filter(item => 
+      (item.nomePaciente && item.nomePaciente.toLowerCase().includes(termo)) ||
+      (item.prontuario && item.prontuario.toLowerCase().includes(termo))
+    );
+    if (encontrados.length > 0) {
+      registrosCarregados = encontrados;
+      indiceAtual = 0;
+      preencherFormulario(registrosCarregados[indiceAtual]);
+      document.getElementById('lblRegistro').innerText = `${indiceAtual + 1} / ${registrosCarregados.length}`;
+      document.getElementById('msgStatus').innerText = `${encontrados.length} encontrados.`;
+    } else {
+      document.getElementById('msgStatus').innerText = 'Nenhum registro encontrado.';
+    }
+    setTimeout(() => document.getElementById('msgStatus').innerText = '', 3000);
+  }
+
+  function fecharModal() {
+    document.getElementById('modalVisualizacao').style.display = 'none';
+  }
+
+  // BOTÃO WORD
+  document.getElementById('btnGerarWord').addEventListener('click', function() {
+    const d = {
+      prontuario: document.getElementById('prontuario').value || 'SN',
+      nome: document.getElementById('nomePaciente').value || 'Paciente',
+      cns: document.getElementById('cns').value || '',
+      nasc: document.getElementById('dataNasc').value || '',
+      sexo: document.getElementById('sexo').value === 'M' ? 'MASCULINO' : 'FEMININO',
+      raca: document.getElementById('racaCor').value || 'PARDA',
+      tel: document.getElementById('telefone').value || '',
+      mae: document.getElementById('nomeMae').value || '',
+      pai: document.getElementById('nomePai').value || '',
+      profissao: document.getElementById('profissao').value || 'AGRICULTORA',
+      endereco: document.getElementById('endereco').value || '',
+      municipio: document.getElementById('municipio').value || 'FRUTUOSO GOMES',
+      estado: document.getElementById('estado').value || 'RN',
+      cep: document.getElementById('cep').value || '59890-000',
+      rg: (document.getElementById('rg').value || '').trim(),
+      cpfPaciente: (document.getElementById('cpfPaciente').value || '').trim(),
+      dtInternacao: document.getElementById('dataInternacao').value || '',
+      dtSaida: document.getElementById('dataSaida').value || '',
+      dias: document.getElementById('diasPermanencia').value || '1',
+      dtSol: document.getElementById('dataSolicitacao').value || '',
+      diag: document.getElementById('diagInicial').value || '',
+      cid: document.getElementById('cidPrincipal').value || '',
+      especialidade: document.getElementById('especialidade').value || 'CLINICA CIRURGICA',
+      proced: document.getElementById('procedimento').value || '',
+      codProced: document.getElementById('codProcedimento').value || '',
+      medico: document.getElementById('medicoSolicitante').value || 'LUCIDIO JÁCOME FERREIRA',
+      cpfMed: document.getElementById('cpfSolicitante').value || '175.499.574-87',
+      sinais: document.getElementById('sinaisSintomas').value || '',
+      justificativa: document.getElementById('justificativa').value || '',
+      exames: document.getElementById('exames').value || '',
+      cirurgia: document.getElementById('txtCirurgia').value || ''
+    };
+
+    const quebraWord = `<br clear="all" style="page-break-before:always; mso-break-type:section-break">`;
+    const linhasPautadasSumario = Array.from({ length: 8 }, () =>
+      `<tr><td style="border-top:none; border-left:1pt solid #000; border-right:1pt solid #000; border-bottom:0.5pt solid #888; height:13pt;">&nbsp;</td></tr>`
+    ).join('');
+
+    const htmlCorpo = `
+      <html xmlns:v="urn:schemas-microsoft-com:vml"
+            xmlns:o="urn:schemas-microsoft-com:office:office"
+            xmlns:w="urn:schemas-microsoft-com:office:word"
+            xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <meta charset="utf-8">
+        <title>AIH - ${d.nome}</title>
+        <style>
+          @page Section1 { size: 595.3pt 841.9pt; margin: 22pt 24pt 22pt 24pt; }
+          div.Section1 { page: Section1; width: 547pt; margin: 0 auto; }
+          body { font-family: Arial, sans-serif; font-size: 8.5pt; color: #000; }
+          table.box { width: 100%; border-collapse: collapse; margin-bottom: 4pt; table-layout: fixed; }
+          table.box td, table.box th { border: 1pt solid #000; padding: 3.5pt 4.5pt; font-size: 7.8pt; vertical-align: top; word-wrap: break-word; }
+          .sec { background: #d9e2ec; border: 1pt solid #000; border-bottom: none; font-weight: bold; font-size: 7.5pt; padding: 2pt 5pt; text-transform: uppercase; text-align: left; }
+          .lbl { display: block; font-size: 5.8pt; font-weight: bold; text-transform: uppercase; color: #222; margin-bottom: 1pt; }
+          .val { font-size: 8.2pt; font-weight: bold; text-transform: uppercase; }
+        </style>
+      </head>
+      <body>
+        <div class="Section1" align="center">
+          <!-- FOLHA 1 -->
+          <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
+            <tr>
+              <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <img src="cid:logoBrasao" width="60" height="52" alt="Brasao">
+              </td>
+              <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <div style="font-size: 10pt; font-weight: bold;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</div>
+                <div style="font-size: 9pt; font-weight: bold;">Hospital Maternidade Severina Carlos de Andrade</div>
+                <div style="font-size: 8pt;">CNPJ 08.349.052/0001-80 | CNES: 2380846 | Frutuoso Gomes-RN</div>
+              </td>
+              <td style="width: 68pt; border: 1pt solid #000;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background: #e2e8f0; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 3pt;">
+                AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR
+              </td>
+            </tr>
+          </table>
+
+          <table class="box">
+            <tr>
+              <td style="width:35%; height:22pt;"><span class="lbl">Número da AIH:</span><span class="val">&nbsp;</span></td>
+              <td style="width:25%; height:22pt;"><span class="lbl">Prontuário:</span><span class="val">${d.prontuario}</span></td>
+              <td style="width:40%; height:22pt;"><span class="lbl">Tipo:</span><span class="val">(X) 01 - inicial &nbsp;&nbsp; ( ) Continuidade</span></td>
+            </tr>
+            <tr>
+              <td style="height:22pt;"><span class="lbl">Apresentação / Órgão Emissor:</span><span class="val">240410 - SMS FRUTUOSO GOMES</span></td>
+              <td style="height:22pt;"><span class="lbl">Data da Internação:</span><span class="val">${d.dtInternacao}</span></td>
+              <td style="height:22pt;"><span class="lbl">Data da Saída:</span><span class="val">${d.dtSaida}</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">DADOS DO PACIENTE</div>
+          <table class="box">
+            <tr>
+              <td colspan="2" style="width:68%; height:22pt;"><span class="lbl">Nome do Paciente:</span><span class="val">${d.nome}</span></td>
+              <td style="width:32%; height:22pt;"><span class="lbl">Cartão SUS (CNS):</span><span class="val">${d.cns}</span></td>
+            </tr>
+            <tr>
+              <td style="height:22pt;"><span class="lbl">Data de Nascimento:</span><span class="val">${d.nasc}</span></td>
+              <td style="height:22pt;"><span class="lbl">Sexo:</span><span class="val">${d.sexo}</span></td>
+              <td style="height:22pt;"><span class="lbl">Raça/Cor:</span><span class="val">${d.raca}</span></td>
+            </tr>
+            <tr>
+              <td colspan="2" style="height:22pt;"><span class="lbl">Nome da mãe:</span><span class="val">${d.mae}</span></td>
+              <td style="height:22pt;"><span class="lbl">Telefone:</span><span class="val">${d.tel}</span></td>
+            </tr>
+            <tr>
+              <td colspan="2" style="height:22pt;"><span class="lbl">Endereço:</span><span class="val">${d.endereco}</span></td>
+              <td style="height:22pt;"><span class="lbl">N°. / Bairro:</span><span class="val">SN - ZONA RURAL</span></td>
+            </tr>
+            <tr>
+              <td style="height:22pt;"><span class="lbl">Município:</span><span class="val">${d.municipio}</span></td>
+              <td style="height:22pt;"><span class="lbl">Estado / CEP:</span><span class="val">${d.estado} - ${d.cep}</span></td>
+              <td style="height:22pt;"><span class="lbl">Nacionalidade:</span><span class="val">BRASILEIRA</span></td>
+            </tr>
+            <tr>
+              <td colspan="2" style="height:22pt;"><span class="lbl">Tipo de Documento:</span><span class="val" style="font-size:7pt;">( ) Identidade &nbsp; ( ) CPF &nbsp; ( ) Reg. Nascimento &nbsp; (X) Sem identificação</span></td>
+              <td style="height:22pt;"><span class="lbl">Número do Documento:</span><span class="val">${d.rg}</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">DADOS DO PROCEDIMENTO</div>
+          <table class="box">
+            <tr>
+              <td style="width:50%; height:28pt;"><span class="lbl">Procedimento solicitado:</span><span class="val">${d.codProced} - ${d.proced}</span></td>
+              <td style="width:50%; height:28pt;"><span class="lbl">Procedimento Realizado:</span><span class="val">${d.codProced} - ${d.proced}</span></td>
+            </tr>
+            <tr>
+              <td style="height:26pt;"><span class="lbl">Especialidade / Mudança de Procedimento (S/N):</span><span class="val">${d.especialidade} &nbsp;|&nbsp; N</span></td>
+              <td style="height:26pt;"><span class="lbl">Modalidade / Enfermaria / Leito:</span><span class="val">(X) Hospitalar &nbsp;|&nbsp; Enf: M &nbsp;|&nbsp; Leito: 01</span></td>
+            </tr>
+            <tr>
+              <td style="height:26pt;"><span class="lbl">CID Principal:</span><span class="val">${d.cid} - ${d.diag}</span></td>
+              <td style="height:26pt;"><span class="lbl">Motivo da Saída/Permanência:</span><span class="val">ALTA (${d.dias} DIA(S))</span></td>
+            </tr>
+            <tr>
+              <td style="height:26pt;"><span class="lbl">CPF Solicitante:</span><span class="val">${d.cpfMed} - ${d.medico}</span></td>
+              <td style="height:26pt;"><span class="lbl">CPF Autorizador / Data Autorização:</span><span class="val">CPF: ${d.cpfMed} | Data: ${d.dtInternacao}</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">PROCEDIMENTOS REALIZADOS</div>
+          <table class="box">
+            <tr>
+              <th style="width:7%;">Linha</th>
+              <th style="width:38%;">PROCEDIMENTO</th>
+              <th style="width:7%;">Qtd.</th>
+              <th style="width:18%;">CPF</th>
+              <th style="width:12%;">CNES</th>
+              <th style="width:18%;">CNPJ</th>
+            </tr>
+            <tr>
+              <td align="center" style="height:17pt;">01</td>
+              <td>${d.codProced} - ${d.proced}</td>
+              <td align="center">01</td>
+              <td align="center">${d.cpfMed}</td>
+              <td align="center">2380846</td>
+              <td align="center">08.349.052/0001-80</td>
+            </tr>
+          </table>
+
+          ${quebraWord}
+
+          <!-- FOLHA 2 -->
+          <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
+            <tr>
+              <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <img src="cid:logoBrasao" width="60" height="52" alt="Brasao">
+              </td>
+              <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <div style="font-size: 10pt; font-weight: bold;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</div>
+                <div style="font-size: 9pt; font-weight: bold;">Hospital Maternidade Severina Carlos de Andrade</div>
+                <div style="font-size: 8pt;">CNPJ 08.349.052/0001-80 | CNES: 2380846 | Frutuoso Gomes-RN</div>
+              </td>
+              <td style="width: 68pt; border: 1pt solid #000;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background: #e2e8f0; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 3pt;">
+                LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
+              </td>
+            </tr>
+          </table>
+
+          <div class="sec">Identificação do Estabelecimento de Saúde</div>
+          <table class="box">
+            <tr>
+              <td style="width:38%;"><span class="lbl">1-NOME DO ESTABELECIMENTO SOLICITANTE</span><span class="val">HOSP. MAT. SEVERINA CARLOS DE ANDRADE</span></td>
+              <td style="width:12%;"><span class="lbl">2-CNES</span><span class="val">2380846</span></td>
+              <td style="width:38%;"><span class="lbl">3-NOME DO ESTABELECIMENTO EXECUTANTE</span><span class="val">HOSP. MAT. SEVERINA CARLOS DE ANDRADE</span></td>
+              <td style="width:12%;"><span class="lbl">4-CNES</span><span class="val">2380846</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">Identificação do Paciente</div>
+          <table class="box">
+            <tr>
+              <td colspan="2" style="width:55%;"><span class="lbl">5-NOME DO PACIENTE</span><span class="val">${d.nome}</span></td>
+              <td style="width:20%;"><span class="lbl">6-N° DO PRONTUÁRIO</span><span class="val">${d.prontuario}</span></td>
+              <td style="width:25%;"><span class="lbl">7-CARTÃO NACIONAL DE SAÚDE (CNS)</span><span class="val">${d.cns}</span></td>
+            </tr>
+            <tr>
+              <td><span class="lbl">8-DATA DE NASCIMENTO</span><span class="val">${d.nasc}</span></td>
+              <td><span class="lbl">9-SEXO</span><span class="val">${d.sexo}</span></td>
+              <td><span class="lbl">10-RAÇA/COR</span><span class="val">${d.raca}</span></td>
+              <td><span class="lbl">12-TELEFONE DE CONTATO</span><span class="val">${d.tel}</span></td>
+            </tr>
+            <tr>
+              <td colspan="2"><span class="lbl">11-NOME DA MÃE</span><span class="val">${d.mae}</span></td>
+              <td colspan="2"><span class="lbl">13-NOME DO RESPONSÁVEL</span><span class="val">${d.mae || d.nome}</span></td>
+            </tr>
+            <tr>
+              <td colspan="2"><span class="lbl">15-ENDEREÇO (RUA, N°, BAIRRO)</span><span class="val">${d.endereco}</span></td>
+              <td><span class="lbl">16-MUNICÍPIO DE RESIDÊNCIA</span><span class="val">${d.municipio}</span></td>
+              <td><span class="lbl">17-IBGE / 18-UF / 19-CEP</span><span class="val">240410 / ${d.estado} / ${d.cep}</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">JUSTIFICATIVA DA INTERNAÇÃO</div>
+          <table class="box">
+            <tr><td colspan="4"><span class="lbl">20-PRINCIPAIS SINAIS E SINTOMAS CLÍNICOS</span><span class="val">${d.sinais}</span></td></tr>
+            <tr><td colspan="4"><span class="lbl">21-CONDIÇÕES QUE JUSTIFICAM A INTERNAÇÃO</span><span class="val">${d.justificativa}</span></td></tr>
+            <tr><td colspan="4"><span class="lbl">22-PRINCIPAIS RESULTADOS DE PROVAS DIAGNÓSTICAS</span><span class="val">${d.exames}</span></td></tr>
+            <tr>
+              <td colspan="2" style="width:55%;"><span class="lbl">23-DIAGNÓSTICO INICIAL</span><span class="val">${d.diag}</span></td>
+              <td style="width:22%;"><span class="lbl">24-CID 10 PRINCIPAL</span><span class="val">${d.cid}</span></td>
+              <td style="width:23%;"><span class="lbl">25-CID SEC. / 26-CAUSAS ASSOC.</span><span class="val">&nbsp;</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">PROCEDIMENTO SOLICITADO</div>
+          <table class="box">
+            <tr>
+              <td colspan="2" style="width:65%; height:24pt;"><span class="lbl">27-DESCRIÇÃO DO PROCEDIMENTO SOLICITADO</span><span class="val">${d.proced || '&nbsp;'}</span></td>
+              <td colspan="2" style="width:35%; height:24pt;"><span class="lbl">28-CÓDIGO DO PROCEDIMENTO</span><span class="val">${d.codProced || '&nbsp;'}</span></td>
+            </tr>
+            <tr>
+              <td><span class="lbl">29-CLÍNICA</span><span class="val">${d.especialidade}</span></td>
+              <td><span class="lbl">30-CARÁTER DA INTERNAÇÃO</span><span class="val">02 - URGÊNCIA / ELETIVO</span></td>
+              <td><span class="lbl">31-DOCUMENTO</span><span class="val">( ) CNS &nbsp; (X) CPF</span></td>
+              <td><span class="lbl">32-N° DOCUMENTO SOLICITANTE</span><span class="val">${d.cpfMed}</span></td>
+            </tr>
+            <tr>
+              <td colspan="2"><span class="lbl">33-NOME DO PROFISSIONAL SOLICITANTE/ASSISTENTE</span><span class="val">${d.medico}</span></td>
+              <td><span class="lbl">34-DATA DA SOLICITAÇÃO</span><span class="val">${d.dtSol || d.dtInternacao}</span></td>
+              <td><span class="lbl">35-ASSINATURA E CARIMBO</span><span class="val">&nbsp;</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">AUTORIZAÇÃO</div>
+          <table class="box">
+            <tr>
+              <td style="width:40%;"><span class="lbl">46-NOME DO PROFISSIONAL AUTORIZADOR</span><span class="val">AUTORIZADOR MUNICIPAL</span></td>
+              <td style="width:30%;"><span class="lbl">48-DOC / 49-N° DOC AUTORIZADOR</span><span class="val">( ) CNS &nbsp; (X) CPF: ${d.cpfMed}</span></td>
+              <td style="width:30%;"><span class="lbl">50-DATA AUTZ. / 52-N° AIH</span><span class="val">${d.dtInternacao}</span></td>
+            </tr>
+          </table>
+
+          ${quebraWord}
+
+          <!-- FOLHA 3 -->
+          <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
+            <tr>
+              <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <img src="cid:logoBrasao" width="60" height="52" alt="Brasao">
+              </td>
+              <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <div style="font-size: 10pt; font-weight: bold;">Estado do Rio Grande do Norte</div>
+                <div style="font-size: 9pt; font-weight: bold;">Secretaria Municipal de Saúde de Frutuoso Gomes</div>
+                <div style="font-size: 8pt;">Hospital Maternidade Severina Carlos de Andrade</div>
+              </td>
+              <td style="width: 68pt; border: 1pt solid #000;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background: #e2e8f0; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 3pt;">
+                PRONTUÁRIO DE INTERNAÇÃO
+              </td>
+            </tr>
+          </table>
+
+          <table class="box">
+            <tr>
+              <td colspan="2" style="width:70%;"><span class="lbl">Nome do Cliente:</span><span class="val">${d.nome}</span></td>
+              <td style="width:30%;"><span class="lbl">N°. do Prontuário:</span><span class="val">${d.prontuario}</span></td>
+            </tr>
+            <tr>
+              <td colspan="2"><span class="lbl">Endereço:</span><span class="val">${d.endereco}</span></td>
+              <td><span class="lbl">Município / UF:</span><span class="val">${d.municipio} - ${d.estado}</span></td>
+            </tr>
+            <tr>
+              <td><span class="lbl">Data de Nascimento:</span><span class="val">${d.nasc}</span></td>
+              <td><span class="lbl">Sexo / Cor:</span><span class="val">${d.sexo} / ${d.raca}</span></td>
+              <td><span class="lbl">Profissão:</span><span class="val">${d.profissao}</span></td>
+            </tr>
+            <tr>
+              <td><span class="lbl">Nome da Mãe:</span><span class="val">${d.mae}</span></td>
+              <td><span class="lbl">RG:</span><span class="val">${d.rg}</span></td>
+              <td><span class="lbl">CPF:</span><span class="val">${d.cpfPaciente || '&nbsp;'}</span></td>
+            </tr>
+            <tr>
+              <td><span class="lbl">Serviço:</span><span class="val">${d.especialidade}</span></td>
+              <td><span class="lbl">Enf. / Leito:</span><span class="val">M | LEITO 01</span></td>
+              <td><span class="lbl">Permanência:</span><span class="val">${d.dias} DIA(S)</span></td>
+            </tr>
+            <tr>
+              <td><span class="lbl">Data Admissão:</span><span class="val">${d.dtInternacao}</span></td>
+              <td><span class="lbl">Alta / Óbito:</span><span class="val">${d.dtSaida} (X) Alta</span></td>
+              <td><span class="lbl">CID-10:</span><span class="val">${d.cid}</span></td>
+            </tr>
+            <tr>
+              <td colspan="3"><span class="lbl">Diagnóstico:</span><span class="val">${d.diag}</span></td>
+            </tr>
+          </table>
+
+          <div class="sec">Sumário de História Clínica, Exame Físico e Tratamento</div>
+          <table class="box" style="margin-bottom:0;">
+            <tr>
+              <td style="border-bottom:0.5pt solid #888; height:55pt; vertical-align:top;">
+                <b>20- Sinais e Sintomas:</b> ${d.sinais}<br>
+                <b>21- Condições (Justificativa):</b> ${d.justificativa}<br>
+                <b>22- Provas Diagnósticas (Exames):</b> ${d.exames}<br>
+                <b>Conduta / Evolução:</b> PACIENTE RECEBEU SUPORTE CLÍNICO E EVOLUIU COM MELHORA DO QUADRO, SENDO DADA ALTA HOSPITALAR EM BOM ESTADO GERAL.
+              </td>
+            </tr>
+            ${linhasPautadasSumario}
+          </table>
+
+          <table style="width:100%; border:none; margin-top:8pt;">
+            <tr style="border:none;">
+              <td style="border:none; text-align:left; width:28%; vertical-align:bottom;"><b>Data:</b> ${d.dtSaida || d.dtInternacao}</td>
+              <td style="border:none; text-align:center; width:38%;">_____________________________________<br><b>Médico Assistente</b></td>
+              <td style="border:none; text-align:center; width:34%;">_____________________________________<br>Direção Clínica / Enfermagem</td>
+            </tr>
+          </table>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const mhtml = `MIME-Version: 1.0\nContent-Type: multipart/related; boundary="----=_NextPart_AIH_FRUTUOSO_GOMES"\n\n------=_NextPart_AIH_FRUTUOSO_GOMES\nContent-Type: text/html; charset="utf-8"\nContent-Transfer-Encoding: quoted-printable\nContent-Location: file:///C:/aih.htm\n\n${htmlCorpo}\n\n------=_NextPart_AIH_FRUTUOSO_GOMES\nContent-Type: image/png\nContent-Transfer-Encoding: base64\nContent-Location: cid:logoBrasao\n\n${BRASAO_OFICIAL_B64.split(',')[1]}\n------=_NextPart_AIH_FRUTUOSO_GOMES--`;
+
+    const blob = new Blob([mhtml], { type: 'application/msword' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 </script>
 </body>
 </html>
