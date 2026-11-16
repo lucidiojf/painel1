@@ -214,21 +214,38 @@
     </div>
 
     <script>
+    
         function exportarWord() {
+            // Pega o conteúdo HTML do formulário
             const conteudoHTML = document.querySelector('.aih-form').outerHTML;
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH</title></head><body>';
+            
+            // Monta o template completo compatível com o Microsoft Word
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH</title><style>body { font-family: Arial, sans-serif; font-size: 11px; }</style></head><body>';
             const rodape = '</body></html>';
             const codigoCompleto = cabecalho + conteudoHTML + rodape;
 
-            const uri = 'data:application/msword;charset=utf-8,' + encodeURIComponent(codigoCompleto);
+            // Cria o Blob com codificação para garantir acentuação correta
+            const blob = new Blob(['\ufeff' + codigoCompleto], {
+                type: 'application/msword;charset=utf-8'
+            });
             
+            // Gera a URL do objeto e força o download
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = uri;
-            a.download = 'AIH_Cabecalho.doc';
+            a.href = url;
+            a.download = 'AIH_Documento.doc';
+            
+            // Adiciona ao DOM, clica programaticamente e remove
             document.body.appendChild(a);
             a.click();
-            document.body.removeChild(a);
+            
+            // Limpeza da memória
+            setTimeout(() => {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 100);
         }
+    </script>
     </script>
 </body>
 </html>
