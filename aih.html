@@ -27,7 +27,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* Barra de Ações (Oculta na impressão) */
+        /* Barra de Ações (Oculta na impressão e exportação) */
         .action-bar {
             background: #003366;
             padding: 15px;
@@ -490,11 +490,11 @@
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_limpo_v1', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_limpo_v2', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_limpo_v1');
+            const salvos = localStorage.getItem('aih_3_folhas_limpo_v2');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -506,7 +506,7 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_limpo_v1');
+                localStorage.removeItem('aih_3_folhas_limpo_v2');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                     if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
@@ -545,11 +545,10 @@
             });
         });
 
-        // Exportador limpo: Transforma inputs digitados em texto puro formatado para o Word
-        function exportarWordOficial() {
+        // Exportador limpo: Converte inputs em texto puro direto no documento Word
+        function exportarWordLimpo() {
             const clone = document.getElementById('conteudoImpresso').cloneNode(true);
             
-            // Substitui cada campo de input/select/textarea por texto simples com o valor digitado
             clone.querySelectorAll('input, select, textarea').forEach(el => {
                 let valor = el.value || '';
                 if(el.tagName === 'SELECT' && el.selectedIndex >= 0) {
@@ -560,7 +559,7 @@
                 span.style.fontFamily = 'Arial';
                 span.style.fontSize = '10px';
                 span.style.fontWeight = 'bold';
-                span.style.color = '#000080'; // Texto em azul escuro para destacar no Word
+                span.style.color = '#000080';
                 span.innerText = ' ' + valor;
                 el.parentNode.replaceChild(span, el);
             });
