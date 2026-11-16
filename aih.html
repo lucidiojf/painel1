@@ -72,7 +72,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             box-sizing: border-box;
-            font-size: 8px;
+            font-size: 7.5px;
         }
 
         table {
@@ -98,18 +98,26 @@
             line-height: 1.2;
         }
 
+        .header-box img {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 2px auto;
+        }
+
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 7.5px;
+            font-size: 7px;
             padding: 2px 3px;
             margin-top: 2px;
             margin-bottom: 1px;
         }
 
         label {
-            font-size: 6px;
+            font-size: 5.5px;
             font-weight: bold;
             display: block;
             text-transform: uppercase;
@@ -122,7 +130,7 @@
             border: none;
             border-bottom: 1px dotted #666;
             background: transparent;
-            font-size: 8px;
+            font-size: 7.5px;
             outline: none;
             padding: 0px;
         }
@@ -246,7 +254,7 @@
                 </tr>
             </table>
             <div class="section-title">Procedimentos Realizados (12 Linhas)</div>
-            <table style="text-align:center; font-size:7.5px;">
+            <table style="text-align:center; font-size:7px;">
                 <tr style="background:#eee;">
                     <td style="width:5%;">Linha</td>
                     <td style="width:35%;">PROCEDIMENTO</td>
@@ -279,7 +287,7 @@
                 MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
                 <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
             </div>
-            <div class="section-title">Identificação do Estabelecimento de Saúde</div>
+            <div class="section-title">1 a 4. Identificação do Estabelecimento de Saúde</div>
             <table>
                 <tr>
                     <td style="width:75%"><label>1. Nome do Estabelecimento Solicitante</label><input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE"></td>
@@ -290,7 +298,7 @@
                     <td><label>4. CNES</label><input type="text" value="2380846"></td>
                 </tr>
             </table>
-            <div class="section-title">Identificação do Paciente</div>
+            <div class="section-title">5 a 16. Identificação do Paciente</div>
             <table>
                 <tr>
                     <td style="width:75%"><label>5. Nome do Paciente</label><input type="text" id="pacienteFolha2"></td>
@@ -300,24 +308,97 @@
                     <td><label>7. Cartão Nacional de Saúde (CNS)</label><input type="text" id="cnsFolha2"></td>
                     <td><label>8. Data de Nascimento</label><input type="date" id="nascFolha2"></td>
                 </tr>
-                <tr><td colspan="2"><label>11. Nome da Mãe</label><input type="text" id="maeFolha2"></td></tr>
-                <tr><td colspan="2"><label>12. Endereço / Município / UF / CEP</label><input type="text" id="endFolha2" value="FRUTUOSO GOMES - RN"></td></tr>
+                <tr>
+                    <td colspan="2"><label>11. Nome da Mãe ou Responsável</label><input type="text" id="maeFolha2"></td>
+                </tr>
+                <tr>
+                    <td><label>12. Endereço (Rua, Nº, Bairro)</label><input type="text" id="enderecoFolha2"></td>
+                    <td>
+                        <table style="border:none; margin:0;">
+                            <tr>
+                                <td style="border:none; padding:0;"><label>13. Município</label><input type="text" id="municipioFolha2" value="FRUTUOSO GOMES"></td>
+                                <td style="border:none; padding:0; width:50px;"><label>16. CEP</label><input type="text" id="cepFolha2"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>14. Telefone de Contato</label><input type="text" id="telFolha2"></td>
+                    <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
+                </tr>
             </table>
-            <div class="section-title">Justificativa da Internação</div>
+            <div class="section-title">17 a 26. Justificativa da Internação</div>
             <table>
                 <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2"></textarea></td></tr>
                 <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao"></td></tr>
                 <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><input type="text" id="resultadosExames"></td></tr>
-                <tr><td><label>20. Diagnóstico Inicial &nbsp;|&nbsp; 21. CID-10 Principal</label><input type="text" id="diagCid" placeholder="Ex: PÉ DIABÉTICO | E10.5"></td></tr>
+                <tr>
+                    <td>
+                        <table style="border:none; margin:0;">
+                            <tr>
+                                <td style="border:none; padding:0;"><label>20. Diagnóstico Inicial</label><input type="text" id="diagInicial"></td>
+                                <td style="border:none; padding:0;"><label>21. CID-10 Principal</label><input type="text" id="cidPrinc"></td>
+                                <td style="border:none; padding:0;"><label>22. CID-10 Secundário</label><input type="text" id="cidSec"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
             </table>
+            <div class="section-title">27 a 35. Procedimento Solicitado e Profissional</div>
             <table>
                 <tr>
-                    <td style="width:75%"><label>24. Descrição do Procedimento</label><input type="text" id="procSolFolha2"></td>
-                    <td style="width:25%"><label>25. Código</label><input type="text" id="codProcFolha2"></td>
+                    <td style="width:75%"><label>27. Descrição do Procedimento Solicitado</label><input type="text" id="procSolFolha2"></td>
+                    <td style="width:25%"><label>28. Código</label><input type="text" id="codProcFolha2"></td>
                 </tr>
                 <tr>
-                    <td><label>30. Profissional Solicitante</label><input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA"></td>
-                    <td><label>29. CPF do Profissional</label><input type="text" id="cpfSolicitanteFolha2"></td>
+                    <td>
+                        <table style="border:none; margin:0;">
+                            <tr>
+                                <td style="border:none; padding:0;"><label>29. Clínica</label>
+                                    <select id="clinica">
+                                        <option value="">Selecione</option>
+                                        <option value="Médica">Médica</option>
+                                        <option value="Cirúrgica">Cirúrgica</option>
+                                        <option value="Obstétrica">Obstétrica</option>
+                                        <option value="Pediátrica">Pediátrica</option>
+                                    </select>
+                                </td>
+                                <td style="border:none; padding:0;"><label>30. Caráter</label>
+                                    <select id="carater">
+                                        <option value="">Selecione</option>
+                                        <option value="Emergência">Emergência</option>
+                                        <option value="Urgência">Urgência</option>
+                                        <option value="Eletiva">Eletiva</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td><label>32. CPF/CNS Profissional</label><input type="text" id="cpfProfissional"></td>
+                </tr>
+                <tr>
+                    <td><label>33. Nome do Profissional Solicitante</label><input type="text" id="medicoSolicitante" value=""></td>
+                    <td><label>34. Data</label><input type="date" id="dataSolicitacao"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label>35. Assinatura e Carimbo (CRM)</label><div style="height:25px;"></div></td>
+                </tr>
+            </table>
+            <div class="section-title">36 a 45. Causas Externas (Acidentes ou Violências)</div>
+            <table>
+                <tr>
+                    <td colspan="2"><label>36. Acidente de Trânsito ( ) &nbsp;&nbsp; 37. Acidente Trabalho Típico ( ) &nbsp;&nbsp; 38. Acidente Trabalho Trajeto ( )</label></td>
+                    <td><label>39. CNPJ Seguradora</label><input type="text" id="cnpjSeguradora"></td>
+                </tr>
+                <tr>
+                    <td><label>40. N° Bilhete</label><input type="text" id="numBilhete"></td>
+                    <td><label>41. Série</label><input type="text" id="serieBilhete"></td>
+                    <td><label>42. CNPJ Empresa</label><input type="text" id="cnpjEmpresa"></td>
+                </tr>
+                <tr>
+                    <td><label>43. CNAE Empresa</label><input type="text" id="cnaeEmpresa"></td>
+                    <td><label>44. CBOR</label><input type="text" id="cbor"></td>
+                    <td><label>45. Vínculo Previdência</label><input type="text" id="vinculoPrev"></td>
                 </tr>
             </table>
         </div>
@@ -354,11 +435,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v12', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v13', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v12');
+        const salvos = localStorage.getItem('aih_dados_v13');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -372,9 +453,9 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v12');
+            localStorage.removeItem('aih_dados_v13');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
-                if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario', 'nacionalidade'].includes(c.id)) c.value = '';
+                if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
         }
     }
