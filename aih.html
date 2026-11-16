@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIH Completa - Padrão Oficial Frutuoso Gomes</title>
+    <title>AIH - 3 Folhas Oficiais | Frutuoso Gomes</title>
     <style>
-        :root {
-            --border-color: #000;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -75,10 +71,10 @@
             color: #fff !important;
         }
 
-        /* Estrutura das 3 Páginas Oficiais (Tabelas Estritas) */
+        /* Estrutura das 3 Páginas Oficiais */
         .aih-page {
             width: 100%;
-            border: 2px solid var(--border-color);
+            border: 2px solid #000;
             background: #fff;
             margin-bottom: 40px;
             padding: 15px;
@@ -90,13 +86,13 @@
         table.aih-table {
             width: 100%;
             border-collapse: collapse;
-            border: 1px solid var(--border-color);
-            margin-top: 5px;
-            margin-bottom: 5px;
+            border: 1px solid #000;
+            margin-top: 4px;
+            margin-bottom: 4px;
         }
 
         table.aih-table th, table.aih-table td {
-            border: 1px solid var(--border-color);
+            border: 1px solid #000;
             padding: 4px 6px;
             vertical-align: top;
             text-align: left;
@@ -105,8 +101,7 @@
         .header-table td {
             text-align: center;
             font-weight: bold;
-            font-size: 11px;
-            border: 1px solid var(--border-color);
+            font-size: 10px;
             background: #f5f5f5;
         }
 
@@ -115,9 +110,10 @@
             font-weight: bold;
             text-align: left;
             padding: 4px 6px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #000;
             font-size: 10px;
             text-transform: uppercase;
+            margin-top: 5px;
         }
 
         label {
@@ -157,7 +153,7 @@
     <div class="container">
         <!-- Barra de Controles -->
         <div class="action-bar">
-            <h2>Gerador de AIH - Layout Oficial Frutuoso Gomes</h2>
+            <h2>AIH - 3 Folhas Oficiais (Frutuoso Gomes)</h2>
             <div class="btn-group">
                 <button onclick="window.print()">🖨️ Imprimir / PDF (3 Folhas)</button>
                 <button onclick="exportarWord()">📄 Baixar Word (Oficial)</button>
@@ -166,22 +162,22 @@
         </div>
 
         <div id="conteudoImpresso">
-            <!-- ================= FOLHA 1: GUIA AIH OFICIAL ================= -->
+            <!-- ================= FOLHA 1: AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
                         <td>
                             PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
                             Hospital Maternidade Severina Carlos de Andrade<br>
-                            CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
-                            <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>
+                            C.N.P.J 08.349.052/0001-80 — Frutuoso Gomes - RN<br>
+                            <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR</strong>
                         </td>
                     </tr>
                 </table>
 
                 <table class="aih-table">
                     <tr>
-                        <td style="width: 40%;">
+                        <td style="width: 35%;">
                             <label>Número da AIH</label>
                             <input type="text" id="numAih">
                         </td>
@@ -189,7 +185,7 @@
                             <label>Prontuário</label>
                             <input type="text" id="prontuario">
                         </td>
-                        <td style="width: 25%;">
+                        <td style="width: 30%;">
                             <label>Tipo</label>
                             <input type="text" id="tipoAih" value="01 - Inicial">
                         </td>
@@ -225,7 +221,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="width: 20%;">
                             <label>Sexo</label>
                             <select id="sexoPaciente">
                                 <option value="">Selecione</option>
@@ -233,12 +229,12 @@
                                 <option value="F">Feminino</option>
                             </select>
                         </td>
-                        <td>
+                        <td style="width: 40%;">
                             <label>Data de Nascimento</label>
                             <input type="date" id="nascimentoPaciente">
                         </td>
-                        <td>
-                            <label>Cartão SUS (CNS)</label>
+                        <td style="width: 40%;">
+                            <label>Cartão SUS</label>
                             <input type="text" id="cnsPaciente">
                         </td>
                     </tr>
@@ -255,7 +251,7 @@
                         </td>
                         <td>
                             <label>Município / UF</label>
-                            <input type="text" id="municipioPaciente" value="Frutuoso Gomes - RN">
+                            <input type="text" id="municipioPaciente" value="FRUTUOSO GOMES - RN">
                         </td>
                     </tr>
                 </table>
@@ -268,7 +264,7 @@
                             <input type="text" id="procedimentoSolicitado">
                         </td>
                         <td style="width: 30%;">
-                            <label>Mudança Procedimento (S/N)</label>
+                            <label>Mudança de Procedimento (S/N)</label>
                             <input type="text" id="mudancaProc" value="N">
                         </td>
                     </tr>
@@ -295,14 +291,15 @@
                 </table>
             </div>
 
-            <!-- ================= FOLHA 2: PRONTUÁRIO E JUSTIFICATIVA ================= -->
+            <!-- ================= FOLHA 2: PRONTUÁRIO DE INTERNAÇÃO ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
                         <td>
                             ESTADO DO RIO GRANDE DO NORTE<br>
-                            Secretaria Municipal de Saúde - Hospital Maternidade Severina Carlos de Andrade<br>
-                            <strong>PRONTUÁRIO DE INTERNAÇÃO E JUSTIFICATIVA CLÍNICA</strong>
+                            Secretaria Municipal de Saúde de Frutuoso Gomes<br>
+                            Hospital Maternidade Severina Carlos de Andrade<br>
+                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>
                         </td>
                     </tr>
                 </table>
@@ -310,18 +307,18 @@
                 <table class="aih-table">
                     <tr>
                         <td style="width: 75%;">
-                            <label>Nome do Cliente</label>
+                            <label>Nome do Paciente</label>
                             <input type="text" id="clienteProntuario">
                         </td>
                         <td style="width: 25%;">
-                            <label>Nº Prontuário</label>
+                            <label>Nº do Prontuário</label>
                             <input type="text" id="numProntuario">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>Município / UF</label>
-                            <input type="text" value="Frutuoso Gomes - RN">
+                            <label>Endereço / Município / UF</label>
+                            <input type="text" id="endProntuario" value="FRUTUOSO GOMES - RN">
                         </td>
                         <td>
                             <label>Data de Nascimento</label>
@@ -330,42 +327,43 @@
                     </tr>
                 </table>
 
-                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA E JUSTIFICATIVA</div>
+                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
                 <table class="aih-table">
                     <tr>
                         <td>
-                            <label>20. Principais Sinais e Sintomas Clínicos</label>
-                            <textarea id="sinaisSintomas" rows="3"></textarea>
+                            <label>Principais Sinais e Sintomas Clínicos / Justificativa</label>
+                            <textarea id="sinaisSintomas" rows="4" placeholder="Descreva o quadro clínico..."></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>21. Condições que Justificam a Internação</label>
-                            <textarea id="condicoesInternacao" rows="2"></textarea>
+                            <label>Condições que Justificam a Internação</label>
+                            <textarea id="condicoesInternacao" rows="3"></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>22. Principais Resultados de Provas Diagnósticas / Exames</label>
-                            <textarea id="resultadosExames" rows="2"></textarea>
+                            <label>Resultados de Provas Diagnósticas / Exames</label>
+                            <textarea id="resultadosExames" rows="3"></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>23. Diagnóstico Inicial &nbsp;|&nbsp; 24. CID-10 Principal</label>
-                            <input type="text" id="diagInicial" placeholder="Descrição e CID">
+                            <label>Diagnóstico Inicial &nbsp;|&nbsp; CID-10 Principal</label>
+                            <input type="text" id="diagInicial">
                         </td>
                     </tr>
                 </table>
             </div>
 
-            <!-- ================= FOLHA 3: ANESTESIA E ATO CIRÚRGICO ================= -->
+            <!-- ================= FOLHA 3: BOLETIM OPERATÓRIO / CIRURGIA ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
                         <td>
-                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                            <strong>FICHA DE ANESTESIA E DESCRIÇÃO DO ATO CIRÚRGICO</strong>
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                            Secretaria Municipal de Saúde — Hospital Maternidade Severina Carlos de Andrade<br>
+                            <strong>BOLETIM OPERATÓRIO / RELATÓRIO DE INTERNAÇÃO</strong>
                         </td>
                     </tr>
                 </table>
@@ -373,32 +371,22 @@
                 <table class="aih-table">
                     <tr>
                         <td style="width: 75%;">
-                            <label>Paciente</label>
+                            <label>Nome</label>
                             <input type="text" id="nomeCirurgia">
                         </td>
                         <td style="width: 25%;">
-                            <label>Nº Prontuário</label>
+                            <label>Prontuário</label>
                             <input type="text" id="prontuarioCirurgia">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>Cirurgia Realizada</label>
-                            <input type="text" id="descCirurgiaRealizada">
+                            <label>Diagnóstico Pré-Operatório / Indicação</label>
+                            <input type="text" id="diagPreOp">
                         </td>
-                        <td>
-                            <label>Código SSM</label>
-                            <input type="text" id="codigoSSM">
-                        </td>
-                    </tr>
-                    <tr>
                         <td>
                             <label>Data da Cirurgia</label>
                             <input type="date" id="dataCirurgia">
-                        </td>
-                        <td>
-                            <label>Início / Término</label>
-                            <input type="text" id="inicioTermino" placeholder="Ex: 11:15 - 11:59">
                         </td>
                     </tr>
                 </table>
@@ -407,7 +395,7 @@
                 <table class="aih-table">
                     <tr>
                         <td style="width: 70%;">
-                            <label>Médico Cirurgião</label>
+                            <label>Operador / Cirurgião</label>
                             <input type="text" id="medicoCirurgiao" value="LUCIDIO JÁCOME FERREIRA">
                         </td>
                         <td style="width: 30%;">
@@ -421,13 +409,13 @@
                             <input type="text" id="primeiroAux">
                         </td>
                         <td>
-                            <label>CRM / Conselho</label>
+                            <label>CRM</label>
                             <input type="text" id="crmAux1">
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <label>Médico Anestesista</label>
+                            <label>Anestesista</label>
                             <input type="text" id="medicoAnestesista">
                         </td>
                         <td>
@@ -437,12 +425,12 @@
                     </tr>
                 </table>
 
-                <div class="section-header">DESCRIÇÃO DO ATO CIRÚRGICO</div>
+                <div class="section-header">RELATÓRIO DE INTERNAÇÃO E ATO CIRÚRGICO</div>
                 <table class="aih-table">
                     <tr>
                         <td>
-                            <label>Relatório Detalhado da Cirurgia</label>
-                            <textarea id="relatorioCirurgico" rows="5"></textarea>
+                            <label>Aspectos nos órgãos, lesões, técnicas e descrição do processo</label>
+                            <textarea id="relatorioCirurgico" rows="6" placeholder="Descreva os achados operatórios..."></textarea>
                         </td>
                     </tr>
                 </table>
@@ -456,11 +444,11 @@
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_oficial_dados', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_oficial', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_oficial_dados');
+            const salvos = localStorage.getItem('aih_3_folhas_oficial');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -472,14 +460,14 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_oficial_dados');
+                localStorage.removeItem('aih_3_folhas_oficial');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
-                    if (!['medicoCirurgiao', 'crmCirurgiao', 'crmAnestesista', 'municipioPaciente'].includes(c.id)) c.value = '';
+                    if (!['medicoCirurgiao', 'crmCirurgiao', 'crmAnestesista', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
             }
         }
 
-        // Sincronização automática de Nome e Prontuário entre as folhas
+        // Sincronização automática de Nome e Prontuário entre as 3 folhas
         document.addEventListener('DOMContentLoaded', () => {
             carregarDados();
 
@@ -514,7 +502,7 @@
         // Exportador para Word mantendo tabelas rígidas oficiais
         function exportarWord() {
             const conteudoHTML = document.getElementById('conteudoImpresso').innerHTML;
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH Oficial</title><style>body { font-family: Arial, sans-serif; font-size: 10px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 15px; } table.aih-table td { border: 1px solid #000; padding: 5px; vertical-align: top; } .aih-page { page-break-after: always; }</style></head><body>';
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 10px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 15px; } table.aih-table td { border: 1px solid #000; padding: 5px; vertical-align: top; } .aih-page { page-break-after: always; }</style></head><body>';
             const rodape = '</body></html>';
             const codigoCompleto = cabecalho + conteudoHTML + rodape;
 
@@ -522,7 +510,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'AIH_Oficial_Severina_Carlos.doc';
+            a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
             document.body.appendChild(a);
             a.click();
             setTimeout(() => {
