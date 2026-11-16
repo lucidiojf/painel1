@@ -62,13 +62,13 @@
             color: #fff !important;
         }
 
-        /* Páginas A4 Estritas */
+        /* Páginas A4 Ajustadas para caixas perfeitas */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 8mm 10mm;
+            padding: 6mm 10mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             box-sizing: border-box;
@@ -79,12 +79,12 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-bottom: 2px;
+            margin-bottom: 1.5px;
         }
 
         th, td {
             border: 1px solid #000;
-            padding: 2px 3px;
+            padding: 1.5px 3px;
             vertical-align: top;
             text-align: left;
         }
@@ -92,26 +92,18 @@
         .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 8.5px;
+            font-size: 8px;
             background: #f9f9f9;
-            padding: 3px;
-            line-height: 1.2;
-        }
-
-        .header-box img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 2px auto;
+            padding: 2px;
+            line-height: 1.1;
         }
 
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 7px;
-            padding: 2px 3px;
+            font-size: 6.5px;
+            padding: 1.5px 3px;
             margin-top: 2px;
             margin-bottom: 1px;
         }
@@ -143,7 +135,7 @@
         @media print {
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
-            .aih-page { border: none; box-shadow: none; margin: 0; width: 100%; height: 100%; padding: 6mm; }
+            .aih-page { border: none; box-shadow: none; margin: 0; width: 100%; height: 100%; padding: 5mm; }
         }
     </style>
 </head>
@@ -377,17 +369,31 @@
                     <td><label>32. CPF/CNS Profissional</label><input type="text" id="cpfProfissional"></td>
                 </tr>
                 <tr>
-                    <td><label>33. Nome do Profissional Solicitante</label><input type="text" id="medicoSolicitante" value=""></td>
-                    <td><label>34. Data</label><input type="date" id="dataSolicitacao"></td>
+                    <td>
+                        <label>33. Profissional Solicitante / Assistente</label>
+                        <select id="medicoSolicitante" onchange="atualizarCpfMedico()">
+                            <option value="">Selecione o Médico</option>
+                            <option value="LUCIDIO JÁCOME FERREIRA" data-cpf="099.311.824-07">LUCIDIO JÁCOME FERREIRA</option>
+                            <option value="HIAGO FRANCIMAR JACOME DE SOUZA" data-cpf="050.980.494-23">HIAGO FRANCIMAR JACOME DE SOUZA</option>
+                            <option value="FRENDSON CAMARA DE OLIVEIRA" data-cpf="012.045.714-81">FRENDSON CAMARA DE OLIVEIRA</option>
+                            <option value="NALYGIA PAULO PAIVA" data-cpf="055.249.504-28">NALYGIA PAULO PAIVA</option>
+                            <option value="CARLOS ALEXANDRE DA SILVA" data-cpf="097.120.314-89">CARLOS ALEXANDRE DA SILVA</option>
+                            <option value="KAREN GIZELLY PAULO SILVA" data-cpf="061.647.044-48">KAREN GIZELLY PAULO SILVA</option>
+                            <option value="SERVULO AUGUSTO REGALADO FERREIRA" data-cpf="106.967.184-30">SERVULO AUGUSTO REGALADO FERREIRA</option>
+                            <option value="FRANCISCO DAS C D JACOME VALENTIM" data-cpf="FRANCISCO DAS C D JACOME VALENTIM">FRANCISCO DAS C D JACOME VALENTIM</option>
+                        </select>
+                    </td>
+                    <td><label>32. Nº do Documento (CPF)</label><input type="text" id="cpfSolicitanteFolha2" readonly></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><label>35. Assinatura e Carimbo (CRM)</label><div style="height:25px;"></div></td>
+                    <td><label>34. Data da Solicitação</label><input type="date" id="dataSolicitacao"></td>
+                    <td><label>35. Assinatura e Carimbo</label></td>
                 </tr>
             </table>
             <div class="section-title">36 a 45. Causas Externas (Acidentes ou Violências)</div>
             <table>
                 <tr>
-                    <td colspan="2"><label>36. Acidente de Trânsito ( ) &nbsp;&nbsp; 37. Acidente Trabalho Típico ( ) &nbsp;&nbsp; 38. Acidente Trabalho Trajeto ( )</label></td>
+                    <td colspan="2"><label>36 a 38. Acidente (Trânsito / Trabalho Típico / Trajeto)</label><input type="text" id="acidenteTipo"></td>
                     <td><label>39. CNPJ Seguradora</label><input type="text" id="cnpjSeguradora"></td>
                 </tr>
                 <tr>
@@ -399,6 +405,20 @@
                     <td><label>43. CNAE Empresa</label><input type="text" id="cnaeEmpresa"></td>
                     <td><label>44. CBOR</label><input type="text" id="cbor"></td>
                     <td><label>45. Vínculo Previdência</label><input type="text" id="vinculoPrev"></td>
+                </tr>
+            </table>
+            <div class="section-title">46 a 52. Autorização</div>
+            <table>
+                <tr>
+                    <td style="width:70%"><label>46. Nome do Profissional Autorizador</label><input type="text" id="nomeAutorizador"></td>
+                    <td style="width:30%"><label>47. Cód. Órgão Emissor</label><input type="text" id="codOrgaoEmissor" value="SES-RN"></td>
+                </tr>
+                <tr>
+                    <td><label>49. Nº da Autorização (AIH)</label><input type="text" id="numAutorizacaoAIH"></td>
+                    <td><label>48 & 50. CPF / Data Autorização</label><input type="text" id="dataAutorizacao"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label>51 & 52. Assinatura e Carimbo do Gestor / Autorizador</label><div style="height:15px;"></div></td>
                 </tr>
             </table>
         </div>
@@ -431,15 +451,23 @@
 </div>
 
 <script>
+    function atualizarCpfMedico() {
+        const select = document.getElementById('medicoSolicitante');
+        const selectedOpt = select.options[select.selectedIndex];
+        const cpf = selectedOpt.getAttribute('data-cpf') || '';
+        document.getElementById('cpfSolicitanteFolha2').value = cpf;
+        salvarDados();
+    }
+
     function salvarDados() {
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v13', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v14', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v13');
+        const salvos = localStorage.getItem('aih_dados_v14');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -453,7 +481,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v13');
+            localStorage.removeItem('aih_dados_v14');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
