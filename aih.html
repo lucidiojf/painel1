@@ -2,27 +2,18 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>AIH - 3 Folhas Oficiais (Padrão Frutuoso Gomes)</title>
+    <title>AIH - 3 Folhas Oficiais (Frutuoso Gomes)</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
-
         body {
             background-color: #525659;
+            font-family: Arial, sans-serif;
+            margin: 0;
             padding: 20px;
-            color: #000;
         }
-
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
-
-        /* Barra de Ações (Fica na tela, some na impressão/Word) */
         .action-bar {
             background: #1a365d;
             padding: 15px;
@@ -31,19 +22,12 @@
             align-items: center;
             border-radius: 6px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-
         .action-bar h2 {
             color: #fff;
             font-size: 1.1rem;
+            margin: 0;
         }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
         .btn-group button {
             background: #fff;
             color: #1a365d;
@@ -52,370 +36,258 @@
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
-            transition: background 0.2s;
         }
-
         .btn-group button:hover {
             background: #e2e8f0;
         }
-
-        .btn-clear {
-            background: #e53e3e !important;
-            color: #fff !important;
-        }
-
-        /* Folhas A4 Estritas */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 12mm;
+            padding: 15mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
-            break-after: page;
-            font-size: 9.5px;
-            position: relative;
+            box-sizing: border-box;
         }
-
-        .header-table, .aih-table {
+        table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
+            font-size: 9.5px;
         }
-
-        .header-table td, .aih-table td {
+        th, td {
             border: 1px solid #000;
-            padding: 3px 5px;
+            padding: 4px 6px;
             vertical-align: top;
             text-align: left;
         }
-
-        .header-logo-text {
+        .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 9.5px;
-            line-height: 1.3;
+            font-size: 10px;
+            background: #f5f5f5;
+            padding: 6px;
         }
-
-        .section-header {
+        .section-title {
             background: #dcdcdc;
             font-weight: bold;
-            text-align: left;
-            padding: 3px 5px;
-            border: 1px solid #000;
-            font-size: 9px;
             text-transform: uppercase;
-            margin-top: 4px;
-            margin-bottom: 2px;
+            font-size: 9px;
+            padding: 4px;
         }
-
         label {
             font-size: 7.5px;
             font-weight: bold;
             display: block;
-            color: #333;
             text-transform: uppercase;
-            margin-bottom: 1px;
+            color: #333;
         }
-
-        input[type="text"], input[type="date"], select, textarea {
+        input, select, textarea {
             width: 100%;
             border: none;
-            border-bottom: 1px dotted #444;
+            border-bottom: 1px dotted #666;
             background: transparent;
             font-size: 9.5px;
-            padding: 1px;
             outline: none;
         }
-
-        input:focus, select:focus, textarea:focus {
-            background: #ffffe0;
-            border-bottom: 1px solid #1a365d;
-        }
-
         @media print {
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
-            .container { max-width: 100%; padding: 0; margin: 0; }
-            .aih-page { border: none; box-shadow: none; margin: 0; padding: 10mm; width: 100%; height: 100%; page-break-after: always; }
+            .aih-page { border: none; box-shadow: none; margin: 0; width: 100%; height: 100%; padding: 10mm; }
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <!-- Barra de Ações -->
-        <div class="action-bar">
-            <h2>Gerador AIH - 3 Folhas Oficiais</h2>
-            <div class="btn-group">
-                <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-                <button onclick="exportarWordPuro()">📄 Baixar Word (Editável)</button>
-                <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
-            </div>
-        </div>
-
-        <div id="conteudoImpresso">
-            <!-- ================= FOLHA 1 ================= -->
-            <div class="aih-page">
-                <table class="header-table">
-                    <tr>
-                        <td class="header-logo-text">
-                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                            Hospital Maternidade Severina Carlos de Andrade<br>
-                            CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
-                            <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>
-                        </td>
-                    </tr>
-                </table>
-
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 35%;"><label>Número da AIH</label><input type="text" id="numAih"></td>
-                        <td style="width: 35%;"><label>Prontuário</label><input type="text" id="prontuario"></td>
-                        <td style="width: 30%;"><label>Tipo</label><input type="text" id="tipoAih" value="01 - Inicial"></td>
-                    </tr>
-                    <tr>
-                        <td><label>Apresentação</label><input type="text" id="apresentacao"></td>
-                        <td colspan="2"><label>Órgão Emissor</label><input type="text" id="orgaoEmissor" value="SES-RN"></td>
-                    </tr>
-                    <tr>
-                        <td><label>Data da Internação</label><input type="date" id="dataInternacao"></td>
-                        <td colspan="2"><label>Data da Saída</label><input type="date" id="dataSaida"></td>
-                    </tr>
-                </table>
-
-                <div class="section-header">DADOS DO PACIENTE</div>
-                <table class="aih-table">
-                    <tr><td colspan="3"><label>Nome do Paciente</label><input type="text" id="nomePaciente"></td></tr>
-                    <tr>
-                        <td style="width: 25%;">
-                            <label>Sexo</label>
-                            <select id="sexoPaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select>
-                        </td>
-                        <td style="width: 40%;"><label>Data de Nascimento</label><input type="date" id="nascimentoPaciente"></td>
-                        <td style="width: 35%;"><label>Cartão SUS</label><input type="text" id="cnsPaciente"></td>
-                    </tr>
-                    <tr><td colspan="3"><label>Nome da Mãe</label><input type="text" id="nomeMae"></td></tr>
-                    <tr>
-                        <td colspan="2"><label>Endereço / Bairro</label><input type="text" id="enderecoPaciente"></td>
-                        <td><label>Município / UF</label><input type="text" id="municipioPaciente" value="FRUTUOSO GOMES - RN"></td>
-                    </tr>
-                </table>
-
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 70%;"><label>Procedimento Solicitado</label><input type="text" id="procedimentoSolicitado"></td>
-                        <td style="width: 30%;"><label>Mudança Procedimento (S/N)</label><input type="text" id="mudancaProc" value="N"></td>
-                    </tr>
-                    <tr>
-                        <td><label>Procedimento Realizado</label><input type="text" id="procedimentoRealizado"></td>
-                        <td><label>CID Principal / Secundário</label><input type="text" id="cidPrincipal"></td>
-                    </tr>
-                    <tr>
-                        <td><label>CPF Solicitante</label><input type="text" id="cpfSolicitante"></td>
-                        <td><label>CPF Autorizador</label><input type="text" id="cpfAutorizador"></td>
-                    </tr>
-                </table>
-
-                <div class="section-header">PROCEDIMENTOS REALIZADOS</div>
-                <table class="aih-table" style="text-align: center;">
-                    <tr style="background: #f0f0f0;"><td>Linha</td><td>PROCEDIMENTO</td><td>Qtd.</td><td>C P F</td><td>C B O</td><td>CNES</td><td>CNPJ</td></tr>
-                    <tr>
-                        <td>01</td>
-                        <td><input type="text" id="proc1"></td>
-                        <td><input type="text" value="1" style="text-align:center;"></td>
-                        <td><input type="text" id="cpfProc1"></td>
-                        <td><input type="text" id="cbo1"></td>
-                        <td><input type="text" value="2380846" style="text-align:center;"></td>
-                        <td><input type="text" value="08.349.052/0001-80" style="text-align:center;"></td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- ================= FOLHA 2 ================= -->
-            <div class="aih-page">
-                <table class="header-table">
-                    <tr>
-                        <td class="header-logo-text">
-                            MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
-                            <strong>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</strong>
-                        </td>
-                    </tr>
-                </table>
-
-                <div class="section-header">IDENTIFICAÇÃO DO ESTABELECIMENTO DE SAÚDE</div>
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 75%;"><label>1. Nome do Estabelecimento Solicitante</label><input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE"></td>
-                        <td style="width: 25%;"><label>2. CNES</label><input type="text" value="2380846"></td>
-                    </tr>
-                    <tr>
-                        <td><label>3. Nome do Estabelecimento Executante</label><input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE"></td>
-                        <td><label>4. CNES</label><input type="text" value="2380846"></td>
-                    </tr>
-                </table>
-
-                <div class="section-header">IDENTIFICAÇÃO DO PACIENTE</div>
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 75%;"><label>5. Nome do Paciente</label><input type="text" id="pacienteFolha2"></td>
-                        <td style="width: 25%;"><label>6. Prontuário</label><input type="text" id="prontuarioFolha2"></td>
-                    </tr>
-                    <tr>
-                        <td><label>7. Cartão Nacional de Saúde (CNS)</label><input type="text" id="cnsFolha2"></td>
-                        <td><label>8. Data de Nascimento</label><input type="date" id="nascFolha2"></td>
-                    </tr>
-                    <tr><td colspan="2"><label>11. Nome da Mãe</label><input type="text" id="maeFolha2"></td></tr>
-                    <tr><td colspan="2"><label>12. Endereço / Município / UF / CEP</label><input type="text" id="endFolha2" value="FRUTUOSO GOMES - RN"></td></tr>
-                </table>
-
-                <div class="section-header">JUSTIFICATIVA DA INTERNAÇÃO</div>
-                <table class="aih-table">
-                    <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="3"></textarea></td></tr>
-                    <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao"></td></tr>
-                    <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><input type="text" id="resultadosExames"></td></tr>
-                    <tr><td><label>20. Diagnóstico Inicial &nbsp;|&nbsp; 21. CID-10 Principal</label><input type="text" id="diagCid" placeholder="Ex: PÉ DIABÉTICO | E10.5"></td></tr>
-                </table>
-
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 75%;"><label>24. Descrição do Procedimento</label><input type="text" id="procSolFolha2"></td>
-                        <td style="width: 25%;"><label>25. Código</label><input type="text" id="codProcFolha2"></td>
-                    </tr>
-                    <tr>
-                        <td><label>30. Profissional Solicitante</label><input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA"></td>
-                        <td><label>29. CPF do Profissional</label><input type="text" id="cpfSolicitanteFolha2"></td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- ================= FOLHA 3 ================= -->
-            <div class="aih-page">
-                <table class="header-table">
-                    <tr>
-                        <td class="header-logo-text">
-                            ESTADO DO RIO GRANDE DO NORTE<br>
-                            Secretaria Municipal de Saúde de Frutuoso Gomes<br>
-                            Hospital Maternidade Severina Carlos de Andrade<br>
-                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>
-                        </td>
-                    </tr>
-                </table>
-
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 75%;"><label>Nome do Cliente / Paciente</label><input type="text" id="clienteProntuario"></td>
-                        <td style="width: 25%;"><label>Nº do Prontuário</label><input type="text" id="numProntuario"></td>
-                    </tr>
-                    <tr>
-                        <td><label>Endereço / Município / UF</label><input type="text" id="endProntuario" value="FRUTUOSO GOMES - RN"></td>
-                        <td><label>Data de Nascimento</label><input type="date" id="nascProntuario"></td>
-                    </tr>
-                </table>
-
-                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
-                <table class="aih-table">
-                    <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="16" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
-                    <tr><td><label>Diagnóstico Inicial &nbsp;|&nbsp; Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
-                </table>
-            </div>
+<div class="container">
+    <div class="action-bar">
+        <h2>Gerador AIH - 3 Folhas Oficiais</h2>
+        <div class="btn-group">
+            <button onclick="window.print()">🖨️ Imprimir / PDF</button>
+            <button onclick="exportarWordExato()">📄 Baixar Word Oficial</button>
         </div>
     </div>
 
-    <script>
-        function salvarDados() {
-            const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
-            const dados = {};
-            campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_v7', JSON.stringify(dados));
-        }
+    <div id="conteudoImpresso">
+        <!-- FOLHA 1 -->
+        <div class="aih-page">
+            <table class="header-box">
+                <tr><td>PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>Hospital Maternidade Severina Carlos de Andrade<br>CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br><b>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</b></td></tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="width:35%"><label>Número da AIH</label><input type="text" id="numAih"></td>
+                    <td style="width:35%"><label>Prontuário</label><input type="text" id="prontuario"></td>
+                    <td style="width:30%"><label>Tipo</label><input type="text" id="tipoAih" value="01 - Inicial"></td>
+                </tr>
+                <tr>
+                    <td><label>Apresentação</label><input type="text" id="apresentacao"></td>
+                    <td colspan="2"><label>Órgão Emissor</label><input type="text" id="orgaoEmissor" value="SES-RN"></td>
+                </tr>
+                <tr>
+                    <td><label>Data da Internação</label><input type="date" id="dataInternacao"></td>
+                    <td colspan="2"><label>Data da Saída</label><input type="date" id="dataSaida"></td>
+                </tr>
+            </table>
+            <div class="section-title">Dados do Paciente</div>
+            <table>
+                <tr><td colspan="3"><label>Nome do Paciente</label><input type="text" id="nomePaciente"></td></tr>
+                <tr>
+                    <td style="width:25%"><label>Sexo</label><select id="sexoPaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select></td>
+                    <td style="width:40%"><label>Data de Nascimento</label><input type="date" id="nascimentoPaciente"></td>
+                    <td style="width:35%"><label>Cartão SUS</label><input type="text" id="cnsPaciente"></td>
+                </tr>
+                <tr><td colspan="3"><label>Nome da Mãe</label><input type="text" id="nomeMae"></td></tr>
+                <tr>
+                    <td colspan="2"><label>Endereço / Bairro</label><input type="text" id="enderecoPaciente"></td>
+                    <td><label>Município / UF</label><input type="text" id="municipioPaciente" value="FRUTUOSO GOMES - RN"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="width:70%"><label>Procedimento Solicitado</label><input type="text" id="procedimentoSolicitado"></td>
+                    <td style="width:30%"><label>Mudança Procedimento (S/N)</label><input type="text" id="mudancaProc" value="N"></td>
+                </tr>
+                <tr>
+                    <td><label>Procedimento Realizado</label><input type="text" id="procedimentoRealizado"></td>
+                    <td><label>CID Principal / Secundário</label><input type="text" id="cidPrincipal"></td>
+                </tr>
+                <tr>
+                    <td><label>CPF Solicitante</label><input type="text" id="cpfSolicitante"></td>
+                    <td><label>CPF Autorizador</label><input type="text" id="cpfAutorizador"></td>
+                </tr>
+            </table>
+            <div class="section-title">Procedimentos Realizados</div>
+            <table style="text-align:center;">
+                <tr style="background:#eee;"><td>Linha</td><td>PROCEDIMENTO</td><td>Qtd.</td><td>C P ف</td><td>C B O</td><td>CNES</td><td>CNPJ</td></tr>
+                <tr><td>01</td><td><input type="text" id="proc1"></td><td><input type="text" value="1"></td><td><input type="text" id="cpfProc1"></td><td><input type="text" id="cbo1"></td><td>2380846</td><td>08.349.052/0001-80</td></tr>
+            </table>
+        </div>
 
-        function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_v7');
-            if (salvos) {
-                const dados = JSON.parse(salvos);
-                for (const id in dados) {
-                    const campo = document.getElementById(id);
-                    if (campo) campo.value = dados[id];
-                }
-            }
-        }
+        <!-- FOLHA 2 -->
+        <div class="aih-page">
+            <table class="header-box">
+                <tr><td>MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br><b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b></td></tr>
+            </table>
+            <div class="section-title">Identificação do Estabelecimento de Saúde</div>
+            <table>
+                <tr>
+                    <td style="width:75%"><label>1. Nome do Estabelecimento Solicitante</label><input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE"></td>
+                    <td style="width:25%"><label>2. CNES</label><input type="text" value="2380846"></td>
+                </tr>
+                <tr>
+                    <td><label>3. Nome do Estabelecimento Executante</label><input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE"></td>
+                    <td><label>4. CNES</label><input type="text" value="2380846"></td>
+                </tr>
+            </table>
+            <div class="section-title">Identificação do Paciente</div>
+            <table>
+                <tr>
+                    <td style="width:75%"><label>5. Nome do Paciente</label><input type="text" id="pacienteFolha2"></td>
+                    <td style="width:25%"><label>6. Prontuário</label><input type="text" id="prontuarioFolha2"></td>
+                </tr>
+                <tr>
+                    <td><label>7. Cartão Nacional de Saúde (CNS)</label><input type="text" id="cnsFolha2"></td>
+                    <td><label>8. Data de Nascimento</label><input type="date" id="nascFolha2"></td>
+                </tr>
+                <tr><td colspan="2"><label>11. Nome da Mãe</label><input type="text" id="maeFolha2"></td></tr>
+                <tr><td colspan="2"><label>12. Endereço / Município / UF / CEP</label><input type="text" id="endFolha2" value="FRUTUOSO GOMES - RN"></td></tr>
+            </table>
+            <div class="section-title">Justificativa da Internação</div>
+            <table>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="3"></textarea></td></tr>
+                <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao"></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><input type="text" id="resultadosExames"></td></tr>
+                <tr><td><label>20. Diagnóstico Inicial &nbsp;|&nbsp; 21. CID-10 Principal</label><input type="text" id="diagCid" placeholder="Ex: PÉ DIABÉTICO | E10.5"></td></tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="width:75%"><label>24. Descrição do Procedimento</label><input type="text" id="procSolFolha2"></td>
+                    <td style="width:25%"><label>25. Código</label><input type="text" id="codProcFolha2"></td>
+                </tr>
+                <tr>
+                    <td><label>30. Profissional Solicitante</label><input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA"></td>
+                    <td><label>29. CPF do Profissional</label><input type="text" id="cpfSolicitanteFolha2"></td>
+                </tr>
+            </table>
+        </div>
 
-        function limparFormulario() {
-            if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_v7');
-                document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
-                    if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
-                });
-            }
-        }
+        <!-- FOLHA 3 -->
+        <div class="aih-page">
+            <table class="header-box">
+                <tr><td>ESTADO DO RIO GRANDE DO NORTE<br>Secretaria Municipal de Saúde de Frutuoso Gomes<br>Hospital Maternidade Severina Carlos de Andrade<br><b>PRONTUÁRIO DE INTERNAÇÃO</b></td></tr>
+            </table>
+            <table>
+                <tr>
+                    <td style="width:75%"><label>Nome do Cliente / Paciente</label><input type="text" id="clienteProntuario"></td>
+                    <td style="width:25%"><label>Nº do Prontuário</label><input type="text" id="numProntuario"></td>
+                </tr>
+                <tr>
+                    <td><label>Endereço / Município / UF</label><input type="text" id="endProntuario" value="FRUTUOSO GOMES - RN"></td>
+                    <td><label>Data de Nascimento</label><input type="date" id="nascProntuario"></td>
+                </tr>
+            </table>
+            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
+            <table>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="18" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                <tr><td><label>Diagnóstico Inicial &nbsp;|&nbsp; Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            carregarDados();
-
-            const p = document.getElementById('nomePaciente');
-            const p2 = document.getElementById('pacienteFolha2');
-            const cp = document.getElementById('clienteProntuario');
-            if (p) {
-                p.addEventListener('input', (e) => {
-                    if (p2) p2.value = e.target.value;
-                    if (cp) cp.value = e.target.value;
-                    salvarDados();
-                });
-            }
-
-            const pr = document.getElementById('prontuario');
-            const pr2 = document.getElementById('prontuarioFolha2');
-            const npr = document.getElementById('numProntuario');
-            if (pr) {
-                pr.addEventListener('input', (e) => {
-                    if (pr2) pr2.value = e.target.value;
-                    if (npr) npr.value = e.target.value;
-                    salvarDados();
-                });
-            }
-
-            document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
-                c.addEventListener('input', salvarDados);
-                c.addEventListener('change', salvarDados);
+<script>
+    // Sincronização automática de Nome e Prontuário entre as folhas
+    document.addEventListener('DOMContentLoaded', () => {
+        const p = document.getElementById('nomePaciente');
+        const p2 = document.getElementById('pacienteFolha2');
+        const cp = document.getElementById('clienteProntuario');
+        if (p) {
+            p.addEventListener('input', (e) => {
+                if (p2) p2.value = e.target.value;
+                if (cp) cp.value = e.target.value;
             });
+        }
+        const pr = document.getElementById('prontuario');
+        const pr2 = document.getElementById('prontuarioFolha2');
+        const npr = document.getElementById('numProntuario');
+        if (pr) {
+            pr.addEventListener('input', (e) => {
+                if (pr2) pr2.value = e.target.value;
+                if (npr) npr.value = e.target.value;
+            });
+        }
+    });
+
+    function exportarWordExato() {
+        let html = document.getElementById('conteudoImpresso').innerHTML;
+        
+        // Substitui os campos preenchidos por texto estático limpo no Word
+        document.querySelectorAll('input').forEach(inp => {
+            html = html.replace(new RegExp(`id="${inp.id}"[^>]*>`, 'g'), `> ${inp.value || ''} `);
+        });
+        document.querySelectorAll('textarea').forEach(ta => {
+            html = html.replace(new RegExp(`id="${ta.id}"[^>]*>[\\s\\S]*?<\/textarea>`, 'g'), `> ${(ta.value || '').replace(/\n/g, '<br>')} `);
+        });
+        document.querySelectorAll('select').forEach(sel => {
+            let val = sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].text : '';
+            if (val === 'Selecione') val = '';
+            html = html.replace(new RegExp(`id="${sel.id}"[^>]*>[\\s\\S]*?<\/select>`, 'g'), `> ${val} `);
         });
 
-        // Exportação limpa e idêntica para o Word sem travar
-        function exportarWordPuro() {
-            let html = document.getElementById('conteudoImpresso').innerHTML;
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial;font-size:10px;}table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:8px;}td{border:1px solid #000;padding:4px;vertical-align:top;}.aih-page{page-break-after:always;}</style></head><body>';
+        const rodape = '</body></html>';
 
-            document.querySelectorAll('input').forEach(inp => {
-                const val = inp.value || '';
-                html = html.replace(new RegExp(`id="${inp.id}"[^>]*>`, 'g'), `> ${val} `);
-            });
-
-            document.querySelectorAll('textarea').forEach(ta => {
-                const val = (ta.value || '').replace(/\n/g, '<br>');
-                html = html.replace(new RegExp(`id="${ta.id}"[^>]*>[\\s\\S]*?<\/textarea>`, 'g'), `> ${val} `);
-            });
-
-            document.querySelectorAll('select').forEach(sel => {
-                const val = sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].text : '';
-                const textoFinal = (val === 'Selecione') ? '' : val;
-                html = html.replace(new RegExp(`id="${sel.id}"[^>]*>[\\s\\S]*?<\/select>`, 'g'), `> ${textoFinal} `);
-            });
-
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9.5px; } table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 8px; } td { border: 1px solid #000; padding: 4px; vertical-align: top; } .aih-page { page-break-after: always; margin-bottom: 20px; } .header-table td { text-align: center; font-weight: bold; background: #f5f5f5; }</style></head><body>';
-            const rodape = '</body></html>';
-
-            const blob = new Blob(['\ufeff' + cabecalho + html + rodape], { type: 'application/msword;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
-        }
-    </script>
+        const blob = new Blob(['\ufeff' + cabecalho + html + rodape], { type: 'application/msword;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
+    }
+</script>
 </body>
 </html>
