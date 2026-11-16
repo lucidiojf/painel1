@@ -280,23 +280,25 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v9', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v10', JSON.JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v9');
+        const salvos = localStorage.getItem('aih_dados_v10');
         if (salvos) {
-            const dados = JSON.parse(salvos);
-            for (const id in dados) {
-                const campo = document.getElementById(id);
-                if (campo) campo.value = dados[id];
-            }
+            try {
+                const dados = JSON.parse(salvos);
+                for (const id in dados) {
+                    const campo = document.getElementById(id);
+                    if (campo) campo.value = dados[id];
+                }
+            } catch (e) {}
         }
     }
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v9');
+            localStorage.removeItem('aih_dados_v10');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
             });
@@ -313,7 +315,7 @@
             p.addEventListener('input', (e) => {
                 if (p2) p2.value = e.target.value;
                 if (cp) cp.value = e.target.value;
-                if (typeof salvarDados === 'function') salvarDados();
+                salvarDados();
             });
         }
 
@@ -324,7 +326,7 @@
             pr.addEventListener('input', (e) => {
                 if (pr2) pr2.value = e.target.value;
                 if (npr) npr.value = e.target.value;
-                if (typeof salvarDados === 'function') salvarDados();
+                salvarDados();
             });
         }
 
@@ -334,12 +336,10 @@
         });
     });
 
-    // Função definitiva para exportar para o Word SEM QUADRADINHOS / INPUTS
+    // Função de exportação para Word totalmente limpa (Sem quadradinhos/inputs)
     function exportarWordSemQuadradinhos() {
-        // Cria um clone do conteúdo impresso para manipulação
         const clone = document.getElementById('conteudoImpresso').cloneNode(true);
 
-        // Substitui todos os inputs por tags span com o texto digitado
         clone.querySelectorAll('input').forEach(input => {
             const span = document.createElement('span');
             span.style.fontWeight = 'bold';
@@ -348,7 +348,6 @@
             input.parentNode.replaceChild(span, input);
         });
 
-        // Substitui todos os selects pelo texto selecionado
         clone.querySelectorAll('select').forEach(select => {
             const span = document.createElement('span');
             span.style.fontWeight = 'bold';
@@ -358,7 +357,6 @@
             select.parentNode.replaceChild(span, select);
         });
 
-        // Substitui todos os textareas pelo texto digitado mantendo as quebras de linha
         clone.querySelectorAll('textarea').forEach(textarea => {
             const div = document.createElement('div');
             div.style.fontWeight = 'bold';
