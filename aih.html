@@ -184,11 +184,11 @@
             <table>
                 <tr><td colspan="4"><label>Nome do Paciente</label><input type="text" id="nomePaciente"></td></tr>
                 <tr>
-                    <td style="width:20%"><label>Sexo</label><select id="sexoPaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select></td>
+                    <td style="width:20%"><label>Sexo</label><select id="sexopaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select></td>
                     <td style="width:30%"><label>Data de Nascimento</label><input type="date" id="nascimentoPaciente"></td>
                     <td style="width:25%">
                         <label>Raça/Cor</label>
-                        <select id="racaPaciente">
+                        <select id="racapaciente">
                             <option value="">Selecione</option>
                             <option value="Branca">Branca</option>
                             <option value="Parda">Parda</option>
@@ -432,18 +432,111 @@
             </div>
             <table>
                 <tr>
+                    <td colspan="2"><label>Endereço Completo (Rua, Nº, Bairro, Município, UF)</label><input type="text" id="enderecoCompletoProntuario"></td>
+                </tr>
+                <tr>
+                    <td style="width:50%">
+                        <label>Cor</label>
+                        <select id="corProntuario">
+                            <option value="">Selecione</option>
+                            <option value="Branca">Branca</option>
+                            <option value="Parda">Parda</option>
+                            <option value="Negra">Negra</option>
+                            <option value="Amarela">Amarela</option>
+                            <option value="Indígena">Indígena</option>
+                        </select>
+                    </td>
+                    <td style="width:50%">
+                        <label>Sexo</label>
+                        <select id="sexoProntuario">
+                            <option value="">Selecione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
                     <td style="width:75%"><label>Nome do Cliente / Paciente</label><input type="text" id="clienteProntuario"></td>
                     <td style="width:25%"><label>Nº do Prontuário</label><input type="text" id="numProntuario"></td>
                 </tr>
                 <tr>
-                    <td><label>Endereço / Município / UF</label><input type="text" id="endProntuario" value="FRUTUOSO GOMES - RN"></td>
+                    <td>
+                        <label>Profissão</label>
+                        <select id="profissaoProntuario">
+                            <option value="">Selecione</option>
+                            <option value="Agricultor(a)">Agricultor(a)</option>
+                            <option value="Aposentado(a)">Aposentado(a)</option>
+                            <option value="Funcionário Público">Funcionário Público</option>
+                            <option value="Autônomo">Autônomo</option>
+                            <option value="Mecânico">Mecânico</option>
+                            <option value="Pescador(a)">Pescador(a)</option>
+                            <option value="Motorista">Motorista</option>
+                            <option value="ASG">ASG</option>
+                            <option value="Profissional Liberal">Profissional Liberal</option>
+                            <option value="Menor">Menor</option>
+                            <option value="Empreendedora">Empreendedora</option>
+                        </select>
+                    </td>
+                    <td>
+                        <table style="border:none; margin:0;">
+                            <tr>
+                                <td style="border:none; padding:0;"><label>RG</label><input type="text" id="rgProntuario"></td>
+                                <td style="border:none; padding:0;"><label>Dt. Expedição</label><input type="date" id="dataExpProntuario"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>CPF</label><input type="text" id="cpfProntuario"></td>
                     <td><label>Data de Nascimento</label><input type="date" id="nascProntuario"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label>Nome do Pai</label><input type="text" id="paiProntuario"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><label>Nome da Mãe</label><input type="text" id="maeProntuario"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Serviço</label>
+                        <select id="servicoProntuario">
+                            <option value="">Selecione</option>
+                            <option value="Clínica Médica">Clínica Médica</option>
+                            <option value="Clínica Pediátrica">Clínica Pediátrica</option>
+                            <option value="Clínica Obstétrica">Clínica Obstétrica</option>
+                            <option value="Clínica Cirúrgica">Clínica Cirúrgica</option>
+                        </select>
+                    </td>
+                    <td>
+                        <table style="border:none; margin:0;">
+                            <tr>
+                                <td style="border:none; padding:0;"><label>Enfermaria</label><input type="text" id="enfermariaProntuario"></td>
+                                <td style="border:none; padding:0;"><label>Leito</label><input type="text" id="leitoProntuario"></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Data de Admissão</label><input type="date" id="admissaoProntuario"></td>
+                    <td>
+                        <label>Saída / Permanência</label>
+                        <select id="saidaProntuario">
+                            <option value="">Selecione</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Óbito">Óbito</option>
+                            <option value="Transferência">Transferência</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label>Dias de Internação</label><input type="text" id="diasInternacaoProntuario"></td>
+                    <td><label>Diagnóstico Inicial</label><input type="text" id="diagInicialProntuario"></td>
                 </tr>
             </table>
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="18" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
-                <tr><td><label>Diagnóstico Inicial &nbsp;|&nbsp; Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="12" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
     </div>
@@ -462,11 +555,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v19', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v20', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v19');
+        const salvos = localStorage.getItem('aih_dados_v20');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -480,7 +573,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v19');
+            localStorage.removeItem('aih_dados_v20');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
