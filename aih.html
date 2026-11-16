@@ -62,29 +62,29 @@
             color: #fff !important;
         }
 
-        /* Páginas A4 rigorosamente controladas para 3 folhas exatas */
+        /* Páginas A4 rigorosamente dimensionadas */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 6mm 10mm;
+            padding: 8mm 12mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             box-sizing: border-box;
-            font-size: 8.5px;
+            font-size: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-bottom: 1.5px;
+            margin-bottom: 2px;
         }
 
         th, td {
             border: 1px solid #000;
-            padding: 1.5px 3px;
+            padding: 2px 4px;
             vertical-align: top;
             text-align: left;
         }
@@ -92,12 +92,12 @@
         .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 8px;
+            font-size: 8.5px;
             background: #f9f9f9;
-            padding: 3px;
-            line-height: 1.15;
+            padding: 4px;
+            line-height: 1.2;
             border: 1px solid #000;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .header-table {
@@ -111,26 +111,18 @@
             vertical-align: middle;
         }
 
-        .logo-img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto;
-        }
-
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 7px;
-            padding: 1.5px 3px;
-            margin-top: 2px;
+            font-size: 8px;
+            padding: 2px 4px;
+            margin-top: 3px;
             margin-bottom: 1px;
         }
 
         label {
-            font-size: 6px;
+            font-size: 7px;
             font-weight: bold;
             display: block;
             text-transform: uppercase;
@@ -143,9 +135,9 @@
             border: none;
             border-bottom: 1px dotted #666;
             background: transparent;
-            font-size: 8.5px;
+            font-size: 9.5px;
             outline: none;
-            padding: 0px;
+            padding: 1px 0;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -173,7 +165,7 @@
                 width: 210mm !important;
                 min-height: 297mm !important;
                 page-break-after: always !important;
-                padding: 6mm 10mm !important;
+                padding: 8mm 12mm !important;
             }
         }
     </style>
@@ -195,15 +187,15 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 55px; text-align: center;">
-                            <!-- Brasão oficial integrado em SVG fiel à imagem original -->
-                            <svg width="45" height="45" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
-                                <path d="M 30 10 L 70 10 L 80 45 C 80 75 50 92 50 92 C 50 92 20 75 20 45 Z" fill="#2d6a4f" stroke="#000" stroke-width="2"/>
-                                <path d="M 34 15 L 66 15 L 73 43 C 73 68 50 84 50 84 C 50 84 27 68 27 43 Z" fill="#40916c"/>
-                                <path d="M 38 25 Q 50 15 62 25 L 62 48 Q 50 58 38 48 Z" fill="#e9d8a6"/>
-                                <circle cx="50" cy="36" r="8" fill="#e76f51"/>
-                                <path d="M 22 55 Q 50 45 78 55 L 75 68 Q 50 60 25 68 Z" fill="#2d3142"/>
-                                <text x="50" y="78" font-size="7" font-weight="bold" fill="#ffd166" text-anchor="middle">F. GOMES</text>
+                        <td style="width: 65px; text-align: center;">
+                            <!-- Brasão oficial vetorial detalhado de Frutuoso Gomes -->
+                            <svg width="55" height="55" viewBox="0 0 200 200" style="display:block; margin:0 auto;">
+                                <path d="M 40 20 L 160 20 L 175 90 C 175 150 100 185 100 185 C 100 185 25 150 25 90 Z" fill="#1b4332" stroke="#d4af37" stroke-width="5"/>
+                                <path d="M 48 28 L 152 28 L 165 85 C 165 140 100 172 100 172 C 100 172 35 140 35 85 Z" fill="#2d6a4f"/>
+                                <path d="M 65 50 Q 100 30 135 50 L 135 95 Q 100 120 65 95 Z" fill="#90e0ef"/>
+                                <circle cx="100" cy="70" r="16" fill="#ffb703"/>
+                                <path d="M 45 110 Q 100 95 155 110 L 148 135 Q 100 122 52 135 Z" fill="#52b788"/>
+                                <text x="100" y="155" font-size="12" font-weight="bold" fill="#ffd166" text-anchor="middle">FRUTUOSO GOMES</text>
                             </svg>
                         </td>
                         <td style="text-align: center;">
@@ -303,7 +295,7 @@
                 </tr>
             </table>
             <div class="section-title">Procedimentos Realizados (12 Linhas)</div>
-            <table style="text-align:center; font-size:7.5px;">
+            <table style="text-align:center; font-size:8px;">
                 <tr style="background:#eee;">
                     <td style="width:5%;">Linha</td>
                     <td style="width:35%;">PROCEDIMENTO</td>
@@ -335,14 +327,14 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 55px; text-align: center;">
-                            <svg width="45" height="45" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
-                                <path d="M 30 10 L 70 10 L 80 45 C 80 75 50 92 50 92 C 50 92 20 75 20 45 Z" fill="#2d6a4f" stroke="#000" stroke-width="2"/>
-                                <path d="M 34 15 L 66 15 L 73 43 C 73 68 50 84 50 84 C 50 84 27 68 27 43 Z" fill="#40916c"/>
-                                <path d="M 38 25 Q 50 15 62 25 L 62 48 Q 50 58 38 48 Z" fill="#e9d8a6"/>
-                                <circle cx="50" cy="36" r="8" fill="#e76f51"/>
-                                <path d="M 22 55 Q 50 45 78 55 L 75 68 Q 50 60 25 68 Z" fill="#2d3142"/>
-                                <text x="50" y="78" font-size="7" font-weight="bold" fill="#ffd166" text-anchor="middle">F. GOMES</text>
+                        <td style="width: 65px; text-align: center;">
+                            <svg width="55" height="55" viewBox="0 0 200 200" style="display:block; margin:0 auto;">
+                                <path d="M 40 20 L 160 20 L 175 90 C 175 150 100 185 100 185 C 100 185 25 150 25 90 Z" fill="#1b4332" stroke="#d4af37" stroke-width="5"/>
+                                <path d="M 48 28 L 152 28 L 165 85 C 165 140 100 172 100 172 C 100 172 35 140 35 85 Z" fill="#2d6a4f"/>
+                                <path d="M 65 50 Q 100 30 135 50 L 135 95 Q 100 120 65 95 Z" fill="#90e0ef"/>
+                                <circle cx="100" cy="70" r="16" fill="#ffb703"/>
+                                <path d="M 45 110 Q 100 95 155 110 L 148 135 Q 100 122 52 135 Z" fill="#52b788"/>
+                                <text x="100" y="155" font-size="12" font-weight="bold" fill="#ffd166" text-anchor="middle">FRUTUOSO GOMES</text>
                             </svg>
                         </td>
                         <td style="text-align: center;">
@@ -396,9 +388,9 @@
             </table>
             <div class="section-title">17 a 26. Justificativa da Internação</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2" style="font-size:8.5px;"></textarea></td></tr>
-                <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:8.5px;"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="2" style="font-size:8.5px;"></textarea></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2" style="font-size:9px;"></textarea></td></tr>
+                <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:9px;"></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="2" style="font-size:9px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -484,14 +476,14 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 55px; text-align: center;">
-                            <svg width="45" height="45" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
-                                <path d="M 30 10 L 70 10 L 80 45 C 80 75 50 92 50 92 C 50 92 20 75 20 45 Z" fill="#2d6a4f" stroke="#000" stroke-width="2"/>
-                                <path d="M 34 15 L 66 15 L 73 43 C 73 68 50 84 50 84 C 50 84 27 68 27 43 Z" fill="#40916c"/>
-                                <path d="M 38 25 Q 50 15 62 25 L 62 48 Q 50 58 38 48 Z" fill="#e9d8a6"/>
-                                <circle cx="50" cy="36" r="8" fill="#e76f51"/>
-                                <path d="M 22 55 Q 50 45 78 55 L 75 68 Q 50 60 25 68 Z" fill="#2d3142"/>
-                                <text x="50" y="78" font-size="7" font-weight="bold" fill="#ffd166" text-anchor="middle">F. GOMES</text>
+                        <td style="width: 65px; text-align: center;">
+                            <svg width="55" height="55" viewBox="0 0 200 200" style="display:block; margin:0 auto;">
+                                <path d="M 40 20 L 160 20 L 175 90 C 175 150 100 185 100 185 C 100 185 25 150 25 90 Z" fill="#1b4332" stroke="#d4af37" stroke-width="5"/>
+                                <path d="M 48 28 L 152 28 L 165 85 C 165 140 100 172 100 172 C 100 172 35 140 35 85 Z" fill="#2d6a4f"/>
+                                <path d="M 65 50 Q 100 30 135 50 L 135 95 Q 100 120 65 95 Z" fill="#90e0ef"/>
+                                <circle cx="100" cy="70" r="16" fill="#ffb703"/>
+                                <path d="M 45 110 Q 100 95 155 110 L 148 135 Q 100 122 52 135 Z" fill="#52b788"/>
+                                <text x="100" y="155" font-size="12" font-weight="bold" fill="#ffd166" text-anchor="middle">FRUTUOSO GOMES</text>
                             </svg>
                         </td>
                         <td style="text-align: center;">
@@ -609,7 +601,7 @@
             </table>
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="18" placeholder="Histórico clínico detalhado..." style="font-size:9px;"></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="18" placeholder="Histórico clínico detalhado..." style="font-size:9.5px;"></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -629,11 +621,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v34', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v35', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v34');
+        const salvos = localStorage.getItem('aih_dados_v35');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -647,7 +639,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v34');
+            localStorage.removeItem('aih_dados_v35');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -714,8 +706,23 @@
             textarea.parentNode.replaceChild(div, textarea);
         });
 
-        // Remove SVGs do Word para garantir estabilidade e usa quebra de seção estrita
-        clone.querySelectorAll('svg').forEach(svg => svg.remove());
+        // Converte o SVG do brasão em imagem base64 nítida para o Word
+        clone.querySelectorAll('svg').forEach(svg => {
+            const width = svg.getAttribute('width') || 55;
+            const height = svg.getAttribute('height') || 55;
+            const svgString = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgString], {type: 'image/svg+xml;charset=utf-8'});
+            const DOMURL = window.URL || window.webkitURL || window;
+            const url = DOMURL.createObjectURL(svgBlob);
+            
+            const img = document.createElement('img');
+            img.src = url;
+            img.width = width;
+            img.height = height;
+            img.style.display = 'block';
+            img.style.margin = '0 auto';
+            svg.parentNode.replaceChild(img, svgURL = img);
+        });
 
         const conteudoHTML = clone.innerHTML;
         const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:9.5px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:4px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-after:always;mso-break-type:section-break;margin-bottom:15px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:4px;border:1px solid #000;margin-bottom:3px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:8.5px;padding:2px;margin-top:2px;}</style></head><body>';
