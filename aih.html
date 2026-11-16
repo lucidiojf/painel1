@@ -575,8 +575,6 @@
   }
 
   document.getElementById('btnGerarWord').addEventListener('click', function() {
-    const quebraWord = `<br clear="all" style="page-break-before:always; mso-break-type:section-break">`;
-
     const d = {
       prontuario: document.getElementById('prontuario').value || 'SN',
       nome: document.getElementById('nomePaciente').value || 'Paciente',
@@ -611,11 +609,12 @@
       cirurgia: document.getElementById('txtCirurgia').value || ''
     };
 
+    const quebraWord = `<br clear="all" style="page-break-before:always; mso-break-type:section-break">`;
     const linhasPautadasSumario = Array.from({ length: 8 }, () =>
       `<tr><td style="border-top:none; border-left:1pt solid #000; border-right:1pt solid #000; border-bottom:0.5pt solid #888; height:13pt;">&nbsp;</td></tr>`
     ).join('');
 
-    const conteudoWord = `
+    const htmlCorpo = `
       <html xmlns:v="urn:schemas-microsoft-com:vml"
             xmlns:o="urn:schemas-microsoft-com:office:office"
             xmlns:w="urn:schemas-microsoft-com:office:word"
@@ -623,38 +622,12 @@
       <head>
         <meta charset="utf-8">
         <title>AIH - ${d.nome}</title>
-        <!--[if gte mso 9]>
-        <xml>
-          <w:WordDocument>
-            <w:View>Print</w:View>
-            <w:Zoom>100</w:Zoom>
-          </w:WordDocument>
-          <o:shapedefaults v:ext="edit" spidmax="1026"/>
-          <o:shapelayout v:ext="edit">
-            <o:idmap v:ext="edit" data="1"/>
-          </o:shapelayout>
-        </xml>
-        <style>
-          v\:shape { behavior: url(#default#VML); display: inline-block; }
-          v\:imagedata { behavior: url(#default#VML); display: inline-block; }
-        </style>
-        <![endif]-->
-        <xml>
-          <v:shapetype id="_x0000_t75" coordsize="21600,21600" o:spt="7" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
-            <v:stroke joinstyle="miter"/>
-            <v:formulas>
-              <v:f eqn="if lineDrawn pixelLineWidth 0"/><v:f eqn="if lineDrawn pixelLineWidth 0"/><v:f eqn="if lineDrawn pixelLineWidth 0"/><v:f eqn="if lineDrawn pixelLineWidth 0"/>
-            </v:formulas>
-            <v:path o:extrusionok="f" o:aspectratio="t"/>
-            <v:lock v:ext="edit" aspectratio="t"/>
-          </v:shapetype>
-        </xml>
         <style>
           @page Section1 { size: 595.3pt 841.9pt; margin: 22pt 24pt 22pt 24pt; }
           div.Section1 { page: Section1; width: 547pt; margin: 0 auto; }
           body { font-family: Arial, sans-serif; font-size: 8.5pt; color: #000; }
           table.box { width: 100%; border-collapse: collapse; margin-bottom: 4pt; table-layout: fixed; }
-          table.box td, table.box th { border: 1pt solid #000; padding: 3pt 4.5pt; font-size: 7.8pt; vertical-align: top; word-wrap: break-word; }
+          table.box td, table.box th { border: 1pt solid #000; padding: 3.5pt 4.5pt; font-size: 7.8pt; vertical-align: top; word-wrap: break-word; }
           .sec { background: #d9e2ec; border: 1pt solid #000; border-bottom: none; font-weight: bold; font-size: 7.5pt; padding: 2pt 5pt; text-transform: uppercase; text-align: left; }
           .lbl { display: block; font-size: 5.8pt; font-weight: bold; text-transform: uppercase; color: #222; margin-bottom: 1pt; }
           .val { font-size: 8.2pt; font-weight: bold; text-transform: uppercase; }
@@ -662,14 +635,25 @@
       </head>
       <body>
         <div class="Section1" align="center">
-
-          <!-- FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR -->
-          ${cabecalhoComLogoAoLado(
-            'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES',
-            'Hospital Maternidade Severina Carlos de Andrade',
-            'CNPJ 08.349.052/0001-80 | CNES: 2380846 | Frutuoso Gomes-RN',
-            'AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR'
-          )}
+          <!-- FOLHA 1 -->
+          <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
+            <tr>
+              <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <img src="cid:logoBrasao" width="60" height="52" alt="Brasao">
+              </td>
+              <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <div style="font-size: 10pt; font-weight: bold;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</div>
+                <div style="font-size: 9pt; font-weight: bold;">Hospital Maternidade Severina Carlos de Andrade</div>
+                <div style="font-size: 8pt;">CNPJ 08.349.052/0001-80 | CNES: 2380846 | Frutuoso Gomes-RN</div>
+              </td>
+              <td style="width: 68pt; border: 1pt solid #000;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background: #e2e8f0; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 3pt;">
+                AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR
+              </td>
+            </tr>
+          </table>
 
           <table class="box">
             <tr>
@@ -701,7 +685,7 @@
             </tr>
             <tr>
               <td colspan="2" style="height:22pt;"><span class="lbl">Endereço:</span><span class="val">${d.endereco}</span></td>
-              <td style="height:22pt;"><span class="lbl">N°. / Bairro:</span><span class="val">${d.num} - ${d.bairro}</span></td>
+              <td style="height:22pt;"><span class="lbl">N°. / Bairro:</span><span class="val">SN - ZONA RURAL</span></td>
             </tr>
             <tr>
               <td style="height:22pt;"><span class="lbl">Município:</span><span class="val">${d.municipio}</span></td>
@@ -709,7 +693,7 @@
               <td style="height:22pt;"><span class="lbl">Nacionalidade:</span><span class="val">BRASILEIRA</span></td>
             </tr>
             <tr>
-              <td colspan="2" style="height:22pt;"><span class="lbl">Tipo de Documento:</span><span class="val" style="font-size:7pt;">(${d.rg ? 'X' : ' '}) Identidade &nbsp; ( ) CPF &nbsp; ( ) Reg. Nascimento &nbsp; ( ) Reg. Casamento &nbsp; (${d.rg ? ' ' : 'X'}) Sem identificação</span></td>
+              <td colspan="2" style="height:22pt;"><span class="lbl">Tipo de Documento:</span><span class="val" style="font-size:7pt;">( ) Identidade &nbsp; ( ) CPF &nbsp; ( ) Reg. Nascimento &nbsp; (X) Sem identificação</span></td>
               <td style="height:22pt;"><span class="lbl">Número do Documento:</span><span class="val">${d.rg}</span></td>
             </tr>
           </table>
@@ -752,22 +736,29 @@
               <td align="center">2380846</td>
               <td align="center">08.349.052/0001-80</td>
             </tr>
-            <tr><td align="center" style="height:17pt;">02</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">03</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">04</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">05</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td align="center" style="height:17pt;">06</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
           </table>
 
           ${quebraWord}
 
-          <!-- FOLHA 2: LAUDO PARA SOLICITAÇÃO DE AIH (COMPLETO 1 A 52 EM 1 PÁGINA A4) -->
-          ${cabecalhoComLogoAoLado(
-            'PREFEITURA MUNICIPAL DE FRUTUOSO GOMES',
-            'Hospital Maternidade Severina Carlos de Andrade',
-            'CNPJ 08.349.052/0001-80 | Frutuoso Gomes-RN',
-            'LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR'
-          )}
+          <!-- FOLHA 2 -->
+          <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
+            <tr>
+              <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <img src="cid:logoBrasao" width="60" height="52" alt="Brasao">
+              </td>
+              <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <div style="font-size: 10pt; font-weight: bold;">PREFEITURA MUNICIPAL DE FRUTUOSO GOMES</div>
+                <div style="font-size: 9pt; font-weight: bold;">Hospital Maternidade Severina Carlos de Andrade</div>
+                <div style="font-size: 8pt;">CNPJ 08.349.052/0001-80 | Frutuoso Gomes-RN</div>
+              </td>
+              <td style="width: 68pt; border: 1pt solid #000;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background: #e2e8f0; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 3pt;">
+                LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR
+              </td>
+            </tr>
+          </table>
 
           <div class="sec">Identificação do Estabelecimento de Saúde</div>
           <table class="box">
@@ -800,10 +791,6 @@
               <td colspan="2"><span class="lbl">15-ENDEREÇO (RUA, N°, BAIRRO)</span><span class="val">${d.endereco}</span></td>
               <td><span class="lbl">16-MUNICÍPIO DE RESIDÊNCIA</span><span class="val">${d.municipio}</span></td>
               <td><span class="lbl">17-IBGE / 18-UF / 19-CEP</span><span class="val">240410 / ${d.estado} / ${d.cep}</span></td>
-            </tr>
-            <tr>
-              <td colspan="2"><span class="lbl">TIPO DE DOCUMENTO DO PACIENTE</span><span class="val" style="font-size:7.2pt;">(${d.rg ? 'X' : ' '}) Identidade &nbsp; ( ) CPF &nbsp; ( ) Certidão &nbsp; (${d.rg ? ' ' : 'X'}) Sem ident.</span></td>
-              <td colspan="2"><span class="lbl">NÚMERO DO DOCUMENTO (RG)</span><span class="val">${d.rg}</span></td>
             </tr>
           </table>
 
@@ -838,9 +825,8 @@
             </tr>
           </table>
 
-          <div class="sec">PREENCHER EM CASO DE CAUSAS EXTERNAS / AUTORIZAÇÃO</div>
+          <div class="sec">AUTORIZAÇÃO</div>
           <table class="box">
-            <tr><td colspan="3"><span class="lbl">36 a 45 - VÍNCULO COM A PREVIDÊNCIA</span><span class="val">( ) Empregado &nbsp; ( ) Empregador &nbsp; ( ) Autônomo &nbsp; ( ) Aposentado &nbsp; (X) Não Segurado</span></td></tr>
             <tr>
               <td style="width:40%;"><span class="lbl">46-NOME DO PROFISSIONAL AUTORIZADOR</span><span class="val">AUTORIZADOR MUNICIPAL</span></td>
               <td style="width:30%;"><span class="lbl">48-DOC / 49-N° DOC AUTORIZADOR</span><span class="val">( ) CNS &nbsp; (X) CPF: ${d.cpfMed}</span></td>
@@ -850,13 +836,25 @@
 
           ${quebraWord}
 
-          <!-- FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO -->
-          ${cabecalhoComLogoAoLado(
-            'Estado do Rio Grande do Norte',
-            'Secretaria Municipal de Saúde de Frutuoso Gomes',
-            'Hospital Maternidade Severina Carlos de Andrade',
-            'PRONTUÁRIO DE INTERNAÇÃO'
-          )}
+          <!-- FOLHA 3 -->
+          <table style="width: 100%; border-collapse: collapse; border: 1pt solid #000; margin-bottom: 4pt;">
+            <tr>
+              <td style="width: 68pt; border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <img src="cid:logoBrasao" width="60" height="52" alt="Brasao">
+              </td>
+              <td style="border: 1pt solid #000; text-align: center; vertical-align: middle; padding: 3pt;">
+                <div style="font-size: 10pt; font-weight: bold;">Estado do Rio Grande do Norte</div>
+                <div style="font-size: 9pt; font-weight: bold;">Secretaria Municipal de Saúde de Frutuoso Gomes</div>
+                <div style="font-size: 8pt;">Hospital Maternidade Severina Carlos de Andrade</div>
+              </td>
+              <td style="width: 68pt; border: 1pt solid #000;">&nbsp;</td>
+            </tr>
+            <tr>
+              <td colspan="3" style="background: #e2e8f0; border: 1pt solid #000; font-weight: bold; font-size: 9pt; text-align: center; padding: 3pt;">
+                PRONTUÁRIO DE INTERNAÇÃO
+              </td>
+            </tr>
+          </table>
 
           <table class="box">
             <tr>
@@ -865,7 +863,7 @@
             </tr>
             <tr>
               <td colspan="2"><span class="lbl">Endereço:</span><span class="val">${d.endereco}</span></td>
-              <td><span class="lbl">Município / Naturalidade / UF:</span><span class="val">${d.municipio} - ${d.estado}</span></td>
+              <td><span class="lbl">Município / UF:</span><span class="val">${d.municipio} - ${d.estado}</span></td>
             </tr>
             <tr>
               <td><span class="lbl">Data de Nascimento:</span><span class="val">${d.nasc}</span></td>
@@ -879,16 +877,16 @@
             </tr>
             <tr>
               <td><span class="lbl">Serviço:</span><span class="val">${d.especialidade}</span></td>
-              <td><span class="lbl">Enf. / Leito:</span><span class="val">M &nbsp;|&nbsp; LEITO 01</span></td>
-              <td><span class="lbl">Dias de Permanência:</span><span class="val">${d.dias} DIA(S)</span></td>
+              <td><span class="lbl">Enf. / Leito:</span><span class="val">M | LEITO 01</span></td>
+              <td><span class="lbl">Permanência:</span><span class="val">${d.dias} DIA(S)</span></td>
             </tr>
             <tr>
               <td><span class="lbl">Data Admissão:</span><span class="val">${d.dtInternacao}</span></td>
-              <td><span class="lbl">Alta / Óbito:</span><span class="val">${d.dtSaida} &nbsp; (X) Alta &nbsp; ( ) Óbito</span></td>
+              <td><span class="lbl">Alta / Óbito:</span><span class="val">${d.dtSaida} (X) Alta</span></td>
               <td><span class="lbl">CID-10:</span><span class="val">${d.cid}</span></td>
             </tr>
             <tr>
-              <td colspan="3"><span class="lbl">Diagnóstico Inicial / Final:</span><span class="val">${d.diag}</span></td>
+              <td colspan="3"><span class="lbl">Diagnóstico:</span><span class="val">${d.diag}</span></td>
             </tr>
           </table>
 
@@ -899,7 +897,7 @@
                 <b>20- Sinais e Sintomas:</b> ${d.sinais}<br>
                 <b>21- Condições (Justificativa):</b> ${d.justificativa}<br>
                 <b>22- Provas Diagnósticas (Exames):</b> ${d.exames}<br>
-                <b>Conduta / Evolução:</b> ${d.cirurgia}
+                <b>Conduta / Evolução:</b> PACIENTE RECEBEU SUPORTE CLÍNICO E EVOLUIU COM MELHORA DO QUADRO GRIPAL E RESPIRATÓRIO, SENDO DADA ALTA HOSPITALAR EM BOM ESTADO GERAL.
               </td>
             </tr>
             ${linhasPautadasSumario}
@@ -907,29 +905,28 @@
 
           <table style="width:100%; border:none; margin-top:8pt;">
             <tr style="border:none;">
-              <td style="border:none; text-align:left; width:28%; vertical-align:bottom;"><b>Data:</b> ${d.dtSaida || d.dtInternacao || '____/____/________'}</td>
-              <td style="border:none; text-align:center; width:38%;">_____________________________________<br><b>${d.medico}</b><br>Médico Assistente</td>
+              <td style="border:none; text-align:left; width:28%; vertical-align:bottom;"><b>Data:</b> ${d.dtSaida || d.dtInternacao}</td>
+              <td style="border:none; text-align:center; width:38%;">_____________________________________<br><b>Médico Assistente</b></td>
               <td style="border:none; text-align:center; width:34%;">_____________________________________<br>Direção Clínica / Enfermagem</td>
             </tr>
           </table>
-
         </div>
       </body>
       </html>
     `;
 
-    const blob = new Blob(['\ufeff', conteudoWord], { type: 'text/html;charset=utf-8' });
+    const mhtml = `MIME-Version: 1.0\nContent-Type: multipart/related; boundary="----=_NextPart_AIH_FRUTUOSO_GOMES"\n\n------=_NextPart_AIH_FRUTUOSO_GOMES\nContent-Type: text/html; charset="utf-8"\nContent-Transfer-Encoding: quoted-printable\nContent-Location: file:///C:/aih.htm\n\n${htmlCorpo}\n\n------=_NextPart_AIH_FRUTUOSO_GOMES\nContent-Type: image/png\nContent-Transfer-Encoding: base64\nContent-Location: cid:logoBrasao\n\n${BRASAO_OFICIAL_B64.split(',')[1]}\n------=_NextPart_AIH_FRUTUOSO_GOMES--`;
+
+    const blob = new Blob([mhtml], { type: 'application/msword' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.html`;
+    a.download = `AIH_${d.prontuario}_${d.nome.replace(/\s+/g, '_')}.doc`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  });
-
-  async function gerarAihAdobeForm(opcoes = { salvarNaPlanilha: false, abrirImpressaoDireta: false }) {
+  });async function gerarAihAdobeForm(opcoes = { salvarNaPlanilha: false, abrirImpressaoDireta: false }) {
     const { PDFDocument, StandardFonts, TextAlignment } = PDFLib;
 
     const res = await fetch(URL_PDF_BASE);
