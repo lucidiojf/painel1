@@ -372,14 +372,14 @@
                         <label>33. Profissional Solicitante / Assistente</label>
                         <select id="medicoSolicitante" onchange="atualizarCpfMedico()">
                             <option value="">Selecione o Médico</option>
-                            <option value="LUCIDIO JÁCOME FERREIRA" data-cpf="175...">LUCIDIO JÁCOME FERREIRA</option>
+                            <option value="LUCIDIO JÁCOME FERREIRA" data-cpf="175.499.574-87">LUCIDIO JÁCOME FERREIRA</option>
                             <option value="HIAGO FRANCIMAR JACOME DE SOUZA" data-cpf="050.980.494-23">HIAGO FRANCIMAR JACOME DE SOUZA</option>
                             <option value="FRENDSON CAMARA DE OLIVEIRA" data-cpf="012.045.714-81">FRENDSON CAMARA DE OLIVEIRA</option>
                             <option value="NALYGIA PAULO PAIVA" data-cpf="055.249.504-28">NALYGIA PAULO PAIVA</option>
                             <option value="CARLOS ALEXANDRE DA SILVA" data-cpf="097.120.314-89">CARLOS ALEXANDRE DA SILVA</option>
                             <option value="KAREN GIZELLY PAULO SILVA" data-cpf="061.647.044-48">KAREN GIZELLY PAULO SILVA</option>
                             <option value="SERVULO AUGUSTO REGALADO FERREIRA" data-cpf="106.967.184-30">SERVULO AUGUSTO REGALADO FERREIRA</option>
-                            <option value="FRANCISCO DAS C D JACOME VALENTIM" data-cpf="FRANCISCO DAS C D JACOME VALENTIM">FRANCISCO DAS C D JACOME VALENTIM</option>
+                            <option value="FRANCISCO DAS C D JACOME VALENTIM" data-cpf="012.345.678-90">FRANCISCO DAS C D JACOME VALENTIM</option>
                         </select>
                     </td>
                     <td><label>32. Nº do Documento (CPF do Profissional)</label><input type="text" id="cpfSolicitanteFolha2" readonly></td>
@@ -462,11 +462,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v16', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v17', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v16');
+        const salvos = localStorage.getItem('aih_dados_v17');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -480,7 +480,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v16');
+            localStorage.removeItem('aih_dados_v17');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
