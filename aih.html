@@ -145,7 +145,7 @@
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
             .container { border: none; box-shadow: none; max-width: 100%; padding: 0; }
-            .aih-page { border: none; margin: 0; padding: 0; page-break-after: always; height: 100vh; }
+            .aih-page { border: none; margin: 0; padding: 0; page-break-after: always; }
         }
     </style>
 </head>
@@ -163,14 +163,141 @@
         </div>
 
         <div id="conteudoImpresso">
-            <!-- ================= FOLHA 1: LAUDO DE SOLICITAÇÃO DA AIH ================= -->
+            <!-- ================= FOLHA 1: AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (CAPA RESUMIDA) ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
                         <td>
                             PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
                             Hospital Maternidade Severina Carlos de Andrade — CNPJ 08.349.052/0001-80<br>
-                            <strong>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR (AIH)</strong>
+                            <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>[cite: 19]
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 35%;">
+                            <label>Número da AIH</label>
+                            <input type="text" id="numAih">
+                        </td>
+                        <td style="width: 35%;">
+                            <label>Prontuário</label>
+                            <input type="text" id="prontuario">
+                        </td>
+                        <td style="width: 30%;">
+                            <label>Tipo</label>
+                            <input type="text" id="tipoAih" value="01 - Inicial">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Apresentação</label>
+                            <input type="text" id="apresentacao">
+                        </td>
+                        <td colspan="2">
+                            <label>Órgão Emissor</label>
+                            <input type="text" id="orgaoEmissor" value="SES-RN">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Data da Internação</label>
+                            <input type="date" id="dataInternacao">
+                        </td>
+                        <td colspan="2">
+                            <label>Data da Saída</label>
+                            <input type="date" id="dataSaida">
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="section-header">DADOS DO PACIENTE</div>
+                <table class="aih-table">
+                    <tr>
+                        <td colspan="3">
+                            <label>Nome do Paciente</label>
+                            <input type="text" id="nomePaciente">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <label>Sexo</label>
+                            <select id="sexoPaciente">
+                                <option value="">Selecione</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </td>
+                        <td style="width: 40%;">
+                            <label>Data de Nascimento</label>
+                            <input type="date" id="nascimentoPaciente">
+                        </td>
+                        <td style="width: 35%;">
+                            <label>Cartão SUS</label>
+                            <input type="text" id="cnsPaciente">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Nome da Mãe</label>
+                            <input type="text" id="nomeMae">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label>Endereço (Rua, Nº, Bairro)</label>
+                            <input type="text" id="enderecoPaciente">
+                        </td>
+                        <td>
+                            <label>Município / UF</label>
+                            <input type="text" id="municipioPaciente" value="FRUTUOSO GOMES - RN">
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="section-header">DADOS DO PROCEDIMENTO</div>
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 70%;">
+                            <label>Procedimento Solicitado</label>
+                            <input type="text" id="procedimentoSolicitado">
+                        </td>
+                        <td style="width: 30%;">
+                            <label>Mudança de Procedimento (S/N)</label>
+                            <input type="text" id="mudancaProc" value="N">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Procedimento Realizado</label>
+                            <input type="text" id="procedimentoRealizado">
+                        </td>
+                        <td>
+                            <label>CID Principal</label>
+                            <input type="text" id="cidPrincipal">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>CPF Solicitante</label>
+                            <input type="text" id="cpfSolicitante">
+                        </td>
+                        <td>
+                            <label>CPF Autorizador</label>
+                            <input type="text" id="cpfAutorizador">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- ================= FOLHA 2: LAUDO DO SUS PARA SOLICITAÇÃO DE AIH ================= -->
+            <div class="aih-page">
+                <table class="aih-table header-table">
+                    <tr>
+                        <td>
+                            MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
+                            <strong>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</strong>[cite: 10]
                         </td>
                     </tr>
                 </table>
@@ -183,7 +310,7 @@
                         </td>
                         <td style="width: 50%;">
                             <label>Nome do Estabelecimento Solicitante</label>
-                            <input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE">
+                            <input type="text" value="HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE">[cite: 10]
                         </td>
                         <td style="width: 25%;">
                             <label>2. CNES Executante</label>
@@ -197,57 +324,39 @@
                     <tr>
                         <td colspan="3">
                             <label>5. Nome do Paciente</label>
-                            <input type="text" id="nomePaciente">
+                            <input type="text" id="pacienteFolha2">
                         </td>
                         <td>
                             <label>6. Prontuário</label>
-                            <input type="text" id="prontuario">
+                            <input type="text" id="prontuarioFolha2">
                         </td>
                     </tr>
                     <tr>
                         <td style="width: 30%;">
                             <label>7. Cartão Nacional de Saúde (CNS)</label>
-                            <input type="text" id="cnsPaciente">
+                            <input type="text" id="cnsFolha2">
                         </td>
                         <td style="width: 25%;">
                             <label>8. Data de Nascimento</label>
-                            <input type="date" id="nascimentoPaciente">
+                            <input type="date" id="nascFolha2">
                         </td>
                         <td style="width: 15%;">
                             <label>9. Sexo</label>
-                            <select id="sexoPaciente">
-                                <option value="">Selecione</option>
-                                <option value="M">Masc</option>
-                                <option value="F">Fem</option>
-                            </select>
+                            <input type="text" id="sexoFolha2">
                         </td>
                         <td style="width: 30%;">
                             <label>10. Raça/Cor</label>
-                            <input type="text" id="racaCor" value="BRANCA">
+                            <input type="text" id="racaFolha2" value="BRANCA">
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             <label>11. Nome da Mãe ou Responsável</label>
-                            <input type="text" id="nomeMae">
+                            <input type="text" id="maeFolha2">
                         </td>
                         <td colspan="2">
                             <label>Telefone de Contato</label>
-                            <input type="text" id="telefonePaciente">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <label>12. Endereço (Rua, Nº, Bairro)</label>
-                            <input type="text" id="enderecoPaciente">
-                        </td>
-                        <td>
-                            <label>13. Município</label>
-                            <input type="text" id="municipioPaciente" value="FRUTUOSO GOMES">
-                        </td>
-                        <td>
-                            <label>15. UF / 16. CEP</label>
-                            <input type="text" id="cepUf" value="RN — 59890-000">
+                            <input type="text" id="telFolha2">
                         </td>
                     </tr>
                 </table>
@@ -285,27 +394,27 @@
                     <tr>
                         <td style="width: 70%;">
                             <label>24. Descrição do Procedimento Solicitado</label>
-                            <input type="text" id="procedimentoSolicitado">
+                            <input type="text" id="procSolFolha2">
                         </td>
                         <td style="width: 30%;">
                             <label>25. Código do Procedimento</label>
-                            <input type="text" id="codigoProcedimento">
+                            <input type="text" id="codProcFolha2">
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <label>30. Nome do Profissional Solicitante</label>
-                            <input type="text" id="nomeMedico" value="LUCIDIO JÁCOME FERREIRA">
+                            <input type="text" id="medicoSolicitante" value="LUCIDIO JÁCOME FERREIRA">
                         </td>
                         <td>
                             <label>29. CRM / CPF do Solicitante</label>
-                            <input type="text" id="crmCpfMedico" value="1.675">
+                            <input type="text" id="crmCpfSolicitante" value="1.675">
                         </td>
                     </tr>
                 </table>
             </div>
 
-            <!-- ================= FOLHA 2: PRONTUÁRIO DE INTERNAÇÃO ================= -->
+            <!-- ================= FOLHA 3: PRONTUÁRIO DE INTERNAÇÃO ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
@@ -313,7 +422,7 @@
                             ESTADO DO RIO GRANDE DO NORTE<br>
                             Secretaria Municipal de Saúde de Frutuoso Gomes<br>
                             Hospital Maternidade Severina Carlos de Andrade<br>
-                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>[cite: 6]
+                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>[cite: 10, 13]
                         </td>
                     </tr>
                 </table>
@@ -341,98 +450,18 @@
                     </tr>
                 </table>
 
-                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>[cite: 6]
+                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>[cite: 10]
                 <table class="aih-table">
                     <tr>
                         <td>
                             <label>Evolução, História Clínica e Conduta</label>
-                            <textarea id="evolucaoClinica" rows="9" placeholder="Evolução clínica detalhada..."></textarea>
+                            <textarea id="evolucaoClinica" rows="10" placeholder="Evolução clínica detalhada..."></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <label>Diagnóstico Inicial &nbsp;|&nbsp; Diagnóstico Final</label>
                             <input type="text" id="diagFinal">
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <!-- ================= FOLHA 3: BOLETIM OPERATÓRIO / RELATÓRIO DE INTERVENÇÃO ================= -->
-            <div class="aih-page">
-                <table class="aih-table header-table">
-                    <tr>
-                        <td>
-                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — Secretaria Municipal de Saúde<br>
-                            <strong>BOLETIM OPERATÓRIO</strong>[cite: 8]
-                        </td>
-                    </tr>
-                </table>
-
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 75%;">
-                            <label>Nome do Paciente</label>
-                            <input type="text" id="nomeCirurgia">
-                        </td>
-                        <td style="width: 25%;">
-                            <label>Prontuário</label>
-                            <input type="text" id="prontuarioCirurgia">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>Diagnóstico Pré-Operatório / Indicação Terapêutica</label>
-                            <input type="text" id="diagPreOp">
-                        </td>
-                        <td>
-                            <label>Data</label>
-                            <input type="date" id="dataCirurgia">
-                        </td>
-                    </tr>
-                </table>
-
-                <div class="section-header">EQUIPE CIRÚRGICA</div>
-                <table class="aih-table">
-                    <tr>
-                        <td style="width: 70%;">
-                            <label>Operador</label>
-                            <input type="text" id="medicoCirurgiao" value="LUCIDIO JÁCOME FERREIRA">
-                        </td>
-                        <td style="width: 30%;">
-                            <label>CRM</label>
-                            <input type="text" id="crmCirurgiao" value="1.675">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>1º Auxiliar</label>
-                            <input type="text" id="primeiroAux">
-                        </td>
-                        <td>
-                            <label>CRM</label>
-                            <input type="text" id="crmAux1">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label>3. Anestesista</label>
-                            <input type="text" id="medicoAnestesista">
-                        </td>
-                        <td>
-                            <label>CRM</label>
-                            <input type="text" id="crmAnestesista" value="8.830">
-                        </td>
-                    </tr>
-                </table>
-
-                <div class="section-header">RELATÓRIO DE INTERVENÇÃO / BOLETIM OPERATÓRIO</div>[cite: 8]
-                <table class="aih-table">
-                    <tr>
-                        <td>
-                            <label>Aspectos nos órgãos, lesões encontradas, técnicas e descrição do processo</label>[cite: 8]
-                            <textarea id="relatorioCirurgico" rows="7" placeholder="Descreva os detalhes da intervenção..."></textarea>
                         </td>
                     </tr>
                 </table>
@@ -446,11 +475,11 @@
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_exatas', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_exatas_v3', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_exatas');
+            const salvos = localStorage.getItem('aih_3_folhas_exatas_v3');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -462,9 +491,9 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_exatas');
+                localStorage.removeItem('aih_3_folhas_exatas_v3');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
-                    if (!['medicoCirurgiao', 'crmCirurgiao', 'crmAnestesista', 'cnesSolicitante', 'cnesExecutante', 'municipioPaciente'].includes(c.id)) c.value = '';
+                    if (!['medicoSolicitante', 'crmCpfSolicitante', 'cnesSolicitante', 'cnesExecutante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
             }
         }
@@ -474,23 +503,23 @@
             carregarDados();
 
             const p = document.getElementById('nomePaciente');
+            const p2 = document.getElementById('pacienteFolha2');
             const cp = document.getElementById('clienteProntuario');
-            const nc = document.getElementById('nomeCirurgia');
             if (p) {
                 p.addEventListener('input', (e) => {
+                    if (p2) p2.value = e.target.value;
                     if (cp) cp.value = e.target.value;
-                    if (nc) nc.value = e.target.value;
                     salvarDados();
                 });
             }
 
             const pr = document.getElementById('prontuario');
+            const pr2 = document.getElementById('prontuarioFolha2');
             const npr = document.getElementById('numProntuario');
-            const prc = document.getElementById('prontuarioCirurgia');
             if (pr) {
                 pr.addEventListener('input', (e) => {
+                    if (pr2) pr2.value = e.target.value;
                     if (npr) npr.value = e.target.value;
-                    if (prc) prc.value = e.target.value;
                     salvarDados();
                 });
             }
