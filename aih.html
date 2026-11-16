@@ -93,16 +93,44 @@
             text-align: center;
             font-weight: bold;
             font-size: 7.5px;
-            background: #f4f6f8;
+            background: #f9f9f9;
             padding: 4px;
             line-height: 1.2;
             border: 1px solid #000;
             margin-bottom: 3px;
         }
 
-        .header-logo-icon {
-            font-size: 13px;
-            margin-bottom: 1px;
+        .header-table {
+            width: 100%;
+            border: none;
+            margin-bottom: 0;
+        }
+
+        .header-table td {
+            border: none;
+            vertical-align: middle;
+        }
+
+        .brasao-container {
+            width: 55px;
+            text-align: center;
+            padding-right: 5px;
+        }
+
+        .brasao-box {
+            width: 45px;
+            height: 45px;
+            border: 1px solid #2e7d32;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 8px;
+            text-align: center;
+            line-height: 1;
         }
 
         .section-title {
@@ -158,15 +186,45 @@
     </div>
 
     <div id="conteudoImpresso">
+        <!-- ================= FUNÇÃO AUXILIAR DE CABEÇALHO COM BRASÃO ================= -->
+        <script>
+            function gerarCabecalho(titulo) {
+                return `
+                <div class="header-box">
+                    <table class="header-table">
+                        <tr>
+                            <td class="brasao-container">
+                                <div class="brasao-box">BRASÃO<br>F. GOMES</div>
+                            </td>
+                            <td style="text-align: center;">
+                                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                                Hospital Maternidade Severina Carlos de Andrade<br>
+                                CNPJ: 08.349.052/0001-80 | CNES: 2380846<br>
+                                <b>${titulo}</b>
+                            </td>
+                        </tr>
+                    </table>
+                </div>`;
+            }
+        </script>
+
         <!-- ================= FOLHA 1 ================= -->
         <div class="aih-page">
+            <script>document.write(geralCabecalho ? gerarCabecalho("AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)") : "");</script>
             <div class="header-box">
-                <div class="header-logo-icon">🏛️</div>
-                ESTADO DO RIO GRANDE DO NORTE<br>
-                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
-                <b>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</b>
+                <table class="header-table">
+                    <tr>
+                        <td class="brasao-container">
+                            <div class="brasao-box">PREF.<br>F.G.</div>
+                        </td>
+                        <td style="text-align: center;">
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                            Hospital Maternidade Severina Carlos de Andrade<br>
+                            CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
+                            <b>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</b>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <table>
                 <tr>
@@ -285,11 +343,19 @@
         <!-- ================= FOLHA 2 ================= -->
         <div class="aih-page">
             <div class="header-box">
-                <div class="header-logo-icon">🏛️</div>
-                ESTADO DO RIO GRANDE DO NORTE<br>
-                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
-                <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
+                <table class="header-table">
+                    <tr>
+                        <td class="brasao-container">
+                            <div class="brasao-box">PREF.<br>F.G.</div>
+                        </td>
+                        <td style="text-align: center;">
+                            ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                            MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
+                            <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <div class="section-title">1 a 4. Identificação do Estabelecimento de Saúde</div>
             <table>
@@ -437,12 +503,19 @@
         <!-- ================= FOLHA 3 ================= -->
         <div class="aih-page">
             <div class="header-box">
-                <div class="header-logo-icon">🏛️</div>
-                ESTADO DO RIO GRANDE DO NORTE<br>
-                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
-                <b>PRONTUÁRIO DE INTERNAÇÃO</b>
+                <table class="header-table">
+                    <tr>
+                        <td class="brasao-container">
+                            <div class="brasao-box">PREF.<br>F.G.</div>
+                        </td>
+                        <td style="text-align: center;">
+                            ESTADO DO RIO GRANDE DO NORTE<br>
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                            CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
+                            <b>PRONTUÁRIO DE INTERNAÇÃO</b>
+                        </td>
+                    </tr>
+                </table>
             </div>
             <table>
                 <tr>
@@ -569,11 +642,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v23', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v24', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v23');
+        const salvos = localStorage.getItem('aih_dados_v24');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -587,7 +660,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v23');
+            localStorage.removeItem('aih_dados_v24');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
