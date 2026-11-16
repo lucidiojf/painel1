@@ -93,9 +93,16 @@
             text-align: center;
             font-weight: bold;
             font-size: 8px;
-            background: #f9f9f9;
-            padding: 2px;
-            line-height: 1.1;
+            background: #f4f6f8;
+            padding: 4px;
+            line-height: 1.2;
+            border: 1px solid #000;
+            margin-bottom: 3px;
+        }
+
+        .header-logo-icon {
+            font-size: 14px;
+            margin-bottom: 1px;
         }
 
         .section-title {
@@ -154,9 +161,10 @@
         <!-- ================= FOLHA 1 ================= -->
         <div class="aih-page">
             <div class="header-box">
-                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                Hospital Maternidade Severina Carlos de Andrade<br>
-                CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
+                <div class="header-logo-icon">🏛️</div>
+                ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                CNPJ: 08.349.052/0001-80 | CNES: 2380846<br>
                 <b>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</b>
             </div>
             <table>
@@ -276,9 +284,9 @@
         <!-- ================= FOLHA 2 ================= -->
         <div class="aih-page">
             <div class="header-box">
-                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                Hospital Maternidade Severina Carlos de Andrade<br>
-                CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
+                <div class="header-logo-icon">🏛️</div>
+                ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
                 MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
                 <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
             </div>
@@ -428,10 +436,10 @@
         <!-- ================= FOLHA 3 ================= -->
         <div class="aih-page">
             <div class="header-box">
-                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                Hospital Maternidade Severina Carlos de Andrade<br>
-                CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
-                ESTADO DO RIO GRANDE DO NORTE<br>
+                <div class="header-logo-icon">🏛️</div>
+                ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                CNPJ: 08.349.052/0001-80 | CNES: 2380846<br>
                 <b>PRONTUÁRIO DE INTERNAÇÃO</b>
             </div>
             <table>
@@ -539,7 +547,7 @@
             </table>
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="22" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="24" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -559,11 +567,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v21', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v22', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v21');
+        const salvos = localStorage.getItem('aih_dados_v22');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -577,7 +585,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v21');
+            localStorage.removeItem('aih_dados_v22');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
