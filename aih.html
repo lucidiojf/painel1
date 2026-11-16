@@ -160,7 +160,7 @@
             <h2>AIH - Padrão 3 Folhas Oficiais (Frutuoso Gomes)</h2>
             <div class="btn-group">
                 <button onclick="window.print()">🖨️ Imprimir / Gerar PDF</button>
-                <button onclick="exportarWordSeguro()">📄 Baixar Word (Editável)</button>
+                <button onclick="exportarWordInstantaneo()">📄 Baixar Word (Editável)</button>
                 <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
             </div>
         </div>
@@ -328,11 +328,11 @@
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_v4', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_v5', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_v4');
+            const salvos = localStorage.getItem('aih_3_folhas_v5');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -344,7 +344,7 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_v4');
+                localStorage.removeItem('aih_3_folhas_v5');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                     if (!['medicoSolicitante', 'municipioPaciente', 'endProntuario'].includes(c.id)) c.value = '';
                 });
@@ -382,35 +382,35 @@
             });
         });
 
-        // Função otimizada, ultra leve e segura para exportar o Word sem travar
-        function exportarWordSeguro() {
-            const containerHTML = document.getElementById('conteudoImpresso').innerHTML;
-            
-            // Substitui os inputs por texto fixo de forma limpa e direta via regex no HTML
-            let htmlProcessado = containerHTML
-                .replace(/<input[^>]*id="([^"]*)"[^>]*>/gi, (match, id) => {
-                    const el = document.getElementById(id);
-                    const val = el ? el.value : '';
-                    return '<strong style="color:#000080;"> ' + val + '</strong>';
-                })
-                .replace(/<select[^>]*id="([^"]*)"[^>]*>([\s\S]*?)<\/select>/gi, (match, id) => {
-                    const el = document.getElementById(id);
-                    const val = el && el.selectedIndex >= 0 ? el.options[el.selectedIndex].text : '';
-                    return '<strong style="color:#000080;"> ' + (val === 'Selecione' ? '' : val) + '</strong>';
-                })
-                .replace(/<textarea[^>]*id="([^"]*)"[^>]*>[\s\S]*?<\/textarea>/gi, (match, id) => {
-                    const el = document.getElementById(id);
-                    const val = el ? el.value.replace(/\n/g, '<br>') : '';
-                    return '<div style="color:#000; font-weight:bold; padding:2px;">' + val + '</div>';
-                });
+        // Função de exportação instantânea e ultraleve (Zero travamento)
+        function exportarWordInstantaneo() {
+            const container = document.getElementById('conteudoImpresso');
+            let html = container.innerHTML;
 
-            // Limpeza geral de qualquer input residual
-            htmlProcessado = htmlProcessado.replace(/<input[^>]*>/gi, '');
+            // Substitui de forma segura os inputs pelos valores digitados
+            const inputs = container.querySelectorAll('input');
+            inputs.forEach(inp => {
+                const val = inp.value || '';
+                html = html.replace(`id="${inp.id}"`, `> ${val} `);
+            });
+
+            const textareas = container.querySelectorAll('textarea');
+            textareas.forEach(ta => {
+                const val = (ta.value || '').replace(/\n/g, '<br>');
+                html = html.replace(`id="${ta.id}"`, `> ${val} `);
+            });
+
+            const selects = container.querySelectorAll('select');
+            selects.forEach(sel => {
+                const val = sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].text : '';
+                const textoFinal = (val === 'Selecione') ? '' : val;
+                html = html.replace(`id="${sel.id}"`, `> ${textoFinal} `);
+            });
 
             const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 9.5px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 10px; } table.aih-table td { border: 1px solid #000; padding: 4px; vertical-align: top; } .aih-page { page-break-after: always; margin-bottom: 20px; } .header-box { text-align: center; font-weight: bold; border: 1px solid #000; padding: 5px; background: #f5f5f5; margin-bottom: 4px; } .section-header { background: #dcdcdc; font-weight: bold; padding: 3px; border: 1px solid #000; margin-top: 4px; }</style></head><body>';
             const rodape = '</body></html>';
 
-            const blob = new Blob(['\ufeff' + cabecalho + htmlProcessado + rodape], { type: 'application/msword;charset=utf-8' });
+            const blob = new Blob(['\ufeff' + cabecalho + html + rodape], { type: 'application/msword;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
