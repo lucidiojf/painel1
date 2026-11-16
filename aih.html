@@ -92,7 +92,7 @@
         .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 8px;
+            font-size: 7.5px;
             background: #f4f6f8;
             padding: 4px;
             line-height: 1.2;
@@ -101,7 +101,7 @@
         }
 
         .header-logo-icon {
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 1px;
         }
 
@@ -162,9 +162,10 @@
         <div class="aih-page">
             <div class="header-box">
                 <div class="header-logo-icon">🏛️</div>
-                ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                ESTADO DO RIO GRANDE DO NORTE<br>
+                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
                 HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                CNPJ: 08.349.052/0001-80 | CNES: 2380846<br>
+                CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
                 <b>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</b>
             </div>
             <table>
@@ -285,8 +286,8 @@
         <div class="aih-page">
             <div class="header-box">
                 <div class="header-logo-icon">🏛️</div>
-                ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                ESTADO DO RIO GRANDE DO NORTE<br>
+                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
                 MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
                 <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
             </div>
@@ -437,9 +438,10 @@
         <div class="aih-page">
             <div class="header-box">
                 <div class="header-logo-icon">🏛️</div>
-                ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                ESTADO DO RIO GRANDE DO NORTE<br>
+                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
                 HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                CNPJ: 08.349.052/0001-80 | CNES: 2380846<br>
+                CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
                 <b>PRONTUÁRIO DE INTERNAÇÃO</b>
             </div>
             <table>
@@ -567,11 +569,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v22', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v23', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v22');
+        const salvos = localStorage.getItem('aih_dados_v23');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -585,7 +587,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v22');
+            localStorage.removeItem('aih_dados_v23');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
