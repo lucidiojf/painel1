@@ -25,7 +25,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 950px;
             background: #fff;
             margin: 0 auto;
             padding: 20px;
@@ -69,17 +69,23 @@
         .aih-form {
             border: 2px solid var(--border-color);
             font-size: 11px;
+            background: #fff;
         }
 
-        .aih-section {
+        .aih-section-title {
+            text-align: center;
+            font-weight: bold;
+            background: #e0e0e0;
+            padding: 6px;
+            font-size: 12px;
             border-bottom: 1px solid var(--border-color);
-            padding: 5px;
+            text-transform: uppercase;
         }
 
         .aih-row {
             display: flex;
             flex-wrap: wrap;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .aih-row:last-child {
@@ -87,8 +93,8 @@
         }
 
         .field-group {
-            padding: 4px;
-            border-right: 1px solid #ccc;
+            padding: 5px;
+            border-right: 1px solid var(--border-color);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -101,8 +107,8 @@
         .field-group label {
             font-weight: bold;
             font-size: 9px;
-            color: #555;
-            margin-bottom: 2px;
+            color: #444;
+            margin-bottom: 3px;
             text-transform: uppercase;
         }
 
@@ -143,7 +149,7 @@
     <div class="container">
         <!-- Barra de Controles -->
         <div class="action-bar">
-            <h2>Módulo AIH - Preenchimento Rápido</h2>
+            <h2>Módulo AIH - Cabeçalho Oficial</h2>
             <div class="btn-group">
                 <button onclick="window.print()">🖨️ Imprimir / PDF</button>
                 <button onclick="exportarWord()">📄 Baixar Word</button>
@@ -152,55 +158,73 @@
 
         <!-- Formulário AIH -->
         <div class="aih-form">
-            <div class="aih-section" style="text-align: center; font-weight: bold; background: #eee; font-size: 13px;">
+            <div class="aih-section-title">
+                MINISTÉRIO DA SAÚDE - SISTEMA ÚNICO DE SAÚDE<br>
                 AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR (AIH)
             </div>
 
-            <!-- Bloco 1: Identificação -->
+            <!-- Bloco Cabeçalho: Órgão Emissor e Estabelecimento -->
             <div class="aih-row">
-                <div class="field-group" style="flex: 3;">
-                    <label>Nome do Paciente</label>
-                    <input type="text" id="nomePaciente" placeholder="Nome completo">
+                <div class="field-group" style="flex: 2;">
+                    <label>1. Órgão Emissor (UF/Municipal)</label>
+                    <input type="text" id="orgaoEmissor" placeholder="Ex: Secretaria Estadual de Saúde - RN">
+                </div>
+                <div class="field-group" style="flex: 2;">
+                    <label>2. Nome do Estabelecimento de Saúde (Hospital)</label>
+                    <input type="text" id="nomeEstabelecimento" placeholder="Nome do Hospital / Unidade">
                 </div>
                 <div class="field-group" style="flex: 1;">
-                    <label>Prontuário</label>
-                    <input type="text" id="prontuario" placeholder="Nº">
+                    <label>3. CNES</label>
+                    <input type="text" id="cnes" placeholder="Código CNES">
                 </div>
             </div>
 
-            <!-- Bloco 2: Dados Clínicos -->
+            <!-- Bloco Tipo de Guia e Datas -->
             <div class="aih-row">
-                <div class="field-group" style="flex: 2;">
-                    <label>Procedimento Solicitado</label>
-                    <input type="text" id="procedimento" placeholder="Nome ou Código do Procedimento">
+                <div class="field-group" style="flex: 1;">
+                    <label>4. Tipo de AIH</label>
+                    <input type="text" id="tipoAih" placeholder="Ex: 1 - Normal">
                 </div>
                 <div class="field-group" style="flex: 1;">
-                    <label>CID Principal</label>
-                    <input type="text" id="cid" placeholder="Ex: O80">
+                    <label>5. Nº da AIH (Anterior se Faturamento)</label>
+                    <input type="text" id="aihAnterior" placeholder="Nº se aplicável">
+                </div>
+                <div class="field-group" style="flex: 1;">
+                    <label>6. Data da Emissão</label>
+                    <input type="date" id="dataEmissao">
+                </div>
+            </div>
+
+            <!-- Bloco Identificação Básica do Paciente -->
+            <div class="aih-section-title" style="background: #f0f0f0; font-size: 11px; text-align: left; padding-left: 5px;">
+                I - IDENTIFICAÇÃO DO PACIENTE
+            </div>
+
+            <div class="aih-row">
+                <div class="field-group" style="flex: 3;">
+                    <label>7. Nome do Paciente</label>
+                    <input type="text" id="nomePaciente" placeholder="Nome completo do paciente">
+                </div>
+                <div class="field-group" style="flex: 1;">
+                    <label>8. Prontuário</label>
+                    <input type="text" id="prontuario" placeholder="Nº do prontuário">
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Função simples e nativa para exportar o conteúdo para Word (.doc) mantendo tabelas
-       <script>
         function exportarWord() {
-            // Pega o conteúdo do formulário
             const conteudoHTML = document.querySelector('.aih-form').outerHTML;
-            
-            // Monta a estrutura compatível com o Microsoft Word
             const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH</title></head><body>';
             const rodape = '</body></html>';
             const codigoCompleto = cabecalho + conteudoHTML + rodape;
 
-            // Codifica em URI para garantir o download estável em qualquer navegador móvel ou PC
             const uri = 'data:application/msword;charset=utf-8,' + encodeURIComponent(codigoCompleto);
             
-            // Cria um link temporário e dispara o clique automático
             const a = document.createElement('a');
             a.href = uri;
-            a.download = 'AIH_Documento.doc';
+            a.download = 'AIH_Cabecalho.doc';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
