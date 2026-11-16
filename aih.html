@@ -372,7 +372,7 @@
                         <label>33. Profissional Solicitante / Assistente</label>
                         <select id="medicoSolicitante" onchange="atualizarCpfMedico()">
                             <option value="">Selecione o Médico</option>
-                            <option value="LUCIDIO JÁCOME FERREIRA" data-cpf="099.311.824-07">LUCIDIO JÁCOME FERREIRA</option>
+                            <option value="LUCIDIO JÁCOME FERREIRA" data-cpf="175...">LUCIDIO JÁCOME FERREIRA</option>
                             <option value="HIAGO FRANCIMAR JACOME DE SOUZA" data-cpf="050.980.494-23">HIAGO FRANCIMAR JACOME DE SOUZA</option>
                             <option value="FRENDSON CAMARA DE OLIVEIRA" data-cpf="012.045.714-81">FRENDSON CAMARA DE OLIVEIRA</option>
                             <option value="NALYGIA PAULO PAIVA" data-cpf="055.249.504-28">NALYGIA PAULO PAIVA</option>
@@ -462,11 +462,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v15', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v16', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v15');
+        const salvos = localStorage.getItem('aih_dados_v16');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -480,7 +480,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v15');
+            localStorage.removeItem('aih_dados_v16');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
