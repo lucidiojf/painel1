@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prontuário e AIH - Hospital Maternidade Severina Carlos de Andrade</title>
+    <title>AIH Completa - Padrão Oficial Frutuoso Gomes</title>
     <style>
         :root {
-            --primary-color: #003366;
             --border-color: #000;
-            --bg-light: #f9f9f9;
         }
 
         * {
@@ -21,7 +19,7 @@
         body {
             background-color: #eef2f5;
             padding: 20px;
-            color: #333;
+            color: #000;
         }
 
         .container {
@@ -35,7 +33,7 @@
 
         /* Barra de Ações (Oculta na impressão) */
         .action-bar {
-            background: var(--primary-color);
+            background: #003366;
             padding: 15px;
             display: flex;
             justify-content: space-between;
@@ -59,13 +57,12 @@
 
         .btn-group button {
             background: #fff;
-            color: var(--primary-color);
+            color: #003366;
             border: none;
             padding: 8px 12px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
-            transition: background 0.2s;
             font-size: 11px;
         }
 
@@ -78,113 +75,80 @@
             color: #fff !important;
         }
 
-        .btn-clear:hover {
-            background: #c9302c !important;
-        }
-
-        /* Estrutura das Páginas A4 */
+        /* Estrutura das 3 Páginas Oficiais (Tabelas Estritas) */
         .aih-page {
+            width: 100%;
             border: 2px solid var(--border-color);
-            font-size: 10px;
             background: #fff;
-            margin-bottom: 30px;
-            padding: 10px;
+            margin-bottom: 40px;
+            padding: 15px;
             page-break-after: always;
             break-after: page;
+            font-size: 10px;
         }
 
-        .aih-page:last-child {
-            margin-bottom: 0;
-        }
-
-        .header-instituicao {
-            text-align: center;
-            font-weight: bold;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 5px;
-            margin-bottom: 8px;
-            font-size: 11px;
-            text-transform: uppercase;
-        }
-
-        .aih-section-title {
-            text-align: center;
-            font-weight: bold;
-            background: #e0e0e0;
-            padding: 4px;
-            font-size: 11px;
+        table.aih-table {
+            width: 100%;
+            border-collapse: collapse;
             border: 1px solid var(--border-color);
             margin-top: 5px;
             margin-bottom: 5px;
-            text-transform: uppercase;
         }
 
-        .aih-row {
-            display: flex;
-            flex-wrap: wrap;
+        table.aih-table th, table.aih-table td {
             border: 1px solid var(--border-color);
-            margin-top: -1px;
+            padding: 4px 6px;
+            vertical-align: top;
+            text-align: left;
         }
 
-        .field-group {
-            padding: 3px 5px;
-            border-right: 1px solid var(--border-color);
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .field-group:last-child {
-            border-right: none;
-        }
-
-        .field-group label {
+        .header-table td {
+            text-align: center;
             font-weight: bold;
-            font-size: 8px;
-            color: #444;
-            margin-bottom: 2px;
+            font-size: 11px;
+            border: 1px solid var(--border-color);
+            background: #f5f5f5;
+        }
+
+        .section-header {
+            background: #dcdcdc;
+            font-weight: bold;
+            text-align: left;
+            padding: 4px 6px;
+            border: 1px solid var(--border-color);
+            font-size: 10px;
             text-transform: uppercase;
         }
 
-        .field-group input, .field-group select, .field-group textarea {
+        label {
+            font-size: 8px;
+            font-weight: bold;
+            display: block;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        input[type="text"], input[type="date"], select, textarea {
+            width: 100%;
             border: none;
-            border-bottom: 1px dotted #888;
-            padding: 2px;
-            font-size: 10px;
-            outline: none;
+            border-bottom: 1px dotted #666;
             background: transparent;
-            resize: vertical;
+            font-size: 10px;
+            padding: 2px;
+            outline: none;
         }
 
-        .field-group input:focus, .field-group select:focus, .field-group textarea:focus {
-            background: var(--bg-light);
-            border-bottom: 1px solid var(--primary-color);
+        input:focus, select:focus, textarea:focus {
+            background: #ffffe0;
+            border-bottom: 1px solid #003366;
         }
 
-        /* Estilos de Impressão exatos para 3 Folhas */
         @media print {
-            body {
-                background: #fff;
-                padding: 0;
-            }
-            .action-bar {
-                display: none;
-            }
-            .container {
-                border: none;
-                box-shadow: none;
-                max-width: 100%;
-                padding: 0;
-                margin: 0;
-            }
-            .aih-page {
-                border: none;
-                page-break-after: always;
-                break-after: page;
-                height: 100vh;
-                margin: 0;
-                padding: 0;
-            }
+            body { background: #fff; padding: 0; }
+            .action-bar { display: none; }
+            .container { border: none; box-shadow: none; max-width: 100%; padding: 0; }
+            .aih-page { border: none; margin: 0; padding: 0; page-break-after: always; }
         }
     </style>
 </head>
@@ -193,409 +157,374 @@
     <div class="container">
         <!-- Barra de Controles -->
         <div class="action-bar">
-            <h2>Módulo AIH - Padrão 3 Folhas (Frutuoso Gomes)</h2>
+            <h2>Gerador de AIH - Layout Oficial Frutuoso Gomes</h2>
             <div class="btn-group">
                 <button onclick="window.print()">🖨️ Imprimir / PDF (3 Folhas)</button>
-                <button onclick="exportarWord()">📄 Baixar Word</button>
-                <button class="btn-clear" onclick="limparFormulario()">🗑️ Novo / Limpar</button>
+                <button onclick="exportarWord()">📄 Baixar Word (Oficial)</button>
+                <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
             </div>
         </div>
 
         <div id="conteudoImpresso">
-            <!-- ================= PÁGINA 1: GUIA AIH PRINCIPAL ================= -->
+            <!-- ================= FOLHA 1: GUIA AIH OFICIAL ================= -->
             <div class="aih-page">
-                <div class="header-instituicao">
-                    PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                    Hospital Maternidade Severina Carlos de Andrade - CNPJ: 08.349.052/0001-80<br>
-                    AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)
-                </div>
+                <table class="aih-table header-table">
+                    <tr>
+                        <td>
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                            Hospital Maternidade Severina Carlos de Andrade<br>
+                            CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
+                            <strong>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</strong>
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 2;">
-                        <label>Número da AIH</label>
-                        <input type="text" id="numAih" placeholder="Nº AIH">
-                    </div>
-                    <div class="field-group" style="flex: 2;">
-                        <label>Prontuário</label>
-                        <input type="text" id="prontuario" placeholder="Prontuário">
-                    </div>
-                    <div class="field-group" style="flex: 2;">
-                        <label>Tipo de AIH</label>
-                        <input type="text" id="tipoAih" value="01 - Inicial">
-                    </div>
-                </div>
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 40%;">
+                            <label>Número da AIH</label>
+                            <input type="text" id="numAih">
+                        </td>
+                        <td style="width: 35%;">
+                            <label>Prontuário</label>
+                            <input type="text" id="prontuario">
+                        </td>
+                        <td style="width: 25%;">
+                            <label>Tipo</label>
+                            <input type="text" id="tipoAih" value="01 - Inicial">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Apresentação</label>
+                            <input type="text" id="apresentacao">
+                        </td>
+                        <td colspan="2">
+                            <label>Órgão Emissor</label>
+                            <input type="text" id="orgaoEmissor" value="SES-RN">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Data da Internação</label>
+                            <input type="date" id="dataInternacao">
+                        </td>
+                        <td colspan="2">
+                            <label>Data da Saída</label>
+                            <input type="date" id="dataSaida">
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Apresentação</label>
-                        <input type="text" id="apresentacao">
-                    </div>
-                    <div class="field-group" style="flex: 3;">
-                        <label>Órgão Emissor</label>
-                        <input type="text" id="orgaoEmissor" value="SES-RN">
-                    </div>
-                </div>
+                <div class="section-header">DADOS DO PACIENTE</div>
+                <table class="aih-table">
+                    <tr>
+                        <td colspan="3">
+                            <label>Nome do Paciente</label>
+                            <input type="text" id="nomePaciente">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Sexo</label>
+                            <select id="sexoPaciente">
+                                <option value="">Selecione</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Feminino</option>
+                            </select>
+                        </td>
+                        <td>
+                            <label>Data de Nascimento</label>
+                            <input type="date" id="nascimentoPaciente">
+                        </td>
+                        <td>
+                            <label>Cartão SUS (CNS)</label>
+                            <input type="text" id="cnsPaciente">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <label>Nome da Mãe</label>
+                            <input type="text" id="nomeMae">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label>Endereço (Rua, Nº, Bairro)</label>
+                            <input type="text" id="enderecoPaciente">
+                        </td>
+                        <td>
+                            <label>Município / UF</label>
+                            <input type="text" id="municipioPaciente" value="Frutuoso Gomes - RN">
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 1;">
-                        <label>Data da Internação</label>
-                        <input type="date" id="dataInternacao">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Data da Saída</label>
-                        <input type="date" id="dataSaida">
-                    </div>
-                </div>
-
-                <div class="aih-section-title">DADOS DO PACIENTE</div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 4;">
-                        <label>Nome do Paciente</label>
-                        <input type="text" id="nomePaciente" placeholder="Nome completo">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Sexo</label>
-                        <select id="sexoPaciente">
-                            <option value="">Selecione</option>
-                            <option value="M">Masculino</option>
-                            <option value="F">Feminino</option>
-                        </select>
-                    </div>
-                    <div class="field-group" style="flex: 1.5;">
-                        <label>Data de Nascimento</label>
-                        <input type="date" id="nascimentoPaciente">
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 2;">
-                        <label>Cartão SUS (CNS)</label>
-                        <input type="text" id="cnsPaciente" placeholder="Nº Cartão SUS">
-                    </div>
-                    <div class="field-group" style="flex: 3;">
-                        <label>Nome da Mãe</label>
-                        <input type="text" id="nomeMae" placeholder="Nome da mãe">
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Endereço (Rua, Nº, Bairro)</label>
-                        <input type="text" id="enderecoPaciente" placeholder="Logradouro e Bairro">
-                    </div>
-                    <div class="field-group" style="flex: 2;">
-                        <label>Município</label>
-                        <input type="text" id="municipioPaciente" value="Frutuoso Gomes">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Estado</label>
-                        <input type="text" id="ufPaciente" value="RN">
-                    </div>
-                </div>
-
-                <div class="aih-section-title">DADOS DO PROCEDIMENTO E DIAGNÓSTICO</div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Procedimento Solicitado</label>
-                        <input type="text" id="procedimentoSolicitado">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Mudança Procedimento (S/N)</label>
-                        <input type="text" id="mudancaProc" value="N">
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Procedimento Realizado</label>
-                        <input type="text" id="procedimentoRealizado">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>CID Principal</label>
-                        <input type="text" id="cidPrincipal" placeholder="Ex: O80">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>CID Secundário</label>
-                        <input type="text" id="cidSecundario">
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 2;">
-                        <label>CPF Solicitante</label>
-                        <input type="text" id="cpfSolicitante">
-                    </div>
-                    <div class="field-group" style="flex: 2;">
-                        <label>CPF Autorizador</label>
-                        <input type="text" id="cpfAutorizador">
-                    </div>
-                    <div class="field-group" style="flex: 2;">
-                        <label>Data Autorização</label>
-                        <input type="date" id="dataAutorizacao">
-                    </div>
-                </div>
+                <div class="section-header">DADOS DO PROCEDIMENTO</div>
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 70%;">
+                            <label>Procedimento Solicitado</label>
+                            <input type="text" id="procedimentoSolicitado">
+                        </td>
+                        <td style="width: 30%;">
+                            <label>Mudança Procedimento (S/N)</label>
+                            <input type="text" id="mudancaProc" value="N">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Procedimento Realizado</label>
+                            <input type="text" id="procedimentoRealizado">
+                        </td>
+                        <td>
+                            <label>CID Principal</label>
+                            <input type="text" id="cidPrincipal">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>CPF Solicitante</label>
+                            <input type="text" id="cpfSolicitante">
+                        </td>
+                        <td>
+                            <label>CPF Autorizador</label>
+                            <input type="text" id="cpfAutorizador">
+                        </td>
+                    </tr>
+                </table>
             </div>
 
-            <!-- ================= PÁGINA 2: PRONTUÁRIO / JUSTIFICATIVA CLÍNICA (COMPACTADA) ================= -->
+            <!-- ================= FOLHA 2: PRONTUÁRIO E JUSTIFICATIVA ================= -->
             <div class="aih-page">
-                <div class="header-instituicao">
-                    ESTADO DO RIO GRANDE DO NORTE<br>
-                    Secretaria Municipal de Saúde - Hospital Maternidade Severina Carlos de Andrade<br>
-                    PRONTUÁRIO DE INTERNAÇÃO E JUSTIFICATIVA CLÍNICA
-                </div>
+                <table class="aih-table header-table">
+                    <tr>
+                        <td>
+                            ESTADO DO RIO GRANDE DO NORTE<br>
+                            Secretaria Municipal de Saúde - Hospital Maternidade Severina Carlos de Andrade<br>
+                            <strong>PRONTUÁRIO DE INTERNAÇÃO E JUSTIFICATIVA CLÍNICA</strong>
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Nome do Cliente</label>
-                        <input type="text" id="clienteProntuario">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Nº Prontuário</label>
-                        <input type="text" id="numProntuario">
-                    </div>
-                </div>
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 75%;">
+                            <label>Nome do Cliente</label>
+                            <input type="text" id="clienteProntuario">
+                        </td>
+                        <td style="width: 25%;">
+                            <label>Nº Prontuário</label>
+                            <input type="text" id="numProntuario">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Município / UF</label>
+                            <input type="text" value="Frutuoso Gomes - RN">
+                        </td>
+                        <td>
+                            <label>Data de Nascimento</label>
+                            <input type="date" id="nascProntuario">
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 2;">
-                        <label>Município</label>
-                        <input type="text" id="munProntuario" value="Frutuoso Gomes">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>UF</label>
-                        <input type="text" value="RN">
-                    </div>
-                    <div class="field-group" style="flex: 2;">
-                        <label>Data de Nascimento</label>
-                        <input type="date" id="nascProntuario">
-                    </div>
-                </div>
-
-                <div class="aih-section-title">SUMÁRIO DE HISTÓRIA CLÍNICA E EXAME FÍSICO</div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 1;">
-                        <label>20. Principais Sinais e Sintomas Clínicos / Histórico</label>
-                        <textarea id="sinaisSintomas" rows="3" placeholder="Descreva os sinais, sintomas e quadro clínico..."></textarea>
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 1;">
-                        <label>21. Condições que Justificam a Internação</label>
-                        <textarea id="condicoesInternacao" rows="2" placeholder="Justificativa técnica para permanência..."></textarea>
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 1;">
-                        <label>22. Principais Resultados de Provas Diagnósticas / Exames</label>
-                        <textarea id="resultadosExames" rows="2" placeholder="Resultados relevantes..."></textarea>
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 2;">
-                        <label>23. Diagnóstico Inicial</label>
-                        <input type="text" id="diagInicial">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>24. CID-10 Principal</label>
-                        <input type="text" id="cid10Prontuario">
-                    </div>
-                </div>
+                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA E JUSTIFICATIVA</div>
+                <table class="aih-table">
+                    <tr>
+                        <td>
+                            <label>20. Principais Sinais e Sintomas Clínicos</label>
+                            <textarea id="sinaisSintomas" rows="3"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>21. Condições que Justificam a Internação</label>
+                            <textarea id="condicoesInternacao" rows="2"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>22. Principais Resultados de Provas Diagnósticas / Exames</label>
+                            <textarea id="resultadosExames" rows="2"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>23. Diagnóstico Inicial &nbsp;|&nbsp; 24. CID-10 Principal</label>
+                            <input type="text" id="diagInicial" placeholder="Descrição e CID">
+                        </td>
+                    </tr>
+                </table>
             </div>
 
-            <!-- ================= PÁGINA 3: FICHA DE ANESTESIA E ATO CIRÚRGICO ================= -->
+            <!-- ================= FOLHA 3: ANESTESIA E ATO CIRÚRGICO ================= -->
             <div class="aih-page">
-                <div class="header-instituicao">
-                    HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
-                    FICHA DE ANESTESIA E DESCRIÇÃO DO ATO CIRÚRGICO
-                </div>
+                <table class="aih-table header-table">
+                    <tr>
+                        <td>
+                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                            <strong>FICHA DE ANESTESIA E DESCRIÇÃO DO ATO CIRÚRGICO</strong>
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Nome do Paciente (Cirurgia)</label>
-                        <input type="text" id="nomeCirurgia">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Nº Prontuário</label>
-                        <input type="text" id="prontuarioCirurgia">
-                    </div>
-                </div>
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 75%;">
+                            <label>Paciente</label>
+                            <input type="text" id="nomeCirurgia">
+                        </td>
+                        <td style="width: 25%;">
+                            <label>Nº Prontuário</label>
+                            <input type="text" id="prontuarioCirurgia">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Cirurgia Realizada</label>
+                            <input type="text" id="descCirurgiaRealizada">
+                        </td>
+                        <td>
+                            <label>Código SSM</label>
+                            <input type="text" id="codigoSSM">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Data da Cirurgia</label>
+                            <input type="date" id="dataCirurgia">
+                        </td>
+                        <td>
+                            <label>Início / Término</label>
+                            <input type="text" id="inicioTermino" placeholder="Ex: 11:15 - 11:59">
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Cirurgia Realizada</label>
-                        <input type="text" id="descCirurgiaRealizada">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Código SSM</label>
-                        <input type="text" id="codigoSSM">
-                    </div>
-                </div>
+                <div class="section-header">EQUIPE CIRÚRGICA</div>
+                <table class="aih-table">
+                    <tr>
+                        <td style="width: 70%;">
+                            <label>Médico Cirurgião</label>
+                            <input type="text" id="medicoCirurgiao" value="LUCIDIO JÁCOME FERREIRA">
+                        </td>
+                        <td style="width: 30%;">
+                            <label>CRM</label>
+                            <input type="text" id="crmCirurgiao" value="1.675">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>1º Auxiliar</label>
+                            <input type="text" id="primeiroAux">
+                        </td>
+                        <td>
+                            <label>CRM / Conselho</label>
+                            <input type="text" id="crmAux1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Médico Anestesista</label>
+                            <input type="text" id="medicoAnestesista">
+                        </td>
+                        <td>
+                            <label>CRM</label>
+                            <input type="text" id="crmAnestesista" value="8.830">
+                        </td>
+                    </tr>
+                </table>
 
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 1;">
-                        <label>Data da Cirurgia</label>
-                        <input type="date" id="dataCirurgia">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Início</label>
-                        <input type="text" id="inicioCirurgia" placeholder="Ex: 11:15">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>Término</label>
-                        <input type="text" id="terminoCirurgia" placeholder="Ex: 11:59">
-                    </div>
-                </div>
-
-                <div class="aih-section-title">EQUIPE CIRÚRGICA E RESPONSÁVEIS</div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Médico Cirurgião</label>
-                        <input type="text" id="medicoCirurgiao" value="LUCIDIO JÁCOME FERREIRA">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>CRM</label>
-                        <input type="text" id="crmCirurgiao" value="1.675">
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>1º Auxiliar</label>
-                        <input type="text" id="primeiroAux" placeholder="Nome do 1º Auxiliar">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>CRM / Conselho</label>
-                        <input type="text" id="crmAux1">
-                    </div>
-                </div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 3;">
-                        <label>Anestesista</label>
-                        <input type="text" id="medicoAnestesista" placeholder="Nome do Anestesista">
-                    </div>
-                    <div class="field-group" style="flex: 1;">
-                        <label>CRM / RQE</label>
-                        <input type="text" id="crmAnestesista" value="8.830">
-                    </div>
-                </div>
-
-                <div class="aih-section-title">DESCRIÇÃO DO ATO CIRÚRGICO</div>
-
-                <div class="aih-row">
-                    <div class="field-group" style="flex: 1;">
-                        <label>Relatório da Cirurgia / Descrição Detalhada</label>
-                        <textarea id="relatorioCirurgico" rows="5" placeholder="Descreva os tempos cirúrgicos, achados operatórios e procedimentos realizados..."></textarea>
-                    </div>
-                </div>
+                <div class="section-header">DESCRIÇÃO DO ATO CIRÚRGICO</div>
+                <table class="aih-table">
+                    <tr>
+                        <td>
+                            <label>Relatório Detalhado da Cirurgia</label>
+                            <textarea id="relatorioCirurgico" rows="5"></textarea>
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        // Função para salvar automaticamente os dados no localStorage
+        // Auto-save no localStorage
         function salvarDados() {
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
-            campos.forEach(campo => {
-                if (campo.id) {
-                    dados[campo.id] = campo.value;
-                }
-            });
-            localStorage.setItem('aih_3_folhas_dados', JSON.stringify(dados));
+            campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
+            localStorage.setItem('aih_oficial_dados', JSON.stringify(dados));
         }
 
-        // Função para carregar os dados salvos ao abrir a página
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_dados');
+            const salvos = localStorage.getItem('aih_oficial_dados');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
                     const campo = document.getElementById(id);
-                    if (campo) {
-                        campo.value = dados[id];
-                    }
+                    if (campo) campo.value = dados[id];
                 }
             }
         }
 
-        // Função para limpar o formulário e o armazenamento local
         function limparFormulario() {
-            if (confirm('Deseja realmente limpar todos os campos e iniciar um novo atendimento?')) {
-                localStorage.removeItem('aih_3_folhas_dados');
-                const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
-                campos.forEach(campo => {
-                    if (campo.id !== 'medicoCirurgiao' && campo.id !== 'crmCirurgiao' && campo.id !== 'crmAnestesista') {
-                        campo.value = '';
-                    }
+            if (confirm('Deseja limpar os dados do formulário?')) {
+                localStorage.removeItem('aih_oficial_dados');
+                document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
+                    if (!['medicoCirurgiao', 'crmCirurgiao', 'crmAnestesista', 'municipioPaciente'].includes(c.id)) c.value = '';
                 });
             }
         }
 
-        // Sincronização inteligente entre campos comuns (Nome e Prontuário) nas 3 páginas
-        function configurarSincronizacao() {
-            const nomePaciente = document.getElementById('nomePaciente');
-            const clienteProntuario = document.getElementById('clienteProntuario');
-            const nomeCirurgia = document.getElementById('nomeCirurgia');
-
-            if (nomePaciente) {
-                nomePaciente.addEventListener('input', (e) => {
-                    if (clienteProntuario) clienteProntuario.value = e.target.value;
-                    if (nomeCirurgia) nomeCirurgia.value = e.target.value;
-                    salvarDados();
-                });
-            }
-
-            const prontuario = document.getElementById('prontuario');
-            const numProntuario = document.getElementById('numProntuario');
-            const prontuarioCirurgia = document.getElementById('prontuarioCirurgia');
-
-            if (prontuario) {
-                prontuario.addEventListener('input', (e) => {
-                    if (numProntuario) numProntuario.value = e.target.value;
-                    if (prontuarioCirurgia) prontuarioCirurgia.value = e.target.value;
-                    salvarDados();
-                });
-            }
-        }
-
-        // Ouvintes de eventos e inicialização
+        // Sincronização automática de Nome e Prontuário entre as folhas
         document.addEventListener('DOMContentLoaded', () => {
             carregarDados();
-            configurarSincronizacao();
 
-            const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
-            campos.forEach(campo => {
-                campo.addEventListener('input', salvarDados);
-                campo.addEventListener('change', salvarDados);
+            const p = document.getElementById('nomePaciente');
+            const cp = document.getElementById('clienteProntuario');
+            const nc = document.getElementById('nomeCirurgia');
+            if (p) {
+                p.addEventListener('input', (e) => {
+                    if (cp) cp.value = e.target.value;
+                    if (nc) nc.value = e.target.value;
+                    salvarDados();
+                });
+            }
+
+            const pr = document.getElementById('prontuario');
+            const npr = document.getElementById('numProntuario');
+            const prc = document.getElementById('prontuarioCirurgia');
+            if (pr) {
+                pr.addEventListener('input', (e) => {
+                    if (npr) npr.value = e.target.value;
+                    if (prc) prc.value = e.target.value;
+                    salvarDados();
+                });
+            }
+
+            document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
+                c.addEventListener('input', salvarDados);
+                c.addEventListener('change', salvarDados);
             });
         });
 
-        // Função de exportação para Word (.doc) mantendo as quebras limpas
+        // Exportador para Word mantendo tabelas rígidas oficiais
         function exportarWord() {
             const conteudoHTML = document.getElementById('conteudoImpresso').innerHTML;
-            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body { font-family: Arial, sans-serif; font-size: 10px; } .aih-page { page-break-after: always; border: 1px solid #000; margin-bottom: 20px; padding: 15px; }</style></head><body>';
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH Oficial</title><style>body { font-family: Arial, sans-serif; font-size: 10px; } table.aih-table { width: 100%; border-collapse: collapse; border: 1px solid #000; margin-bottom: 15px; } table.aih-table td { border: 1px solid #000; padding: 5px; vertical-align: top; } .aih-page { page-break-after: always; }</style></head><body>';
             const rodape = '</body></html>';
             const codigoCompleto = cabecalho + conteudoHTML + rodape;
 
-            const blob = new Blob(['\ufeff' + codigoCompleto], {
-                type: 'application/msword;charset=utf-8'
-            });
-            
+            const blob = new Blob(['\ufeff' + codigoCompleto], { type: 'application/msword;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
-            
+            a.download = 'AIH_Oficial_Severina_Carlos.doc';
             document.body.appendChild(a);
             a.click();
-            
             setTimeout(() => {
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
