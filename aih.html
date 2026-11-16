@@ -184,24 +184,26 @@
 
     <script>
         // Função simples e nativa para exportar o conteúdo para Word (.doc) mantendo tabelas
+       <script>
         function exportarWord() {
+            // Pega o conteúdo do formulário
             const conteudoHTML = document.querySelector('.aih-form').outerHTML;
-            const cabecalho = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>AIH</title></head><body>";
-            const rodape = "</body></html>";
+            
+            // Monta a estrutura compatível com o Microsoft Word
+            const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH</title></head><body>';
+            const rodape = '</body></html>';
             const codigoCompleto = cabecalho + conteudoHTML + rodape;
 
-            const blob = new Blob(['\ufeff' + codigoCompleto], {
-                type: 'application/msword'
-            });
+            // Codifica em URI para garantir o download estável em qualquer navegador móvel ou PC
+            const uri = 'data:application/msword;charset=utf-8,' + encodeURIComponent(codigoCompleto);
             
-            const url = URL.createObjectURL(blob);
+            // Cria um link temporário e dispara o clique automático
             const a = document.createElement('a');
-            a.href = url;
+            a.href = uri;
             a.download = 'AIH_Documento.doc';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url);
         }
     </script>
 </body>
