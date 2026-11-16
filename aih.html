@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AIH - 3 Folhas Oficiais | Frutuoso Gomes</title>
+    <title>AIH 3 Folhas Oficiais - Frutuoso Gomes</title>
     <style>
         * {
             box-sizing: border-box;
@@ -71,13 +71,13 @@
             color: #fff !important;
         }
 
-        /* Estrutura das 3 Páginas Oficiais Compactadas para A4 */
+        /* Estrutura exata das 3 Páginas Oficiais para A4 / Word */
         .aih-page {
             width: 100%;
             border: 2px solid #000;
             background: #fff;
             margin-bottom: 30px;
-            padding: 10px;
+            padding: 12px;
             page-break-after: always;
             break-after: page;
             font-size: 9.5px;
@@ -154,16 +154,16 @@
     <div class="container">
         <!-- Barra de Controles -->
         <div class="action-bar">
-            <h2>AIH - Padrão 3 Folhas Compactas (Frutuoso Gomes)</h2>
+            <h2>AIH - Padrão 3 Folhas Oficiais (Frutuoso Gomes)</h2>
             <div class="btn-group">
-                <button onclick="window.print()">🖨️ Imprimir / PDF (Exatas 3 Folhas)</button>
+                <button onclick="window.print()">🖨️ Imprimir / PDF (3 Folhas)</button>
                 <button onclick="exportarWord()">📄 Baixar Word (Oficial)</button>
                 <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
             </div>
         </div>
 
         <div id="conteudoImpresso">
-            <!-- ================= FOLHA 1: LAUDO / GUIA DE INTERNAÇÃO AIH ================= -->
+            <!-- ================= FOLHA 1: LAUDO DE SOLICITAÇÃO DA AIH ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
@@ -257,7 +257,7 @@
                     <tr>
                         <td>
                             <label>17. Principais Sinais e Sintomas Clínicos</label>
-                            <textarea id="sinaisSintomas" rows="2"></textarea>
+                            <textarea id="sinaisSintomas" rows="2" placeholder="Descreva os sinais e sintomas..."></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -313,7 +313,7 @@
                             ESTADO DO RIO GRANDE DO NORTE<br>
                             Secretaria Municipal de Saúde de Frutuoso Gomes<br>
                             Hospital Maternidade Severina Carlos de Andrade<br>
-                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>
+                            <strong>PRONTUÁRIO DE INTERNAÇÃO</strong>[cite: 6]
                         </td>
                     </tr>
                 </table>
@@ -341,12 +341,12 @@
                     </tr>
                 </table>
 
-                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>
+                <div class="section-header">SUMÁRIO DE HISTÓRIA CLÍNICA, EXAME FÍSICO E TRATAMENTO</div>[cite: 6]
                 <table class="aih-table">
                     <tr>
                         <td>
-                            <label>Evolução e Conduta Clínica</label>
-                            <textarea id="evolucaoClinica" rows="8" placeholder="Histórico clínico detalhado..."></textarea>
+                            <label>Evolução, História Clínica e Conduta</label>
+                            <textarea id="evolucaoClinica" rows="9" placeholder="Evolução clínica detalhada..."></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -358,14 +358,14 @@
                 </table>
             </div>
 
-            <!-- ================= FOLHA 3: BOLETIM OPERATÓRIO / CIRURGIA ================= -->
+            <!-- ================= FOLHA 3: BOLETIM OPERATÓRIO / RELATÓRIO DE INTERVENÇÃO ================= -->
             <div class="aih-page">
                 <table class="aih-table header-table">
                     <tr>
                         <td>
-                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                            Hospital Maternidade Severina Carlos de Andrade — Secretaria Municipal de Saúde<br>
-                            <strong>BOLETIM OPERATÓRIO / FICHA DE ANESTESIA</strong>
+                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — Secretaria Municipal de Saúde<br>
+                            <strong>BOLETIM OPERATÓRIO</strong>[cite: 8]
                         </td>
                     </tr>
                 </table>
@@ -383,11 +383,11 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Diagnóstico Pré-Operatório / Indicação</label>
+                            <label>Diagnóstico Pré-Operatório / Indicação Terapêutica</label>
                             <input type="text" id="diagPreOp">
                         </td>
                         <td>
-                            <label>Data da Cirurgia</label>
+                            <label>Data</label>
                             <input type="date" id="dataCirurgia">
                         </td>
                     </tr>
@@ -397,7 +397,7 @@
                 <table class="aih-table">
                     <tr>
                         <td style="width: 70%;">
-                            <label>Operador / Cirurgião</label>
+                            <label>Operador</label>
                             <input type="text" id="medicoCirurgiao" value="LUCIDIO JÁCOME FERREIRA">
                         </td>
                         <td style="width: 30%;">
@@ -417,7 +417,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <label>Médico Anestesista</label>
+                            <label>3. Anestesista</label>
                             <input type="text" id="medicoAnestesista">
                         </td>
                         <td>
@@ -427,12 +427,12 @@
                     </tr>
                 </table>
 
-                <div class="section-header">RELATÓRIO DE INTERVENÇÃO / ATO CIRÚRGICO</div>
+                <div class="section-header">RELATÓRIO DE INTERVENÇÃO / BOLETIM OPERATÓRIO</div>[cite: 8]
                 <table class="aih-table">
                     <tr>
                         <td>
-                            <label>Descrição dos achados, técnicas e procedimentos executados</label>
-                            <textarea id="relatorioCirurgico" rows="7" placeholder="Descreva o ato operatório..."></textarea>
+                            <label>Aspectos nos órgãos, lesões encontradas, técnicas e descrição do processo</label>[cite: 8]
+                            <textarea id="relatorioCirurgico" rows="7" placeholder="Descreva os detalhes da intervenção..."></textarea>
                         </td>
                     </tr>
                 </table>
@@ -446,11 +446,11 @@
             const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
             const dados = {};
             campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-            localStorage.setItem('aih_3_folhas_compactas', JSON.stringify(dados));
+            localStorage.setItem('aih_3_folhas_exatas', JSON.stringify(dados));
         }
 
         function carregarDados() {
-            const salvos = localStorage.getItem('aih_3_folhas_compactas');
+            const salvos = localStorage.getItem('aih_3_folhas_exatas');
             if (salvos) {
                 const dados = JSON.parse(salvos);
                 for (const id in dados) {
@@ -462,7 +462,7 @@
 
         function limparFormulario() {
             if (confirm('Deseja limpar os dados do formulário?')) {
-                localStorage.removeItem('aih_3_folhas_compactas');
+                localStorage.removeItem('aih_3_folhas_exatas');
                 document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                     if (!['medicoCirurgiao', 'crmCirurgiao', 'crmAnestesista', 'cnesSolicitante', 'cnesExecutante', 'municipioPaciente'].includes(c.id)) c.value = '';
                 });
