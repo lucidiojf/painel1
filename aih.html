@@ -13,7 +13,7 @@
 
         body {
             background-color: #525659;
-            padding: 20px;
+            padding: 10px;
             color: #000;
         }
 
@@ -62,18 +62,19 @@
             color: #fff !important;
         }
 
-        /* Configuração exata para o padrão A4 */
+        /* Páginas A4 com tamanho de letra ideal e sem vazamento */
         .aih-page {
             width: 210mm;
             height: 297mm;
             max-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 8mm 10mm;
+            padding: 6mm 10mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
+            page-break-inside: avoid;
             box-sizing: border-box;
-            font-size: 7.5px;
+            font-size: 9px;
             overflow: hidden;
         }
 
@@ -81,12 +82,12 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-bottom: 1.5px;
+            margin-bottom: 2px;
         }
 
         th, td {
             border: 1px solid #000;
-            padding: 1.5px 3px;
+            padding: 2px 4px;
             vertical-align: top;
             text-align: left;
         }
@@ -94,9 +95,9 @@
         .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 7.5px;
+            font-size: 9px;
             background: #f9f9f9;
-            padding: 3px;
+            padding: 4px;
             line-height: 1.2;
             border: 1px solid #000;
             margin-bottom: 3px;
@@ -113,26 +114,18 @@
             vertical-align: middle;
         }
 
-        .logo-img {
-            width: 45px;
-            height: 45px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto;
-        }
-
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 6.5px;
-            padding: 1.5px 3px;
+            font-size: 8px;
+            padding: 2px 4px;
             margin-top: 2px;
             margin-bottom: 1px;
         }
 
         label {
-            font-size: 5.5px;
+            font-size: 7px;
             font-weight: bold;
             display: block;
             text-transform: uppercase;
@@ -145,7 +138,7 @@
             border: none;
             border-bottom: 1px dotted #666;
             background: transparent;
-            font-size: 7.5px;
+            font-size: 9px;
             outline: none;
             padding: 0px;
         }
@@ -178,7 +171,7 @@
                 max-height: 297mm !important;
                 page-break-after: always !important;
                 page-break-inside: avoid !important;
-                padding: 8mm 10mm !important;
+                padding: 6mm 10mm !important;
             }
         }
     </style>
@@ -200,8 +193,13 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 55px; text-align: center;">
-                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+                        <td style="width: 50px; text-align: center;">
+                            <svg width="38" height="38" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
+                                <circle cx="50" cy="50" r="46" fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
+                                <circle cx="50" cy="50" r="38" fill="#52b788" />
+                                <path d="M 30 65 Q 50 30 70 65 Z" fill="#d8f3dc"/>
+                                <text x="50" y="80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">F.G.</text>
+                            </svg>
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -300,7 +298,7 @@
                 </tr>
             </table>
             <div class="section-title">Procedimentos Realizados (12 Linhas)</div>
-            <table style="text-align:center; font-size:7px;">
+            <table style="text-align:center; font-size:8px;">
                 <tr style="background:#eee;">
                     <td style="width:5%;">Linha</td>
                     <td style="width:35%;">PROCEDIMENTO</td>
@@ -332,8 +330,13 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 55px; text-align: center;">
-                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+                        <td style="width: 50px; text-align: center;">
+                            <svg width="38" height="38" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
+                                <circle cx="50" cy="50" r="46" fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
+                                <circle cx="50" cy="50" r="38" fill="#52b788" />
+                                <path d="M 30 65 Q 50 30 70 65 Z" fill="#d8f3dc"/>
+                                <text x="50" y="80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">F.G.</text>
+                            </svg>
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -482,7 +485,7 @@
                     <td><label>48 & 50. CPF / Data Autorização</label><input type="text" id="dataAutorizacao"></td>
                 </tr>
                 <tr>
-                    <td colspan="2"><label>51 & 52. Assinatura e Carimbo do Gestor / Autorizador</label><div style="height:12px;"></div></td>
+                    <td colspan="2"><label>51 & 52. Assinatura e Carimbo do Gestor / Autorizador</label><div style="height:10px;"></div></td>
                 </tr>
             </table>
         </div>
@@ -492,8 +495,13 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 55px; text-align: center;">
-                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+                        <td style="width: 50px; text-align: center;">
+                            <svg width="38" height="38" viewBox="0 0 100 100" style="display:block; margin:0 auto;">
+                                <circle cx="50" cy="50" r="46" fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
+                                <circle cx="50" cy="50" r="38" fill="#52b788" />
+                                <path d="M 30 65 Q 50 30 70 65 Z" fill="#d8f3dc"/>
+                                <text x="50" y="80" font-size="14" font-weight="bold" fill="#fff" text-anchor="middle">F.G.</text>
+                            </svg>
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -610,7 +618,7 @@
             </table>
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="24" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="20" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -630,11 +638,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v26', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v28', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v26');
+        const salvos = localStorage.getItem('aih_dados_v28');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -648,7 +656,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v26');
+            localStorage.removeItem('aih_dados_v28');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -716,7 +724,7 @@
         });
 
         const conteudoHTML = clone.innerHTML;
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:9.5px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:3px;vertical-align:top;}.aih-page{page-break-after:always;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:8.5px;padding:3px;margin-top:3px;}</style></head><body>';
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:3px;vertical-align:top;}.aih-page{page-break-after:always;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
         const rodape = '</body></html>';
 
         const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
