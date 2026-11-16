@@ -68,7 +68,7 @@
             min-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 6mm 10mm;
+            padding: 5mm 10mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             box-sizing: border-box;
@@ -135,7 +135,7 @@
         @media print {
             body { background: #fff; padding: 0; }
             .action-bar { display: none; }
-            .aih-page { border: none; box-shadow: none; margin: 0; width: 100%; height: 100%; padding: 5mm; }
+            .aih-page { border: none; box-shadow: none; margin: 0; width: 100%; height: 100%; padding: 4mm; }
         }
     </style>
 </head>
@@ -184,11 +184,11 @@
             <table>
                 <tr><td colspan="4"><label>Nome do Paciente</label><input type="text" id="nomePaciente"></td></tr>
                 <tr>
-                    <td style="width:20%"><label>Sexo</label><select id="sexopaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select></td>
+                    <td style="width:20%"><label>Sexo</label><select id="sexoPaciente"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select></td>
                     <td style="width:30%"><label>Data de Nascimento</label><input type="date" id="nascimentoPaciente"></td>
                     <td style="width:25%">
                         <label>Raça/Cor</label>
-                        <select id="racapaciente">
+                        <select id="racaPaciente">
                             <option value="">Selecione</option>
                             <option value="Branca">Branca</option>
                             <option value="Parda">Parda</option>
@@ -276,6 +276,9 @@
         <!-- ================= FOLHA 2 ================= -->
         <div class="aih-page">
             <div class="header-box">
+                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                Hospital Maternidade Severina Carlos de Andrade<br>
+                CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
                 MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
                 <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
             </div>
@@ -425,12 +428,17 @@
         <!-- ================= FOLHA 3 ================= -->
         <div class="aih-page">
             <div class="header-box">
-                ESTADO DO RIO GRANDE DO NORTE<br>
-                Secretaria Municipal de Saúde de Frutuoso Gomes<br>
+                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
                 Hospital Maternidade Severina Carlos de Andrade<br>
+                CNPJ 08.349.052/0001-80 — Frutuoso Gomes-RN<br>
+                ESTADO DO RIO GRANDE DO NORTE<br>
                 <b>PRONTUÁRIO DE INTERNAÇÃO</b>
             </div>
             <table>
+                <tr>
+                    <td style="width:75%"><label>Nome do Cliente / Paciente</label><input type="text" id="clienteProntuario"></td>
+                    <td style="width:25%"><label>Nº do Prontuário</label><input type="text" id="numProntuario"></td>
+                </tr>
                 <tr>
                     <td colspan="2"><label>Endereço Completo (Rua, Nº, Bairro, Município, UF)</label><input type="text" id="enderecoCompletoProntuario"></td>
                 </tr>
@@ -454,10 +462,6 @@
                             <option value="Feminino">Feminino</option>
                         </select>
                     </td>
-                </tr>
-                <tr>
-                    <td style="width:75%"><label>Nome do Cliente / Paciente</label><input type="text" id="clienteProntuario"></td>
-                    <td style="width:25%"><label>Nº do Prontuário</label><input type="text" id="numProntuario"></td>
                 </tr>
                 <tr>
                     <td>
@@ -535,7 +539,7 @@
             </table>
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="12" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="22" placeholder="Histórico clínico detalhado..."></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -555,11 +559,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v20', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v21', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v20');
+        const salvos = localStorage.getItem('aih_dados_v21');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -573,7 +577,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v20');
+            localStorage.removeItem('aih_dados_v21');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
