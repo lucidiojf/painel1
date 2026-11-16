@@ -111,26 +111,12 @@
             vertical-align: middle;
         }
 
-        .brasao-container {
-            width: 55px;
-            text-align: center;
-            padding-right: 5px;
-        }
-
-        .brasao-box {
-            width: 45px;
-            height: 45px;
-            border: 1px solid #2e7d32;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #e8f5e9;
-            color: #2e7d32;
-            font-weight: bold;
-            font-size: 8px;
-            text-align: center;
-            line-height: 1;
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
         }
 
         .section-title {
@@ -186,40 +172,18 @@
     </div>
 
     <div id="conteudoImpresso">
-        <!-- ================= FUNÇÃO AUXILIAR DE CABEÇALHO COM BRASÃO ================= -->
-        <script>
-            function gerarCabecalho(titulo) {
-                return `
-                <div class="header-box">
-                    <table class="header-table">
-                        <tr>
-                            <td class="brasao-container">
-                                <div class="brasao-box">BRASÃO<br>F. GOMES</div>
-                            </td>
-                            <td style="text-align: center;">
-                                PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                                Hospital Maternidade Severina Carlos de Andrade<br>
-                                CNPJ: 08.349.052/0001-80 | CNES: 2380846<br>
-                                <b>${titulo}</b>
-                            </td>
-                        </tr>
-                    </table>
-                </div>`;
-            }
-        </script>
-
         <!-- ================= FOLHA 1 ================= -->
         <div class="aih-page">
-            <script>document.write(geralCabecalho ? gerarCabecalho("AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)") : "");</script>
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td class="brasao-container">
-                            <div class="brasao-box">PREF.<br>F.G.</div>
+                        <td style="width: 60px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
                         </td>
                         <td style="text-align: center;">
+                            ESTADO DO RIO GRANDE DO NORTE<br>
                             PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                            Hospital Maternidade Severina Carlos de Andrade<br>
+                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
                             CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
                             <b>AUTORIZAÇÃO PARA INTERNAÇÃO HOSPITALAR (AIH)</b>
                         </td>
@@ -345,12 +309,12 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td class="brasao-container">
-                            <div class="brasao-box">PREF.<br>F.G.</div>
+                        <td style="width: 60px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
                         </td>
                         <td style="text-align: center;">
-                            ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
-                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                            ESTADO DO RIO GRANDE DO NORTE<br>
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
                             MINISTÉRIO DA SAÚDE — SISTEMA ÚNICO DE SAÚDE (SUS)<br>
                             <b>LAUDO PARA SOLICITAÇÃO DE AUTORIZAÇÃO DE INTERNAÇÃO HOSPITALAR</b>
                         </td>
@@ -505,12 +469,13 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td class="brasao-container">
-                            <div class="brasao-box">PREF.<br>F.G.</div>
+                        <td style="width: 60px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
-                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES — HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
+                            PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
+                            HOSPITAL MATERNIDADE SEVERINA CARLOS DE ANDRADE<br>
                             CNPJ: 08.349.052/0001-80 &nbsp;|&nbsp; CNES: 2380846<br>
                             <b>PRONTUÁRIO DE INTERNAÇÃO</b>
                         </td>
@@ -642,11 +607,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v24', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v25', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v24');
+        const salvos = localStorage.getItem('aih_dados_v25');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -660,7 +625,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v24');
+            localStorage.removeItem('aih_dados_v25');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
