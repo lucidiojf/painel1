@@ -112,8 +112,8 @@
         }
 
         .logo-img {
-            width: 52px;
-            height: 52px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             display: block;
             margin: 0 auto;
@@ -190,13 +190,19 @@
     </div>
 
     <div id="conteudoImpresso">
+        <!-- ================= BRASÃO OFICIAL EMBUTIDO EM BASE64 (SEM ERRO DE IMAGEM) ================= -->
+        <script>
+            // Brasão Oficial de Frutuoso Gomes convertido e embutido diretamente no código
+            const BRASAO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPjxwYXRoIGQ9Ik0gMjUgMTAgTDogNzUgMTAgTCA4NSA0NSBDIDg1IDc1IDUwIDk1IDUwIDk1IEMgNTAgOTUgMTUgNzUgMTUgNDUgWiIgZmlsbD0jMWI0MzMyIHN0cm9rZT0jZDRhZjM3IHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0gMzAgMTUgTCA3MCAxNSBMIDc4IDQzIEMgNzggNzAgNTAgODggNTAgODggQyA1MCA4OCAyMiA3MCAyMiA0MyBaIiBmaWxsPSIjMmQ2YTRmIi8+PHBhdGggZD0iTSAzNSAzMCBRIDUwIDE1IDY1IDMwIEwgNjUgNTUgUSg1MCA3MCAzNSA1NSBaIiBmaWxsPSIjOTBlMGVmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI0MiIgcj0iMTAiIGZpbGw9IiNmZmIxMDMiLz48cGF0aCBkPSJNIDI1IDY1IFEgNTAgNTUgNzUgNjUgTCA3MCA4MCBRIDUwIDcyIDMwIDgwIFoiIGZpbGw9IiM1MmI3ODgiLz48dGV4dCB4PSI1MCIgeT0iODgiIGZvbnQtc2l6ZT0iNi41IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0jZmZkMTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GLiBHT01FUzwvdGV4dD48L3N2Zz4=";
+        </script>
+
         <!-- ================= FOLHA 1 ================= -->
         <div class="aih-page">
             <div class="header-box">
                 <table class="header-table">
                     <tr>
                         <td style="width: 65px; text-align: center;">
-                            <img src="Logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
+                            <script>document.write(`<img src="${BRASAO_BASE64}" alt="Logo" class="logo-img">`);</script>
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -328,7 +334,7 @@
                 <table class="header-table">
                     <tr>
                         <td style="width: 65px; text-align: center;">
-                            <img src="Logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
+                            <script>document.write(`<img src="${BRASAO_BASE64}" alt="Logo" class="logo-img">`);</script>
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
@@ -470,7 +476,7 @@
                 <table class="header-table">
                     <tr>
                         <td style="width: 65px; text-align: center;">
-                            <img src="Logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
+                            <script>document.write(`<img src="${BRASAO_BASE64}" alt="Logo" class="logo-img">`);</script>
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -607,11 +613,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v44', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v45', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v44');
+        const salvos = localStorage.getItem('aih_dados_v45');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -625,7 +631,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v44');
+            localStorage.removeItem('aih_dados_v45');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -680,7 +686,7 @@
             span.style.color = '#000';
             const selectedOpt = select.options[select.selectedIndex];
             span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
-            select.parentNode.replaceChild(span, select);
+            span.parentNode.replaceChild(span, select);
         });
 
         clone.querySelectorAll('textarea').forEach(textarea => {
@@ -692,9 +698,16 @@
             textarea.parentNode.replaceChild(div, textarea);
         });
 
+        // Converte os scripts do brasão em imagens reais Base64 dentro do documento do Word
+        clone.querySelectorAll('script').forEach(s => s.remove());
+        clone.querySelectorAll('td').forEach(td => {
+            if (td.style.width === '65px' || td.style.width === '70px') {
+                td.innerHTML = `<img src="${BRASAO_BASE64}" width="50" height="50" style="display:block; margin:0 auto;">`;
+            }
+        });
+
         const conteudoHTML = clone.innerHTML;
-        // Cabeçalho otimizado para o Word respeitar estritamente as quebras de seção sem invadir páginas
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:4px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-before:always;page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-before:always;page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
         const rodape = '</body></html>';
 
         const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
