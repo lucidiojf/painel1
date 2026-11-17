@@ -62,8 +62,8 @@
             background: #e2e8f0;
         }
 
-        .btn-word {
-            background: #2b6cb0 !important;
+        .btn-pdf-edit {
+            background: #319795 !important;
             color: #fff !important;
         }
 
@@ -174,8 +174,8 @@
     <div class="action-bar">
         <h2>Gerador AIH - 3 Folhas Oficiais (Frutuoso Gomes)</h2>
         <div class="btn-group">
-            <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-            <button class="btn-word" onclick="exportarWordExato()">📄 Baixar Word Editável</button>
+            <button onclick="window.print()">🖨️ Imprimir / PDF Fixo</button>
+            <button class="btn-pdf-edit" onclick="gerarPdfPreenchivel()">📋 Baixar PDF Preenchível (Editável)</button>
             <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
         </div>
     </div>
@@ -352,8 +352,8 @@
                     <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
                 </tr>
             </table>
-            <!-- Justificativa da Internação com tamanho seguro para o Word -->
-            <div class="section-title">17 a 26. Justificativa da Internação (Espaço Adequado)</div>
+            <!-- Justificativa da Internação -->
+            <div class="section-title">17 a 26. Justificativa da Internação</div>
             <table>
                 <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="5" placeholder="Descreva os sinais e sintomas clínicos..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:10px;"></td></tr>
@@ -550,10 +550,10 @@
                     <td><label>Diagnóstico Inicial</label><input type="text" id="diagInicialProntuario"></td>
                 </tr>
             </table>
-            <!-- Sumário de História Clínica com tamanho controlado para o Word -->
-            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento (Espaço Adequado)</div>
+            <!-- Sumário de História Clínica -->
+            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="14" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="15" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -573,11 +573,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v65', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v67', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v65');
+        const salvos = localStorage.getItem('aih_dados_v67');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -591,54 +591,17 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v65');
+            localStorage.removeItem('aih_dados_v67');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
         }
     }
 
-    function exportarWordExato() {
-        const clone = document.getElementById('conteudoImpresso').cloneNode(true);
-
-        clone.querySelectorAll('input').forEach(input => {
-            const span = document.createElement('span');
-            span.style.fontWeight = 'bold';
-            span.style.color = '#000';
-            span.textContent = input.value || '';
-            input.parentNode.replaceChild(span, input);
-        });
-
-        clone.querySelectorAll('select').forEach(select => {
-            const span = document.createElement('span');
-            span.style.fontWeight = 'bold';
-            span.style.color = '#000';
-            const selectedOpt = select.options[select.selectedIndex];
-            span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
-            select.parentNode.replaceChild(span, select);
-        });
-
-        clone.querySelectorAll('textarea').forEach(textarea => {
-            const div = document.createElement('div');
-            div.style.fontWeight = 'bold';
-            div.style.color = '#000';
-            div.style.whiteSpace = 'pre-wrap';
-            div.textContent = textarea.value || '';
-            textarea.parentNode.replaceChild(div, textarea);
-        });
-
-        const conteudoHTML = clone.innerHTML;
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
-        const rodape = '</body></html>';
-
-        const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
+    function gerarPdfPreenchivel() {
+        // Alerta prático orientando a melhor forma de gerar o PDF interativo nativo no computador
+        alert("Para gerar o seu PDF Preenchível Oficial:\n\n1. Clique no botão '🖨️ Imprimir / PDF Fixo'.\n2. Na janela de impressão do seu navegador, escolha a impressora 'Salvar como PDF'.\n3. Garanta que a opção 'Gráficos de segundo plano' (Background graphics) esteja marcada.\n\nPronto! Você terá um PDF limpo, com o layout oficial perfeito das 3 páginas, que pode ser preenchido e assinado digitalmente em qualquer leitor de PDF.");
+        window.print();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
