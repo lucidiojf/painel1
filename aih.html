@@ -44,9 +44,10 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
-        .btn-group button {
+        .btn-group button, .btn-group a {
             background: #fff;
             color: #1a365d;
             border: none;
@@ -54,9 +55,12 @@
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 13px;
         }
 
-        .btn-group button:hover {
+        .btn-group button:hover, .btn-group a:hover {
             background: #e2e8f0;
         }
 
@@ -173,7 +177,7 @@
         <h2>Gerador AIH - 3 Folhas Oficiais (Frutuoso Gomes)</h2>
         <div class="btn-group">
             <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-            <button class="btn-word" onclick="exportarWordOficial()">📄 Baixar Word Editável</button>
+            <button class="btn-word" onclick="gerarWordDireto()">📄 Baixar Word Editável</button>
             <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
         </div>
     </div>
@@ -571,11 +575,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v59', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v60', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v59');
+        const salvos = localStorage.getItem('aih_dados_v60');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -589,15 +593,14 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v59');
+            localStorage.removeItem('aih_dados_v60');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
         }
     }
 
-    function exportarWordOficial() {
-        // Função leve baseada no modelo que abria instantaneamente, com os campos ampliados
+    function gerarWordDireto() {
         const clone = document.getElementById('conteudoImpresso').cloneNode(true);
 
         clone.querySelectorAll('input').forEach(input => {
@@ -631,13 +634,19 @@
         const rodape = '</body></html>';
 
         const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
+        
+        // Criação de link direto forçado para garantir que o navegador dispare o download
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
         document.body.appendChild(a);
         a.click();
-        setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 200);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
