@@ -177,7 +177,7 @@
         <h2>Gerador AIH - 3 Folhas Oficiais (Frutuoso Gomes)</h2>
         <div class="btn-group">
             <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-            <button class="btn-word" onclick="gerarWordDireto()">📄 Baixar Word Editável</button>
+            <button class="btn-word" onclick="baixarWordSeguro()">📄 Baixar Word Editável</button>
             <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
         </div>
     </div>
@@ -575,11 +575,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v60', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v61', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v60');
+        const salvos = localStorage.getItem('aih_dados_v61');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -593,17 +593,18 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v60');
+            localStorage.removeItem('aih_dados_v61');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
         }
     }
 
-    function gerarWordDireto() {
-        const clone = document.getElementById('conteudoImpresso').cloneNode(true);
+    function baixarWordSeguro() {
+        // Atualiza os valores dos inputs e textareas no HTML antes de gerar o arquivo
+        const clonado = document.getElementById('conteudoImpresso').cloneNode(true);
 
-        clone.querySelectorAll('input').forEach(input => {
+        clonado.querySelectorAll('input').forEach(input => {
             const span = document.createElement('span');
             span.style.fontWeight = 'bold';
             span.style.color = '#000';
@@ -611,16 +612,16 @@
             input.parentNode.replaceChild(span, input);
         });
 
-        clone.querySelectorAll('select').forEach(select => {
+        clonado.querySelectorAll('select').forEach(select => {
             const span = document.createElement('span');
             span.style.fontWeight = 'bold';
             span.style.color = '#000';
             const selectedOpt = select.options[select.selectedIndex];
             span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
-            span.parentNode.replaceChild(span, select);
+            select.parentNode.replaceChild(span, select);
         });
 
-        clone.querySelectorAll('textarea').forEach(textarea => {
+        clonado.querySelectorAll('textarea').forEach(textarea => {
             const div = document.createElement('div');
             div.style.fontWeight = 'bold';
             div.style.color = '#000';
@@ -629,24 +630,19 @@
             textarea.parentNode.replaceChild(div, textarea);
         });
 
-        const conteudoHTML = clone.innerHTML;
         const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
         const rodape = '</body></html>';
+        
+        const htmlCompleto = cabecalho + clonado.innerHTML + rodape;
 
-        const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
-        
-        // Criação de link direto forçado para garantir que o navegador dispare o download
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
-        document.body.appendChild(a);
-        a.click();
-        
-        setTimeout(() => {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 200);
+        // Criação de URL de dados segura (Data URI) que força o navegador a baixar sem bloquear
+        const uri = 'data:application/msword;charset=utf-8,' + encodeURIComponent(htmlCompleto);
+        const link = document.createElement('a');
+        link.href = uri;
+        link.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
