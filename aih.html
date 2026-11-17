@@ -62,13 +62,13 @@
             color: #fff !important;
         }
 
-        /* Páginas A4 preenchendo perfeitamente o papel */
+        /* Páginas A4 fluidas no padrão ideal que você aprovou */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
             background: #fff;
             margin: 0 auto 30px auto;
-            padding: 6mm 10mm;
+            padding: 10mm 12mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             box-sizing: border-box;
@@ -79,12 +79,12 @@
             width: 100%;
             border-collapse: collapse;
             border: 1px solid #000;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         th, td {
             border: 1px solid #000;
-            padding: 2px 4px;
+            padding: 3px 5px;
             vertical-align: top;
             text-align: left;
         }
@@ -92,12 +92,12 @@
         .header-box {
             text-align: center;
             font-weight: bold;
-            font-size: 8.5px;
+            font-size: 9px;
             background: #f9f9f9;
-            padding: 3px;
-            line-height: 1.2;
+            padding: 5px;
+            line-height: 1.25;
             border: 1px solid #000;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
         }
 
         .header-table {
@@ -111,23 +111,31 @@
             vertical-align: middle;
         }
 
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+
         .section-title {
             background: #dcdcdc;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 8px;
-            padding: 2px 4px;
-            margin-top: 2px;
-            margin-bottom: 1px;
+            font-size: 8.5px;
+            padding: 3px 5px;
+            margin-top: 4px;
+            margin-bottom: 2px;
         }
 
         label {
-            font-size: 7px;
+            font-size: 7.5px;
             font-weight: bold;
             display: block;
             text-transform: uppercase;
             color: #333;
-            margin-bottom: 1px;
+            margin-bottom: 2px;
         }
 
         input, select, textarea {
@@ -165,7 +173,7 @@
                 width: 210mm !important;
                 min-height: 297mm !important;
                 page-break-after: always !important;
-                padding: 6mm 10mm !important;
+                padding: 10mm 12mm !important;
             }
         }
     </style>
@@ -182,50 +190,13 @@
     </div>
 
     <div id="conteudoImpresso">
-        <!-- ================= BRASÃO OFICIAL EXATO (SVG NATIVO) ================= -->
-        <script>
-            function getBrasaoOficialReal() {
-                return `<svg width="50" height="50" viewBox="0 0 140 140" style="display:block; margin:0 auto;">
-                    <!-- Ramos de algodão e milho nas laterais -->
-                    <path d="M 12 110 Q 2 65 18 20" fill="none" stroke="#2d6a4f" stroke-width="3.5"/>
-                    <circle cx="12" cy="70" r="4" fill="#fff" stroke="#2d6a4f" stroke-width="1.5"/>
-                    <circle cx="18" cy="45" r="4" fill="#fff" stroke="#2d6a4f" stroke-width="1.5"/>
-                    <path d="M 128 110 Q 138 65 122 20" fill="none" stroke="#2d6a4f" stroke-width="3.5"/>
-                    <!-- Escudo Central -->
-                    <path d="M 35 15 L 105 15 L 115 52 C 115 88 70 110 70 110 C 70 110 25 88 25 52 Z" fill="#1b4332" stroke="#d4af37" stroke-width="4"/>
-                    <path d="M 40 19 L 100 19 L 108 50 C 108 82 70 102 70 102 C 70 102 32 82 32 50 Z" fill="#2d6a4f"/>
-                    <path d="M 46 27 L 94 27 L 99 48 C 99 75 70 88 70 88 C 70 88 41 75 41 48 Z" fill="#000"/>
-                    <!-- Paisagem Interna: Céu, Sol, Cacto e Rio -->
-                    <path d="M 45 30 L 95 30 L 95 62 C 95 78 70 85 70 85 C 70 85 45 78 45 62 Z" fill="#90e0ef"/>
-                    <circle cx="78" cy="38" r="9" fill="#ffb703"/>
-                    <path d="M 32 62 Q 55 52 78 62 L 72 82 Q 55 74 38 82 Z" fill="#52b788"/>
-                    <!-- Cacto -->
-                    <path d="M 55 55 L 55 42 Q 55 38 58 38 L 60 38 L 60 55 Z" fill="#2d6a4f"/>
-                    <path d="M 52 46 L 47 46 L 47 49 L 52 49 Z" fill="#2d6a4f"/>
-                    <path d="M 60 48 L 65 48 L 65 51 L 60 51 Z" fill="#2d6a4f"/>
-                    <!-- Faixa inferior com nome -->
-                    <rect x="35" y="85" width="70" height="15" rx="3" fill="#1b4332" stroke="#d4af37" stroke-width="1.5"/>
-                    <text x="70" y="95" font-size="6.5" font-weight="bold" fill="#ffd166" text-anchor="middle">FRUTUOSO GOMES</text>
-                    <!-- Três polígonos na base com datas -->
-                    <g transform="translate(23, 108) scale(0.65)">
-                        <polygon points="12,28 28,4 44,28" fill="#1b4332" stroke="#d4af37" stroke-width="1.5"/>
-                        <text x="28" y="23" font-size="9" font-weight="bold" fill="#ffd166" text-anchor="middle">20</text>
-                        <polygon points="52,28 68,4 84,28" fill="#1b4332" stroke="#d4af37" stroke-width="1.5"/>
-                        <text x="68" y="23" font-size="9" font-weight="bold" fill="#ffd166" text-anchor="middle">12</text>
-                        <polygon points="92,28 108,4 124,28" fill="#1b4332" stroke="#d4af37" stroke-width="1.5"/>
-                        <text x="108" y="23" font-size="9" font-weight="bold" fill="#ffd166" text-anchor="middle">63</text>
-                    </g>
-                </svg>`;
-            }
-        </script>
-
         <!-- ================= FOLHA 1 ================= -->
         <div class="aih-page">
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 65px; text-align: center;">
-                            <script>document.write(getBrasaoOficialReal());</script>
+                        <td style="width: 60px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -324,7 +295,7 @@
                 </tr>
             </table>
             <div class="section-title">Procedimentos Realizados (12 Linhas)</div>
-            <table style="text-align:center; font-size:8px;">
+            <table style="text-align:center; font-size:9px;">
                 <tr style="background:#eee;">
                     <td style="width:5%;">Linha</td>
                     <td style="width:35%;">PROCEDIMENTO</td>
@@ -356,8 +327,8 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 70px; text-align: center;">
-                            <script>document.write(getBrasaoOficialReal());</script>
+                        <td style="width: 60px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
@@ -410,9 +381,9 @@
             </table>
             <div class="section-title">17 a 26. Justificativa da Internação</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2" style="font-size:9.5px;"></textarea></td></tr>
-                <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:9.5px;"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="2" style="font-size:9.5px;"></textarea></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="2" style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:10px;"></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="2" style="font-size:10px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -498,8 +469,8 @@
             <div class="header-box">
                 <table class="header-table">
                     <tr>
-                        <td style="width: 70px; text-align: center;">
-                            <script>document.write(getBrasaoOficialReal());</script>
+                        <td style="width: 60px; text-align: center;">
+                            <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -636,11 +607,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v42', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v43', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v42');
+        const salvos = localStorage.getItem('aih_dados_v43');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -654,7 +625,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v42');
+            localStorage.removeItem('aih_dados_v43');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -722,8 +693,7 @@
         });
 
         const conteudoHTML = clone.innerHTML;
-        // Cabeçalho e tags estritas do Word para forçar exatamente 3 páginas separadas
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:4px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-before:always;page-break-after:always;mso-break-type:section-break;margin-bottom:15px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:4px;border:1px solid #000;margin-bottom:3px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:8.5px;padding:2px;margin-top:2px;}</style></head><body>';
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-before:always;page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
         const rodape = '</body></html>';
 
         const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
