@@ -190,27 +190,13 @@
     </div>
 
     <div id="conteudoImpresso">
-        <!-- ================= BRASÃO OFICIAL NATIVO EM SVG ================= -->
-        <script>
-            const BRASAO_OFICIAL_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100">
-                <path d="M 22 10 L 78 10 L 88 45 C 88 78 50 96 50 96 C 50 96 12 78 12 45 Z" fill="#1b4332" stroke="#d4af37" stroke-width="3"/>
-                <path d="M 27 15 L 73 15 L 81 43 C 81 70 50 88 50 88 C 50 88 22 70 22 43 Z" fill="#2d6a4f"/>
-                <path d="M 35 28 Q 50 15 65 28 L 65 52 Q 50 66 35 52 Z" fill="#90e0ef"/>
-                <circle cx="50" cy="40" r="9" fill="#ffb703"/>
-                <path d="M 22 62 Q 50 50 78 62 L 72 76 Q 50 68 28 76 Z" fill="#52b788"/>
-                <text x="50" y="85" font-size="6" font-weight="bold" fill="#ffd166" text-anchor="middle">F. GOMES</text>
-            </svg>`;
-            
-            const BRASAO_DATA_URI = "data:image/svg+xml;utf8," + encodeURIComponent(BRASAO_OFICIAL_SVG);
-        </script>
-
         <!-- ================= FOLHA 1 ================= -->
         <div class="aih-page">
             <div class="header-box">
                 <table class="header-table">
                     <tr>
                         <td style="width: 65px; text-align: center;">
-                            <script>document.write(`<img src="${BRASAO_DATA_URI}" alt="Logo" class="logo-img">`);</script>
+                            <img src="Logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -342,7 +328,7 @@
                 <table class="header-table">
                     <tr>
                         <td style="width: 65px; text-align: center;">
-                            <script>document.write(`<img src="${BRASAO_DATA_URI}" alt="Logo" class="logo-img">`);</script>
+                            <img src="Logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE — PREFEITURA MUNICIPAL DE FRUTUOSO GOMES<br>
@@ -484,7 +470,7 @@
                 <table class="header-table">
                     <tr>
                         <td style="width: 65px; text-align: center;">
-                            <script>document.write(`<img src="${BRASAO_DATA_URI}" alt="Logo" class="logo-img">`);</script>
+                            <img src="Logo.png" alt="Logo" class="logo-img" onerror="this.onerror=null; this.src='logo.png';">
                         </td>
                         <td style="text-align: center;">
                             ESTADO DO RIO GRANDE DO NORTE<br>
@@ -621,11 +607,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v47', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v48', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v47');
+        const salvos = localStorage.getItem('aih_dados_v48');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -639,7 +625,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v47');
+            localStorage.removeItem('aih_dados_v48');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -710,17 +696,9 @@
                 textarea.parentNode.replaceChild(div, textarea);
             });
 
-            // Insere o brasão convertido corretamente para exibição no Word
-            clone.querySelectorAll('script').forEach(s => s.remove());
-            clone.querySelectorAll('td').forEach(td => {
-                if (td.style.width === '65px' || td.style.width === '70px') {
-                    td.innerHTML = `<img src="${BRASAO_DATA_URI}" width="50" height="50" style="display:block; margin:0 auto;">`;
-                }
-            });
-
-            // Adiciona quebra de página estricta entre as folhas para o Word fechar exatamente em 3 páginas
-            const quebra = index > 0 ? 'style="page-break-before: always; mso-break-type: section-break;"' : '';
-            htmlPages += `<div ${quebra}>${clone.innerHTML}</div>`;
+            // Quebra de página estrita compatível com o Word para travar exatamente em 3 páginas
+            const quebraWord = index > 0 ? '<br clear="all" style="page-break-before:always">' : '';
+            htmlPages += quebraWord + '<div class="aih-page" style="border:none; box-shadow:none; margin:0; padding:0;">' + clone.innerHTML + '</div>';
         });
 
         const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
