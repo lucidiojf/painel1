@@ -62,7 +62,7 @@
             color: #fff !important;
         }
 
-        /* Páginas A4 preenchendo o papel perfeitamente */
+        /* Páginas A4 preenchendo o papel com excelente legibilidade */
         .aih-page {
             width: 210mm;
             min-height: 297mm;
@@ -72,7 +72,7 @@
             box-shadow: 0 0 15px rgba(0,0,0,0.3);
             page-break-after: always;
             box-sizing: border-box;
-            font-size: 9.5px;
+            font-size: 10px;
         }
 
         table {
@@ -143,7 +143,7 @@
             border: none;
             border-bottom: 1px dotted #666;
             background: transparent;
-            font-size: 9.5px;
+            font-size: 10px;
             outline: none;
             padding: 1px 0;
         }
@@ -190,7 +190,7 @@
     </div>
 
     <div id="conteudoImpresso">
-        <!-- ================= LOGO EMBUTIDO EM BASE64 DE ALTA DEFINIÇÃO ================= -->
+        <!-- ================= LOGO EM BASE64 ================= -->
         <script>
             const LOGO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPjxwYXRoIGQ9Ik0gMjUgMTAgTDogNzUgMTAgTCA4NSA0NSBDIDg1IDc1IDUwIDk1IDUwIDk1IEMgNTAgOTUgMTUgNzUgMTUgNDUgWiIgZmlsbD0jMWI0MzMyIHN0cm9rZT0jZDRhZjM3IHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0gMzAgMTUgTCA3MCAxNSBMIDc4IDQzIEMgNzggNzAgNTAgODggNTAgODggQyA1MCA4OCAyMiA3MCAyMiA0MyBaIiBmaWxsPSIjMmQ2YTRmIi8+PHBhdGggZD0iTSAzNSAzMCBRIDUwIDE1IDY1IDMwIEwgNjUgNTUgUSg1MCA3MCAzNSA1NSBaIiBmaWxsPSIjOTBlMGVmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI0MiIgcj0iMTAiIGZpbGw9IiNmZmIxMDMiLz48cGF0aCBkPSJNIDI1IDY1IFEgNTAgNTUgNzUgNjUgTCA3MCA4MCBRIDUwIDcyIDMwIDgwIFoiIGZpbGw9IiM1MmI3ODgiLz48dGV4dCB4PSI1MCIgeT0iODgiIGZvbnQtc2l6ZT0iNi41IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0jZmZkMTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GLiBHT01FUzwvdGV4dD48L3N2Zz4=";
         </script>
@@ -384,12 +384,12 @@
                     <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
                 </tr>
             </table>
-            <!-- Justificativa da Internação com espaço bem ampliado -->
+            <!-- Justificativa da Internação com espaço máximo igual ao modelo inicial -->
             <div class="section-title">17 a 26. Justificativa da Internação (Espaço Ampliado)</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="4" style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="5" style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:10px;"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="3" style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="4" style="font-size:10px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -591,10 +591,10 @@
                     <td><label>Diagnóstico Inicial</label><input type="text" id="diagInicialProntuario"></td>
                 </tr>
             </table>
-            <!-- Sumário de História Clínica com espaço fortemente ampliado -->
+            <!-- Sumário de História Clínica com espaço fortemente ampliado igual ao modelo HTML -->
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento (Espaço Ampliado)</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="22" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="24" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -614,11 +614,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v50', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v51', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v50');
+        const salvos = localStorage.getItem('aih_dados_v51');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -632,7 +632,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v50');
+            localStorage.removeItem('aih_dados_v51');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -691,7 +691,7 @@
                 span.style.color = '#000';
                 const selectedOpt = select.options[select.selectedIndex];
                 span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
-                select.parentNode.replaceChild(span, select);
+                span.parentNode.replaceChild(span, select);
             });
 
             clone.querySelectorAll('textarea').forEach(textarea => {
@@ -703,7 +703,6 @@
                 textarea.parentNode.replaceChild(div, textarea);
             });
 
-            // Insere o logo limpo em Base64 na exportação do Word
             clone.querySelectorAll('script').forEach(s => s.remove());
             clone.querySelectorAll('td').forEach(td => {
                 if (td.style.width === '65px' || td.style.width === '70px') {
