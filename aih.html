@@ -354,12 +354,12 @@
                     <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
                 </tr>
             </table>
-            <!-- Justificativa da Internação com espaço bem ampliado -->
-            <div class="section-title">17 a 26. Justificativa da Internação (Espaço Ampliado)</div>
+            <!-- Justificativa da Internação com tamanho equilibrado para o Word -->
+            <div class="section-title">17 a 26. Justificativa da Internação</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="8" placeholder="Descreva os sinais e sintomas clínicos..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="4" placeholder="Descreva os sinais e sintomas clínicos..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:10px;"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="6" placeholder="Resultados de exames..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="3" placeholder="Resultados de exames..." style="font-size:10px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -552,10 +552,10 @@
                     <td><label>Diagnóstico Inicial</label><input type="text" id="diagInicialProntuario"></td>
                 </tr>
             </table>
-            <!-- Sumário de História Clínica com espaço máximo ampliado -->
-            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento (Espaço Ampliado)</div>
+            <!-- Sumário de História Clínica com tamanho adequado para o Word -->
+            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="28" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="12" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -575,11 +575,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v61', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v62', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v61');
+        const salvos = localStorage.getItem('aih_dados_v62');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -593,7 +593,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v61');
+            localStorage.removeItem('aih_dados_v62');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -601,7 +601,6 @@
     }
 
     function baixarWordSeguro() {
-        // Atualiza os valores dos inputs e textareas no HTML antes de gerar o arquivo
         const clonado = document.getElementById('conteudoImpresso').cloneNode(true);
 
         clonado.querySelectorAll('input').forEach(input => {
@@ -635,7 +634,6 @@
         
         const htmlCompleto = cabecalho + clonado.innerHTML + rodape;
 
-        // Criação de URL de dados segura (Data URI) que força o navegador a baixar sem bloquear
         const uri = 'data:application/msword;charset=utf-8,' + encodeURIComponent(htmlCompleto);
         const link = document.createElement('a');
         link.href = uri;
