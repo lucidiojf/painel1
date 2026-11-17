@@ -175,7 +175,7 @@
         <h2>Gerador AIH - 3 Folhas Oficiais (Frutuoso Gomes)</h2>
         <div class="btn-group">
             <button onclick="window.print()">🖨️ Imprimir / PDF</button>
-            <button class="btn-word" onclick="baixarWordPerfeito()">📄 Baixar Word Editável</button>
+            <button class="btn-word" onclick="exportarWordExato()">📄 Baixar Word Editável</button>
             <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
         </div>
     </div>
@@ -352,12 +352,12 @@
                     <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
                 </tr>
             </table>
-            <!-- Justificativa da Internação com espaço bem ampliado -->
-            <div class="section-title">17 a 26. Justificativa da Internação (Espaço Ampliado)</div>
+            <!-- Justificativa da Internação com tamanho seguro para o Word -->
+            <div class="section-title">17 a 26. Justificativa da Internação (Espaço Adequado)</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="6" placeholder="Descreva os sinais e sintomas clínicos..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="5" placeholder="Descreva os sinais e sintomas clínicos..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:10px;"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="5" placeholder="Resultados de exames..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="4" placeholder="Resultados de exames..." style="font-size:10px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -550,10 +550,10 @@
                     <td><label>Diagnóstico Inicial</label><input type="text" id="diagInicialProntuario"></td>
                 </tr>
             </table>
-            <!-- Sumário de História Clínica com espaço ampliado controlado -->
-            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento (Espaço Ampliado)</div>
+            <!-- Sumário de História Clínica com tamanho controlado para o Word -->
+            <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento (Espaço Adequado)</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="20" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="14" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -573,11 +573,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v64', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v65', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v64');
+        const salvos = localStorage.getItem('aih_dados_v65');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -591,17 +591,17 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v64');
+            localStorage.removeItem('aih_dados_v65');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
         }
     }
 
-    function baixarWordPerfeito() {
-        const clonado = document.getElementById('conteudoImpresso').cloneNode(true);
+    function exportarWordExato() {
+        const clone = document.getElementById('conteudoImpresso').cloneNode(true);
 
-        clonado.querySelectorAll('input').forEach(input => {
+        clone.querySelectorAll('input').forEach(input => {
             const span = document.createElement('span');
             span.style.fontWeight = 'bold';
             span.style.color = '#000';
@@ -609,7 +609,7 @@
             input.parentNode.replaceChild(span, input);
         });
 
-        clonado.querySelectorAll('select').forEach(select => {
+        clone.querySelectorAll('select').forEach(select => {
             const span = document.createElement('span');
             span.style.fontWeight = 'bold';
             span.style.color = '#000';
@@ -618,7 +618,7 @@
             select.parentNode.replaceChild(span, select);
         });
 
-        clonado.querySelectorAll('textarea').forEach(textarea => {
+        clone.querySelectorAll('textarea').forEach(textarea => {
             const div = document.createElement('div');
             div.style.fontWeight = 'bold';
             div.style.color = '#000';
@@ -627,22 +627,18 @@
             textarea.parentNode.replaceChild(div, textarea);
         });
 
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:4px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-after:always;mso-break-type:section-break;margin-bottom:10px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:4px;border:1px solid #000;margin-bottom:3px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:8.5px;padding:2px;margin-top:2px;}</style></head><body>';
+        const conteudoHTML = clone.innerHTML;
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
         const rodape = '</body></html>';
-        
-        const htmlCompleto = cabecalho + clonado.innerHTML + rodape;
 
-        const blob = new Blob(['\ufeff' + htmlCompleto], { type: 'application/msword;charset=utf-8' });
+        const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = 'AIH_3_Folhas_Frutuoso_Gomes.doc';
         document.body.appendChild(a);
         a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 200);
+        setTimeout(() => { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 100);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
