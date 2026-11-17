@@ -379,12 +379,12 @@
                     <td><label>17. Código IBGE Município</label><input type="text" id="ibgeFolha2"></td>
                 </tr>
             </table>
-            <!-- Justificativa da Internação com espaço bem ampliado -->
+            <!-- Justificativa da Internação com espaço máximo ampliado idêntico à tela HTML -->
             <div class="section-title">17 a 26. Justificativa da Internação (Espaço Ampliado)</div>
             <table>
-                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="5" style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>17. Principais Sinais e Sintomas Clínicos</label><textarea id="sinaisSintomas" rows="8" placeholder="Descreva os sinais e sintomas clínicos..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>18. Condições que Justificam a Internação</label><input type="text" id="condicoesInternacao" style="font-size:10px;"></td></tr>
-                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="4" style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>19. Resultados de Provas Diagnósticas (Exames)</label><textarea id="resultadosExames" rows="6" placeholder="Resultados de exames..." style="font-size:10px;"></textarea></td></tr>
                 <tr>
                     <td>
                         <table style="border:none; margin:0;">
@@ -586,10 +586,10 @@
                     <td><label>Diagnóstico Inicial</label><input type="text" id="diagInicialProntuario"></td>
                 </tr>
             </table>
-            <!-- Sumário de História Clínica com espaço fortemente ampliado -->
+            <!-- Sumário de História Clínica com o espaço máximo ampliado idêntico à tela HTML -->
             <div class="section-title">Sumário de História Clínica, Exame Físico e Tratamento (Espaço Ampliado)</div>
             <table>
-                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="24" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
+                <tr><td><label>Evolução, História Clínica e Conduta</label><textarea id="evolucaoClinica" rows="28" placeholder="Histórico clínico detalhado..." style="font-size:10px;"></textarea></td></tr>
                 <tr><td><label>Diagnóstico Final</label><input type="text" id="diagFinal"></td></tr>
             </table>
         </div>
@@ -609,11 +609,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v54', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v55', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v54');
+        const salvos = localStorage.getItem('aih_dados_v55');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -627,7 +627,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v54');
+            localStorage.removeItem('aih_dados_v55');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -666,7 +666,7 @@
     });
 
     function exportarWordExato() {
-        // Exportação ultra-leve otimizada para abrir instantaneamente no Word sem travar
+        // Função leve e estável que abria perfeitamente e sem travamentos
         const clone = document.getElementById('conteudoImpresso').cloneNode(true);
 
         clone.querySelectorAll('input').forEach(input => {
