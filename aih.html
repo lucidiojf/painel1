@@ -190,10 +190,9 @@
     </div>
 
     <div id="conteudoImpresso">
-        <!-- ================= BRASÃO OFICIAL EMBUTIDO EM BASE64 (SEM ERRO DE IMAGEM) ================= -->
+        <!-- ================= BRASÃO OFICIAL EMBUTIDO EM BASE64 ================= -->
         <script>
-            // Brasão Oficial de Frutuoso Gomes convertido e embutido diretamente no código
-            const BRASAO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPjxwYXRoIGQ9Ik0gMjUgMTAgTDogNzUgMTAgTCA4NSA0NSBDIDg1IDc1IDUwIDk1IDUwIDk1IEMgNTAgOTUgMTUgNzUgMTUgNDUgWiIgZmlsbD0jMWI0MzMyIHN0cm9rZT0jZDRhZjM3IHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0gMzAgMTUgTCA3MCAxNSBMIDc4IDQzIEMgNzggNzAgNTAgODggNTAgODggQyA1MCA4OCAyMiA3MCAyMiA0MyBaIiBmaWxsPSIjMmQ2YTRmIi8+PHBhdGggZD0iTSAzNSAzMCBRIDUwIDE1IDY1IDMwIEwgNjUgNTUgUSg1MCA3MCAzNSA1NSBaIiBmaWxsPSIjOTBlMGVmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI0MiIgcj0iMTAiIGZpbGw9IiNmZmIxMDMiLz48cGF0aCBkPSJNIDI1IDY1IFEgNTAgNTUgNzUgNjUgTCA3MCA4MCBRIDUwIDcyIDMwIDgwIFoiIGZpbGw9IiM1MmI3ODgiLz48dGV4dCB4PSI1MCIgeT0iODgiIGZvbnQtc2l6ZT0iNi41IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0jZmZkMTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GLiBHT01FUzwvdGV4dD48L3N2Zz4=";
+            const BRASAO_BASE64 = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPjxwYXRoIGQ9Ik0gMjUgMTAgTDogNzUgMTAgTCA4 animasiwIDQ1 CIDg1IDc1IDUwIDk1IDUwIDk1IEMgNTAgOTUgMTUgNzUgMTUgNDUgWiIgZmlsbD0jMWI0MzMyIHN0cm9rZT0jZDRhZjM3IHN0cm9rZS13aWR0aD0iMyIvPjxwYXRoIGQ9Ik0gMzAgMTUgTCA3MCAxNSBMIDc4IDQzIEMgNzggNzAgNTAgODggNTAgODggQyA1MCA4OCAyMiA3MCAyMiA0MyBaIiBmaWxsPSIjMmQ2YTRmIi8+PHBhdGggZD0iTSAzNSAzMCBRIDUwIDE1IDY1IDMwIEwgNjUgNTUgUSg1MCA3OCAzNSA1NSBaIiBmaWxsPSIjOTBlMGVmIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSI0MiIgcj0iMTAiIGZpbGw9IiffmJExMDMiLz48cGF0aCBkPSJNIDI1IDY1IFEgNTAgNTUgNzUgNjUgTCA3MCA4MCBRIDUwIDcyIDMwIDgwIFoiIGZpbGw9IiM1MmI3ODgiLz48dGV4dCB4PSI1MCIgeT0iODgiIGZvbnQtc2l6ZT0iNi41IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0jZmZkMTY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5GLiBHT01FUzwvdGV4dD48L3N2Zz4=";
         </script>
 
         <!-- ================= FOLHA 1 ================= -->
@@ -613,11 +612,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v45', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v46', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v45');
+        const salvos = localStorage.getItem('aih_dados_v46');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -631,7 +630,7 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v45');
+            localStorage.removeItem('aih_dados_v46');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
@@ -670,47 +669,57 @@
     });
 
     function exportarWordExato() {
-        const clone = document.getElementById('conteudoImpresso').cloneNode(true);
+        // Coleta limpa e segura do HTML das páginas para evitar travamento
+        const paginas = document.querySelectorAll('.aih-page');
+        let htmlPages = '';
 
-        clone.querySelectorAll('input').forEach(input => {
-            const span = document.createElement('span');
-            span.style.fontWeight = 'bold';
-            span.style.color = '#000';
-            span.textContent = input.value || '';
-            input.parentNode.replaceChild(span, input);
+        paginas.forEach((page, index) => {
+            const clone = page.cloneNode(true);
+            
+            // Substitui inputs por texto estático em negrito
+            clone.querySelectorAll('input').forEach(input => {
+                const span = document.createElement('span');
+                span.style.fontWeight = 'bold';
+                span.style.color = '#000';
+                span.textContent = input.value || '';
+                input.parentNode.replaceChild(span, input);
+            });
+
+            // Substitui selects pelo valor selecionado
+            clone.querySelectorAll('select').forEach(select => {
+                const span = document.createElement('span');
+                span.style.fontWeight = 'bold';
+                span.style.color = '#000';
+                const selectedOpt = select.options[select.selectedIndex];
+                span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
+                select.parentNode.replaceChild(span, select);
+            });
+
+            // Substitui textareas pelo texto digitado
+            clone.querySelectorAll('textarea').forEach(textarea => {
+                const div = document.createElement('div');
+                div.style.fontWeight = 'bold';
+                div.style.color = '#000';
+                div.style.whiteSpace = 'pre-wrap';
+                div.textContent = textarea.value || '';
+                textarea.parentNode.replaceChild(div, textarea);
+            });
+
+            // Insere o brasão em Base64 garantindo nitidez sem erros no Word
+            clone.querySelectorAll('script').forEach(s => s.remove());
+            clone.querySelectorAll('td').forEach(td => {
+                if (td.style.width === '65px' || td.style.width === '70px') {
+                    td.innerHTML = `<img src="${BRASAO_BASE64}" width="50" height="50" style="display:block; margin:0 auto;">`;
+                }
+            });
+
+            htmlPages += `<div style="page-break-before: always; page-break-after: always; mso-break-type: section-break; margin-bottom: 20px;">${clone.innerHTML}</div>`;
         });
 
-        clone.querySelectorAll('select').forEach(select => {
-            const span = document.createElement('span');
-            span.style.fontWeight = 'bold';
-            span.style.color = '#000';
-            const selectedOpt = select.options[select.selectedIndex];
-            span.textContent = (selectedOpt && selectedOpt.value !== "") ? selectedOpt.text : '';
-            span.parentNode.replaceChild(span, select);
-        });
-
-        clone.querySelectorAll('textarea').forEach(textarea => {
-            const div = document.createElement('div');
-            div.style.fontWeight = 'bold';
-            div.style.color = '#000';
-            div.style.whiteSpace = 'pre-wrap';
-            div.textContent = textarea.value || '';
-            textarea.parentNode.replaceChild(div, textarea);
-        });
-
-        // Converte os scripts do brasão em imagens reais Base64 dentro do documento do Word
-        clone.querySelectorAll('script').forEach(s => s.remove());
-        clone.querySelectorAll('td').forEach(td => {
-            if (td.style.width === '65px' || td.style.width === '70px') {
-                td.innerHTML = `<img src="${BRASAO_BASE64}" width="50" height="50" style="display:block; margin:0 auto;">`;
-            }
-        });
-
-        const conteudoHTML = clone.innerHTML;
-        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.aih-page{page-break-before:always;page-break-after:always;mso-break-type:section-break;margin-bottom:20px;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
+        const cabecalho = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>AIH 3 Folhas</title><style>body{font-family:Arial,sans-serif;font-size:10px;} table{width:100%;border-collapse:collapse;border:1px solid #000;margin-bottom:6px;} td{border:1px solid #000;padding:2px;vertical-align:top;}.header-box{text-align:center;font-weight:bold;background:#f5f5f5;padding:5px;border:1px solid #000;margin-bottom:4px;}.section-title{background:#dcdcdc;font-weight:bold;text-transform:uppercase;font-size:9px;padding:3px;margin-top:3px;}</style></head><body>';
         const rodape = '</body></html>';
 
-        const blob = new Blob(['\ufeff' + cabecalho + conteudoHTML + rodape], { type: 'application/msword;charset=utf-8' });
+        const blob = new Blob(['\ufeff' + cabecalho + htmlPages + rodape], { type: 'application/msword;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
