@@ -30,6 +30,8 @@
             align-items: center;
             border-radius: 6px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .action-bar h2 {
@@ -41,6 +43,7 @@
         .btn-group {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-group button {
@@ -55,6 +58,11 @@
 
         .btn-group button:hover {
             background: #e2e8f0;
+        }
+
+        .btn-copy {
+            background: #319795 !important;
+            color: #fff !important;
         }
 
         .btn-clear {
@@ -165,6 +173,7 @@
         <h2>Gerador AIH - 3 Folhas Oficiais (Frutuoso Gomes)</h2>
         <div class="btn-group">
             <button onclick="window.print()">🖨️ Imprimir / PDF</button>
+            <button class="btn-copy" onclick="copiarTextoParaEdicao()">📋 Copiar Dados para Edição</button>
             <button class="btn-clear" onclick="limparFormulario()">🗑️ Limpar</button>
         </div>
     </div>
@@ -562,11 +571,11 @@
         const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
         const dados = {};
         campos.forEach(campo => { if (campo.id) dados[campo.id] = campo.value; });
-        localStorage.setItem('aih_dados_v57', JSON.stringify(dados));
+        localStorage.setItem('aih_dados_v58', JSON.stringify(dados));
     }
 
     function carregarDados() {
-        const salvos = localStorage.getItem('aih_dados_v57');
+        const salvos = localStorage.getItem('aih_dados_v58');
         if (salvos) {
             try {
                 const dados = JSON.parse(salvos);
@@ -580,11 +589,47 @@
 
     function limparFormulario() {
         if (confirm('Deseja limpar os dados?')) {
-            localStorage.removeItem('aih_dados_v57');
+            localStorage.removeItem('aih_dados_v58');
             document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea').forEach(c => {
                 if (!['municipioPaciente', 'endProntuario', 'nacionalidade', 'municipioFolha2'].includes(c.id)) c.value = '';
             });
         }
+    }
+
+    function copiarTextoParaEdicao() {
+        let textoCopiado = "=== DADOS DA AIH E PRONTUÁRIO ===\n\n";
+        const campos = document.querySelectorAll('.aih-page input, .aih-page select, .aih-page textarea');
+        
+        campos.forEach(campo => {
+            let label = "";
+            // Tenta achar o label associado ao campo
+            let prev = campo.previousElementSibling;
+            if (prev && prev.tagName === 'LABEL') {
+                label = prev.innerText;
+            } else {
+                let parentTd = campo.closest('td');
+                if (parentTd) {
+                    let lbl = parentTd.querySelector('label');
+                    if (lbl) label = lbl.innerText;
+                }
+            }
+            
+            if (!label && campo.id) label = campo.id;
+            let valor = campo.value || "";
+            if (campo.tagName === 'SELECT' && campo.selectedIndex >= 0) {
+                valor = campo.options[campo.selectedIndex].text;
+            }
+            
+            if (label) {
+                textoCopiado += `${label}: ${valor}\n`;
+            }
+        });
+
+        navigator.clipboard.writeText(textoCopiado).then(() => {
+            alert("📋 Dados copiados com sucesso!\n\nAgora basta abrir um documento em branco no Word ou Bloco de Notas e colar (Ctrl + V).");
+        }).catch(err => {
+            alert("Erro ao copiar. Tente selecionar e copiar manualmente.");
+        });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
